@@ -1,0 +1,136 @@
+@CHARSET "UTF-8";
+
+.z-window {
+	background-image: none;
+	background-color: #661313;
+}
+
+.z-window-header {
+	color: white;
+	font-size: 18px;
+	font-weight: normal;
+	background-color: #661313;
+}
+
+.z-borderlayout {
+	background-image: none;
+	background-color: #661313;
+}
+
+.etiqueta {
+	font-weight: bold;
+	font-family: arial;
+	color: #771313;
+	font-size: 11px;
+}
+
+.z-textbox {
+	width: 99%;
+}
+
+.z-groupbox-3d {
+	background: white;
+}
+
+.z-groupbox-3d-hm {
+	background: #CE6464;
+}
+
+.z-groupbox-3d-hl .z-groupbox-3d-header {
+	color: white;
+	font-family: arial, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.btn {
+	font-size: 11px;
+	color: white;
+	cursor: pointer;
+	width: 95px;
+	height: 29px;
+	-webkit-border-radius: 0.7em;
+	-moz-border-radius: 0.7em;
+	border-radius: 0.7em;
+	background: #952C2C;
+	white-space: pre-line;
+	text-shadow: 0 0 0;
+	font-family: sans-serif;
+}
+
+.multilinea {
+	height: 35px;
+}
+
+.multilineaTab {
+	height: 250px;
+}
+
+.z-loading {
+	background-color: #952C2C;
+	border: 1px outset #A0A0A0;
+	font-weight: bold;
+	font-size: 18px;
+	cursor: wait;
+	width: 250px;
+	height: 45px;
+}
+
+.z-loading-indicator {
+	color: gray;
+	border: 0 none;
+}
+
+.abrir {
+	cursor: pointer;
+	-webkit-border-radius: 0.7em;
+	-moz-border-radius: 0.7em;
+	border-radius: 0.7em;
+	background: #952C2C;
+	white-space: pre-line;
+	text-shadow: 0 1px #3A0202;
+}
+
+.catalogo {
+	cursor: pointer;
+	-webkit-border-radius: 0.7em;
+	-moz-border-radius: 0.7em;
+	border-radius: 0.7em;
+	background: #952C2C;
+	width: 28px;
+	height: 28px;
+}
+
+.banner {
+	background-color: #661313;
+}
+
+.lblIndex {
+	font-size: 26px;
+	color: #661313;
+	font-weight: bold;
+}
+
+.azul .z-groupbox-header {
+	background: #EBE8E8;
+}
+
+.blanco .z-groupbox-header {
+	background: white;
+}
+
+div.z-listbox-header th.z-listheader,div.z-listbox-header th.z-auxheader
+	{
+	white-space: pre-line;
+	font-size: 10px;
+}
+
+body * {
+	font-family: Arial;
+	font-size: 11px;
+}
+
+.z-listheader-content,.z-listcell-content,.z-listgroup-content,.z-listgroupfoot-content,.z-listfooter-content
+	{
+	font-size: 10px;
+}
