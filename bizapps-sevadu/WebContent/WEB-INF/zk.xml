@@ -1,4 +1,8 @@
 <zk>
+	<library-property>
+		<name>org.zkoss.theme.preferred</name>
+		<value>silvertail</value> <!-- or silvertail, atlantic -->
+	</library-property>
 	<session-config>
 		<device-type>ajax</device-type>
 		<timeout-message>Sesion Caducada, por favor Actualice el Navegador
@@ -19,12 +23,12 @@
 		<name>org.zkoss.zul.progressbox.position</name>
 		<value>center,center</value>
 	</library-property>
-	
+
 	<library-property>
 		<name>org.zkoss.zul.progressbox.mask</name>
 		<value>true</value>
 	</library-property>
-	
+
 	<library-property>
 		<name>org.zkoss.zul.progressbox.msg</name>
 		<value>"Por Favor, Espere..."</value>

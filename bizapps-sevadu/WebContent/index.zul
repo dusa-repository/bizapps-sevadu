@@ -1,5 +1,119 @@
+<?page title="SEVADU" contentType="text/html;charset=UTF-8"  ?>
 <zk>
-	<window>
-		<label value="hola"></label>
+	<style src="public/Estilo.css" />
+
+	<style>
+		.z-groupbox-hr { background:#661313;border-radius: 30px 30px
+		30px 30px }
+		.z-groupbox { border-radius: 30px 30px 30px 30px }
+
+		.z-groupbox .z-groupbox-header {
+		background: #661313;
+		border-radius:
+		30px 30px 30px 30px
+		}
+	</style>
+	<zscript>
+		String variable = execution.getParameter("respuesta");
+		String
+		a
+		= "";
+		if (variable == null)
+		a = "INICIAR SESION";
+		else
+		a =
+		execution.getParameter("respuesta");
+	</zscript>
+	<window title="" border="0" height="100%" width="100%"
+		apply="controlador.portal.CIndex">
+		<borderlayout height="100%"
+			style="background-image: url('public/imagenes/generales/fondo.png'); background-repeat:no-repeat;height=100%; width=100% ; background-color:white">
+			<north height="2%" class="banner">
+				<hbox hflex="1">
+					<separator />
+					<separator />
+					<separator />
+				</hbox>
+			</north>
+			<east width="80%" border="none">
+				<vlayout>
+					<div align="center">
+						<separator />
+						<separator />
+						<separator />
+						<separator />
+						<image src="/public/imagenes/generales/LogoDusa.png" height="4em"
+							width="15em" />
+					</div>
+					<div height="100%" align="left">
+						<separator />
+						<separator />
+						<separator />
+						<separator />
+						<separator />
+						<separator />
+						<separator />
+						<label class="lblIndex" value="S.E.V.A.D.U." />
+					</div>
+					<separator />
+					<separator />
+					<separator />
+					<separator />
+					<separator />
+					<separator />
+					<separator />
+					<div height="100%" width="100%" align="center">
+						<groupbox height="100%" width="40%">
+							<caption label="${a}"
+								style="color:black; font-size: 16px; font-weight:bold" />
+							<separator></separator>
+							<separator></separator>
+							<hlayout width="100%">
+								<h:form id="inicioSesion" action="j_spring_security_check"
+									method="POST" xmlns:h="native" align="left">
+									<vlayout width="100%">
+										<label class="etiqueta" height="20px" style="font-size:16px"
+											value="Nombre de Usuario :" />
+										<textbox placeholder="Usuario" height="22px" id="log_usuario"
+											name="j_username" hflex="1" width="200px" />
+									</vlayout>
+									<separator></separator>
+									<vlayout width="100%">
+										<label class="etiqueta" height="20px" style="font-size:16px"
+											value="Contraseña :" />
+										<textbox placeholder="Contraseña" height="22px" id="log_clave"
+											hflex="1" type="password" name="j_password" width="200px" />
+									</vlayout>
+									<separator />
+									<separator />
+									<hlayout width="100%">
+										<button type="submit" class="btn" label="Entrar"
+											style="font-size:18px" image="/public/imagenes/botones/entrar.png"
+											height="37px" width="170px" />
+									</hlayout>
+								</h:form>
+							</hlayout>
+							<vlayout width="100%">
+								<separator />
+								<separator />
+								<a href="">
+									<label id="lblOlvidoClave" sclass="pointer"
+										value="¿Olvido su Contraseña?"
+										style="color:red;margin-left:10px;font-weight:bold;font-size:14px" />
+								</a>
+							</vlayout>
+						</groupbox>
+					</div>
+				</vlayout>
+			</east>
+			<south class="banner" border="0" height="5%" collapsible="false">
+				<div align="center" sclass="footer">
+					<separator></separator>
+					<label style="padding-center:35%;color: white"
+							value="© 2014 Destilería Unidas S.A | RIF: J-30940783-0 | Todos los derechos reservados | Desarrollado por BIZAPPS,C.A">
+					</label>
+				</div>
+			</south>
+		</borderlayout>
 	</window>
 </zk>
