@@ -176,10 +176,10 @@
 									</listbox>
 									<vbox>
 										<button class="abrir" id="pasar1" image="/public/imagenes/botones/adelante.png"
-											tooltiptext="Agregar Grupos" width="30px" />
+											tooltiptext="Agregar Grupos" />
 										<separator />
 										<button id="pasar2" class="abrir" image="/public/imagenes/botones/atras.png"
-											tooltiptext="Quitar Grupos" width="30px" />
+											tooltiptext="Quitar Grupos" />
 									</vbox>
 									<listbox id="ltbGruposAgregados" height="160px"
 										emptyMessage="No ha Seleccionado ningun Grupo" checkmark="true">

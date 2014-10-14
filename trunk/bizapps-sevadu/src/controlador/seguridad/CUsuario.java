@@ -699,7 +699,7 @@ public class CUsuario extends CGenerico {
 		if (usuario == null)
 			return true;
 		else {
-			if (usuario.getCedula().equals(id))
+			if (usuario.getIdUsuario()==id)
 				return true;
 			else {
 				msj.mensajeAlerta(Mensaje.loginUsado);

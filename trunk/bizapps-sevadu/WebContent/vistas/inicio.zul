@@ -27,44 +27,22 @@
 	<window title="" border="0" height="100%" width="100%" apply="arbol.CArbol">
 		<borderlayout height="100%" style="background-color:#fff;">
 			<north height="11%" class="banner">
-				<hbox hflex="1">
-					<separator />
-					<separator />
-					<separator />
-					<vbox>
+				<hbox width="100%" widths="12%,55%,33%">
+					<vbox width="100%">
 						<separator />
 						<image src="../public/imagenes/generales/LogoDusa.png"
 							height="4em" width="18em" />
 					</vbox>
-					<separator />
-					<separator />
-					<separator />
-					<separator />
 					<div align="center" width="100%">
 						<separator />
 						<separator />
 						<hbox>
-							<separator />
-							<separator />
-							<separator />
-							<separator />
-							<separator />
-							<separator />
-							<separator />
 							<label style="font-size:23px;color:white;font-weight: bold"
-								value="PANEL DE CONTROL WEB PEDIDOS" />
+								value="SISTEMA DE ESTADISTICA DE VENTAS DE ALIADOS" />
 						</hbox>
 					</div>
 					<div align="center" width="100%">
 						<hbox height="100%" width="100%">
-							<separator />
-							<separator />
-							<separator />
-							<separator />
-							<separator />
-							<separator />
-							<separator />
-							<separator />
 							<vbox height="100%" width="100%">
 								<separator />
 								<image id="imagenes" width="60px" height="55px" />
@@ -93,7 +71,7 @@
 								<listbox style="border:none" width="200px" id="ltbRoles">
 									<template name="model">
 										<listitem>
-											<listcell style="color:white;font-weight: bold; background:#661313"
+											<listcell style="font-size:14px;color:white;font-weight: bold; background:#661313"
 												label="${each.nombre}">
 											</listcell>
 										</listitem>
@@ -137,12 +115,8 @@
 					</center>
 				</borderlayout>
 			</center>
-			<south class="banner" border="0" height="6%" collapsible="false">
+			<south class="banner" border="0" height="4,2%" collapsible="false">
 				<div align="center" sclass="footer">
-					<a style="color: white" href="../j_spring_security_logout">
-						<label value="INICIO">
-						</label>
-					</a>
 					<separator></separator>
 					<label style="padding-center:35%;color: white"
 						value="© 2014 Destilería Unidas S.A | RIF: J-30940783-0 | Todos los derechos reservados | Desarrollado por BIZAPPS,C.A">
