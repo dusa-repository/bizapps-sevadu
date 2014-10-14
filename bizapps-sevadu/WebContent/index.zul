@@ -27,7 +27,7 @@
 	<window title="" border="0" height="100%" width="100%"
 		apply="controlador.portal.CIndex">
 		<borderlayout height="100%"
-			style="background-image: url('public/imagenes/generales/fondo.png'); background-repeat:no-repeat;height=100%; width=100% ; background-color:white">
+			style="background-image: url('public/imagenes/generales/estadistica.jpg'); background-repeat:no-repeat;height=100%; width=100% ; background-color:white">
 			<north height="2%" class="banner">
 				<hbox hflex="1">
 					<separator />
@@ -35,7 +35,7 @@
 					<separator />
 				</hbox>
 			</north>
-			<east width="80%" border="none">
+			<east width="70%" border="none">
 				<vlayout>
 					<div align="center">
 						<separator />
@@ -45,7 +45,7 @@
 						<image src="/public/imagenes/generales/LogoDusa.png" height="4em"
 							width="15em" />
 					</div>
-					<div height="100%" align="left">
+					<div height="100%" align="center">
 						<separator />
 						<separator />
 						<separator />
@@ -53,7 +53,7 @@
 						<separator />
 						<separator />
 						<separator />
-						<label class="lblIndex" value="S.E.V.A.D.U." />
+						<label class="lblIndex" value="SISTEMA DE ESTADISTICA DE VENTAS DE ALIADOS" />
 					</div>
 					<separator />
 					<separator />
