@@ -1,0 +1,141 @@
+package modelo.maestros;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.sql.Time;
+import java.util.Date;
+import java.util.List;
+
+
+/**
+ * The persistent class for the maestro_marca database table.
+ * 
+ */
+@Entity
+@Table(name="maestro_marca")
+@NamedQuery(name="MaestroMarca.findAll", query="SELECT m FROM MaestroMarca m")
+public class MaestroMarca implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
+
+	@Column(name="marca_dusa")
+	private String marcaDusa;
+	
+	private String descripcion;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="fecha_auditoria")
+	private Date fechaAuditoria;
+
+	@Column(name="filtro_impresion")
+	private int filtroImpresion;
+
+	@Column(name="filtro_termometro")
+	private int filtroTermometro;
+
+	@Column(name="hora_auditoria")
+	private Time horaAuditoria;
+
+	@Column(name="id_usuario")
+	private String idUsuario;
+
+	@Column(name="lote_upload")
+	private String loteUpload;
+
+	//bi-directional many-to-one association to MaestroProducto
+	@OneToMany(mappedBy="maestroMarca")
+	private List<MaestroProducto> maestroProductos;
+
+	public MaestroMarca() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getDescripcion() {
+		return this.descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public Date getFechaAuditoria() {
+		return this.fechaAuditoria;
+	}
+
+	public void setFechaAuditoria(Date fechaAuditoria) {
+		this.fechaAuditoria = fechaAuditoria;
+	}
+
+	public int getFiltroImpresion() {
+		return this.filtroImpresion;
+	}
+
+	public void setFiltroImpresion(int filtroImpresion) {
+		this.filtroImpresion = filtroImpresion;
+	}
+
+	public int getFiltroTermometro() {
+		return this.filtroTermometro;
+	}
+
+	public void setFiltroTermometro(int filtroTermometro) {
+		this.filtroTermometro = filtroTermometro;
+	}
+
+	public Time getHoraAuditoria() {
+		return this.horaAuditoria;
+	}
+
+	public void setHoraAuditoria(Time horaAuditoria) {
+		this.horaAuditoria = horaAuditoria;
+	}
+
+	public String getIdUsuario() {
+		return this.idUsuario;
+	}
+
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+	public String getLoteUpload() {
+		return this.loteUpload;
+	}
+
+	public void setLoteUpload(String loteUpload) {
+		this.loteUpload = loteUpload;
+	}
+
+	public List<MaestroProducto> getMaestroProductos() {
+		return this.maestroProductos;
+	}
+
+	public void setMaestroProductos(List<MaestroProducto> maestroProductos) {
+		this.maestroProductos = maestroProductos;
+	}
+
+	public MaestroProducto addMaestroProducto(MaestroProducto maestroProducto) {
+		getMaestroProductos().add(maestroProducto);
+		maestroProducto.setMaestroMarca(this);
+
+		return maestroProducto;
+	}
+
+	public MaestroProducto removeMaestroProducto(MaestroProducto maestroProducto) {
+		getMaestroProductos().remove(maestroProducto);
+		maestroProducto.setMaestroMarca(null);
+
+		return maestroProducto;
+	}
+
+}
