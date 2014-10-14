@@ -10,9 +10,13 @@ http://www.springframework.org/schema/data/jpa http://www.springframework.org/sc
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<!-- <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
+			/> -->
+		<!-- <property name="url" value="jdbc:sqlserver://localhost:1433;DatabaseName=dusa_sevadu" 
+			/> -->
 		<property name="url"
-			value="jdbc:sqlserver://localhost:1433;DatabaseName=dusa_sevadu" />
+			value="jdbc:mysql://localhost:3306/sevaduco_dusa_estadistica_ventas" />
 		<property name="username" value="client" />
 		<property name="password" value="123" />
 	</bean>

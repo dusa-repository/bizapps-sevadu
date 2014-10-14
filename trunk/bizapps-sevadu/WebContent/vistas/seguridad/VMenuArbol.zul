@@ -1,0 +1,69 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVMenuArbol" apply="controlador.seguridad.CMenuArbol">
+		<groupbox width="auto" mold="3d" title="Menu Arbol (VMenuArbol)">
+			<div id="botoneraMenuArbol" />
+			<groupbox id="gpxRegistro" width="auto" class ="azul" title="" open="false">
+				<caption label="Añadir"  style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar un Nuevo Item del Menu Arbol" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="20%" />
+						<column label="" width="10%" />
+						<column label="" width="25%" />
+						<column label="" width="45%" />
+					</columns>
+					<rows>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Nombre:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="2">
+									<textbox id="txtNombre" hflex="1" maxlength="100"
+										tooltiptext="Ingrese el Nombre del Item del Menu Arbol" width="100%"/>
+							</cell>
+							<hbox />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Padre:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<longbox id="txtPadre" hflex="1" maxlength="3"
+								tooltiptext="Ingrese el Padre del Item" width="100%"/>
+							<hbox />
+							<hbox />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Url:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="2">							
+									<textbox id="txtUrl" hflex="1" maxlength="100"
+										tooltiptext="Ingrese la Url de la Vista" />							
+							</cell>
+							<hbox />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
+					tooltiptext="Presione para Visualizar los Item del Menu Registrados" />
+				<div id="divCatalogoMenuArbol" tooltiptext="Seleccione el Item del Menu para Realizar una Accion" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+	</div>
+</zk>

@@ -1,0 +1,56 @@
+<zk>
+	<style src="/public/Estilo.css" />
+	<div apply="controlador.seguridad.CEditarUsuario" id="divEditarUsuario">
+		<groupbox width="50%" mold="3d" title="Editar Usuario">
+			<grid width="100%">
+				<columns visible="false">
+					<column label="" width="40%" />
+					<column label="" width="60%" />
+				</columns>
+				<rows>
+					<row>
+						<hbox>
+							<label value="Nombre de Usuario:" class="etiqueta" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red" />
+						</hbox>
+						<textbox id="txtNombreUsuarioEditar" maxlength="50"
+							disabled="true" />
+					</row>
+					<row>
+						<hbox>
+							<label value="Contraseña nueva:" class="etiqueta" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red" />
+						</hbox>
+						<textbox id="txtClaveUsuarioNueva" type="password"
+							maxlength="256" width="250px" tabindex="8"
+							tooltiptext="Ingrese una Nueva Contraseña" />
+					</row>
+					<row>
+						<hbox>
+							<label value="
+							Confirme su contraseña: " class="etiqueta" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red" />
+						</hbox>
+						<textbox id="txtClaveUsuarioConfirmar" type="password"
+							maxlength="256" width="250px" tabindex="8" tooltiptext="Confirme su Contraseña" />
+					</row>
+					<row>
+						<label class="etiqueta" value="Adjuntar Imagen:" />
+						<fileupload
+							style="	background: #952C2C;font-size: 13px;color: white;cursor: pointer;width: 95px;height: 29px;	-webkit-border-radius: 0.7em;-moz-border-radius: 0.7em;	border-radius: 0.7em;"
+							id="fudImagenUsuario" image="/public/imagenes/botones/cargar.png" label="Foto"/>
+					</row>
+					<row>
+						<label class="etiqueta" value="Imagen Seleccionada:" />
+						<image id="imgUsuario" width="50px" height="50px" />
+					</row>
+				</rows>
+			</grid>
+			<separator />
+			<div id="botoneraEditarUsuario" />
+		</groupbox>
+	</div>
+</zk>
