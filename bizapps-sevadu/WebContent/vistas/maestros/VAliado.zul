@@ -1,0 +1,70 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVAliado" apply="controlador.maestros.CAliado" width="100%">
+		<groupbox width="100%" mold="3d" title="Maestro de Aliados">
+			<div id="botoneraAliado" />
+			<separator />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar un Nuevo Aliado" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="15%" />
+						<column label="" width="15%" />
+						<column label="" width="5%" />
+						<column label="" width="15%" />
+						<column label="" width="15%" />
+						<column label="" width="15%" />
+						<column label="" width="5%" />
+						<column label="" width="15%" />
+					</columns>
+					<rows>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Codigo:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<textbox id="txtCodigo" maxlength="20"
+									tooltiptext="Ingrese el Codigo del Aliado" />
+							</cell>
+							<label class="etiqueta" value="Nombre:" />
+							<cell colspan="3">
+								<textbox id="txtNombre" maxlength="100"
+									tooltiptext="Ingrese el Nombre del Aliado" />
+							</cell>
+						</row>
+						<row>
+							<cell colspan="4">
+								<div id="divBuscadorZona" width="100%" />
+							</cell>
+							<cell colspan="4">
+								<div id="divBuscadorVendedor" width="100%" />
+							</cell>
+						</row>
+						<row>
+							<cell colspan="4">
+								<div id="divBuscadorEstado" width="100%" />
+							</cell>
+							<cell colspan="4">
+								<div id="divBuscadorCiudad" width="100%" />
+							</cell>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
+					tooltiptext="Presione para Visualizar los Aliados Registrados" />
+				<div id="catalogoAliado" tooltiptext="Seleccione el Aliado para Realizar una Accion" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+	</div>
+</zk>

@@ -1,7 +1,11 @@
 package modelo.maestros;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
+
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
@@ -33,8 +37,9 @@ public class MaestroMarca implements Serializable {
 	@Column(name="filtro_impresion")
 	private int filtroImpresion;
 
+	@Type(type = "org.hibernate.type.NumericBooleanType")
 	@Column(name="filtro_termometro")
-	private int filtroTermometro;
+	private boolean filtroTermometro;
 
 	@Column(name="hora_auditoria")
 	private Time horaAuditoria;
@@ -52,6 +57,23 @@ public class MaestroMarca implements Serializable {
 	public MaestroMarca() {
 	}
 
+	public MaestroMarca(int id, String marcaDusa, String descripcion,
+			Date fechaAuditoria, int filtroImpresion, boolean filtroTermometro,
+			Time horaAuditoria, String idUsuario, String loteUpload) {
+		super();
+		this.id = id;
+		this.marcaDusa = marcaDusa;
+		this.descripcion = descripcion;
+		this.fechaAuditoria = fechaAuditoria;
+		this.filtroImpresion = filtroImpresion;
+		this.filtroTermometro = filtroTermometro;
+		this.horaAuditoria = horaAuditoria;
+		this.idUsuario = idUsuario;
+		this.loteUpload = loteUpload;
+	}
+
+
+
 	public int getId() {
 		return this.id;
 	}
@@ -60,8 +82,24 @@ public class MaestroMarca implements Serializable {
 		this.id = id;
 	}
 
+	public String getMarcaDusa() {
+		return marcaDusa;
+	}
+
+	public void setMarcaDusa(String marcaDusa) {
+		this.marcaDusa = marcaDusa;
+	}
+
 	public String getDescripcion() {
 		return this.descripcion;
+	}
+
+	public boolean isFiltroTermometro() {
+		return filtroTermometro;
+	}
+
+	public void setFiltroTermometro(boolean filtroTermometro) {
+		this.filtroTermometro = filtroTermometro;
 	}
 
 	public void setDescripcion(String descripcion) {
@@ -82,14 +120,6 @@ public class MaestroMarca implements Serializable {
 
 	public void setFiltroImpresion(int filtroImpresion) {
 		this.filtroImpresion = filtroImpresion;
-	}
-
-	public int getFiltroTermometro() {
-		return this.filtroTermometro;
-	}
-
-	public void setFiltroTermometro(int filtroTermometro) {
-		this.filtroTermometro = filtroTermometro;
 	}
 
 	public Time getHoraAuditoria() {

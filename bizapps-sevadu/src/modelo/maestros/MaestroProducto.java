@@ -1,87 +1,111 @@
 package modelo.maestros;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
-
 
 /**
  * The persistent class for the maestro_producto database table.
  * 
  */
 @Entity
-@Table(name="maestro_producto")
-@NamedQuery(name="MaestroProducto.findAll", query="SELECT m FROM MaestroProducto m")
+@Table(name = "maestro_producto")
+@NamedQuery(name = "MaestroProducto.findAll", query = "SELECT m FROM MaestroProducto m")
 public class MaestroProducto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="codigo_producto_dusa")
+	@Column(name = "codigo_producto_dusa")
 	private String codigoProductoDusa;
 
-	@Column(name="codigo_botella_dusa")
+	@Column(name = "codigo_botella_dusa")
 	private String codigoBotellaDusa;
 
-	@Column(name="codigo_caja_dusa")
+	@Column(name = "codigo_caja_dusa")
 	private String codigoCajaDusa;
 
-	@Column(name="descripcion_marca")
+	@Column(name = "descripcion_marca")
 	private String descripcionMarca;
 
-	@Column(name="descripcion_producto")
+	@Column(name = "descripcion_producto")
 	private String descripcionProducto;
 
-	@Column(name="especie_dusa")
+	@Column(name = "especie_dusa")
 	private String especieDusa;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_auditoria")
+	@Column(name = "fecha_auditoria")
 	private Date fechaAuditoria;
 
-	@Column(name="hora_auditoria")
+	@Column(name = "hora_auditoria")
 	private Time horaAuditoria;
 
-	@Column(name="id_usuario")
+	@Column(name = "id_usuario")
 	private String idUsuario;
 
-	@Column(name="lote_upload")
+	@Column(name = "lote_upload")
 	private String loteUpload;
 
-	@Column(name="packing_size_dusa")
+	@Column(name = "packing_size_dusa")
 	private int packingSizeDusa;
 
-	@Column(name="volumen_dusa")
+	@Column(name = "volumen_dusa")
 	private float volumenDusa;
 
-	//bi-directional many-to-one association to Existencia
-	@OneToMany(mappedBy="maestroProducto")
+	// bi-directional many-to-one association to Existencia
+	@OneToMany(mappedBy = "maestroProducto")
 	private List<Existencia> existencias;
 
-	//bi-directional many-to-one association to MaestroAliado
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="codigo_aliado")
+	// bi-directional many-to-one association to MaestroAliado
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "codigo_aliado")
 	private MaestroAliado maestroAliado;
 
-	//bi-directional many-to-one association to MaestroMarca
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="marca_dusa", referencedColumnName="marca_dusa")
+	// bi-directional many-to-one association to MaestroMarca
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "marca_dusa", referencedColumnName = "marca_dusa", unique = false)
 	private MaestroMarca maestroMarca;
 
-	//bi-directional many-to-one association to MappingProducto
-	@OneToMany(mappedBy="maestroProducto")
+	// bi-directional many-to-one association to MappingProducto
+	@OneToMany(mappedBy = "maestroProducto")
 	private List<MappingProducto> mappingProductos;
 
-	//bi-directional many-to-one association to PlanVenta
-	@OneToMany(mappedBy="maestroProducto")
+	// bi-directional many-to-one association to PlanVenta
+	@OneToMany(mappedBy = "maestroProducto")
 	private List<PlanVenta> planVentas;
 
-	//bi-directional many-to-one association to Venta
-	@OneToMany(mappedBy="maestroProducto")
+	// bi-directional many-to-one association to Venta
+	@OneToMany(mappedBy = "maestroProducto")
 	private List<Venta> ventas;
 
 	public MaestroProducto() {
+	}
+
+	public MaestroProducto(String codigoProductoDusa, String codigoBotellaDusa,
+			String codigoCajaDusa, String descripcionMarca,
+			String descripcionProducto, String especieDusa,
+			Date fechaAuditoria, Time horaAuditoria, String idUsuario,
+			String loteUpload, int packingSizeDusa, float volumenDusa,
+			MaestroAliado maestroAliado, MaestroMarca maestroMarca) {
+		super();
+		this.codigoProductoDusa = codigoProductoDusa;
+		this.codigoBotellaDusa = codigoBotellaDusa;
+		this.codigoCajaDusa = codigoCajaDusa;
+		this.descripcionMarca = descripcionMarca;
+		this.descripcionProducto = descripcionProducto;
+		this.especieDusa = especieDusa;
+		this.fechaAuditoria = fechaAuditoria;
+		this.horaAuditoria = horaAuditoria;
+		this.idUsuario = idUsuario;
+		this.loteUpload = loteUpload;
+		this.packingSizeDusa = packingSizeDusa;
+		this.volumenDusa = volumenDusa;
+		this.maestroAliado = maestroAliado;
+		this.maestroMarca = maestroMarca;
 	}
 
 	public String getCodigoProductoDusa() {

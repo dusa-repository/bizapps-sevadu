@@ -1,0 +1,87 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVEnvio" apply="controlador.maestros.CConfiguracionEnvioCorreo"
+		width="100%">
+		<groupbox width="100%" mold="3d"
+			title="Maestro de Configuraciones de Envio de Correo">
+			<div id="botoneraEnvio" />
+			<separator />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar una Nueva Configuracion de Envio de Correo Automatico" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="16.6%" />
+						<column label="" width="16.6%" />
+						<column label="" width="16.6%" />
+						<column label="" width="16.6%" />
+						<column label="" width="16.6%" />
+						<column label="" width="17%" />
+					</columns>
+					<rows>
+						<row>
+							<cell colspan="4">
+								<div id="divBuscadorReporte" width="100%" />
+							</cell>
+							<label class="etiqueta" value="Estado:" />
+							<radiogroup id="rdbActivo">
+								<radio id="rdoSi" label="Activo" />
+								<space />
+								<radio id="rdoNo" label="Inactivo" />
+							</radiogroup>
+						</row>
+					</rows>
+				</grid>
+				<separator />
+				<groupbox width="auto" class="blaco" title="" closable="false">
+					<caption label="Destinatarios" style="font-weight:bold; font-size: 13px" />
+					<hbox width="100%" widths="50%,5%,45%">
+						<vbox width="100%" height="100%">
+							<listbox id="ltbCorreos" height="300px" width="100%"
+								emptyMessage="No hay Usuarios Registrados">
+								<listhead>
+									<listheader label="Usuario" width="50%" />
+									<listheader label="Correo" width="50%" />
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="${each.primerNombre} ${each.primerApellido}">
+										</listcell>
+										<listcell label="${each.email}">
+										</listcell>
+									</listitem>
+								</template>
+							</listbox>
+							<label class="etiqueta"
+								value="Presione doble click sobre una celda para agregar el correo a los destinatarios" />
+						</vbox>
+						<separator />
+						<hbox width="100%" height="100%" widths="20%,75%,5%">
+							<hbox>
+								<label class="etiqueta" value="Destinatarios:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<textbox width="100%" height="300px" multiline="true"
+								class="multilinea" id="txtDestinatarios" maxlength="1000"
+								tooltiptext="Ingrese los destinatarios" />
+							<separator />
+						</hbox>
+					</hbox>
+				</groupbox>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
+					tooltiptext="Presione para Visualizar las Configuraciones de Envio de Correo Automatico" />
+				<div id="catalogoEnvio"
+					tooltiptext="Seleccione el la Configuracion para Realizar una Accion" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+	</div>
+</zk>
