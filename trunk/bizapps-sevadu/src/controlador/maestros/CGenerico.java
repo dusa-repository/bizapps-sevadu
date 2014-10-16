@@ -2,6 +2,7 @@ package controlador.maestros;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -35,10 +36,19 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Tab;
 
+import servicio.maestros.SConfiguracionEnvioCorreo;
+import servicio.maestros.SExistencia;
+import servicio.maestros.SF0004;
+import servicio.maestros.SF0005;
+import servicio.maestros.SMaestroAliado;
+import servicio.maestros.SMaestroMarca;
+import servicio.maestros.SMaestroProducto;
+import servicio.maestros.SMappingProducto;
+import servicio.maestros.SPlanVenta;
+import servicio.maestros.SVenta;
 import servicio.seguridad.SArbol;
 import servicio.seguridad.SGrupo;
 import servicio.seguridad.SUsuario;
-
 import componente.Mensaje;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
@@ -52,6 +62,26 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected SGrupo servicioGrupo;
 	@WireVariable("SUsuario")
 	protected SUsuario servicioUsuario;
+	@WireVariable("SF0004")
+	protected SF0004 servicioF0004;
+	@WireVariable("SF0005")
+	protected SF0005 servicioF0005;
+	@WireVariable("SConfiguracionEnvioCorreo")
+	protected SConfiguracionEnvioCorreo servicioEnvio;
+	@WireVariable("SExistencia")
+	protected SExistencia servicioExistencia;
+	@WireVariable("SMaestroAliado")
+	protected SMaestroAliado servicioAliado;
+	@WireVariable("SMaestroMarca")
+	protected SMaestroMarca servicioMarca;
+	@WireVariable("SMaestroProducto")
+	protected SMaestroProducto servicioProducto;
+	@WireVariable("SMappingProducto")
+	protected SMappingProducto servicioMapping;
+	@WireVariable("SPlanVenta")
+	protected SPlanVenta servicioPlan;
+	@WireVariable("SVenta")
+	protected SVenta servicioVenta;
 
 	protected static SimpleDateFormat formatoFecha = new SimpleDateFormat(
 			"dd-MM-yyyy");
@@ -69,6 +99,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	public Timestamp fechaHora = new Timestamp(fecha.getTime());
 	public Mensaje msj = new Mensaje();
 	public String cerrar;
+	Time tiempo = new Time(fecha.getTime());
 	private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
 			"/META-INF/PropiedadesBaseDatos.xml");
 

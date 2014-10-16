@@ -1,0 +1,94 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVF0004" apply="controlador.maestros.CF0004" width="100%" >
+		<groupbox width="100%" mold="3d"
+			title="Trabajo con Tipos de Codigos Definidos por el Usuario (VF0004)">
+			<div id="botoneraF0004" />
+			<separator />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar un Nuevo Tipo de Codigo" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="20%" />
+						<column label="" width="10%" />
+						<column label="" width="25%" />
+						<column label="" width="45%" />
+					</columns>
+					<rows>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Cd Producto:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<textbox id="txtSYF0004" hflex="1" maxlength="4" width="10px"
+								tooltiptext="Ingrese el Codigo Principal del Sistema" />
+							<hbox />
+							<hbox />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Tipos de Codigos:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<textbox id="txtRTF0004" hflex="1" maxlength="2" width="10px"
+								tooltiptext="Ingrese el Codigo Secundario del Sistema" />
+							<hbox />
+							<hbox />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Descripcion:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="2">
+								<textbox id="txtDL01F0004" hflex="1" maxlength="30"
+									tooltiptext="Ingrese la Descripcion del Tipo de Codigo"
+									multiline="true" />
+							</cell>
+							<hbox />
+						</row>
+						<row>
+							<label class="etiqueta" value="Long Codigo:" />
+							<doublebox id="txtCDLF0004" tooltiptext="Ingrese el Codigo del Tipo de Codigo"
+								width="98%" />
+							<hbox />
+							<hbox />
+						</row>
+						<row>
+							<label class="etiqueta" value="2da Linea (Y/N):" />
+							<textbox id="txtLNF0004" hflex="1" maxlength="1"
+								tooltiptext="Ingrese la Segunda Linea del Tipo de Codigo" />
+							<hbox />
+							<hbox />
+						</row>
+						<row>
+							<label class="etiqueta" value="Numerico (Y/N):" />
+							<textbox id="txtNUMF0004" hflex="1" maxlength="1"
+								tooltiptext="Ingrese el valor Numerico del Tipo de Codigo" />
+							<hbox />
+							<hbox />
+
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
+					tooltiptext="Presione para Visualizar los Tipos de Codigos Registrados" />
+				<div id="catalogoF0004" tooltiptext="Seleccione el Tipo de Codigo para Realizar una Accion" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+	</div>
+</zk>

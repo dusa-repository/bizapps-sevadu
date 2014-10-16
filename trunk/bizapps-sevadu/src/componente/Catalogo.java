@@ -3,6 +3,10 @@ package componente;
 import java.util.ArrayList;
 import java.util.List;
 
+import modelo.maestros.F0004;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -29,6 +33,8 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Vbox;
 import org.zkoss.zul.Window;
 
+import servicio.maestros.SF0004;
+
 public abstract class Catalogo<Clase> extends Window {
 
 	private static final long serialVersionUID = 1L;
@@ -41,6 +47,13 @@ public abstract class Catalogo<Clase> extends Window {
 	Textbox txtRT;
 	Label labelRTNombre;
 	Label labelBuscado;
+
+	private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+			"/META-INF/ConfiguracionAplicacion.xml");
+
+	public static SF0004 getServicioF4() {
+		return applicationContext.getBean(SF0004.class);
+	}
 
 	public Catalogo(final Component cGenerico, String titulo,
 			List<Clase> lista, boolean emergente, boolean udc, boolean hibrido,
@@ -138,7 +151,7 @@ public abstract class Catalogo<Clase> extends Window {
 		lsbCatalogo.appendChild(cabecera);
 		lsbCatalogo.setWidth("100%");
 		lsbCatalogo.appendChild(lhdEncabezado);
-//		lsbCatalogo.setSizedByContent(true);
+		// lsbCatalogo.setSizedByContent(true);
 		lsbCatalogo.setSpan("true");
 		cabecera.setVisible(true);
 		lhdEncabezado.setVisible(true);
@@ -316,12 +329,11 @@ public abstract class Catalogo<Clase> extends Window {
 
 	public void actualizarLista(List<Clase> lista, boolean check) {
 		lsbCatalogo.setModel(new ListModelList<Clase>(lista));
-		if(check)
-		{
-		 lsbCatalogo.setMultiple(false);
-		 lsbCatalogo.setCheckmark(false);
-		 lsbCatalogo.setMultiple(true);
-		 lsbCatalogo.setCheckmark(true);
+		if (check) {
+			lsbCatalogo.setMultiple(false);
+			lsbCatalogo.setCheckmark(false);
+			lsbCatalogo.setMultiple(true);
+			lsbCatalogo.setCheckmark(true);
 		}
 	}
 
@@ -353,6 +365,19 @@ public abstract class Catalogo<Clase> extends Window {
 
 		lsbCatalogo.clearSelection();
 
+	}
+
+	public void settearCamposUdc(String valor1, String valor2) {
+		F0004 f004 = getServicioF4().buscar(valor1, valor2);
+		if (f004 != null) {
+			txtSY.setValue(f004.getId().getDtsy());
+			labelBuscado.setValue(f004.getDtdl01());
+			txtRT.setValue(f004.getId().getDtrt());
+		} else {
+			txtSY.setValue(valor1);
+			labelBuscado.setValue("Tipo UDC NO REGISTRADA AUN");
+			txtRT.setValue(valor2);
+		}
 	}
 
 }

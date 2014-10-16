@@ -1,0 +1,61 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVMarca" apply="controlador.maestros.CMarca" width="100%">
+		<groupbox width="100%" mold="3d" title="Maestro de Marca">
+			<div id="botoneraMarca" />
+			<separator />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar una Nueva Marca" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="20%" />
+						<column label="" width="30%" />
+						<column label="" width="20%" />
+						<column label="" width="30%" />
+					</columns>
+					<rows>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Codigo:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<textbox id="txtCodigo" maxlength="10" tooltiptext="Ingrese el codigo" />
+							<label class="etiqueta" value="Se utiliza para Termometro:" />
+							<radiogroup id="rdbActivo">
+								<radio id="rdoSi" label="Si" />
+								<space />
+								<radio id="rdoNo" label="No" />
+							</radiogroup>
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Descripcion:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="2">
+								<textbox id="txtDescripcion" maxlength="50"
+									tooltiptext="Ingrese la descripcion" />
+							</cell>
+							<hbox />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
+					tooltiptext="Presione para Visualizar las Marcas" />
+				<div id="catalogoMarca" tooltiptext="Seleccione la Marca para Realizar una Accion" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+	</div>
+</zk>

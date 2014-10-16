@@ -1,0 +1,129 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVProducto" apply="controlador.maestros.CProducto"
+		width="100%">
+		<groupbox width="100%" mold="3d" title="Maestro de Producto">
+			<div id="botoneraProducto" />
+			<separator />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar un Nuevo Producto" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="15%" />
+						<column label="" width="15%" />
+						<column label="" width="10%" />
+						<column label="" width="10%" />
+						<column label="" width="15%" />
+						<column label="" width="15%" />
+						<column label="" width="10%" />
+						<column label="" width="10%" />
+					</columns>
+					<rows>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Codigo:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<textbox id="txtCodigo" maxlength="100"
+									tooltiptext="Ingrese el Codigo del Producto" />
+							</cell>
+							<hbox>
+								<label class="etiqueta" value="Descripcion:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<textbox id="txtDescripcion" maxlength="100"
+									tooltiptext="Ingrese la Descripcion del Producto" />
+							</cell>
+						</row>
+						<row>
+							<cell colspan="4">
+								<div id="divBuscadorCaja" width="100%" />
+							</cell>
+							<cell colspan="4">
+								<div id="divBuscadorBotella" width="100%" />
+							</cell>
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Marca:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="2">
+								<textbox id="txtMarca" hflex="1" maxlength="100"
+									tooltiptext="Seleccione del Catalogo el Codigo de la Marca" />
+							</cell>
+							<button id="btnBuscarMarca" label="Buscar"
+								tooltiptext="Catalogo de Codigos de Marcas" image="/public/imagenes/botones/buscar.png"
+								class="btn" />
+							<hbox>
+								<label class="etiqueta" value="Volumen:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<doublespinner value="0" id="spnVolumen" width="100%"
+									tooltiptext="Ingrese el Volumen del Producto" step="1" format="#.##"
+									constraint="min 0 max 1000000" />
+							</cell>
+							<hbox />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Packing size:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<spinner value="0" id="spnPacking" width="100%"
+									tooltiptext="Ingrese el Packing Size del Producto" step="1"
+									constraint="min 0 max 100000" />
+							</cell>
+							<hbox />
+							<cell colspan="4">
+								<div id="divBuscadorEspecie" width="100%" />
+							</cell>
+						</row>
+						<row>
+							<label class="etiqueta" value="¿Comun para Todos los Aliados?" />
+							<cell colspan="3">
+								<checkbox checked="true" id="chkSi" />
+							</cell>
+							<label id="lblAliado" visible="false" class="etiqueta" value="Aliado:" />
+							<cell colspan="2">
+								<textbox visible="false" id="txtAliado" hflex="1" maxlength="20"
+									tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
+							</cell>
+							<button visible="false" id="btnBuscarAliado" label="Buscar"
+								tooltiptext="Catalogo de Codigos de Aliados" image="/public/imagenes/botones/buscar.png"
+								class="btn" />
+							<hbox />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
+					tooltiptext="Presione para Visualizar los Productos" />
+				<div id="catalogoProducto" tooltiptext="Seleccione el Producto para Realizar una Accion" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+		<div id="divCatalogoMarca" tooltiptext="Click para Seleccionar una Marca" />
+		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
+	</div>
+</zk>
