@@ -1,0 +1,27 @@
+<zk>
+	<style src="/public/Estilo.css" />
+	<div apply="controlador.maestros.CConfiguracion" id="divConfiguracion">
+		<groupbox width="100%" mold="3d" title="Configuracion">
+			<div id="botoneraConfiguracion" />
+			<separator />
+			<grid width="100%">
+				<columns visible="false">
+					<column label="" width="25%" />
+					<column label="" width="25%" />
+					<column label="" width="50%" />
+				</columns>
+				<rows>
+					<row>
+						<hbox>
+							<label class="etiqueta" value="Inicio del Año Fiscal Actual:" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red" />
+						</hbox>
+						<datebox width="100%" readonly="true" id="dtbConfiguracion"
+							tooltiptext="Seleccione la Fecha" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+	</div>
+</zk>

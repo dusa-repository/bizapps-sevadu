@@ -1,0 +1,70 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divTipoCliente" apply="controlador.maestros.CTipoCliente">
+		<groupbox width="auto" mold="3d" title="Tipo de Cliente">
+			<div id="botoneraTipoCliente" />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar un nuevo Tipo de Cliente" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="20%" />
+						<column label="" width="10%" />
+						<column label="" width="25%" />
+						<column label="" width="45%" />
+					</columns>
+					<rows>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Codigo:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+
+							<textbox id="txtCodigo" hflex="1" maxlength="50"
+								tooltiptext="Ingrese el Codigo de Tipo de Cliente" width="100%" />
+							<hbox />
+							<hbox />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Descripcion:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="2">
+								<textbox id="txtDescripcion" hflex="1" maxlength="100"
+									tooltiptext="Ingrese la Descripcion" width="100%" />
+							</cell>
+							<hbox />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Canal de Ventas:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<textbox id="txtCanal" hflex="1" maxlength="50"
+								tooltiptext="Ingrese el Canal de Ventas" />
+							<hbox />
+							<hbox />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
+					tooltiptext="Presione para Visualizar los Tipos de Clientes Registrados" />
+				<div id="divCatalogoTipoCliente" tooltiptext="Seleccione el Tipo de Cliente para Realizar una Accion" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+	</div>
+</zk>
