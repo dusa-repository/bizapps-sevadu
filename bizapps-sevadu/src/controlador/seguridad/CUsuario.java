@@ -83,25 +83,11 @@ public class CUsuario extends CGenerico {
 	@Wire
 	private Textbox txtDireccionUsuario;
 	@Wire
-	private Textbox txtLicenciaCUsuario;
-	@Wire
-	private Textbox txtLicenciaMUsuario;
-	@Wire
-	private Textbox txtLicenciaIUsuario;
-	@Wire
 	private Textbox txtLoginUsuario;
 	@Wire
 	private Textbox txtPasswordUsuario;
 	@Wire
-	private Textbox txtPassword2Usuario;
-	@Wire
-	private Spinner spnTiempoUsuario;
-	@Wire
-	private Spinner spnCitasUsuario;
-	@Wire
-	private Combobox cmbEspecialidad;
-	@Wire
-	private Combobox cmbUnidad;
+	private Textbox txtPassword2Usuario;;
 	@Wire
 	private Button btnBuscarUsuario;
 	@Wire
@@ -140,7 +126,6 @@ public class CUsuario extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				cerrar = (String) map.get("titulo");
-				System.out.println(tabs.size());
 				map.clear();
 				map = null;
 			}

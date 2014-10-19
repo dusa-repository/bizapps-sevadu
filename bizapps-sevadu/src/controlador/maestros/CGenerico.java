@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Tab;
 
+import servicio.maestros.SConfiguracion;
 import servicio.maestros.SConfiguracionEnvioCorreo;
 import servicio.maestros.SExistencia;
 import servicio.maestros.SF0004;
@@ -45,6 +46,7 @@ import servicio.maestros.SMaestroMarca;
 import servicio.maestros.SMaestroProducto;
 import servicio.maestros.SMappingProducto;
 import servicio.maestros.SPlanVenta;
+import servicio.maestros.STipoCliente;
 import servicio.maestros.SVenta;
 import servicio.seguridad.SArbol;
 import servicio.seguridad.SGrupo;
@@ -82,6 +84,10 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected SPlanVenta servicioPlan;
 	@WireVariable("SVenta")
 	protected SVenta servicioVenta;
+	@WireVariable("STipoCliente")
+	protected STipoCliente servicioTipoCliente;
+	@WireVariable("SConfiguracion")
+	protected SConfiguracion servicioConfiguracion;
 
 	protected static SimpleDateFormat formatoFecha = new SimpleDateFormat(
 			"dd-MM-yyyy");
@@ -291,7 +297,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 		arreglo.add(ds.getUrl());
 		return arreglo;
 	}
-	
+
 	class SMTPAuthenticator extends javax.mail.Authenticator {
 		public PasswordAuthentication getPasswordAuthentication() {
 			return new PasswordAuthentication("cdusa", "cartucho");

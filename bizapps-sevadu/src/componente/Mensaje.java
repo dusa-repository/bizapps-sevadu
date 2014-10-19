@@ -3,6 +3,7 @@ package componente;
 import org.zkoss.zul.Messagebox;
 
 public class Mensaje {
+	public static String CodigoUsado = "El Codigo del Tipo Cliente esta siendo Usado por otro Registro";
 	public static String almacenNoExiste ="El Codigo del Almacen no Existe.";
 	public static String contrasennasInvalidas = "Las contraseñas no coinciden.";
 	public static String camposVaciosItem = "Debe Llenar Todos lo Campos Requeridos, de la seccion de Articulo (**).";
