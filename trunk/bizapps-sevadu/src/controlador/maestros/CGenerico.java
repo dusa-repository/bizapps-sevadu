@@ -45,6 +45,7 @@ import servicio.maestros.SMaestroAliado;
 import servicio.maestros.SMaestroMarca;
 import servicio.maestros.SMaestroProducto;
 import servicio.maestros.SMappingProducto;
+import servicio.maestros.SMarcaActivadaVendedor;
 import servicio.maestros.SPlanVenta;
 import servicio.maestros.STipoCliente;
 import servicio.maestros.SVenta;
@@ -80,6 +81,8 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected SMaestroProducto servicioProducto;
 	@WireVariable("SMappingProducto")
 	protected SMappingProducto servicioMapping;
+	@WireVariable("SMarcaActivadaVendedor")
+	protected SMarcaActivadaVendedor servicioMarcaActivada;
 	@WireVariable("SPlanVenta")
 	protected SPlanVenta servicioPlan;
 	@WireVariable("SVenta")
