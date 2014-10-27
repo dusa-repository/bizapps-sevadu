@@ -1,3 +1,9 @@
 <zk>
-	<spreadsheet id="ss" width="100%" height="100%" style="border:1px solid black;" apply="controlador.transacciones.CTermometro"/>
+	<window height="500px" id="divVTermometro" apply="controlador.transacciones.CTermometro"
+		width="100%">
+		<button autodisable="self" id="btnExportar" label="Exportar"
+			image="/public/imagenes/botones/importar.png" />
+		<spreadsheet src="/public/articulo.xlsx" maxVisibleRows="200" maxVisibleColumns="40" showToolbar="true"
+			id="ss" width="100%" height="200%" />
+	</window>
 </zk>
