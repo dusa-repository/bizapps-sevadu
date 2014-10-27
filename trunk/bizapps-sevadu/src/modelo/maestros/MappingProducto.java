@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import modelo.pk.MappingProductoPK;
+import modelo.pk.PlanVentaPK;
 
 import java.sql.Time;
 import java.util.Date;
@@ -16,20 +17,13 @@ import java.util.Date;
 @Entity
 @Table(name = "mapping_producto")
 @NamedQuery(name = "MappingProducto.findAll", query = "SELECT m FROM MappingProducto m")
-@IdClass(MappingProductoPK.class)
-public class MappingProducto {
+//@IdClass(MappingProductoPK.class)
+public class MappingProducto implements Serializable  {
 
-	// bi-directional many-to-one association to MaestroAliado
-	@Id
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "codigo_aliado")
-	private MaestroAliado maestroAliado;
-
-	// bi-directional many-to-one association to MaestroProducto
-	@Id
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "codigo_producto_dusa")
-	private MaestroProducto maestroProducto;
+	private static final long serialVersionUID = -7741985757645361744L;
+	
+	@EmbeddedId
+	private MappingProductoPK id;
 
 	@Column(name = "codigo_botella_cliente")
 	private String codigoBotellaCliente;
@@ -123,20 +117,12 @@ public class MappingProducto {
 		this.loteUpload = loteUpload;
 	}
 
-	public MaestroAliado getMaestroAliado() {
-		return this.maestroAliado;
+	public MappingProductoPK getId() {
+		return id;
 	}
 
-	public void setMaestroAliado(MaestroAliado maestroAliado) {
-		this.maestroAliado = maestroAliado;
-	}
-
-	public MaestroProducto getMaestroProducto() {
-		return this.maestroProducto;
-	}
-
-	public void setMaestroProducto(MaestroProducto maestroProducto) {
-		this.maestroProducto = maestroProducto;
+	public void setId(MappingProductoPK id) {
+		this.id = id;
 	}
 
 }

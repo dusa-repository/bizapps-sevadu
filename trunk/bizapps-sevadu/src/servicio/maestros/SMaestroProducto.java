@@ -33,4 +33,8 @@ public class SMaestroProducto {
 	public void eliminarUno(String clave) {
 		productoDAO.delete(clave);
 	}
+
+	public MaestroProducto buscar(String idProducto) {
+		return productoDAO.findOne(idProducto);
+	}
 }

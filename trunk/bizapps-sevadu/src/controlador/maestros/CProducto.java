@@ -114,11 +114,11 @@ public class CProducto extends CGenerico {
 						txtMarca.setValue(producto.getMaestroMarca()
 								.getMarcaDusa());
 						buscadorCaja.settearCampo(servicioF0005.buscar("00",
-								"00", producto.getCodigoCajaDusa()));
+								"04", producto.getCodigoCajaDusa()));
 						buscadorBotella.settearCampo(servicioF0005.buscar("00",
-								"01", producto.getCodigoBotellaDusa()));
+								"05", producto.getCodigoBotellaDusa()));
 						buscadorEspecie.settearCampo(servicioF0005.buscar("00",
-								"02", producto.getEspecieDusa()));
+								"06", producto.getEspecieDusa()));
 						spnPacking.setValue(producto.getPackingSizeDusa());
 						Float valor = producto.getVolumenDusa();
 						if (valor != null)

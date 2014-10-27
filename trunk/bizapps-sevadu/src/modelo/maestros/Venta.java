@@ -33,11 +33,17 @@ public class Venta implements Serializable {
 
 	private float cantidad;
 
+	private Float precio;
+
+	@Column(name="supervisor_aliado")
+	private String supervisor;
+
 	@Column(name="ciudad_aliado")
 	private String ciudadAliado;
 
-	@Column(name="codigo_cliente")
-	private String codigoCliente;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "codigo_cliente")
+	private Cliente codigoCliente;
 
 	private String especie;
 
@@ -144,11 +150,11 @@ public class Venta implements Serializable {
 		this.ciudadAliado = ciudadAliado;
 	}
 
-	public String getCodigoCliente() {
+	public Cliente getCodigoCliente() {
 		return this.codigoCliente;
 	}
 
-	public void setCodigoCliente(String codigoCliente) {
+	public void setCodigoCliente(Cliente codigoCliente) {
 		this.codigoCliente = codigoCliente;
 	}
 
@@ -278,6 +284,22 @@ public class Venta implements Serializable {
 
 	public void setTipoClienteBean(TipoCliente tipoClienteBean) {
 		this.tipoClienteBean = tipoClienteBean;
+	}
+
+	public Float getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(Float precio) {
+		this.precio = precio;
+	}
+
+	public String getSupervisor() {
+		return supervisor;
+	}
+
+	public void setSupervisor(String supervisor) {
+		this.supervisor = supervisor;
 	}
 
 }

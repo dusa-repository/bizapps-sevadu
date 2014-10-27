@@ -1,0 +1,35 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVCargarArchivo" apply="controlador.transacciones.CCargarArchivo"
+		width="100%">
+		<groupbox width="100%" mold="3d" title="Maestro de Aliados">
+			<div id="botoneraCargarRegistro" />
+			<separator />
+			<groupbox id="gpxCargarRegistro" width="auto" class="azul"
+				title="" closable="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar un Nuevo Aliado" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="25%" />
+						<column label="" width="15%" />
+						<column label="" width="40%" />
+						<column label="" width="20%" />
+					</columns>
+					<rows>
+						<row id="row">
+							<label id="lblNombre" class="etiqueta" value="Seleccione el Archivo:" />
+							<button autodisable="self" id="btnImportar"
+								style="	background: #952C2C;font-size: 13px;color: white;cursor: pointer;width: 100px;height: 33px;	-webkit-border-radius: 0.7em;-moz-border-radius: 0.7em;	border-radius: 0.7em;"
+								upload="true" label="Buscar" tooltiptext="Importar Data"
+								image="/public/imagenes/botones/importar.png" />
+							<label id="lblDescripcion" />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+		</groupbox>
+
+	</div>
+</zk>
