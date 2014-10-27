@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Tab;
 
+import servicio.maestros.SCliente;
 import servicio.maestros.SConfiguracion;
 import servicio.maestros.SConfiguracionEnvioCorreo;
 import servicio.maestros.SExistencia;
@@ -91,6 +92,8 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected STipoCliente servicioTipoCliente;
 	@WireVariable("SConfiguracion")
 	protected SConfiguracion servicioConfiguracion;
+	@WireVariable("SCliente")
+	protected SCliente servicioCliente;
 
 	protected static SimpleDateFormat formatoFecha = new SimpleDateFormat(
 			"dd-MM-yyyy");
@@ -108,7 +111,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	public Timestamp fechaHora = new Timestamp(fecha.getTime());
 	public Mensaje msj = new Mensaje();
 	public String cerrar;
-	Time tiempo = new Time(fecha.getTime());
+	public Time tiempo = new Time(fecha.getTime());
 	private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
 			"/META-INF/PropiedadesBaseDatos.xml");
 

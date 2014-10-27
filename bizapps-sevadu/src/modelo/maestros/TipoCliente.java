@@ -26,6 +26,9 @@ public class TipoCliente implements Serializable {
 	//bi-directional many-to-one association to Venta
 	@OneToMany(mappedBy="tipoClienteBean")
 	private List<Venta> ventas;
+	
+	@OneToMany(mappedBy="tipoCliente")
+	private List<Cliente> clientes;
 
 	public TipoCliente() {
 	}
@@ -74,6 +77,14 @@ public class TipoCliente implements Serializable {
 		venta.setTipoClienteBean(null);
 
 		return venta;
+	}
+
+	public List<Cliente> getClientes() {
+		return clientes;
+	}
+
+	public void setClientes(List<Cliente> clientes) {
+		this.clientes = clientes;
 	}
 
 }

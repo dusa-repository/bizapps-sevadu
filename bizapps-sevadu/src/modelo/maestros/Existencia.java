@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import modelo.pk.ExistenciaPK;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
 
@@ -14,26 +15,14 @@ import java.util.Date;
  * 
  */
 @Entity
+@Table(name="existencia")
 @NamedQuery(name="Existencia.findAll", query="SELECT e FROM Existencia e")
-@IdClass(ExistenciaPK.class)
-public class Existencia {
+public class Existencia implements Serializable {
 
-	//bi-directional many-to-one association to MaestroAliado
-	@Id
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="codigo_aliado")
-	private MaestroAliado maestroAliado;
+	private static final long serialVersionUID = -5233763823355941727L;
 
-	//bi-directional many-to-one association to MaestroProducto
-	@Id
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "codigo_producto", referencedColumnName = "codigo_producto_dusa")
-	private MaestroProducto maestroProducto;
-
-	@Id
-	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_existencia")
-	private java.util.Date fechaExistencia;
+	@EmbeddedId
+	private ExistenciaPK id;
 	
 	private int cantidad;
 
@@ -53,8 +42,9 @@ public class Existencia {
 	public Existencia() {
 	}
 
+
 	public int getCantidad() {
-		return this.cantidad;
+		return cantidad;
 	}
 
 	public void setCantidad(int cantidad) {
@@ -62,7 +52,7 @@ public class Existencia {
 	}
 
 	public Date getFechaAuditoria() {
-		return this.fechaAuditoria;
+		return fechaAuditoria;
 	}
 
 	public void setFechaAuditoria(Date fechaAuditoria) {
@@ -70,7 +60,7 @@ public class Existencia {
 	}
 
 	public Time getHoraAuditoria() {
-		return this.horaAuditoria;
+		return horaAuditoria;
 	}
 
 	public void setHoraAuditoria(Time horaAuditoria) {
@@ -78,7 +68,7 @@ public class Existencia {
 	}
 
 	public String getIdUsuario() {
-		return this.idUsuario;
+		return idUsuario;
 	}
 
 	public void setIdUsuario(String idUsuario) {
@@ -86,27 +76,20 @@ public class Existencia {
 	}
 
 	public String getLoteUpload() {
-		return this.loteUpload;
+		return loteUpload;
 	}
 
 	public void setLoteUpload(String loteUpload) {
 		this.loteUpload = loteUpload;
 	}
 
-	public MaestroAliado getMaestroAliado() {
-		return this.maestroAliado;
+	public ExistenciaPK getId() {
+		return id;
 	}
 
-	public void setMaestroAliado(MaestroAliado maestroAliado) {
-		this.maestroAliado = maestroAliado;
+	public void setId(ExistenciaPK id) {
+		this.id = id;
 	}
-
-	public MaestroProducto getMaestroProducto() {
-		return this.maestroProducto;
-	}
-
-	public void setMaestroProducto(MaestroProducto maestroProducto) {
-		this.maestroProducto = maestroProducto;
-	}
+	
 
 }

@@ -57,7 +57,7 @@ public class MaestroProducto implements Serializable {
 	private float volumenDusa;
 
 	// bi-directional many-to-one association to Existencia
-	@OneToMany(mappedBy = "maestroProducto")
+	@OneToMany(mappedBy = "id.maestroProd")
 	private List<Existencia> existencias;
 
 	// bi-directional many-to-one association to MaestroAliado
@@ -71,11 +71,11 @@ public class MaestroProducto implements Serializable {
 	private MaestroMarca maestroMarca;
 
 	// bi-directional many-to-one association to MappingProducto
-	@OneToMany(mappedBy = "maestroProducto")
+	@OneToMany(mappedBy = "id.maestroProducto")
 	private List<MappingProducto> mappingProductos;
 
 	// bi-directional many-to-one association to PlanVenta
-	@OneToMany(mappedBy = "maestroProducto")
+	@OneToMany(mappedBy = "id.maestroProducto")
 	private List<PlanVenta> planVentas;
 
 	// bi-directional many-to-one association to Venta
@@ -211,20 +211,20 @@ public class MaestroProducto implements Serializable {
 	public void setExistencias(List<Existencia> existencias) {
 		this.existencias = existencias;
 	}
-
-	public Existencia addExistencia(Existencia existencia) {
-		getExistencias().add(existencia);
-		existencia.setMaestroProducto(this);
-
-		return existencia;
-	}
-
-	public Existencia removeExistencia(Existencia existencia) {
-		getExistencias().remove(existencia);
-		existencia.setMaestroProducto(null);
-
-		return existencia;
-	}
+//
+//	public Existencia addExistencia(Existencia existencia) {
+//		getExistencias().add(existencia);
+//		existencia.s.setMaestroProducto(this);
+//
+//		return existencia;
+//	}
+//
+//	public Existencia removeExistencia(Existencia existencia) {
+//		getExistencias().remove(existencia);
+//		existencia.setMaestroProducto(null);
+//
+//		return existencia;
+//	}
 
 	public MaestroAliado getMaestroAliado() {
 		return this.maestroAliado;
@@ -250,19 +250,19 @@ public class MaestroProducto implements Serializable {
 		this.mappingProductos = mappingProductos;
 	}
 
-	public MappingProducto addMappingProducto(MappingProducto mappingProducto) {
-		getMappingProductos().add(mappingProducto);
-		mappingProducto.setMaestroProducto(this);
-
-		return mappingProducto;
-	}
-
-	public MappingProducto removeMappingProducto(MappingProducto mappingProducto) {
-		getMappingProductos().remove(mappingProducto);
-		mappingProducto.setMaestroProducto(null);
-
-		return mappingProducto;
-	}
+//	public MappingProducto addMappingProducto(MappingProducto mappingProducto) {
+//		getMappingProductos().add(mappingProducto);
+//		mappingProducto.setMaestroProducto(this);
+//
+//		return mappingProducto;
+//	}
+//
+//	public MappingProducto removeMappingProducto(MappingProducto mappingProducto) {
+//		getMappingProductos().remove(mappingProducto);
+//		mappingProducto.setMaestroProducto(null);
+//
+//		return mappingProducto;
+//	}
 
 	public List<PlanVenta> getPlanVentas() {
 		return this.planVentas;
@@ -272,19 +272,19 @@ public class MaestroProducto implements Serializable {
 		this.planVentas = planVentas;
 	}
 
-	public PlanVenta addPlanVenta(PlanVenta planVenta) {
-		getPlanVentas().add(planVenta);
-		planVenta.setMaestroProducto(this);
-
-		return planVenta;
-	}
-
-	public PlanVenta removePlanVenta(PlanVenta planVenta) {
-		getPlanVentas().remove(planVenta);
-		planVenta.setMaestroProducto(null);
-
-		return planVenta;
-	}
+//	public PlanVenta addPlanVenta(PlanVenta planVenta) {
+//		getPlanVentas().add(planVenta);
+//		planVenta.setMaestroProducto(this);
+//
+//		return planVenta;
+//	}
+//
+//	public PlanVenta removePlanVenta(PlanVenta planVenta) {
+//		getPlanVentas().remove(planVenta);
+//		planVenta.setMaestroProducto(null);
+//
+//		return planVenta;
+//	}
 
 	public List<Venta> getVentas() {
 		return this.ventas;

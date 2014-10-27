@@ -60,7 +60,7 @@ public class MaestroAliado implements Serializable {
 	private String zona;
 
 	//bi-directional many-to-one association to Existencia
-	@OneToMany(mappedBy="maestroAliado")
+	@OneToMany(mappedBy="id.maestroAliado")
 	private List<Existencia> existencias;
 
 	//bi-directional many-to-one association to MaestroProducto
@@ -68,16 +68,19 @@ public class MaestroAliado implements Serializable {
 	private List<MaestroProducto> maestroProductos;
 
 	//bi-directional many-to-one association to MappingProducto
-	@OneToMany(mappedBy="maestroAliado")
+	@OneToMany(mappedBy="id.maestroAliado")
 	private List<MappingProducto> mappingProductos;
 
 	//bi-directional many-to-one association to PlanVenta
-	@OneToMany(mappedBy="maestroAliado")
+	@OneToMany(mappedBy="id.maestroAliado")
 	private List<PlanVenta> planVentas;
 
 	//bi-directional many-to-one association to Venta
 	@OneToMany(mappedBy="maestroAliado")
 	private List<Venta> ventas;
+	
+	@OneToMany(mappedBy="maestroAliado")
+	private List<Cliente> clientes;
 
 	public MaestroAliado() {
 	}
@@ -202,19 +205,19 @@ public class MaestroAliado implements Serializable {
 		this.existencias = existencias;
 	}
 
-	public Existencia addExistencia(Existencia existencia) {
-		getExistencias().add(existencia);
-		existencia.setMaestroAliado(this);
-
-		return existencia;
-	}
-
-	public Existencia removeExistencia(Existencia existencia) {
-		getExistencias().remove(existencia);
-		existencia.setMaestroAliado(null);
-
-		return existencia;
-	}
+//	public Existencia addExistencia(Existencia existencia) {
+//		getExistencias().add(existencia);
+//		existencia.setMaestroAliado(this);
+//
+//		return existencia;
+//	}
+//
+//	public Existencia removeExistencia(Existencia existencia) {
+//		getExistencias().remove(existencia);
+//		existencia.setMaestroAliado(null);
+//
+//		return existencia;
+//	}
 
 	public List<MaestroProducto> getMaestroProductos() {
 		return this.maestroProductos;
@@ -246,19 +249,19 @@ public class MaestroAliado implements Serializable {
 		this.mappingProductos = mappingProductos;
 	}
 
-	public MappingProducto addMappingProducto(MappingProducto mappingProducto) {
-		getMappingProductos().add(mappingProducto);
-		mappingProducto.setMaestroAliado(this);
-
-		return mappingProducto;
-	}
-
-	public MappingProducto removeMappingProducto(MappingProducto mappingProducto) {
-		getMappingProductos().remove(mappingProducto);
-		mappingProducto.setMaestroAliado(null);
-
-		return mappingProducto;
-	}
+//	public MappingProducto addMappingProducto(MappingProducto mappingProducto) {
+//		getMappingProductos().add(mappingProducto);
+//		mappingProducto.setMaestroAliado(this);
+//
+//		return mappingProducto;
+//	}
+//
+//	public MappingProducto removeMappingProducto(MappingProducto mappingProducto) {
+//		getMappingProductos().remove(mappingProducto);
+//		mappingProducto.setMaestroAliado(null);
+//
+//		return mappingProducto;
+//	}
 
 	public List<PlanVenta> getPlanVentas() {
 		return this.planVentas;
@@ -268,19 +271,19 @@ public class MaestroAliado implements Serializable {
 		this.planVentas = planVentas;
 	}
 
-	public PlanVenta addPlanVenta(PlanVenta planVenta) {
-		getPlanVentas().add(planVenta);
-		planVenta.setMaestroAliado(this);
-
-		return planVenta;
-	}
-
-	public PlanVenta removePlanVenta(PlanVenta planVenta) {
-		getPlanVentas().remove(planVenta);
-		planVenta.setMaestroAliado(null);
-
-		return planVenta;
-	}
+//	public PlanVenta addPlanVenta(PlanVenta planVenta) {
+//		getPlanVentas().add(planVenta);
+//		planVenta.setMaestroAliado(this);
+//
+//		return planVenta;
+//	}
+//
+//	public PlanVenta removePlanVenta(PlanVenta planVenta) {
+//		getPlanVentas().remove(planVenta);
+//		planVenta.setMaestroAliado(null);
+//
+//		return planVenta;
+//	}
 
 	public List<Venta> getVentas() {
 		return this.ventas;
@@ -302,6 +305,14 @@ public class MaestroAliado implements Serializable {
 		venta.setMaestroAliado(null);
 
 		return venta;
+	}
+
+	public List<Cliente> getClientes() {
+		return clientes;
+	}
+
+	public void setClientes(List<Cliente> clientes) {
+		this.clientes = clientes;
 	}
 
 }
