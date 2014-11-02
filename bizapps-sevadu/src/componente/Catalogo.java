@@ -1,12 +1,21 @@
 package componente;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import modelo.maestros.F0004;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -18,6 +27,7 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Hbox;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
@@ -165,6 +175,18 @@ public abstract class Catalogo<Clase> extends Window {
 				String[] registros = crearRegistros(objeto);
 				for (int i = 0; i < registros.length; i++) {
 					Listcell celda = new Listcell(registros[i]);
+					if (registros[i] != null) {
+						if (registros[i]
+								.contains("/WEB-INF/classes/controlador/")) {
+							celda.setLabel(null);
+							Image imagen = new Image();
+							if (traerImagen(registros[i]) != null) {
+								imagen.setContent(traerImagen(registros[i]));
+								imagen.setParent(celda);
+							} else
+								celda.setLabel(registros[i]);
+						}
+					}
 					celda.setParent(fila);
 				}
 			}
@@ -378,6 +400,19 @@ public abstract class Catalogo<Clase> extends Window {
 			labelBuscado.setValue("Tipo UDC NO REGISTRADA AUN");
 			txtRT.setValue(valor2);
 		}
+	}
+
+	public BufferedImage traerImagen(String string) throws IOException {
+		BufferedImage imagenes;
+		URI uri = null;
+		try {
+			uri = new URI(string);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		File fnew = new File(uri);
+		imagenes = ImageIO.read(fnew);
+		return imagenes;
 	}
 
 }

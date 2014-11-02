@@ -47,6 +47,7 @@ public class SMappingProducto {
 			pk.setMaestroAliado(aliado);
 			pk.setMaestroProducto(productos.get(i));
 			mapper.setId(pk);
+			mapper.setLoteUpload("No");
 			lista.add(mapper);
 		}
 		return lista;
