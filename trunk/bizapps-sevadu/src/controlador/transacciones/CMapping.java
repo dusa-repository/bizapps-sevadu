@@ -1,9 +1,17 @@
 package controlador.transacciones;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroProducto;
@@ -58,6 +66,8 @@ public class CMapping extends CGenerico {
 	Catalogo<MappingProducto> catalogo;
 	Catalogo<MaestroAliado> catalogoAliado;
 	List<MappingProducto> lista = new ArrayList<MappingProducto>();
+	URL urlSi = getClass().getResource("../seguridad/si.png");
+	URL urlNo = getClass().getResource("../seguridad/no.png");
 
 	@Override
 	public void inicializar() throws IOException {
@@ -143,26 +153,34 @@ public class CMapping extends CGenerico {
 		catalogo = new Catalogo<MappingProducto>(catalogoMapping, "", lista,
 				false, false, true, "Codigo de Producto",
 				"Descripcion del Producto", "Codigo Producto Aliado",
-				"Codigo Caja Aliado", "Codigo Botella Aliado") {
+				"Codigo Caja Aliado", "Codigo Botella Aliado", "Mapeado") {
 
 			@Override
 			protected List<MappingProducto> buscar(List<String> valores) {
 
 				List<MappingProducto> listaMapping = new ArrayList<MappingProducto>();
-
 				for (MappingProducto objeto : lista) {
+					String codigoProducto = "";
+					if (objeto.getCodigoProductoCliente() != null)
+						codigoProducto = objeto.getCodigoProductoCliente();
+					String codigoCaja = "";
+					if (objeto.getCodigoCajaCliente() != null)
+						codigoCaja = objeto.getCodigoCajaCliente();
+					String codigoBotella = "";
+					if (objeto.getCodigoBotellaCliente() != null)
+						codigoBotella = objeto.getCodigoBotellaCliente();
 					if (objeto.getId().getMaestroProducto()
 							.getCodigoProductoDusa().toLowerCase()
 							.contains(valores.get(0).toLowerCase())
 							&& objeto.getId().getMaestroProducto()
 									.getDescripcionProducto().toLowerCase()
 									.contains(valores.get(1).toLowerCase())
-							&& objeto.getCodigoProductoCliente().toLowerCase()
-									.contains(valores.get(2).toLowerCase())
-							&& objeto.getCodigoCajaCliente().toLowerCase()
-									.contains(valores.get(3).toLowerCase())
-							&& objeto.getCodigoBotellaCliente().toLowerCase()
-									.contains(valores.get(4).toLowerCase())) {
+							&& codigoProducto.toLowerCase().contains(
+									valores.get(2).toLowerCase())
+							&& codigoCaja.toLowerCase().contains(
+									valores.get(3).toLowerCase())
+							&& codigoBotella.toLowerCase().contains(
+									valores.get(4).toLowerCase())) {
 						listaMapping.add(objeto);
 					}
 				}
@@ -171,7 +189,12 @@ public class CMapping extends CGenerico {
 
 			@Override
 			protected String[] crearRegistros(MappingProducto objeto) {
-				String[] registros = new String[5];
+				String imagenm = null;
+				if (objeto.getLoteUpload().equals("No")) {
+					imagenm = urlNo.toString();
+				} else
+					imagenm = urlSi.toString();
+				String[] registros = new String[6];
 				registros[0] = objeto.getId().getMaestroProducto()
 						.getCodigoProductoDusa();
 				registros[1] = objeto.getId().getMaestroProducto()
@@ -179,6 +202,7 @@ public class CMapping extends CGenerico {
 				registros[2] = objeto.getCodigoProductoCliente();
 				registros[3] = objeto.getCodigoCajaCliente();
 				registros[4] = objeto.getCodigoBotellaCliente();
+				registros[5] = imagenm;
 				return registros;
 			}
 
