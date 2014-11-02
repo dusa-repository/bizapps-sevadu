@@ -12,7 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import modelo.maestros.MaestroAliado;
 
 import org.hibernate.annotations.Type;
 
@@ -30,6 +33,9 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usuario", unique = true, nullable = false)
 	private long idUsuario;
+	
+	@OneToOne(mappedBy="usuario")
+	private MaestroAliado aliado;
 	
 	@Column(length = 50)
 	private String email;
@@ -255,6 +261,14 @@ public class Usuario implements Serializable {
 
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
+	}
+
+	public MaestroAliado getAliado() {
+		return aliado;
+	}
+
+	public void setAliado(MaestroAliado aliado) {
+		this.aliado = aliado;
 	}
 
 }
