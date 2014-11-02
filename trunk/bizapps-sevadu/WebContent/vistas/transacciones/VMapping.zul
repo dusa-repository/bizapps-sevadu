@@ -1,0 +1,45 @@
+<zk>
+	<style src="/public/Estilo.css" />
+	<div style="background-color: white" id="divMapping" width="100%"
+		apply="controlador.transacciones.CMapping">
+		<div id="botoneraMapping" />
+		<separator />
+		<grid width="50%">
+			<columns visible="false">
+				<column label="" width="20%" />
+				<column label="" width="60%" />
+				<column label="" width="20%" />
+			</columns>
+			<rows>
+				<row>
+					<label class="etiqueta" value="Productos:" />
+					<hbox align="center" pack="center">
+						<radiogroup>
+							<hbox>
+								<radio label="Todos" value="si" id="rdoTodos" />
+								<separator />
+								<radio label="Mapeados" value="no" id="rdoSi" />
+								<separator />
+								<radio label="No Mapeados" value="no" id="rdoNo" />
+							</hbox>
+						</radiogroup>
+					</hbox>
+					<!-- style="font-size: 13px ;width: 132px; height: 35px" -->
+					<button id="btnRefrescar" class="btn" label="Filtrar"
+						autodisable="self" image="/public/imagenes/botones/refresh2.png" />
+				</row>
+				<row id="row" visible="false">
+					<label class="etiqueta" value="Aliado:" />
+					<textbox id="txtAliado" hflex="1" maxlength="20"
+						tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
+					<button id="btnBuscarAliado" label="Buscar"
+						tooltiptext="Catalogo de Codigos de Aliados" image="/public/imagenes/botones/buscar.png"
+						class="btn" />
+				</row>
+			</rows>
+		</grid>
+		<separator />
+		<div id="catalogoMapping" tooltiptext="Doble Click al Item para Editar" />
+		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
+	</div>
+</zk>

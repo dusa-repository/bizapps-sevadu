@@ -37,4 +37,8 @@ public class SMaestroAliado {
 	public MaestroAliado buscar(String value) {
 		return aliadoDAO.findOne(value);
 	}
+
+	public MaestroAliado buscarPorLoginUsuario(String nombreUsuarioSesion) {
+		return aliadoDAO.findByUsuarioLogin(nombreUsuarioSesion);
+	}
 }

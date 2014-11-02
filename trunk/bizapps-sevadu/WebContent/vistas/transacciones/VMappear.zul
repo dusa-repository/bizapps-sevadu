@@ -1,0 +1,55 @@
+<zk>
+	<window id="wdwMappear" title="Editar Producto" border="normal"
+		width="40em" height="auto" contentStyle="overflow:auto"
+		apply="controlador.transacciones.CMappear" closable="true">
+		<div id="botoneraMappear" />
+		<separator />
+		<grid width="100%">
+			<columns visible="false">
+				<column label="" width="50%" />
+				<column label="" width="50%" />
+			</columns>
+			<rows>
+				<row>
+					<label class="etiqueta" value="Codigo del Producto DUSA:" />
+					<label id="lblCodigo" />
+				</row>
+				<row>
+					<label class="etiqueta" value="Descripcion del Producto:" />
+					<label id="lblDescripcion" />
+				</row>
+				<row>
+					<hbox>
+						<label class="etiqueta" value="Codigo Producto Aliado:" />
+						<space />
+						<label value="*" style="font-weight:bold;color:red">
+						</label>
+					</hbox>
+					<textbox id="txtCodigo" maxlength="100"
+						tooltiptext="Ingrese el Codigo del Producto del Aliado" />
+				</row>
+
+				<row>
+					<hbox>
+						<label class="etiqueta" value="Codigo Caja Aliado:" />
+						<space />
+						<label value="*" style="font-weight:bold;color:red">
+						</label>
+					</hbox>
+					<textbox id="txtCaja" maxlength="100"
+						tooltiptext="Ingrese el Codigo de Caja del Aliado" />
+				</row>
+				<row>
+					<hbox>
+						<label class="etiqueta" value="Codigo Botella Aliado:" />
+						<space />
+						<label value="*" style="font-weight:bold;color:red">
+						</label>
+					</hbox>
+					<textbox id="txtBotella" maxlength="100"
+						tooltiptext="Ingrese el Codigo de Botella del Aliado" />
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>

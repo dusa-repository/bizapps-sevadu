@@ -125,7 +125,8 @@ public class CArbol extends CGenerico {
 			String nombre = authorities.get(k).toString();
 			if (Validador.validarNumero(nombre)) {
 				arbol = servicioArbol.buscar(Long.parseLong(nombre));
-				if (arbol != null)
+				if (arbol != null
+						&& !arbol.getNombre().equals("Ver Aliados Mapping"))
 					ids.add(arbol.getIdArbol());
 				arbole.add(arbol);
 			}
@@ -177,7 +178,8 @@ public class CArbol extends CGenerico {
 	@Listen("onClick = #arbolMenu")
 	public void selectedNode() {
 		if (arbolMenu.getSelectedItem() != null) {
-			Treecell celda = (Treecell) arbolMenu.getSelectedItem().getChildren().get(0).getChildren().get(0);
+			Treecell celda = (Treecell) arbolMenu.getSelectedItem()
+					.getChildren().get(0).getChildren().get(0);
 			long item = Long.valueOf(celda.getId());
 			boolean abrir = true;
 			Tab taba = new Tab();
@@ -242,35 +244,35 @@ public class CArbol extends CGenerico {
 		tab2 = tab;
 	}
 
-//	public void abrirVentanas(Arbol arbolItem) {
-//		boolean abrir = true;
-//		Tab taba = new Tab();
-//
-//		if (!arbolItem.getUrl().equals("inicio")) {
-//			for (int i = 0; i < tabs.size(); i++) {
-//				if (tabs.get(i).getLabel().equals(arbolItem.getNombre())) {
-//					abrir = false;
-//					taba = tabs.get(i);
-//				}
-//			}
-//			if (abrir) {
-//				String ruta = "/vistas/" + arbolItem.getUrl() + ".zul";
-//				contenido2 = new Include();
-//				contenido2.setSrc(null);
-//				contenido2.setSrc(ruta);
-//
-//				Tab newTab = new Tab(arbolItem.getNombre());
-//				newTab.setSelected(true);
-//				Tabpanel newTabpanel = new Tabpanel();
-//				newTabpanel.appendChild(contenido2);
-//				tabBox2.getTabs().insertBefore(newTab, tab2);
-//				newTabpanel.setParent(tabBox2.getTabpanels());
-//				tabs.add(newTab);
-//			} else {
-//				taba.setSelected(true);
-//			}
-//		}
-//	}
+	// public void abrirVentanas(Arbol arbolItem) {
+	// boolean abrir = true;
+	// Tab taba = new Tab();
+	//
+	// if (!arbolItem.getUrl().equals("inicio")) {
+	// for (int i = 0; i < tabs.size(); i++) {
+	// if (tabs.get(i).getLabel().equals(arbolItem.getNombre())) {
+	// abrir = false;
+	// taba = tabs.get(i);
+	// }
+	// }
+	// if (abrir) {
+	// String ruta = "/vistas/" + arbolItem.getUrl() + ".zul";
+	// contenido2 = new Include();
+	// contenido2.setSrc(null);
+	// contenido2.setSrc(ruta);
+	//
+	// Tab newTab = new Tab(arbolItem.getNombre());
+	// newTab.setSelected(true);
+	// Tabpanel newTabpanel = new Tabpanel();
+	// newTabpanel.appendChild(contenido2);
+	// tabBox2.getTabs().insertBefore(newTab, tab2);
+	// newTabpanel.setParent(tabBox2.getTabpanels());
+	// tabs.add(newTab);
+	// } else {
+	// taba.setSelected(true);
+	// }
+	// }
+	// }
 
 	/* Metodo que permite abrir la ventana de editar usuario en una pestaña */
 	@Listen("onClick = #lblEditarCuenta")
@@ -293,15 +295,13 @@ public class CArbol extends CGenerico {
 			newTab.addEventListener(Events.ON_CLOSE,
 					new EventListener<Event>() {
 						@Override
-						public void onEvent(Event arg0)
-								throws Exception {
+						public void onEvent(Event arg0) throws Exception {
 							for (int i = 0; i < tabs.size(); i++) {
 								if (tabs.get(i).getLabel()
 										.equals("Editar Usuario")) {
 									if (i == (tabs.size() - 1)
 											&& tabs.size() > 1) {
-										tabs.get(i - 1).setSelected(
-												true);
+										tabs.get(i - 1).setSelected(true);
 									}
 
 									tabs.get(i).close();
@@ -321,7 +321,7 @@ public class CArbol extends CGenerico {
 		} else
 			taba.setSelected(true);
 	}
-	
+
 	@Listen("onClick = #mnuItem")
 	public void cerrarTodas() {
 		for (int i = 0; i < tabs.size(); i++) {

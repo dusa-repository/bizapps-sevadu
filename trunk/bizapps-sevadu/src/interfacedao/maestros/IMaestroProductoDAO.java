@@ -13,4 +13,7 @@ public interface IMaestroProductoDAO extends
 	@Query("select p from MaestroProducto p order by p.codigoProductoDusa asc")
 	List<MaestroProducto> findAllOrderByCodigoProductoDusaAsc();
 
+	List<MaestroProducto> findByCodigoProductoDusaNotInOrderByCodigoProductoDusaAsc(
+			List<String> ids);
+
 }

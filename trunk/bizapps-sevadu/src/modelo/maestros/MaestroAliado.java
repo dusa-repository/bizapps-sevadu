@@ -1,85 +1,92 @@
 package modelo.maestros;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import modelo.seguridad.Usuario;
+
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
-
 
 /**
  * The persistent class for the maestro_aliado database table.
  * 
  */
 @Entity
-@Table(name="maestro_aliado")
-@NamedQuery(name="MaestroAliado.findAll", query="SELECT m FROM MaestroAliado m")
+@Table(name = "maestro_aliado")
+@NamedQuery(name = "MaestroAliado.findAll", query = "SELECT m FROM MaestroAliado m")
 public class MaestroAliado implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="codigo_aliado")
+	@Column(name = "codigo_aliado")
 	private String codigoAliado;
 
-	@Column(name="ciudad_aliado")
+	@OneToOne
+	@JoinColumn(name = "id_usuario_sistema", referencedColumnName = "id_usuario", nullable = true)
+	private Usuario usuario;
+
+	@Column(name = "ciudad_aliado")
 	private String ciudadAliado;
 
-	@Column(name="codigo_padre")
+	@Column(name = "codigo_padre")
 	private String codigoPadre;
 
-	@Column(name="codigo_vendedor")
+	@Column(name = "codigo_vendedor")
 	private String codigoVendedor;
 
-	@Column(name="descripcion_vendedor")
+	@Column(name = "descripcion_vendedor")
 	private String descripcionVendedor;
 
-	@Column(name="descripcion_zona")
+	@Column(name = "descripcion_zona")
 	private String descripcionZona;
 
-	@Column(name="estado_aliado")
+	@Column(name = "estado_aliado")
 	private String estadoAliado;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_auditoria")
+	@Column(name = "fecha_auditoria")
 	private Date fechaAuditoria;
 
-	@Column(name="hora_auditoria")
+	@Column(name = "hora_auditoria")
 	private Time horaAuditoria;
 
-	@Column(name="id_usuario")
+	@Column(name = "id_usuario")
 	private String idUsuario;
 
-	@Column(name="lote_upload")
+	@Column(name = "lote_upload")
 	private String loteUpload;
 
 	private String nombre;
 
-	@Column(name="tipo_cliente")
+	@Column(name = "tipo_cliente")
 	private String tipoCliente;
 
 	private String zona;
 
-	//bi-directional many-to-one association to Existencia
-	@OneToMany(mappedBy="id.maestroAliado")
+	// bi-directional many-to-one association to Existencia
+	@OneToMany(mappedBy = "id.maestroAliado")
 	private List<Existencia> existencias;
 
-	//bi-directional many-to-one association to MaestroProducto
-	@OneToMany(mappedBy="maestroAliado")
+	// bi-directional many-to-one association to MaestroProducto
+	@OneToMany(mappedBy = "maestroAliado")
 	private List<MaestroProducto> maestroProductos;
 
-	//bi-directional many-to-one association to MappingProducto
-	@OneToMany(mappedBy="id.maestroAliado")
+	// bi-directional many-to-one association to MappingProducto
+	@OneToMany(mappedBy = "id.maestroAliado")
 	private List<MappingProducto> mappingProductos;
 
-	//bi-directional many-to-one association to PlanVenta
-	@OneToMany(mappedBy="id.maestroAliado")
+	// bi-directional many-to-one association to PlanVenta
+	@OneToMany(mappedBy = "id.maestroAliado")
 	private List<PlanVenta> planVentas;
 
-	//bi-directional many-to-one association to Venta
-	@OneToMany(mappedBy="maestroAliado")
+	// bi-directional many-to-one association to Venta
+	@OneToMany(mappedBy = "maestroAliado")
 	private List<Venta> ventas;
-	
-	@OneToMany(mappedBy="maestroAliado")
+
+	@OneToMany(mappedBy = "maestroAliado")
 	private List<Cliente> clientes;
 
 	public MaestroAliado() {
@@ -205,19 +212,19 @@ public class MaestroAliado implements Serializable {
 		this.existencias = existencias;
 	}
 
-//	public Existencia addExistencia(Existencia existencia) {
-//		getExistencias().add(existencia);
-//		existencia.setMaestroAliado(this);
-//
-//		return existencia;
-//	}
-//
-//	public Existencia removeExistencia(Existencia existencia) {
-//		getExistencias().remove(existencia);
-//		existencia.setMaestroAliado(null);
-//
-//		return existencia;
-//	}
+	// public Existencia addExistencia(Existencia existencia) {
+	// getExistencias().add(existencia);
+	// existencia.setMaestroAliado(this);
+	//
+	// return existencia;
+	// }
+	//
+	// public Existencia removeExistencia(Existencia existencia) {
+	// getExistencias().remove(existencia);
+	// existencia.setMaestroAliado(null);
+	//
+	// return existencia;
+	// }
 
 	public List<MaestroProducto> getMaestroProductos() {
 		return this.maestroProductos;
@@ -249,19 +256,21 @@ public class MaestroAliado implements Serializable {
 		this.mappingProductos = mappingProductos;
 	}
 
-//	public MappingProducto addMappingProducto(MappingProducto mappingProducto) {
-//		getMappingProductos().add(mappingProducto);
-//		mappingProducto.setMaestroAliado(this);
-//
-//		return mappingProducto;
-//	}
-//
-//	public MappingProducto removeMappingProducto(MappingProducto mappingProducto) {
-//		getMappingProductos().remove(mappingProducto);
-//		mappingProducto.setMaestroAliado(null);
-//
-//		return mappingProducto;
-//	}
+	// public MappingProducto addMappingProducto(MappingProducto
+	// mappingProducto) {
+	// getMappingProductos().add(mappingProducto);
+	// mappingProducto.setMaestroAliado(this);
+	//
+	// return mappingProducto;
+	// }
+	//
+	// public MappingProducto removeMappingProducto(MappingProducto
+	// mappingProducto) {
+	// getMappingProductos().remove(mappingProducto);
+	// mappingProducto.setMaestroAliado(null);
+	//
+	// return mappingProducto;
+	// }
 
 	public List<PlanVenta> getPlanVentas() {
 		return this.planVentas;
@@ -271,19 +280,19 @@ public class MaestroAliado implements Serializable {
 		this.planVentas = planVentas;
 	}
 
-//	public PlanVenta addPlanVenta(PlanVenta planVenta) {
-//		getPlanVentas().add(planVenta);
-//		planVenta.setMaestroAliado(this);
-//
-//		return planVenta;
-//	}
-//
-//	public PlanVenta removePlanVenta(PlanVenta planVenta) {
-//		getPlanVentas().remove(planVenta);
-//		planVenta.setMaestroAliado(null);
-//
-//		return planVenta;
-//	}
+	// public PlanVenta addPlanVenta(PlanVenta planVenta) {
+	// getPlanVentas().add(planVenta);
+	// planVenta.setMaestroAliado(this);
+	//
+	// return planVenta;
+	// }
+	//
+	// public PlanVenta removePlanVenta(PlanVenta planVenta) {
+	// getPlanVentas().remove(planVenta);
+	// planVenta.setMaestroAliado(null);
+	//
+	// return planVenta;
+	// }
 
 	public List<Venta> getVentas() {
 		return this.ventas;
@@ -313,6 +322,14 @@ public class MaestroAliado implements Serializable {
 
 	public void setClientes(List<Cliente> clientes) {
 		this.clientes = clientes;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }
