@@ -126,7 +126,8 @@ public class CArbol extends CGenerico {
 			if (Validador.validarNumero(nombre)) {
 				arbol = servicioArbol.buscar(Long.parseLong(nombre));
 				if (arbol != null
-						&& !arbol.getNombre().equals("Ver Aliados Mapping"))
+						&& !arbol.getNombre().equals("Ver Aliados Mapping")
+						&& !arbol.getNombre().equals("Ver Aliados Termometro"))
 					ids.add(arbol.getIdArbol());
 				arbole.add(arbol);
 			}

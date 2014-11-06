@@ -1,9 +1,70 @@
 <zk>
-	<window height="500px" id="divVTermometro" apply="controlador.transacciones.CTermometro"
-		width="100%">
-		<button autodisable="self" id="btnExportar" label="Exportar"
-			image="/public/imagenes/botones/importar.png" />
-		<spreadsheet src="/public/articulo.xlsx" maxVisibleRows="200" maxVisibleColumns="40" showToolbar="true"
-			id="ss" width="100%" height="200%" />
-	</window>
+	<div height="500px" style="background-color: white" id="divVTermometro"
+		width="100%" apply="controlador.transacciones.CTermometro">
+		<div id="botoneraTermometro" />
+		<separator />
+		<grid width="60%">
+			<columns visible="false">
+				<column label="" width="20%" />
+				<column label="" width="40%" />
+				<column label="" width="20%" />
+				<column label="" width="40%" />
+			</columns>
+			<rows>
+				<row id="rowTermometro" visible="false">
+					<label class="etiqueta" value="Aliado:" />
+					<textbox id="txtAliado" hflex="1" maxlength="20"
+						tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
+					<button id="btnBuscarAliado" label="Buscar"
+						tooltiptext="Catalogo de Codigos de Aliados" image="/public/imagenes/botones/buscar.png"
+						class="btn" />
+					<hbox />
+				</row>
+				<row>
+					<label class="etiqueta" value="Año:" />
+					<combobox tooltiptext="Seleccione un Año"
+						placeholder="Seleccione un Año" id="cmbAnno" readonly="true"
+						width="100%">
+						<template name="model">
+							<comboitem label="${each}" />
+						</template>
+					</combobox>
+					<label class="etiqueta" value="Mes:" />
+					<combobox tooltiptext="Seleccione un Mes"
+						placeholder="Seleccione un Mes" id="cmbMes" readonly="true" width="100%">
+						<template name="model">
+							<comboitem label="${each}" />
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<label class="etiqueta" value="Periodo a Consultar:" />
+					<cell colspan="3" align="center">
+						<radiogroup>
+							<hbox>
+								<radio label="Mensual" value="si" id="rdoMensual" />
+								<separator />
+								<radio label="Trimestral" value="no" id="rdoTrimestral" />
+								<separator />
+								<radio label="Semestral" value="no" id="rdoSemestral" />
+								<separator />
+								<radio label="Anual" value="no" id="rdoAnual" />
+							</hbox>
+						</radiogroup>
+					</cell>
+				</row>
+				<row>
+					<hbox />
+					<hbox />
+					<hbox />
+					<button class="btn" autodisable="self" id="btnExportar"
+						label="Exportar" image="/public/imagenes/botones/importar.png" />
+				</row>
+			</rows>
+		</grid>
+		<separator />
+		<spreadsheet maxVisibleRows="200"
+			maxVisibleColumns="40" id="ss" width="100%" height="200%" />
+		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
+	</div>
 </zk>
