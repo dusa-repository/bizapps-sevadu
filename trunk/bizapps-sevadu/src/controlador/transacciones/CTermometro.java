@@ -5,10 +5,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import modelo.maestros.MaestroAliado;
 import modelo.seguridad.Arbol;
@@ -21,6 +27,7 @@ import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zss.api.CellOperationUtil;
 import org.zkoss.zss.api.Exporter;
 import org.zkoss.zss.api.Exporters;
 import org.zkoss.zss.api.Importer;
@@ -29,6 +36,7 @@ import org.zkoss.zss.api.Range;
 import org.zkoss.zss.api.Ranges;
 import org.zkoss.zss.api.model.Book;
 import org.zkoss.zss.api.model.CellData;
+import org.zkoss.zss.api.model.CellStyle;
 import org.zkoss.zss.ui.Spreadsheet;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
@@ -75,6 +83,10 @@ public class CTermometro extends CGenerico {
 	private Spreadsheet ss;
 	Catalogo<MaestroAliado> catalogoAliado;
 	Calendar calendarioTermometro = Calendar.getInstance();
+	int habiles;
+	int recorridos;
+	int faltantes;
+	protected DateFormat formato = new SimpleDateFormat("yyyy-MM");
 
 	private String[] anno = { "2013", "2014", "2015", "2016", "2017", "2018",
 			"2019", "2020" };
@@ -154,13 +166,12 @@ public class CTermometro extends CGenerico {
 							&& !rdoSemestral.isChecked())
 						msj.mensajeError("Debe marcar una de las opciones de Filtrado");
 					else {
-
-						ss.setSrc("/public/articulo.xlsx");
 						MaestroAliado aliado = new MaestroAliado();
 						int anno = Integer.parseInt(cmbAnno.getValue());
 						int tiempo = 0;
 						int periodo = 0;
 						int tipo = 0;
+						int anno2 = 0;
 						periodo = obtenerIntDadoString(cmbMes.getValue());
 						// periodo rango de arriba tiempo rando de abajo
 						if (rdoMensual.isChecked()) {
@@ -171,16 +182,22 @@ public class CTermometro extends CGenerico {
 							tipo = 2;
 							tiempo = periodo - 2;
 							tiempo = obtenerMes(tiempo);
+							if (periodo - 2 <= 0)
+								anno2 = anno - 1;
 						}
 						if (rdoSemestral.isChecked()) {
 							tipo = 3;
 							tiempo = periodo - 5;
 							tiempo = obtenerMes(tiempo);
+							if (periodo - 5 <= 0)
+								anno2 = anno - 1;
 						}
 						if (rdoAnual.isChecked()) {
 							tipo = 4;
 							tiempo = periodo - 11;
 							tiempo = obtenerMes(tiempo);
+							if (periodo - 11 <= 0)
+								anno2 = anno - 1;
 						}
 						if (rowTermometro.isVisible())
 							aliado = servicioAliado
@@ -189,6 +206,19 @@ public class CTermometro extends CGenerico {
 							aliado = servicioAliado
 									.buscarPorLoginUsuario(nombreUsuarioSesion());
 						if (aliado != null) {
+							calcularDias(anno, tiempo);
+							ss.setSrc("/public/plantilla.xlsx");
+							Range range = Ranges.range(ss.getSelectedSheet(),
+									1, 4);
+							range.setCellValue(recorridos);
+							range = Ranges.range(ss.getSelectedSheet(), 1, 5);
+							range.setCellValue(habiles);
+							range = Ranges.range(ss.getSelectedSheet(), 1, 6);
+							range.setCellValue(faltantes);
+							range = Ranges.range(ss.getSelectedSheet(), 2, 3);
+							range.setCellValue(cmbMes.getValue());
+							range = Ranges.range(ss.getSelectedSheet(), 1, 0);
+							range.setCellValue(aliado.getNombre());
 							List<TermometroCliente> lista = new ArrayList<TermometroCliente>();
 							switch (tipo) {
 							case 1:
@@ -200,7 +230,7 @@ public class CTermometro extends CGenerico {
 							case 4:
 								lista = servicioTermometro
 										.buscarPorAliadoEntreMeses(aliado,
-												tiempo, periodo, anno);
+												tiempo, periodo, anno, anno2);
 								break;
 							}
 							generarTermometro(lista, tipo);
@@ -245,32 +275,111 @@ public class CTermometro extends CGenerico {
 		botonera.getChildren().get(6).setVisible(false);
 		botonera.getChildren().get(8).setVisible(false);
 		botoneraTermometro.appendChild(botonera);
+	}
 
-		// System.out.println(ss.getSBook().getBookName());
-		// Range range = Ranges.range(ss.getSelectedSheet(), 0, 0);
-		// CellData cellData = range.getCellData();
-		// System.out.println(cellData.getValue());
-		// cellData.setValue("HOOOOLA");
-		// cellData = range.getCellData();
-		// System.out.println(cellData.getValue());
-		// range.setFreezePanel(6, 6);
+	protected void calcularDias(int anno2, int tiempo) {
+		String fechaString = anno2 + "-" + tiempo;
+		formato.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		if (tiempo != 12 && tiempo != 11 && tiempo != 10)
+			fechaString = anno2 + "-" + "0" + tiempo;
+		Date fecha = new Date();
+		try {
+			fecha = formato.parse(fechaString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int tiempo2 = tiempo + 1;
+		String fechaString2 = anno2 + "-" + tiempo2;
+		if (tiempo2 != 13 && tiempo2 != 12 && tiempo2 != 11 && tiempo2 != 10)
+			fechaString2 = anno2 + "-" + "0" + tiempo2;
+		Date fecha2 = new Date();
+		try {
+			fecha2 = formato.parse(fechaString2);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Calendar calendario = new GregorianCalendar();
+		calendario.setTime(fecha2);
+		calendario.add(Calendar.DAY_OF_YEAR, -1);
+		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		fecha2 = calendario.getTime();
+		habiles = obtenerDiasHabiles(fecha, fecha2);
+		Date fechaHoy = null;
+		calendario = Calendar.getInstance();
+		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		fechaHoy = calendario.getTime();
+		recorridos = 0;
+		faltantes = 0;
+		if (fechaHoy.after(fecha)) {
+			recorridos = obtenerDiasHabiles(fecha, fechaHoy);
+			if (recorridos >= habiles)
+				recorridos = 0;
+			else
+				faltantes = habiles - recorridos;
+		} else {
+			faltantes = habiles;
+			recorridos = 0;
+		}
 	}
 
 	protected void generarTermometro(List<TermometroCliente> lista, int tipo) {
-		switch (tipo) {
-		case 1:
+		if (!lista.isEmpty()) {
+			ss.setMaxVisibleRows(lista.size() + 10);
+			switch (tipo) {
+			case 1:
+				for (int i = 0; i < lista.size(); i++) {
+					Range range = Ranges.range(ss.getSelectedSheet(), i + 3, 0);
+//					sombrear footer
+					range.setCellValue(lista.get(i).getZona());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 1);
+					range.setCellValue(lista.get(i).getVendedor());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 2);
+					range.setCellValue(lista.get(i).getMarca());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 3);
+					range.setCellValue(lista.get(i).getMes1());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 4);
+					range.setCellValue(lista.get(i).getCuota());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 5);
+					range.setCellValue(lista.get(i).getVendido());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 6);
+					range.setCellValue(lista.get(i).getPorcentaje());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 7);
+					range.setCellValue(lista.get(i).getExcendente());
+					if (lista.get(i).getExcendente() >= 0)
+						CellOperationUtil
+								.applyFontColor(range, "#34CB2C");
+					else
+						CellOperationUtil
+								.applyFontColor(range, "#F10303");
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 8);
+					range.setCellValue(lista.get(i).getSugerido());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 9);
+					range.setCellValue(lista.get(i).getMeta());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 10);
+					range.setCellValue(lista.get(i).getProyeccion());
+					range = Ranges.range(ss.getSelectedSheet(), i + 3, 11);
+					if (lista.get(i).getVendido() >= lista.get(i).getCuota())
+						CellOperationUtil
+								.applyBackgroundColor(range, "#34CB2C");
+					else
+						CellOperationUtil
+								.applyBackgroundColor(range, "#F10303");
+				}
+				break;
+			case 2:
 
-			break;
-		case 2:
+				break;
+			case 3:
 
-			break;
-		case 3:
+				break;
+			case 4:
 
-			break;
-		case 4:
-
-			break;
-		}
+				break;
+			}
+		} else
+			msj.mensajeAlerta("No existen registros para esta seleccion");
 	}
 
 	@Listen("onClick = #btnBuscarAliado")
