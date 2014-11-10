@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.mail.Address;
 import javax.mail.Authenticator;
@@ -475,6 +476,32 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 			break;
 		}
 		return tiempo;
+	}
+	
+	
+	public int obtenerDiasHabiles(Date fecha, Date fecha2) {
+		Calendar calendario = Calendar.getInstance();
+		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		calendario.setTime(fecha2);
+		calendario.set(Calendar.HOUR, 0);
+		calendario.set(Calendar.HOUR_OF_DAY, 0);
+		calendario.set(Calendar.SECOND, 0);
+		calendario.set(Calendar.MILLISECOND, 0);
+		calendario.set(Calendar.MINUTE, 0);
+		calendario.add(Calendar.DAY_OF_YEAR, +1);
+		fecha2 = calendario.getTime();
+		calendario.setTime(fecha);
+		int contador = 0;
+		do {
+			calendario.setTime(fecha);
+			if (calendario.get(Calendar.DAY_OF_WEEK) != 1
+					&& calendario.get(Calendar.DAY_OF_WEEK) != 7)
+				contador++;
+
+			calendario.add(Calendar.DAY_OF_YEAR, +1);
+			fecha = calendario.getTime();
+		} while (!fecha.equals(fecha2));
+		return contador;
 	}
 
 }
