@@ -22,16 +22,15 @@
 				</row>
 				<row>
 					<label class="etiqueta" value="Año:" />
-					<combobox tooltiptext="Seleccione un Año"
-						placeholder="Seleccione un Año" id="cmbAnno" readonly="true"
-						width="100%">
+					<combobox tooltiptext="Seleccione un Año" placeholder="Seleccione un Año"
+						id="cmbAnno" readonly="true" width="100%">
 						<template name="model">
 							<comboitem label="${each}" />
 						</template>
 					</combobox>
 					<label class="etiqueta" value="Mes:" />
-					<combobox tooltiptext="Seleccione un Mes"
-						placeholder="Seleccione un Mes" id="cmbMes" readonly="true" width="100%">
+					<combobox tooltiptext="Seleccione un Mes" placeholder="Seleccione un Mes"
+						id="cmbMes" readonly="true" width="100%">
 						<template name="model">
 							<comboitem label="${each}" />
 						</template>
@@ -58,8 +57,11 @@
 			</rows>
 		</grid>
 		<separator />
-		<spreadsheet
-			maxVisibleColumns="40" id="ss" width="100%" height="100%" />
+		<div width="100%" height="100%">
+			<spreadsheet id="ss" width="100%"
+				height="350px" />
+		</div>
+		<separator />
 		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
 	</div>
 </zk>

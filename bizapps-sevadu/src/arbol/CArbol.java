@@ -194,6 +194,10 @@ public class CArbol extends CGenerico {
 					}
 				}
 				if (abrir) {
+					if(arbolItem.getUrl().contains("Termometro")){
+						west.setOpen(false);
+						mapGeneral.put("west", west);
+					}
 					String ruta = "/vistas/" + arbolItem.getUrl() + ".zul";
 					contenido = new Include();
 					contenido.setSrc(null);

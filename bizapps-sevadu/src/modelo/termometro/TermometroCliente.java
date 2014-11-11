@@ -23,6 +23,10 @@ public class TermometroCliente {
 	private double sugerido;
 	private double meta;
 	private int proyeccion;
+	private String campo;
+	private int faltantes;
+	private int recorridos;
+	private int habiles;
 	
 	public TermometroCliente() {
 		super();
@@ -203,6 +207,38 @@ public class TermometroCliente {
 
 	public void setProyeccion(int proyeccion) {
 		this.proyeccion = proyeccion;
+	}
+
+	public String getCampo() {
+		return campo;
+	}
+
+	public void setCampo(String campo) {
+		this.campo = campo;
+	}
+
+	public int getFaltantes() {
+		return faltantes;
+	}
+
+	public void setFaltantes(int faltantes) {
+		this.faltantes = faltantes;
+	}
+
+	public int getRecorridos() {
+		return recorridos;
+	}
+
+	public void setRecorridos(int recorridos) {
+		this.recorridos = recorridos;
+	}
+
+	public int getHabiles() {
+		return habiles;
+	}
+
+	public void setHabiles(int habiles) {
+		this.habiles = habiles;
 	}
 	
 	
