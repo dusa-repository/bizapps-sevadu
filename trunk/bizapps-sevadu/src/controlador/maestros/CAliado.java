@@ -461,7 +461,7 @@ public class CAliado extends CGenerico {
 	public void mostrarCatalogoUsuario() {
 		final List<Usuario> usuario = servicioUsuario.buscarTodosSinAliado();
 		catalogoU = new Catalogo<Usuario>(catalogoUsuario, "Usuario", usuario,
-				false, false, false, "Cedula", "Correo", "Primer Nombre",
+				true, false, false, "Cedula", "Correo", "Primer Nombre",
 				"Segundo Nombre", "Primer Apellido", "Segundo Apellido",
 				"Sexo", "Telefono", "Direccion") {
 

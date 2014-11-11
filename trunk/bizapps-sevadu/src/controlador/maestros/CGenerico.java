@@ -478,6 +478,48 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 		return tiempo;
 	}
 	
+	public String mounthStringGivenIntegerValue(int mes) {
+		String mounth = "";
+		switch (mes) {
+		case 1:
+			mounth = "Enero";
+			break;
+		case 2:
+			mounth = "Febrero";
+			break;
+		case 3:
+			mounth = "Marzo";
+			break;
+		case 4:
+			mounth = "Abril";
+			break;
+		case 5:
+			mounth = "Mayo";
+			break;
+		case 6:
+			mounth = "Junio";
+			break;
+		case 7:
+			mounth = "Julio";
+			break;
+		case 8:
+			mounth = "Agosto";
+			break;
+		case 9:
+			mounth = "Septiembre";
+			break;
+		case 10:
+			mounth = "Octubre";
+			break;
+		case 11:
+			mounth = "Noviembre";
+			break;
+		case 12:
+			mounth = "Diciembre";
+			break;
+		}
+		return mounth;
+	}
 	
 	public int obtenerDiasHabiles(Date fecha, Date fecha2) {
 		Calendar calendario = Calendar.getInstance();

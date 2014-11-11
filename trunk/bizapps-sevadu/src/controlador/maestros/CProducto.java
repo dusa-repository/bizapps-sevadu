@@ -485,7 +485,7 @@ public class CProducto extends CGenerico {
 		final List<MaestroMarca> listaObjetos = servicioMarca
 				.buscarTodosOrdenados();
 		catalogoMarca = new Catalogo<MaestroMarca>(divCatalogoMarca, "Marca",
-				listaObjetos, false, false, false, "Codigo", "Descripcion",
+				listaObjetos, true, false, false, "Codigo", "Descripcion",
 				"Termometro") {
 
 			@Override
@@ -552,7 +552,7 @@ public class CProducto extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Aliado", listaObjetos, false, false, false, "Codigo",
+				"Aliado", listaObjetos, true, false, false, "Codigo",
 				"Nombre", "Zona", "Vendedor") {
 
 			@Override
