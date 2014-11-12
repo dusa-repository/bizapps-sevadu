@@ -374,7 +374,7 @@ public class CAliado extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "00");
 		buscadorVendedor = new BuscadorUDC("Vendedor", 100, listF0005, true,
-				false, false, "00", "00", "32%", "8%", "10%", "50%") {
+				false, false, "00", "00", "32.6%", "8%", "10%", "49.4%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "00",
@@ -385,7 +385,7 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "01");
 		buscadorZona = new BuscadorUDC("Zona", 100, listF0005, true, false,
-				false, "00", "01", "32%", "8%", "10%", "50%") {
+				false, "00", "01", "33.3%", "8%", "10%", "48.8%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "01",
@@ -396,7 +396,7 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "02");
 		buscadorEstado = new BuscadorUDC("Estado", 100, listF0005, true, false,
-				false, "00", "02", "32%", "8%", "10%", "50%") {
+				false, "00", "02", "33.3%", "8%", "10%", "48.8%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "02",
@@ -407,7 +407,7 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "03");
 		buscadorCiudad = new BuscadorUDC("Ciudad", 100, listF0005, true, false,
-				false, "00", "03", "32%", "8%", "10%", "50%") {
+				false, "00", "03", "32.6%", "8%", "10%", "49.4%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "03",

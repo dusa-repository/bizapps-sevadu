@@ -387,7 +387,6 @@ public class CTermometro extends CGenerico {
 			case 1:
 				ss.setMaxVisibleColumns(12);
 				for (int i = 0; i < lista.size(); i++) {
-					System.out.println(lista.get(i).getPorcentaje());
 					range = Ranges.range(ss.getSelectedSheet(), i + 3, 0);
 					// sombrear footer
 					range.setCellValue(lista.get(i).getZona());
@@ -787,7 +786,7 @@ public class CTermometro extends CGenerico {
 				}
 			}
 			try {
-				Filedownload.save(new AMedia(nombre, null, null, file, true));
+				Filedownload.save(new AMedia(nombre+".xlsx", null, null, file, true));
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

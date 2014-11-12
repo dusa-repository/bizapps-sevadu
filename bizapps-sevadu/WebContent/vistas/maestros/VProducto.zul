@@ -91,7 +91,6 @@
 									tooltiptext="Ingrese el Packing Size del Producto" step="1"
 									constraint="min 0 max 100000" />
 							</cell>
-							<hbox />
 							<cell colspan="4">
 								<div id="divBuscadorEspecie" width="100%" />
 							</cell>

@@ -194,7 +194,7 @@ public class CArbol extends CGenerico {
 					}
 				}
 				if (abrir) {
-					if(arbolItem.getUrl().contains("Termometro")){
+					if (arbolItem.getUrl().contains("Termometro")) {
 						west.setOpen(false);
 						mapGeneral.put("west", west);
 					}
@@ -209,6 +209,9 @@ public class CArbol extends CGenerico {
 								@Override
 								public void onEvent(Event arg0)
 										throws Exception {
+									if (arbolItem.getUrl().contains(
+											"Termometro"))
+										west.setOpen(true);
 									for (int i = 0; i < tabs.size(); i++) {
 										if (tabs.get(i).getLabel()
 												.equals(arbolItem.getNombre())) {

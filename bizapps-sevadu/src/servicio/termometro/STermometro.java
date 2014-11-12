@@ -47,7 +47,7 @@ public class STermometro {
 			ordenar.add("idZonaAliado");
 			ordenar.add("idVendedorAliado");
 			ordenar.add("idMaestroProductoMaestroMarcaMarcaDusa");
-			ordenar.add("idMes");
+			ordenar.add("idMaestroProductoCodigoProductoDusa");
 			o = new Sort(Sort.Direction.ASC, ordenar);
 			plan = planDAO
 					.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdMaestroAliadoAndIdAnnoAndIdMesBetween(
@@ -59,7 +59,7 @@ public class STermometro {
 			ordenar.add("id.zonaAliado");
 			ordenar.add("id.vendedorAliado");
 			ordenar.add("id.maestroProducto.maestroMarca.marcaDusa");
-			ordenar.add("id.mes");
+			ordenar.add("id.maestroProducto.codigoProductoDusa");
 			o = new Sort(Sort.Direction.ASC, ordenar);
 			limiteSup = 1;
 			limiteInf = 12;
@@ -158,6 +158,7 @@ public class STermometro {
 			String vendedor2 = plan.get(0).getId().getVendedorAliado();
 			String marca = plan.get(0).getId().getMaestroProducto()
 					.getMaestroMarca().getMarcaDusa();
+			String producto = "";
 			Double acumVentas = (double) 0;
 			Double mes1 = (double) 0;
 			Double mes2 = (double) 0;
@@ -186,17 +187,20 @@ public class STermometro {
 						&& plan.get(i).getId().getMaestroProducto()
 								.getMaestroMarca().getMarcaDusa().equals(marca)) {
 					PlanVenta planEspecifico = plan.get(i);
-					Double sumaVentas = (Math
-							.rint(ventaDAO
-									.sumByAliadoAndVendedorAndProductoAndFecha(
-											aliado, planEspecifico.getId()
-													.getZonaAliado(),
-											planEspecifico.getId()
-													.getVendedorAliado(),
-											planEspecifico.getId()
-													.getMaestroProducto(),
-											fechaDesde, fechaHasta) * 1) / 1);
-
+					Double sumaVentas = (double) 0;
+					if (!plan.get(i).getId().getMaestroProducto()
+							.getCodigoProductoDusa().equals(producto))
+						sumaVentas = (Math.rint(ventaDAO
+								.sumByAliadoAndVendedorAndProductoAndFecha(
+										aliado, planEspecifico.getId()
+												.getZonaAliado(),
+										planEspecifico.getId()
+												.getVendedorAliado(),
+										planEspecifico.getId()
+												.getMaestroProducto(),
+										fechaDesde, fechaHasta) * 1) / 1);
+					producto = plan.get(i).getId().getMaestroProducto()
+							.getCodigoProductoDusa();
 					acumVentas = acumVentas + sumaVentas;
 					acumPlanificadas = acumPlanificadas
 							+ planEspecifico.getCajasPlanificadas();
