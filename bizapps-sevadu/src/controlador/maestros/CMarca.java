@@ -15,6 +15,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Radio;
+import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 
@@ -33,6 +34,8 @@ public class CMarca extends CGenerico {
 	private Radio rdoSi;
 	@Wire
 	private Radio rdoNo;
+	@Wire
+	private Spinner spnOrden;
 	@Wire
 	private Div divVMarca;
 	@Wire
@@ -78,6 +81,8 @@ public class CMarca extends CGenerico {
 							rdoSi.setChecked(true);
 						else
 							rdoNo.setChecked(true);
+						if (marca.getOrden() != null)
+							spnOrden.setValue(marca.getOrden());
 						txtCodigo.setDisabled(true);
 						txtDescripcion.setFocus(true);
 					} else
@@ -112,7 +117,8 @@ public class CMarca extends CGenerico {
 						filtro = true;
 					MaestroMarca marca = new MaestroMarca(clave,
 							txtCodigo.getValue(), txtDescripcion.getValue(),
-							fecha, 0, filtro, tiempo, nombreUsuarioSesion(), "");
+							fecha, 0, filtro, tiempo, nombreUsuarioSesion(),
+							"", spnOrden.getValue());
 					servicioMarca.guardar(marca);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
@@ -248,6 +254,7 @@ public class CMarca extends CGenerico {
 		rdoNo.setChecked(false);
 		rdoSi.setChecked(false);
 		clave = 0;
+		spnOrden.setValue(0);
 	}
 
 	@Listen("onClick = #gpxRegistro")
@@ -315,6 +322,7 @@ public class CMarca extends CGenerico {
 	private boolean camposEditando() {
 		if (txtCodigo.getText().compareTo("") != 0
 				|| txtDescripcion.getText().compareTo("") != 0
+				|| spnOrden.getValue() != 0
 				|| (rdoSi.isChecked() || rdoSi.isChecked())) {
 			return true;
 		} else

@@ -1,11 +1,16 @@
 package interfacedao.maestros;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
+import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;
 import modelo.maestros.Venta;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,5 +21,25 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 	double sumByAliadoAndVendedorAndProductoAndFecha(MaestroAliado aliado,
 			String zonaAliado, String vendedorAliado,
 			MaestroProducto maestroProducto, Date fecha, Date fecha2);
+
+	List<Venta> findByMaestroAliadoAndNombreVendedorAndCodigoClienteAndFechaFacturaBetweenAndZonaAliadoAndMaestroProductoMaestroMarcaMarcaDusa(
+			MaestroAliado aliado, String vendedor, Cliente cliente, Date desde,
+			Date hasta, String zona, String marca);
+
+	@Query("select distinct(v.codigoCliente.codigoCliente) from Venta v where v.maestroAliado.codigoAliado=?1")
+	Collection<? extends String> findDistinctCliente(String value);
+
+	@Query("select distinct(v.nombreVendedor) from Venta v where v.maestroAliado.codigoAliado=?1")
+	Collection<? extends String> findDistinctVendedor(String value);
+
+	@Query("select distinct(v.zonaAliado) from Venta v where v.maestroAliado.codigoAliado=?1")
+	Collection<? extends String> findDistinctZona(String value);
+
+	@Query("select distinct(v.codigoCliente) from Venta v where v.maestroAliado.codigoAliado=?1 and v.fechaFactura between ?2 and ?3")
+	List<Venta> countDistinctByAliadoAndFechaFacturaBetween(String aliado,
+			Date desde, Date hasta);
+
+	List<Venta> findByMaestroAliadoCodigoAliadoAndFechaFacturaBetween(
+			String aliado, String desde, String hasta, Sort o);
 
 }

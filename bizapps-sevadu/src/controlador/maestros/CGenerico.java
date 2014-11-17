@@ -98,6 +98,8 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected SCliente servicioCliente;
 	@WireVariable("STermometro")
 	protected STermometro servicioTermometro;
+	private static ApplicationContext app = new ClassPathXmlApplicationContext(
+			"/META-INF/ConfiguracionAplicacion.xml");
 
 	protected static SimpleDateFormat formatoFecha = new SimpleDateFormat(
 			"dd-MM-yyyy");
@@ -119,6 +121,18 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
 			"/META-INF/PropiedadesBaseDatos.xml");
 
+
+	public static SMaestroAliado getServicioAliado() {
+		return app.getBean(SMaestroAliado.class);
+	}
+	
+	public static SVenta getServicioVenta() {
+		return app.getBean(SVenta.class);
+	}
+	
+	public static SConfiguracion getServicioConfiguracion() {
+		return app.getBean(SConfiguracion.class);
+	}
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);

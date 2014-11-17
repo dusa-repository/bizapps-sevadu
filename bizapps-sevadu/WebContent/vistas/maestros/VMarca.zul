@@ -39,11 +39,16 @@
 								<label value="*" style="font-weight:bold;color:red">
 								</label>
 							</hbox>
-							<cell colspan="2">
-								<textbox id="txtDescripcion" maxlength="50"
-									tooltiptext="Ingrese la descripcion" />
-							</cell>
-							<hbox />
+							<textbox id="txtDescripcion" maxlength="50"
+								tooltiptext="Ingrese la descripcion" />
+							<hbox>
+								<label class="etiqueta" value="Orden de Impresion:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<spinner id="spnOrden" step="1" constraint="min 0 max 1000"
+								value="0" width="100%" />
 						</row>
 					</rows>
 				</grid>

@@ -65,6 +65,9 @@ public class MaestroAliado implements Serializable {
 	private String tipoCliente;
 
 	private String zona;
+	
+	@OneToMany(mappedBy = "id.maestroAliado")
+	private List<MarcaActivadaVendedor> activaciones;
 
 	// bi-directional many-to-one association to Existencia
 	@OneToMany(mappedBy = "id.maestroAliado")
@@ -330,6 +333,14 @@ public class MaestroAliado implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public List<MarcaActivadaVendedor> getActivaciones() {
+		return activaciones;
+	}
+
+	public void setActivaciones(List<MarcaActivadaVendedor> activaciones) {
+		this.activaciones = activaciones;
 	}
 
 }

@@ -127,7 +127,8 @@ public class CArbol extends CGenerico {
 				arbol = servicioArbol.buscar(Long.parseLong(nombre));
 				if (arbol != null
 						&& !arbol.getNombre().equals("Ver Aliados Mapping")
-						&& !arbol.getNombre().equals("Ver Aliados Termometro"))
+						&& !arbol.getNombre().equals("Ver Aliados Termometro")
+						&& !arbol.getNombre().equals("Ver Aliados Reporte"))
 					ids.add(arbol.getIdArbol());
 				arbole.add(arbol);
 			}
@@ -194,7 +195,7 @@ public class CArbol extends CGenerico {
 					}
 				}
 				if (abrir) {
-					if (arbolItem.getUrl().contains("Termometro")) {
+					if (arbolItem.getUrl().equals("Termometro")) {
 						west.setOpen(false);
 						mapGeneral.put("west", west);
 					}

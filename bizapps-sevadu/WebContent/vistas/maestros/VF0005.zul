@@ -50,7 +50,7 @@
 								<label value="*" style="font-weight:bold;color:red">
 								</label>
 							</hbox>
-							<textbox id="txtKYF0005" hflex="1" maxlength="10"
+							<textbox id="txtKYF0005" hflex="1" maxlength="100"
 								tooltiptext="Ingrese el Codigo" />
 							<hbox />
 							<hbox />
