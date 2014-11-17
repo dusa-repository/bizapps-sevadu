@@ -34,15 +34,15 @@ public class SVenta {
 						aliado, vendedor, cliente, desde, hasta, zona, marca);
 	}
 
-	public Collection<? extends String> buscarDistinctCliente(String value) {
+	public List<String> buscarDistinctCliente(String value) {
 		return ventaDAO.findDistinctCliente(value);
 	}
 
-	public Collection<? extends String> buscarDistinctVendedor(String value) {
+	public List<String> buscarDistinctVendedor(String value) {
 		return ventaDAO.findDistinctVendedor(value);
 	}
 
-	public Collection<? extends String> buscarDistinctZona(String value) {
+	public List<String> buscarDistinctZona(String value) {
 		return ventaDAO.findDistinctZona(value);
 	}
 

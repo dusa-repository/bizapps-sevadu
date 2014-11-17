@@ -26,14 +26,14 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 			MaestroAliado aliado, String vendedor, Cliente cliente, Date desde,
 			Date hasta, String zona, String marca);
 
-	@Query("select distinct(v.codigoCliente.codigoCliente) from Venta v where v.maestroAliado.codigoAliado=?1")
-	Collection<? extends String> findDistinctCliente(String value);
+	@Query("select distinct(v.codigoCliente.codigoCliente) from Venta v where v.maestroAliado.codigoAliado=?1 order by v.codigoCliente.codigoCliente asc")
+	List<String> findDistinctCliente(String value);
 
-	@Query("select distinct(v.nombreVendedor) from Venta v where v.maestroAliado.codigoAliado=?1")
-	Collection<? extends String> findDistinctVendedor(String value);
+	@Query("select distinct(v.nombreVendedor) from Venta v where v.maestroAliado.codigoAliado=?1 order by v.nombreVendedor asc")
+	List<String> findDistinctVendedor(String value);
 
-	@Query("select distinct(v.zonaAliado) from Venta v where v.maestroAliado.codigoAliado=?1")
-	Collection<? extends String> findDistinctZona(String value);
+	@Query("select distinct(v.zonaAliado) from Venta v where v.maestroAliado.codigoAliado=?1 order by v.zonaAliado asc")
+	List<String> findDistinctZona(String value);
 
 	@Query("select distinct(v.codigoCliente.codigoCliente) from Venta v where v.maestroAliado.codigoAliado=?1 and v.fechaFactura between ?2 and ?3")
 	List<String> countDistinctByAliadoAndFechaFacturaBetween(String aliado,

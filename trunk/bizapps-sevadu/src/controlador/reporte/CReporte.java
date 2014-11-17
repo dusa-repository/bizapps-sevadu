@@ -266,11 +266,10 @@ public class CReporte extends CGenerico {
 						mapa.put("vendedor", vendedor);
 						mapa.put("desde", desde);
 						mapa.put("hasta", hasta);
-						Sessions.getCurrent().setAttribute("reporte",
-								mapa);
+						Sessions.getCurrent().setAttribute("reporte", mapa);
 						Window window = (Window) Executions.createComponents(
-								"/vistas/reportes/VReporteVentasPlan.zul", null,
-								mapa);
+								"/vistas/reportes/VReporteVentasPlan.zul",
+								null, mapa);
 						window.doModal();
 						break;
 					case "(R55420025)Generar Objetivos/Marca/Clientes (EXCEL)":
@@ -622,20 +621,26 @@ public class CReporte extends CGenerico {
 
 	@Listen("onOpen = #cmbCliente")
 	public void buscarClientes() {
-		cmbCliente.setModel(new ListModelList<String>(servicioVenta
-				.buscarDistinctCliente(idAliado)));
+		List<String> lista = new ArrayList<String>();
+		lista.add("TODOS");
+		lista.addAll(servicioVenta.buscarDistinctCliente(idAliado));
+		cmbCliente.setModel(new ListModelList<String>(lista));
 	}
 
 	@Listen("onOpen = #cmbVendedor")
 	public void buscarVendedores() {
-		cmbVendedor.setModel(new ListModelList<String>(servicioVenta
-				.buscarDistinctVendedor(idAliado)));
+		List<String> lista = new ArrayList<String>();
+		lista.add("TODOS");
+		lista.addAll(servicioVenta.buscarDistinctVendedor(idAliado));
+		cmbVendedor.setModel(new ListModelList<String>(lista));
 	}
 
 	@Listen("onOpen = #cmbZona")
 	public void buscarZoonas() {
-		cmbZona.setModel(new ListModelList<String>(servicioVenta
-				.buscarDistinctZona(idAliado)));
+		List<String> lista = new ArrayList<String>();
+		lista.add("TODAS");
+		lista.addAll(servicioVenta.buscarDistinctZona(idAliado));
+		cmbZona.setModel(new ListModelList<String>(lista));
 	}
 
 }
