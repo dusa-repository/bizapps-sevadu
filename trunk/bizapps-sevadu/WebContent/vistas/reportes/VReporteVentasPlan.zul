@@ -1,0 +1,46 @@
+<zk>
+	<window id="wdwRecordar" title="Cajas Planificadas Vs Cajas Vendidas"
+		border="normal" width="90%" height="100%" contentStyle="overflow:auto"
+		apply="controlador.reporte.CVentaPlan" closable="true">
+		<listbox width="100%" id="ltbLista" height="auto"
+			emptyMessage="No existen ventas cargadas" rows="15">
+			<listhead>
+				<listheader label="Año" width="7.5%" />
+				<listheader label="Mes" width="7.5%" />
+				<listheader label="Codigo Producto" width="15%" />
+				<listheader label="Descripcion" width="25%" />
+				<listheader label="Cajas Planificadas" width="15%" />
+				<listheader label="Cajas Vendidas" width="15%" />
+				<listheader label="Porcentaje Cumplimiento" width="15%" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="${each.marca}" />
+					<listcell label="${each.zona}" />
+					<listcell label="${each.vendedor}" />
+					<listcell label="${each.campo}" />
+					<listcell label="${each.vendido}" />
+					<listcell label="${each.meta}" />
+					<listcell label="${each.porcentaje}" />
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter>
+						<label value="TOTAL" />
+				</listfooter>
+				<listfooter>
+					<label id="lblFoot1" />
+				</listfooter>
+				<listfooter>
+					<label id="lblFoot2" />
+				</listfooter>
+				<listfooter>
+					<label id="lblFoot3" />
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</window>
+</zk>

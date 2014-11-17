@@ -1,10 +1,7 @@
 package com.dusa.thermometer;
 
-import com.dusa.thermometer.service.bf.ProcessDataBf;
-import com.dusa.thermometer.service.bf.ThermometerBf;
 import com.dusa.thermometer.service.to.ActivationTo;
 import com.dusa.thermometer.service.to.HeaderTo;
-import com.dusa.thermometer.service.to.ThermometerTo;
 import com.dusa.thermometer.service.transformation.*;
 
 import java.util.ArrayList;
@@ -28,19 +25,6 @@ import modelo.maestros.Venta;
 import modelo.pk.MarcaActivadaPK;
 
 public class Test {
-
-	// public static void main(String args[]) {
-	// ThermometerBf thermometerBf = new ThermometerBf();
-	// ProcessDataBf processDataBf = new ProcessDataBf();
-	// ThermometerTo thermometer = new ThermometerTo();
-	// List<ThermometerData> data = getTestData();
-	// processDataBf.calculateTotals(data);
-	// thermometer.setData(data);
-	// thermometer.setLabels(getTestHeaders());
-	//
-	// String x = thermometerBf.generateThermometer(thermometer);
-	// System.out.println(x);
-	// }
 
 	private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
 			"/META-INF/ConfiguracionAplicacion.xml");
@@ -89,36 +73,6 @@ public class Test {
 	public static List<ThermometerData> getTestData(MaestroAliado aliado,
 			Date desde, Date hasta) {
 		List<ThermometerData> thermometerDatas = new ArrayList<ThermometerData>();
-		// if(aliado!=null){
-		// List<ActivationTo> activations2 = new ArrayList<ActivationTo>();
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(true, false));
-		// activations2.add(new ActivationTo(true, false));
-		// activations2.add(new ActivationTo(true, false));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(true, true));
-		// activations2.add(new ActivationTo(true, true));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(true, true));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(true, true));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(false, true));
-		// activations2.add(new ActivationTo(false, true));
-		// activations2.add(new ActivationTo(false, true));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(true, true));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(false, false));
-		// activations2.add(new ActivationTo(false, false));
-
-		Calendar calendario = Calendar.getInstance();
 
 		List<MaestroMarca> marcas = getServicioMarca()
 				.buscarActivasTermometro();
@@ -222,6 +176,19 @@ public class Test {
 			sellerData.addChild(zoneData);
 			supervisorData.addChild(sellerData);
 			thermometerDatas.add(supervisorData);
+		}else{
+			SupervisorData supervisorData = new SupervisorData(1, "No hay informacion que mostrar");
+	        thermometerDatas.add(supervisorData);
+	        SellerData sellerData = new SellerData(1, "No hay informacion que mostrar");
+	        supervisorData.addChild(sellerData);
+	        ZoneData zoneData = new ZoneData(1, "No hay informacion que mostrar");
+	        sellerData.addChild(zoneData);
+	        List<ActivationTo> activations = new ArrayList<ActivationTo>();
+	        for (int j = 0; j < marcas.size(); j++) {
+	            activations.add(new ActivationTo(false, false));
+	        } 
+	        ClientData clientData = new ClientData("No hay informacion que mostrar", "0", activations, 1);
+	        zoneData.addChild(clientData);
 		}
 		return thermometerDatas;
 	}

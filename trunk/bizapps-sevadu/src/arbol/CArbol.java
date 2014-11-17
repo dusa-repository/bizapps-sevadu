@@ -128,7 +128,9 @@ public class CArbol extends CGenerico {
 				if (arbol != null
 						&& !arbol.getNombre().equals("Ver Aliados Mapping")
 						&& !arbol.getNombre().equals("Ver Aliados Termometro")
-						&& !arbol.getNombre().equals("Ver Aliados Reporte"))
+						&& !arbol.getNombre().equals("Ver Aliados Reporte")
+						&& !arbol.getNombre().equals(
+								"Ver Reportes Administrador"))
 					ids.add(arbol.getIdArbol());
 				arbole.add(arbol);
 			}

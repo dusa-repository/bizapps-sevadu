@@ -9,6 +9,7 @@ import interfacedao.maestros.IVentaDAO;
 import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
+import modelo.maestros.MaestroProducto;
 import modelo.maestros.Venta;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class SVenta {
 
 	public Integer contarPorAliadoEntreFechas(String aliado, Date desde,
 			Date hasta) {
-		List<Venta> lista = ventaDAO
+		List<String> lista = ventaDAO
 				.countDistinctByAliadoAndFechaFacturaBetween(aliado, desde,
 						hasta);
 		if (!lista.isEmpty())
@@ -66,5 +67,26 @@ public class SVenta {
 		o = new Sort(Sort.Direction.ASC, ordenar);
 		return ventaDAO.findByMaestroAliadoCodigoAliadoAndFechaFacturaBetween(
 				aliado, desde, hasta, o);
+	}
+
+	public List<Venta> buscarPorAliadoYVendedorEntreFechas(String aliado,
+			String vendedor, Date fechaDesde, Date fechaHasta) {
+
+		List<String> ordenar = new ArrayList<String>();
+		Sort o;
+		ordenar.add("fechaFactura");
+		ordenar.add("maestroProductoCodigoProductoDusa");
+		o = new Sort(Sort.Direction.ASC, ordenar);
+		return ventaDAO
+				.findByMaestroAliadoCodigoAliadoAndNombreVendedorLikeAndFechaFacturaBetween(
+						aliado, vendedor, fechaDesde, fechaHasta, o);
+	}
+
+	public Double sumar(MaestroAliado maestroAliado, String zonaAliado,
+			String nombreVendedor, MaestroProducto maestroProducto,
+			Date fechaDesde, Date fechaHasta) {
+		return ventaDAO.sumByAliadoAndVendedorAndProductoAndFecha(
+				maestroAliado, zonaAliado, nombreVendedor, maestroProducto,
+				fechaDesde, fechaHasta);
 	}
 }

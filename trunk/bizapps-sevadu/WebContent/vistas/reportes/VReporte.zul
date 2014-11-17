@@ -29,6 +29,7 @@
 							<comboitem label="(R55420001)Ventas Consolidadas por Zona y Cliente" />
 							<comboitem label="(R55420002)Ventas Consolidadas por Zona/Cliente/Marca" />
 							<comboitem label="(R55420003)Ventas Consolidadas por Zona/Marca/Cliente" />
+							<comboitem label="(R55420004)Comparativo Plan de Ventas Vs Ventas" />
 							<comboitem label="(R55420005)Activacion de Marcas por Zona/Vendedor/Cliente" />
 							<comboitem label="(R55420006)Activacion de Marcas por Vendedor Aliado" />
 							<comboitem label="(R55420007)Activacion por Marca" />
@@ -37,18 +38,17 @@
 							<comboitem label="(R55420010)Ventas 80/20 por Marca" />
 							<comboitem label="(R55420011)Ventas 80/20 por Marca/Cliente" />
 							<comboitem label="(R55420014)Inventario por Marca" />
-							<comboitem label="(R55420016)Existencia Consolidada por Aliado/Marca" />
-							<comboitem label="(R55420017)Ventas Consolidada por Aliados" />
+							<comboitem label="(R55420016)Existencia Consolidada por Aliado/Marca" id="itm16" visible="false"/>
+							<comboitem label="(R55420017)Ventas Consolidada por Aliados" id="itm17" visible="false"/>
 							<comboitem label="(R55420018)Ventas por Segmentacion ON" />
 							<comboitem label="(R55420019)Ventas por Segmentacion OFF" />
-							<comboitem label="(R55420020)Ventas Consolidada por Zona Dusa/Aliado/Marca" />
-							<comboitem label="(R55420021)Ventas Consolidada Marca" />
+							<comboitem label="(R55420020)Ventas Consolidada por Zona Dusa/Aliado/Marca" id="itm20" visible="false"/>
+							<comboitem label="(R55420021)Ventas Consolidada Marca" id="itm21" visible="false"/>
 							<comboitem label="(R55420022)Ventas Consolidada Aliados/Marca ( Comparativos )" />
-							<comboitem label="(R55420023)Ventas Consolidada Aliados ( Comparativos )" />
+							<comboitem label="(R55420023)Ventas Consolidada Aliados ( Comparativos )" id="itm23" visible="false"/>
 							<comboitem label="(R55420024)Inventario con Compras Calculadas Aliado/Marca" />
 							<comboitem label="(R55420026)Reporte de Control de Subida de Archivos" />
-							<comboitem label="(G55420001)Grafico de Activacion/Marca" />
-							<comboitem label="(R55420004)Comparativo Plan de Ventas Vs Ventas" />
+							<!-- <comboitem label="(G55420001)Grafico de Activacion/Marca" /> -->
 							<!-- <comboitem label="(R55420025)Generar Objetivos/Marca/Clientes (EXCEL)" /> -->
 						</combobox>
 					</cell>
