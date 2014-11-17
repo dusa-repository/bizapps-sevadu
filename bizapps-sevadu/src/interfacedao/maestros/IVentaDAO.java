@@ -35,11 +35,15 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 	@Query("select distinct(v.zonaAliado) from Venta v where v.maestroAliado.codigoAliado=?1")
 	Collection<? extends String> findDistinctZona(String value);
 
-	@Query("select distinct(v.codigoCliente) from Venta v where v.maestroAliado.codigoAliado=?1 and v.fechaFactura between ?2 and ?3")
-	List<Venta> countDistinctByAliadoAndFechaFacturaBetween(String aliado,
+	@Query("select distinct(v.codigoCliente.codigoCliente) from Venta v where v.maestroAliado.codigoAliado=?1 and v.fechaFactura between ?2 and ?3")
+	List<String> countDistinctByAliadoAndFechaFacturaBetween(String aliado,
 			Date desde, Date hasta);
 
 	List<Venta> findByMaestroAliadoCodigoAliadoAndFechaFacturaBetween(
 			String aliado, String desde, String hasta, Sort o);
+
+	List<Venta> findByMaestroAliadoCodigoAliadoAndNombreVendedorLikeAndFechaFacturaBetween(
+			String aliado, String vendedor, Date fechaDesde, Date fechaHasta,
+			Sort o);
 
 }

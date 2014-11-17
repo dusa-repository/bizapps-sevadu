@@ -9,12 +9,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import modelo.maestros.Configuracion;
 import modelo.maestros.MaestroAliado;
@@ -33,19 +31,21 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
-import org.zkoss.zul.West;
+import org.zkoss.zul.Window;
 
 import componente.Botonera;
 import componente.Catalogo;
@@ -55,6 +55,7 @@ import controlador.maestros.CGenerico;
 
 public class CReporte extends CGenerico {
 
+	private static final long serialVersionUID = 1470992598691077405L;
 	@Wire
 	private Textbox txtAliado;
 	@Wire
@@ -71,6 +72,16 @@ public class CReporte extends CGenerico {
 	private Combobox cmbCliente;
 	@Wire
 	private Combobox cmbVendedor;
+	@Wire
+	private Comboitem itm16;
+	@Wire
+	private Comboitem itm17;
+	@Wire
+	private Comboitem itm20;
+	@Wire
+	private Comboitem itm21;
+	@Wire
+	private Comboitem itm23;
 	@Wire
 	private Datebox dtbDesde;
 	@Wire
@@ -99,6 +110,13 @@ public class CReporte extends CGenerico {
 				arbol = servicioArbol.buscar(Long.parseLong(nombre));
 				if (arbol.getNombre().equals("Ver Aliados Reporte"))
 					rowAliado.setVisible(true);
+				if (arbol.getNombre().equals("Ver Reportes Administrador")) {
+					itm16.setVisible(true);
+					itm17.setVisible(true);
+					itm20.setVisible(true);
+					itm21.setVisible(true);
+					itm23.setVisible(true);
+				}
 			}
 		}
 		HashMap<String, Object> map = (HashMap<String, Object>) Sessions
@@ -243,6 +261,17 @@ public class CReporte extends CGenerico {
 						break;
 					case "(R55420004)Comparativo Plan de Ventas Vs Ventas":
 						tipo = 23;
+						HashMap<String, Object> mapa = new HashMap<String, Object>();
+						mapa.put("idAliado", aliado);
+						mapa.put("vendedor", vendedor);
+						mapa.put("desde", desde);
+						mapa.put("hasta", hasta);
+						Sessions.getCurrent().setAttribute("reporte",
+								mapa);
+						Window window = (Window) Executions.createComponents(
+								"/vistas/reportes/VReporteVentasPlan.zul", null,
+								mapa);
+						window.doModal();
 						break;
 					case "(R55420025)Generar Objetivos/Marca/Clientes (EXCEL)":
 						tipoReporte = "EXCEL";
@@ -301,7 +330,7 @@ public class CReporte extends CGenerico {
 		};
 		Button guardar = (Button) botonera.getChildren().get(3);
 		guardar.setLabel("Generar");
-		guardar.setSrc("/public/imagenes/botones/reporte.png");
+		guardar.setImage("/public/imagenes/botones/reporte.png");
 		botonera.getChildren().get(0).setVisible(false);
 		botonera.getChildren().get(1).setVisible(false);
 		botonera.getChildren().get(2).setVisible(false);
@@ -320,7 +349,7 @@ public class CReporte extends CGenerico {
 			ClassLoader cl = this.getClass().getClassLoader();
 			InputStream fis = null;
 
-			Map parameters = new HashMap();
+			Map<String, Object> parameters = new HashMap<String, Object>();
 
 			parameters.put("aliado", aliado);
 			parameters.put("cliente", cliente);
@@ -336,7 +365,6 @@ public class CReporte extends CGenerico {
 			String url = lista.get(2);
 			List<Configuracion> configuracion = new ArrayList<Configuracion>();
 			Integer numeroClientes = 0;
-			String fly = "";
 			Integer sugerido = 0;
 			DateFormat fechaF = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -393,7 +421,6 @@ public class CReporte extends CGenerico {
 				fis = (cl.getResourceAsStream("/reporte/R55420011.jasper"));
 				break;
 			case "11":
-				// parameters.put("variable_sugerido", a);
 				fis = (cl.getResourceAsStream("/reporte/R55420014.jasper"));
 				break;
 			case "12":
@@ -417,8 +444,8 @@ public class CReporte extends CGenerico {
 			case "18":
 				configuracion = getServicioConfiguracion().buscarTodas();
 				if (!configuracion.isEmpty())
-					parameters.put("fy_actual",
-							fechaF.format(configuracion.get(0).getInicioFyActual()));
+					parameters.put("fy_actual", fechaF.format(configuracion
+							.get(0).getInicioFyActual()));
 				else
 					parameters.put("fy_actual", fechaF.format(fecha));
 				fis = (cl.getResourceAsStream("/reporte/R55420022.jasper"));
@@ -426,8 +453,8 @@ public class CReporte extends CGenerico {
 			case "19":
 				configuracion = getServicioConfiguracion().buscarTodas();
 				if (!configuracion.isEmpty())
-					parameters.put("fy_actual",
-							fechaF.format(configuracion.get(0).getInicioFyActual()));
+					parameters.put("fy_actual", fechaF.format(configuracion
+							.get(0).getInicioFyActual()));
 				else
 					parameters.put("fy_actual", fechaF.format(fecha));
 				fis = (cl.getResourceAsStream("/reporte/R55420023.jasper"));
@@ -503,17 +530,17 @@ public class CReporte extends CGenerico {
 	}
 
 	protected boolean validar() {
-		if (idAliado == null) {
-			msj.mensajeAlerta("Debe seleccionar un Aliado");
+		if (!rowAliado.isVisible() && idAliado == null) {
+			msj.mensajeAlerta("Su usuario no esta asociado a ningun Aliado, "
+					+ "pongase en contacto con el Administrador del sistema");
 			return false;
 		} else {
-			if (cmbReporte.getText().compareTo("") == 0) {
-				msj.mensajeAlerta("Debe seleccionar un Reporte");
+			if (rowAliado.isVisible() && idAliado == null) {
+				msj.mensajeAlerta("Debe seleccionar un Aliado");
 				return false;
 			} else {
-				if (!rowAliado.isVisible() && idAliado == null) {
-					msj.mensajeAlerta("Su usuario no esta asociado a ningun Aliado, "
-							+ "pongase en contacto con el Administrador del sistema");
+				if (cmbReporte.getText().compareTo("") == 0) {
+					msj.mensajeAlerta("Debe seleccionar un Reporte");
 					return false;
 				} else
 					return true;
@@ -570,10 +597,11 @@ public class CReporte extends CGenerico {
 	public void seleccionAliado() {
 		MaestroAliado aliado = catalogoAliado.objetoSeleccionadoDelCatalogo();
 		txtAliado.setValue(aliado.getCodigoAliado());
+		idAliado = aliado.getCodigoAliado();
 		catalogoAliado.setParent(null);
 	}
 
-	@Listen("onChange = #txtAliado")
+	@Listen("onOK = #txtAliado")
 	public void buscarNombreAliado() {
 		MaestroAliado aliado = servicioAliado.buscar(txtAliado.getValue());
 		if (aliado != null) {

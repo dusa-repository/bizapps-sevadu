@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import modelo.maestros.ConfiguracionEnvioCorreo;
 import modelo.maestros.F0005;
 import modelo.maestros.MaestroAliado;
@@ -27,6 +32,7 @@ import componente.Botonera;
 import componente.BuscadorUDC;
 import componente.Catalogo;
 import componente.Mensaje;
+import componente.Validador;
 
 public class CConfiguracionEnvioCorreo extends CGenerico {
 
@@ -222,8 +228,24 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 		if (clave == 0 && !camposLLenos()) {
 			msj.mensajeError(Mensaje.camposVacios);
 			return false;
-		} else
-			return true;
+		} else {
+			if (!validarCorreos()) {
+				msj.mensajeError(Mensaje.correoInvalido);
+				return false;
+			} else
+				return true;
+		}
+	}
+
+	private boolean validarCorreos() {
+		String destinos[] = txtDestinatarios.getValue().split(";");
+		int j = 0;
+		while (j < destinos.length) {
+			if (!Validador.validarCorreo(destinos[j]))
+				return false;
+			j++;
+		}
+		return true;
 	}
 
 	@Listen("onOpen = #gpxDatos")
@@ -318,7 +340,7 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "07");
 		buscadorReporte = new BuscadorUDC("Reporte", 50, listF0005, true,
-				false, false, "00", "07","32%", "8%", "10%", "50%") {
+				false, false, "00", "07", "32%", "8%", "10%", "50%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "07",

@@ -2,6 +2,7 @@ package controlador.maestros;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -121,18 +122,18 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
 			"/META-INF/PropiedadesBaseDatos.xml");
 
-
 	public static SMaestroAliado getServicioAliado() {
 		return app.getBean(SMaestroAliado.class);
 	}
-	
+
 	public static SVenta getServicioVenta() {
 		return app.getBean(SVenta.class);
 	}
-	
+
 	public static SConfiguracion getServicioConfiguracion() {
 		return app.getBean(SConfiguracion.class);
 	}
+
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
@@ -445,8 +446,6 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 		}
 		return valor;
 	}
-	
-
 
 	protected int obtenerMes(int tiempo) {
 		switch (tiempo) {
@@ -491,7 +490,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 		}
 		return tiempo;
 	}
-	
+
 	public String mounthStringGivenIntegerValue(int mes) {
 		String mounth = "";
 		switch (mes) {
@@ -534,7 +533,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 		}
 		return mounth;
 	}
-	
+
 	public int obtenerDiasHabiles(Date fecha, Date fecha2) {
 		Calendar calendario = Calendar.getInstance();
 		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
@@ -558,6 +557,18 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 			fecha = calendario.getTime();
 		} while (!fecha.equals(fecha2));
 		return contador;
+	}
+
+	public static double round(double value, int places) {
+		if (places < 0)
+			throw new IllegalArgumentException();
+		Double valor = value;
+		BigDecimal bd = new BigDecimal(value);
+		if (!valor.isNaN() && !valor.isInfinite()) {
+			bd = new BigDecimal(value);
+			bd = bd.setScale(places, RoundingMode.HALF_UP);
+		}
+		return bd.doubleValue();
 	}
 
 }
