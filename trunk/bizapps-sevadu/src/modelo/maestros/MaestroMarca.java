@@ -50,6 +50,9 @@ public class MaestroMarca implements Serializable {
 	@Column(name="lote_upload")
 	private String loteUpload;
 
+	@Column(name="orden_termometro")
+	private Integer orden;
+
 	//bi-directional many-to-one association to MaestroProducto
 	@OneToMany(mappedBy="maestroMarca")
 	private List<MaestroProducto> maestroProductos;
@@ -59,7 +62,7 @@ public class MaestroMarca implements Serializable {
 
 	public MaestroMarca(int id, String marcaDusa, String descripcion,
 			Date fechaAuditoria, int filtroImpresion, boolean filtroTermometro,
-			Time horaAuditoria, String idUsuario, String loteUpload) {
+			Time horaAuditoria, String idUsuario, String loteUpload, Integer orden) {
 		super();
 		this.id = id;
 		this.marcaDusa = marcaDusa;
@@ -70,6 +73,7 @@ public class MaestroMarca implements Serializable {
 		this.horaAuditoria = horaAuditoria;
 		this.idUsuario = idUsuario;
 		this.loteUpload = loteUpload;
+		this.orden = orden;
 	}
 
 
@@ -166,6 +170,14 @@ public class MaestroMarca implements Serializable {
 		maestroProducto.setMaestroMarca(null);
 
 		return maestroProducto;
+	}
+
+	public Integer getOrden() {
+		return orden;
+	}
+
+	public void setOrden(Integer orden) {
+		this.orden = orden;
 	}
 
 }

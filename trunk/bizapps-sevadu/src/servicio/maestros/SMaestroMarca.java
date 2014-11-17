@@ -33,4 +33,8 @@ public class SMaestroMarca {
 	public MaestroMarca buscar(String value) {
 		return marcaDAO.findByMarcaDusa(value);
 	}
+
+	public List<MaestroMarca> buscarActivasTermometro() {
+		return marcaDAO.findByFiltroTermometroTrueOrderByOrdenAsc();
+	}
 }

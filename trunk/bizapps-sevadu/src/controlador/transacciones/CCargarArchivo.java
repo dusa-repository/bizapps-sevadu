@@ -13,10 +13,12 @@ import modelo.maestros.F0005;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;
+import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.PlanVenta;
 import modelo.maestros.TipoCliente;
 import modelo.maestros.Venta;
 import modelo.pk.ExistenciaPK;
+import modelo.pk.MarcaActivadaPK;
 import modelo.pk.PlanVentaPK;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -39,7 +41,6 @@ import org.zkoss.zul.Tab;
 import componente.Botonera;
 import componente.Mensaje;
 import componente.Validador;
-
 import controlador.maestros.CGenerico;
 
 public class CCargarArchivo extends CGenerico {
@@ -173,8 +174,950 @@ public class CCargarArchivo extends CGenerico {
 	}
 
 	protected void importarActivacion() {
-		// TODO Auto-generated method stub
-
+		XSSFWorkbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(media.getStreamData());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		Iterator<Row> rowIterator = sheet.iterator();
+		String mostrarError = "";
+		boolean error = false;
+		boolean errorLong = false;
+		if (rowIterator.hasNext()) {
+			List<MarcaActivadaVendedor> marcas = new ArrayList<MarcaActivadaVendedor>();
+			int contadorRow = 0;
+			boolean entro = false;
+			while (rowIterator.hasNext()) {
+				contadorRow = contadorRow + 1;
+				Row row = rowIterator.next();
+				if (!entro) {
+					row = rowIterator.next();
+					contadorRow = contadorRow + 1;
+					entro = true;
+				}
+				MarcaActivadaVendedor marcaActivada = new MarcaActivadaVendedor();
+				MaestroAliado aliado = new MaestroAliado();
+				String idAliado = null;
+				Double refAliado = (double) 0;
+				Cliente cliente = new Cliente();
+				String idCliente = null;
+				Double refCliente = (double) 0;
+				Double marca1 = null, marca2 = null, marca3 = null, marca4 = null, marca5 = null, marca6 = null, marca7 = null, marca8 = null, marca9 = null, marca10 = null, marca11 = null, marca12 = null, marca13 = null, marca14 = null, marca15 = null, marca16 = null, marca17 = null, marca18 = null, marca19 = null, marca20 = null, marca21 = null, marca22 = null, marca23 = null, marca24 = null, marca25 = null, marca26 = null, marca27 = null, marca28 = null, marca29 = null, marca30 = null, marca31 = null, marca32 = null, marca33 = null, marca34 = null, marca35 = null, marca36 = null, marca37 = null, marca38 = null, marca39 = null, marca40 = null, marca41 = null, marca42 = null, marca43 = null, marca44 = null, marca45 = null, marca46 = null, marca47 = null, marca48 = null, marca49 = null, marca50 = null;
+				Double total = null;
+				Double porcentaje = null;
+				String campo1 = null;
+				String campo2 = null;
+				Iterator<Cell> cellIterator = row.cellIterator();
+				int contadorCell = 0;
+				while (cellIterator.hasNext()) {
+					contadorCell = contadorCell + 1;
+					Cell cell = cellIterator.next();
+					switch (cell.getColumnIndex()) {
+					case 0:
+						idAliado = obtenerStringCualquiera(cell, refAliado,
+								idAliado);
+						if (idAliado != null) {
+							if (idAliado.length() > 50) {
+								mostrarError = mensajeErrorLongitud(
+										mostrarError, contadorRow, contadorCell);
+								errorLong = true;
+							} else {
+								aliado = servicioAliado.buscar(idAliado);
+								if (aliado == null) {
+									mostrarError = mensajeErrorNoEncontrado(
+											mostrarError, idAliado,
+											contadorRow, contadorCell, "Aliado");
+									error = true;
+								}
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 1:
+						idCliente = obtenerStringCualquiera(cell, refCliente,
+								idCliente);
+						if (idCliente != null) {
+							if (idCliente.length() > 50) {
+								mostrarError = mensajeErrorLongitud(
+										mostrarError, contadorRow, contadorCell);
+								errorLong = true;
+							} else {
+								cliente = servicioCliente
+										.buscarPorCodigoYAliado(idCliente,
+												aliado);
+								if (cliente == null) {
+									mostrarError = mensajeErrorNoEncontrado(
+											mostrarError, idCliente,
+											contadorRow, contadorCell,
+											"Cliente");
+									error = true;
+								}
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 2:
+						if (cell.getCellType() == 0) {
+							marca1 = cell.getNumericCellValue();
+							if (marca1 != 0 && marca1 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 3:
+						if (cell.getCellType() == 0) {
+							marca2 = cell.getNumericCellValue();
+							if (marca2 != 0 && marca2 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 4:
+						if (cell.getCellType() == 0) {
+							marca3 = cell.getNumericCellValue();
+							if (marca3 != 0 && marca3 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 5:
+						if (cell.getCellType() == 0) {
+							marca4 = cell.getNumericCellValue();
+							if (marca4 != 0 && marca4 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 6:
+						if (cell.getCellType() == 0) {
+							marca5 = cell.getNumericCellValue();
+							if (marca5 != 0 && marca5 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 7:
+						if (cell.getCellType() == 0) {
+							marca6 = cell.getNumericCellValue();
+							if (marca6 != 0 && marca6 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 8:
+						if (cell.getCellType() == 0) {
+							marca7 = cell.getNumericCellValue();
+							if (marca7 != 0 && marca7 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 9:
+						if (cell.getCellType() == 0) {
+							marca8 = cell.getNumericCellValue();
+							if (marca8 != 0 && marca8 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 10:
+						if (cell.getCellType() == 0) {
+							marca9 = cell.getNumericCellValue();
+							if (marca9 != 0 && marca9 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 11:
+						if (cell.getCellType() == 0) {
+							marca10 = cell.getNumericCellValue();
+							if (marca10 != 0 && marca10 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 12:
+						if (cell.getCellType() == 0) {
+							marca11 = cell.getNumericCellValue();
+							if (marca11 != 0 && marca11 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 13:
+						if (cell.getCellType() == 0) {
+							marca12 = cell.getNumericCellValue();
+							if (marca12 != 0 && marca12 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 14:
+						if (cell.getCellType() == 0) {
+							marca13 = cell.getNumericCellValue();
+							if (marca13 != 0 && marca13 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 15:
+						if (cell.getCellType() == 0) {
+							marca14 = cell.getNumericCellValue();
+							if (marca14 != 0 && marca14 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 16:
+						if (cell.getCellType() == 0) {
+							marca15 = cell.getNumericCellValue();
+							if (marca15 != 0 && marca15 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 17:
+						if (cell.getCellType() == 0) {
+							marca16 = cell.getNumericCellValue();
+							if (marca16 != 0 && marca16 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 18:
+						if (cell.getCellType() == 0) {
+							marca17 = cell.getNumericCellValue();
+							if (marca17 != 0 && marca17 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 19:
+						if (cell.getCellType() == 0) {
+							marca18 = cell.getNumericCellValue();
+							if (marca18 != 0 && marca18 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 20:
+						if (cell.getCellType() == 0) {
+							marca19 = cell.getNumericCellValue();
+							if (marca19 != 0 && marca19 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 21:
+						if (cell.getCellType() == 0) {
+							marca20 = cell.getNumericCellValue();
+							if (marca20 != 0 && marca20 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 22:
+						if (cell.getCellType() == 0) {
+							marca21 = cell.getNumericCellValue();
+							if (marca21 != 0 && marca21 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 23:
+						if (cell.getCellType() == 0) {
+							marca22 = cell.getNumericCellValue();
+							if (marca22 != 0 && marca22 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 24:
+						if (cell.getCellType() == 0) {
+							marca23 = cell.getNumericCellValue();
+							if (marca23 != 0 && marca23 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 25:
+						if (cell.getCellType() == 0) {
+							marca24 = cell.getNumericCellValue();
+							if (marca24 != 0 && marca24 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 26:
+						if (cell.getCellType() == 0) {
+							marca25 = cell.getNumericCellValue();
+							if (marca25 != 0 && marca25 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 27:
+						if (cell.getCellType() == 0) {
+							marca26 = cell.getNumericCellValue();
+							if (marca26 != 0 && marca26 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 28:
+						if (cell.getCellType() == 0) {
+							marca27 = cell.getNumericCellValue();
+							if (marca27 != 0 && marca27 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 29:
+						if (cell.getCellType() == 0) {
+							marca28 = cell.getNumericCellValue();
+							if (marca28 != 0 && marca28 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 30:
+						if (cell.getCellType() == 0) {
+							marca29 = cell.getNumericCellValue();
+							if (marca29 != 0 && marca29 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 31:
+						if (cell.getCellType() == 0) {
+							marca30 = cell.getNumericCellValue();
+							if (marca30 != 0 && marca30 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 32:
+						if (cell.getCellType() == 0) {
+							marca31 = cell.getNumericCellValue();
+							if (marca31 != 0 && marca31 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 33:
+						if (cell.getCellType() == 0) {
+							marca32 = cell.getNumericCellValue();
+							if (marca32 != 0 && marca32 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 34:
+						if (cell.getCellType() == 0) {
+							marca33 = cell.getNumericCellValue();
+							if (marca33 != 0 && marca33 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 35:
+						if (cell.getCellType() == 0) {
+							marca34 = cell.getNumericCellValue();
+							if (marca34 != 0 && marca34 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 36:
+						if (cell.getCellType() == 0) {
+							marca35 = cell.getNumericCellValue();
+							if (marca35 != 0 && marca35 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 37:
+						if (cell.getCellType() == 0) {
+							marca36 = cell.getNumericCellValue();
+							if (marca36 != 0 && marca36 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 38:
+						if (cell.getCellType() == 0) {
+							marca37 = cell.getNumericCellValue();
+							if (marca37 != 0 && marca37 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 39:
+						if (cell.getCellType() == 0) {
+							marca38 = cell.getNumericCellValue();
+							if (marca38 != 0 && marca38 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 40:
+						if (cell.getCellType() == 0) {
+							marca39 = cell.getNumericCellValue();
+							if (marca39 != 0 && marca39 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 41:
+						if (cell.getCellType() == 0) {
+							marca40 = cell.getNumericCellValue();
+							if (marca40 != 0 && marca40 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 42:
+						if (cell.getCellType() == 0) {
+							marca41 = cell.getNumericCellValue();
+							if (marca41 != 0 && marca41 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 43:
+						if (cell.getCellType() == 0) {
+							marca42 = cell.getNumericCellValue();
+							if (marca42 != 0 && marca42 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 44:
+						if (cell.getCellType() == 0) {
+							marca43 = cell.getNumericCellValue();
+							if (marca43 != 0 && marca43 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 45:
+						if (cell.getCellType() == 0) {
+							marca44 = cell.getNumericCellValue();
+							if (marca44 != 0 && marca44 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 46:
+						if (cell.getCellType() == 0) {
+							marca45 = cell.getNumericCellValue();
+							if (marca45 != 0 && marca45 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 47:
+						if (cell.getCellType() == 0) {
+							marca46 = cell.getNumericCellValue();
+							if (marca46 != 0 && marca46 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 48:
+						if (cell.getCellType() == 0) {
+							marca47 = cell.getNumericCellValue();
+							if (marca47 != 0 && marca47 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 49:
+						if (cell.getCellType() == 0) {
+							marca48 = cell.getNumericCellValue();
+							if (marca48 != 0 && marca48 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 50:
+						if (cell.getCellType() == 0) {
+							marca49 = cell.getNumericCellValue();
+							if (marca49 != 0 && marca49 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 51:
+						if (cell.getCellType() == 0) {
+							marca50 = cell.getNumericCellValue();
+							if (marca50 != 0 && marca50 != 1) {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 52:
+						if (cell.getCellType() == 0) {
+							total = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 53:
+						if (cell.getCellType() == 0) {
+							porcentaje = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 54:
+						if (cell.getCellType() == 1) {
+							campo1 = cell.getStringCellValue();
+							if (campo1 != null)
+								if (campo1.length() > 50) {
+									mostrarError = mensajeErrorLongitud(
+											mostrarError, contadorRow,
+											contadorCell);
+									errorLong = true;
+								}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 55:
+						if (cell.getCellType() == 1) {
+							campo2 = cell.getStringCellValue();
+							if (campo2 != null)
+								if (campo2.length() > 50) {
+									mostrarError = mensajeErrorLongitud(
+											mostrarError, contadorRow,
+											contadorCell);
+									errorLong = true;
+								}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					}
+				}
+				if (!error && !errorLong && aliado != null && marca1 != null
+						&& marca2 != null && marca3 != null && marca4 != null
+						&& marca5 != null && marca6 != null && marca7 != null
+						&& marca8 != null && marca9 != null && marca10 != null
+						&& marca11 != null && marca12 != null
+						&& marca13 != null && marca14 != null
+						&& marca15 != null && marca16 != null
+						&& marca17 != null && marca18 != null
+						&& marca19 != null && marca20 != null
+						&& marca21 != null && marca22 != null
+						&& marca23 != null && marca24 != null
+						&& marca25 != null && marca26 != null
+						&& marca27 != null && marca28 != null
+						&& marca29 != null && marca30 != null
+						&& marca31 != null && marca32 != null
+						&& marca33 != null && marca34 != null
+						&& marca35 != null && marca36 != null
+						&& marca37 != null && marca38 != null
+						&& marca39 != null && marca40 != null
+						&& marca41 != null && marca42 != null
+						&& marca43 != null && marca44 != null
+						&& marca45 != null && marca46 != null
+						&& marca47 != null && marca48 != null
+						&& marca49 != null && marca50 != null && total != null
+						&& porcentaje != null && campo1 != null
+						&& campo2 != null) {
+					MarcaActivadaPK pk = new MarcaActivadaPK();
+					pk.setCliente(cliente);
+					pk.setMaestroAliado(aliado);
+					marcaActivada.setId(pk);
+					marcaActivada.setCampoA(campo1);
+					marcaActivada.setCampoB(campo2);
+					marcaActivada.setMarcaA(marca1.intValue());
+					marcaActivada.setMarcaB(marca2.intValue());
+					marcaActivada.setMarcaC(marca3.intValue());
+					marcaActivada.setMarcaD(marca4.intValue());
+					marcaActivada.setMarcaE(marca5.intValue());
+					marcaActivada.setMarcaF(marca6.intValue());
+					marcaActivada.setMarcaG(marca7.intValue());
+					marcaActivada.setMarcaH(marca8.intValue());
+					marcaActivada.setMarcaI(marca9.intValue());
+					marcaActivada.setMarcaJ(marca10.intValue());
+					marcaActivada.setMarcaK(marca11.intValue());
+					marcaActivada.setMarcaL(marca12.intValue());
+					marcaActivada.setMarcaM(marca13.intValue());
+					marcaActivada.setMarcaN(marca14.intValue());
+					marcaActivada.setMarcaO(marca15.intValue());
+					marcaActivada.setMarcaP(marca16.intValue());
+					marcaActivada.setMarcaQ(marca17.intValue());
+					marcaActivada.setMarcaR(marca18.intValue());
+					marcaActivada.setMarcaS(marca19.intValue());
+					marcaActivada.setMarcaT(marca20.intValue());
+					marcaActivada.setMarcaU(marca21.intValue());
+					marcaActivada.setMarcaV(marca22.intValue());
+					marcaActivada.setMarcaW(marca23.intValue());
+					marcaActivada.setMarcaX(marca24.intValue());
+					marcaActivada.setMarcaY(marca25.intValue());
+					marcaActivada.setMarcaZ(marca26.intValue());
+					marcaActivada.setMarcaZA(marca27.intValue());
+					marcaActivada.setMarcaZB(marca28.intValue());
+					marcaActivada.setMarcaZC(marca29.intValue());
+					marcaActivada.setMarcaZD(marca30.intValue());
+					marcaActivada.setMarcaZE(marca31.intValue());
+					marcaActivada.setMarcaZF(marca32.intValue());
+					marcaActivada.setMarcaZG(marca33.intValue());
+					marcaActivada.setMarcaZH(marca34.intValue());
+					marcaActivada.setMarcaZI(marca35.intValue());
+					marcaActivada.setMarcaZJ(marca36.intValue());
+					marcaActivada.setMarcaZK(marca37.intValue());
+					marcaActivada.setMarcaZL(marca38.intValue());
+					marcaActivada.setMarcaZM(marca39.intValue());
+					marcaActivada.setMarcaZN(marca40.intValue());
+					marcaActivada.setMarcaZO(marca41.intValue());
+					marcaActivada.setMarcaZP(marca42.intValue());
+					marcaActivada.setMarcaZQ(marca43.intValue());
+					marcaActivada.setMarcaZR(marca44.intValue());
+					marcaActivada.setMarcaZS(marca45.intValue());
+					marcaActivada.setMarcaZT(marca46.intValue());
+					marcaActivada.setMarcaZU(marca47.intValue());
+					marcaActivada.setMarcaZV(marca48.intValue());
+					marcaActivada.setMarcaZW(marca49.intValue());
+					marcaActivada.setMarcaZX(marca50.intValue());
+					marcaActivada.setTotal(total.intValue());
+					marcaActivada.setPorcentaje(porcentaje.floatValue());
+					marcas.add(marcaActivada);
+				}
+			}
+			if (!error && !errorLong) {
+				servicioMarcaActivada.guardarVarios(marcas);
+				msj.mensajeInformacion("Archivo importado con exito" + "\n"
+						+ "Cantidad de Filas evaluadas:" + (contadorRow - 1)
+						+ "\n" + "Cantidad de Filas insertadas:"
+						+ (contadorRow - 1));
+			} else
+				msj.mensajeError("El archivo no ha podido ser importado, causas:"
+						+ "\n"
+						+ mostrarError
+						+ "\n"
+						+ "Cantidad de Filas evaluadas:"
+						+ (contadorRow - 1)
+						+ "\n" + "Cantidad de Filas insertadas: 0");
+		}
 	}
 
 	protected void importarCartera() {

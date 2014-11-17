@@ -73,6 +73,9 @@ public class Cliente implements Serializable {
 	
 	@OneToMany(mappedBy = "codigoCliente")
 	private List<Venta> ventas;
+	
+	@OneToMany(mappedBy = "id.cliente")
+	private List<MarcaActivadaVendedor> activaciones;
 
 	public Cliente() {
 		super();
@@ -229,6 +232,14 @@ public class Cliente implements Serializable {
 
 	public void setVentas(List<Venta> ventas) {
 		this.ventas = ventas;
+	}
+
+	public List<MarcaActivadaVendedor> getActivaciones() {
+		return activaciones;
+	}
+
+	public void setActivaciones(List<MarcaActivadaVendedor> activaciones) {
+		this.activaciones = activaciones;
 	}
 	
 	

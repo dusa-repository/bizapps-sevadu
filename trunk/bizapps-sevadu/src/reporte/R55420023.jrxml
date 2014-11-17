@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="R55420001" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="579c4fae-3add-438d-bea5-15651d1f8fc7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="fecha_desde" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2013-07-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha_hasta" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2013-07-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="aliado" class="java.lang.String">
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="naliado" class="java.lang.String"/>
+	<parameter name="fy_actual" class="java.lang.String"/>
+	<parameter name="zona" class="java.lang.String"/>
+	<parameter name="vendedor" class="java.lang.String"/>
+	<parameter name="cliente" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT tmp.codigo_aliado,nombre,maestro_marca.marca_dusa,maestro_marca.descripcion,(round(sum(cantidad),2)) as cantidad ,round(sum(cajas_planificadas),2) as cajas_planificadas,(round(sum(cajas_fy_actual),2)) as cajas_fy_actual, round(sum(cajas_planificadas_fy),2) as cajas_planificadas_fy,(round(sum(cajas_mes_anterior),2)) as cajas_mes_anterior,(round(sum(cajas_año_anterior),2)) as cajas_año_anterior,  0 as break from (
+SELECT codigo_aliado,codigo_producto,round(sum(cantidad),2) as cantidad,0 as cajas_planificadas,0 as cajas_fy_actual, 0 as cajas_planificadas_fy,0 as cajas_mes_anterior,0 as cajas_año_anterior  FROM ventas   where codigo_aliado like '%$P!{aliado}%' and fecha_factura>=$P{fecha_desde} and fecha_factura<=$P{fecha_hasta} group by codigo_aliado,codigo_producto
+UNION ALL
+SELECT codigo_aliado,codigo_producto,0 as cantidad,0 as cajas_planificadas, round(sum(cantidad),2) as cajas_fy_actual ,0 as cajas_planificadas_fy,0 as cajas_mes_anterior ,0 as cajas_año_anterior FROM ventas   where codigo_aliado like '%$P!{aliado}%' and fecha_factura>=$P{fy_actual}  and fecha_factura<=$P{fecha_hasta} group by codigo_aliado,codigo_producto
+UNION ALL
+SELECT codigo_aliado,codigo_producto,0 as cantidad, coalesce(sum(cajas_planificadas) ,0) as cajas_planificadas , 0 as cajas_fy_actual,0 as cajas_planificadas_fy,0 as cajas_mes_anterior,0 as cajas_año_anterior FROM  plan_ventas  where  plan_ventas.codigo_aliado like '%$P!{aliado}%' and  DATE_FORMAT(STR_TO_DATE(  concat(concat(concat(anno,'-'),lpad(mes,2,'0')),'-01'),'%Y-%m-%d'),'%Y-%m-%d')  >=$P{fecha_desde} and  DATE_FORMAT(STR_TO_DATE(  concat(concat(concat(anno,'-'),lpad(mes,2,'0')),'-01'),'%Y-%m-%d'),'%Y-%m-%d')  <= $P{fecha_hasta} group by codigo_aliado,codigo_producto
+UNION ALL
+SELECT codigo_aliado,codigo_producto,0 as cantidad, 0 as cajas_planificadas , 0 as cajas_fy_actual , coalesce(sum(cajas_planificadas) ,0) as cajas_planificadas_fy,0 as cajas_mes_anterior,0 as cajas_año_anterior FROM  plan_ventas  where  plan_ventas.codigo_aliado like '%$P!{aliado}%' and  DATE_FORMAT(STR_TO_DATE(  concat(concat(concat(anno,'-'),lpad(mes,2,'0')),'-01'),'%Y-%m-%d'),'%Y-%m-%d')  >=($P{fecha_hasta} - interval '1' year ) and  DATE_FORMAT(STR_TO_DATE(  concat(concat(concat(anno,'-'),lpad(mes,2,'0')),'-01'),'%Y-%m-%d'),'%Y-%m-%d')  <= $P{fecha_hasta} group by codigo_aliado,codigo_producto
+UNION ALL
+SELECT codigo_aliado,codigo_producto,0 as cantidad,0 as cajas_planificadas,0 as cajas_fy_actual, 0 as cajas_planificadas_fy,round(sum(cantidad),2)  as cajas_mes_anterior ,0 as cajas_año_anterior FROM ventas   where codigo_aliado like '%$P!{aliado}%' and fecha_factura>=($P{fecha_desde} - interval '1' year ) and fecha_factura<=($P{fecha_hasta} - interval '1' year ) group by codigo_aliado,codigo_producto
+UNION ALL
+SELECT codigo_aliado,codigo_producto,0 as cantidad,0 as cajas_planificadas,0 as cajas_fy_actual, 0 as cajas_planificadas_fy,0 as cajas_mes_anterior,round(sum(cantidad),2) as cajas_año_anterior  FROM ventas   where codigo_aliado like '%$P!{aliado}%' and fecha_factura>=($P{fy_actual} - interval '1' year ) and fecha_factura<=($P{fy_actual} - interval '1' day ) group by codigo_aliado,codigo_producto
+
+) as tmp inner join maestro_aliado ON tmp.codigo_aliado=maestro_aliado.codigo_aliado inner join maestro_producto ON tmp.codigo_producto= maestro_producto.codigo_producto_dusa INNER JOIN maestro_marca ON  maestro_marca.marca_dusa= maestro_producto.marca_dusa
+group by tmp.codigo_aliado,nombre,maestro_marca.marca_dusa,maestro_marca.descripcion
+order by tmp.codigo_aliado,nombre,maestro_marca.marca_dusa,maestro_marca.descripcion]]>
+	</queryString>
+	<field name="codigo_aliado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="marca_dusa" class="java.lang.String">
+		<fieldDescription><![CDATA[Codigo de la marca]]></fieldDescription>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[Nombre de la marca]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cajas_planificadas" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cajas_fy_actual" class="java.lang.Double"/>
+	<field name="cajas_planificadas_fy" class="java.math.BigDecimal"/>
+	<field name="cajas_mes_anterior" class="java.lang.Double"/>
+	<field name="cajas_año_anterior" class="java.lang.Double"/>
+	<field name="break" class="java.lang.Long"/>
+	<variable name="total_cantidad" class="java.lang.Float" resetType="Group" resetGroup="aliado" calculation="Sum">
+		<variableExpression><![CDATA[$F{cantidad}]]></variableExpression>
+	</variable>
+	<variable name="total_plan" class="java.lang.Float" resetType="Group" resetGroup="aliado" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_planificadas}]]></variableExpression>
+	</variable>
+	<variable name="total_cantidad_fy_actual" class="java.lang.Float" resetType="Group" resetGroup="aliado" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_fy_actual}]]></variableExpression>
+	</variable>
+	<variable name="total_plan_fy_actual" class="java.lang.Float" resetType="Group" resetGroup="aliado" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_planificadas_fy}]]></variableExpression>
+	</variable>
+	<variable name="total_cantidad_mes_anterior" class="java.lang.Float" resetType="Group" resetGroup="aliado" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_mes_anterior}]]></variableExpression>
+	</variable>
+	<variable name="total_cantidad_año_anterior" class="java.lang.Float" resetType="Group" resetGroup="aliado" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_año_anterior}]]></variableExpression>
+	</variable>
+	<variable name="total_cantidad_g" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{cantidad}]]></variableExpression>
+	</variable>
+	<variable name="total_plan_g" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_planificadas}]]></variableExpression>
+	</variable>
+	<variable name="total_cantidad_fy_actual_g" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_fy_actual}]]></variableExpression>
+	</variable>
+	<variable name="total_plan_fy_actual_g" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_planificadas_fy}]]></variableExpression>
+	</variable>
+	<variable name="total_cantidad_mes_anterior_g" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_mes_anterior}]]></variableExpression>
+	</variable>
+	<variable name="total_cantidad_año_anterior_g" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{cajas_año_anterior}]]></variableExpression>
+	</variable>
+	<group name="break">
+		<groupExpression><![CDATA[$F{break}]]></groupExpression>
+		<groupFooter>
+			<band height="21">
+				<textField pattern="#,##0.00">
+					<reportElement x="328" y="0" width="60" height="20" uuid="b4191b42-fd80-49a8-b45c-43cc3f82549c"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_cantidad_g}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="388" y="0" width="60" height="20" uuid="cf802b83-3fca-49ae-96d3-61b31d5c3d60"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_plan_g}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="558" y="0" width="57" height="20" uuid="15dd6906-0469-4ff0-88ce-7612197cad27"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_cantidad_fy_actual_g}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="615" y="0" width="59" height="20" uuid="84f2cb5b-1282-48f3-a6d8-d1fffa022c9d"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_plan_fy_actual_g}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="268" y="0" width="60" height="20" uuid="2c577899-f95f-4114-a841-874e57b8cc11"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_cantidad_mes_anterior_g}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="508" y="0" width="50" height="20" uuid="5acc4d37-e8ae-413e-9fbb-b42d71ad0c7d"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_cantidad_año_anterior_g}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="448" y="0" width="60" height="21" uuid="3a9e4e63-b9d5-4ae0-92e3-c76cbe02bb7b"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{total_plan_g} ==0 ? 0 : ($V{total_cantidad_g}/$V{total_plan_g})*100 )]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="674" y="0" width="65" height="21" uuid="48e57725-a422-4884-a84f-48176ee79c11"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{total_plan_fy_actual_g} ==0 ? 0 : ($V{total_cantidad_fy_actual_g}/$V{total_plan_fy_actual_g})*100 )]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText" x="175" y="0" width="76" height="20" uuid="7f328e94-7e14-4bc2-831f-e0f15a57e189"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<text><![CDATA[Total General]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="aliado" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{codigo_aliado}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<textField pattern="#,##0.00">
+					<reportElement x="328" y="0" width="60" height="21" uuid="dea2a745-e533-4323-b4af-b042cbe49fec"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_cantidad}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="388" y="0" width="60" height="21" uuid="6321f831-d197-4453-87fc-ad4f12cefbc8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_plan}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="448" y="0" width="60" height="21" uuid="58713766-bcf4-4795-8476-6ee2f318cf46"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{total_plan} ==0 ? 0 : ($V{total_cantidad}/$V{total_plan})*100 )]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="558" y="0" width="57" height="21" uuid="30f1d7ab-8f3d-4be1-893b-58fec4ccaec2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_cantidad_fy_actual}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="615" y="0" width="59" height="21" uuid="e098edc0-f54d-4d49-aced-7fa19d1be083"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_plan_fy_actual}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="674" y="0" width="65" height="21" uuid="30144685-d6e7-48dc-b617-eb9c43ed4c51"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{total_plan_fy_actual} ==0 ? 0 : ($V{total_cantidad_fy_actual}/$V{total_plan_fy_actual})*100 )]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="21" y="2" width="53" height="18" uuid="2253acc0-b5bc-4e74-acd1-a0a9f22265d8"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codigo_aliado}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="74" y="2" width="177" height="18" uuid="1702af67-5dfb-4529-a136-0d20a1d51888"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="268" y="0" width="60" height="20" uuid="cafe81dc-5caa-43de-a1c8-e89fbddb6f82"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_cantidad_mes_anterior}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="508" y="1" width="50" height="20" uuid="68198a18-5b13-4398-94e0-e60a8e2ece88"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{total_cantidad_año_anterior}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText" x="220" y="0" width="395" height="20" uuid="61d75ae5-7d45-4f8b-bbe8-6370c94d73e0"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENTAS CONSOLIDADA POR ALIADOS (COMPARATIVO)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText" x="11" y="0" width="57" height="20" uuid="fb166906-3b31-4fc1-891e-284def6c4fa5"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[R55420023]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="275" y="60" width="39" height="18" uuid="a3c4a2b9-84da-4f49-b990-aed41b68f0a2"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Aliado:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="377" y="60" width="225" height="18" uuid="d4d80d2c-a9ba-4f27-8664-43e4feda6847"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$P{naliado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="314" y="60" width="63" height="18" uuid="1baa4d7a-5864-4bf9-ad5d-b2b6577c7605"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[( $P{aliado}=="" ? "TODOS" : $P{aliado} )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="403" y="20" width="100" height="20" uuid="8d76a28b-8a44-49dd-aff3-fa7299bbed24"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$P{fecha_hasta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText" x="377" y="20" width="14" height="20" uuid="5f3e76e1-7908-4a23-8d21-ba6c68164c24"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[al]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="301" y="20" width="76" height="20" uuid="b0db5871-b30f-4042-af3c-0441fb6e5f8f"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$P{fecha_desde}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText" x="275" y="20" width="26" height="20" uuid="b079326a-903d-4e45-a7b5-bedba66be5ca"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[del]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText" x="275" y="40" width="80" height="20" uuid="137fdde3-3d0b-4a28-94f1-2a7bdc228b38"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Inicio FY Actual:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="355" y="40" width="100" height="20" uuid="5ed7b7d5-223b-4aa3-97f0-e2233ad552f4"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{fy_actual}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText" x="443" y="4" width="65" height="33" uuid="a64fe730-075b-4fc7-b436-386cde5944ee"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[% CUMPLI. MES]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line" x="11" y="4" width="728" height="1" uuid="ff96d3ca-b993-4c59-b7a1-8bc60a58bbf5"/>
+			</line>
+			<line>
+				<reportElement key="line" x="10" y="39" width="729" height="1" uuid="251d528c-4997-49d2-b1f7-3749f6553b05"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-4" x="11" y="5" width="57" height="17" uuid="ae267f2c-b124-4fa5-a11e-afb49bb97680"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ALIADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="68" y="5" width="183" height="17" uuid="d516a6a4-1fe2-431d-94b3-10e047e30d5c"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="328" y="4" width="60" height="34" uuid="1e2cb018-c447-4c39-88a6-ff2741aa59db"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[CA MES AÑO ACT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="388" y="4" width="55" height="34" uuid="749cf323-dcfc-40c1-8179-0be3826580af"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[PLAN MES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="268" y="4" width="60" height="34" uuid="587ce912-5de4-4903-8736-f9e18536e199"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[CA MES AÑO ANT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText" x="508" y="4" width="50" height="33" uuid="5ffa7d23-48d6-4f35-929a-3caf1681db6b"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ACU. AÑO ANT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText" x="558" y="4" width="57" height="33" uuid="318349b9-3875-4a43-ad5f-530b3d0c1f56"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ACU. AÑO ACT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText" x="615" y="4" width="59" height="33" uuid="810543f2-52ef-45d2-b766-65400013c7f3"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[PLAN ACUMULADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText" x="674" y="4" width="65" height="33" uuid="3221a28d-7a9c-4a5c-b668-0e656a248c95"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[% CUMPLI. AÑO ACU.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{codigo_aliado}==""]]></printWhenExpression>
+			<textField pattern="#,##0">
+				<reportElement x="388" y="0" width="60" height="22" uuid="ab068709-f56a-4841-b193-64f12a0c3cca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cajas_planificadas}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="448" y="0" width="60" height="22" uuid="f9908e95-c0bb-4024-9af1-560621b02e7b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[( $F{cajas_planificadas}==0 ? 0 : ($F{cantidad}/$F{cajas_planificadas})*100 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="0" width="53" height="22" uuid="a2f2ba18-714c-465f-9d8c-2e68286f8b93"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{marca_dusa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="84" y="0" width="167" height="22" uuid="4c65dab9-386e-4cb0-9861-7d3dc82aeb1a"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" x="328" y="0" width="60" height="22" uuid="4305dfbd-9a94-4487-a9d6-a2d71e0248c1"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="558" y="0" width="57" height="22" uuid="023e2a3a-fc09-48c1-9479-192ee1d7f713"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cajas_fy_actual}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="674" y="0" width="65" height="22" uuid="434c7b12-77a3-45cd-980e-5124f9609477"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[( $F{cajas_planificadas_fy}==0 ? 0 : ($F{cajas_fy_actual}/$F{cajas_planificadas_fy})*100 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="615" y="0" width="59" height="22" uuid="24e942ca-e35c-49cf-96bf-be2b18ec1a5d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cajas_planificadas_fy}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="268" y="0" width="60" height="22" uuid="19994df4-1f80-43bf-8303-c0bf0ba7702e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cajas_mes_anterior}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="508" y="1" width="50" height="21" uuid="44a361cd-ff4d-4ce2-83c0-0f239d202d52"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cajas_año_anterior}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="619" y="0" width="80" height="20" uuid="fdfc021c-d523-4c05-8be9-ac3ad9a60526"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField" x="699" y="0" width="40" height="20" uuid="4eb0a51b-6dae-454e-8562-4367c975f783"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a" isBlankWhenNull="false">
+				<reportElement key="textField" x="11" y="0" width="100" height="20" uuid="79838355-1059-4780-b1c7-43960f1b95cb"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
