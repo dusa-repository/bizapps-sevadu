@@ -757,7 +757,7 @@ public class CTermometro extends CGenerico {
 
 	@Listen("onClick=#btnExportar")
 	public void expor() {
-		if (ss != null) {
+		if (ss.getBook() != null) {
 			Exporter exporter = Exporters.getExporter();
 			Book book = ss.getBook();
 			File file = null;

@@ -46,4 +46,7 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 			String aliado, String vendedor, Date fechaDesde, Date fechaHasta,
 			Sort o);
 
+	List<Venta> findByMaestroAliadoCodigoAliadoAndFechaFacturaBetween(
+			String aliadoObjeto, Date fechaDesde2, Date fechaHasta2, Sort o);
+
 }
