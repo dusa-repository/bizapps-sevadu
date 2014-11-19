@@ -3,7 +3,7 @@
 	<div id="divVEnvio" apply="controlador.maestros.CConfiguracionEnvioCorreo"
 		width="100%">
 		<groupbox width="100%" mold="3d"
-			title="Maestro de Configuraciones de Envio de Correo">
+			title="Maestro de Configuraciones de Envio de Correo (VEnvio)">
 			<div id="botoneraEnvio" />
 			<separator />
 			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
@@ -16,13 +16,13 @@
 						<column label="" width="16.6%" />
 						<column label="" width="16.6%" />
 						<column label="" width="16.6%" />
+						<column label="" width="13%" />
 						<column label="" width="16.6%" />
-						<column label="" width="16.6%" />
-						<column label="" width="17%" />
+						<column label="" width="19.6%" />
 					</columns>
 					<rows>
 						<row>
-							<cell colspan="4">
+							<cell colspan="3">
 								<div id="divBuscadorReporte" width="100%" />
 							</cell>
 							<label class="etiqueta" value="Estado:" />
@@ -31,15 +31,16 @@
 								<space />
 								<radio id="rdoNo" label="Inactivo" />
 							</radiogroup>
+							<hbox/>
 						</row>
 					</rows>
 				</grid>
 				<separator />
-				<groupbox width="auto" class="blaco" title="" closable="false">
+				<groupbox width="auto" class="blanco" title="" closable="false">
 					<caption label="Destinatarios" style="font-weight:bold; font-size: 13px" />
-					<hbox width="100%" widths="50%,5%,45%">
+					<hbox width="100%" widths="50%,50%">
 						<vbox width="100%" height="100%">
-							<listbox id="ltbCorreos" height="300px" width="100%"
+							<listbox id="ltbCorreos" height="250px" width="100%"
 								emptyMessage="No hay Usuarios Registrados">
 								<listhead>
 									<listheader label="Usuario" width="50%" />
@@ -54,21 +55,19 @@
 									</listitem>
 								</template>
 							</listbox>
-							<label class="etiqueta"
+							<label style="font-weight:bold;color:black;font-size:12px"
 								value="Presione doble click sobre una celda para agregar el correo a los destinatarios" />
 						</vbox>
-						<separator />
-						<hbox width="100%" height="100%" widths="20%,75%,5%">
+						<hbox width="100%" height="100%" widths="15%,85%">
 							<hbox>
 								<label class="etiqueta" value="Destinatarios:" />
 								<space />
 								<label value="*" style="font-weight:bold;color:red">
 								</label>
 							</hbox>
-							<textbox width="100%" height="300px" multiline="true"
+							<textbox width="auto" height="250px" multiline="true"
 								class="multilinea" id="txtDestinatarios" maxlength="1000"
 								tooltiptext="Ingrese los destinatarios" />
-							<separator />
 						</hbox>
 					</hbox>
 				</groupbox>

@@ -34,7 +34,7 @@ public class CConfiguracion extends CGenerico {
 		if (map != null) {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
-				nombre = (String) map.get("nombre");
+				nombre = (String) map.get("titulo");
 				map.clear();
 				map = null;
 			}

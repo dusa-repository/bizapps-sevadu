@@ -1,7 +1,7 @@
 <zk>
 	<style src="/public/Estilo.css" />
 	<div id="divGrupo" apply="controlador.seguridad.CGrupo">
-		<groupbox width="65%" mold="3d" title="Grupo (VGrupo)">
+		<groupbox width="100%" mold="3d" title="Grupo (VGrupo)">
 			<div id="botoneraGrupo" />
 			<separator />
 			<groupbox id="gpxRegistro" width="auto" class ="azul" title="" open="false">

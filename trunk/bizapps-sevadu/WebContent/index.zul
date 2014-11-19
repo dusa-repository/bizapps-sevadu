@@ -3,12 +3,12 @@
 	<style src="public/Estilo.css" />
 
 	<style>
-		.z-groupbox-hr { background:#661313;border-radius: 30px 30px
+		.z-groupbox-hr { background:#800400;border-radius: 30px 30px
 		30px 30px }
 		.z-groupbox { border-radius: 30px 30px 30px 30px }
 
 		.z-groupbox .z-groupbox-header {
-		background: #661313;
+		background: #800400;
 		border-radius:
 		30px 30px 30px 30px
 		}
@@ -29,32 +29,18 @@
 		<borderlayout height="100%"
 			style="background-image: url('public/imagenes/generales/estadistica.jpg'); background-repeat:no-repeat;height=100%; width=100% ; background-color:white">
 			<north height="2%" class="banner">
-				<hbox hflex="1">
-					<separator />
-					<separator />
-					<separator />
-				</hbox>
 			</north>
-			<east width="70%" border="none">
-				<vlayout>
-					<div align="center">
-						<separator />
-						<separator />
-						<separator />
-						<separator />
-						<image src="/public/imagenes/generales/LogoDusa.png" height="4em"
-							width="15em" />
+			<east width="75%" border="none">
+		<vbox height="100%" align="end" pack="center">
+					<div width="100%" height="100%" align="right">
+						<image src="/public/imagenes/generales/LogoDusa.png" height="5em"
+							width="20em" />
 					</div>
-					<div height="100%" align="center">
-						<separator />
-						<separator />
-						<separator />
-						<separator />
-						<separator />
-						<separator />
-						<separator />
-						<label class="lblIndex" value="SISTEMA DE ESTADISTICA DE VENTAS DE ALIADOS" />
-					</div>
+					<separator />
+					<separator />
+					<separator />
+					<separator />
+						<label height="100%"  class="lblIndex" value="SISTEMA DE ESTADISTICA DE VENTAS DE ALIADOS" />
 					<separator />
 					<separator />
 					<separator />
@@ -63,7 +49,7 @@
 					<separator />
 					<separator />
 					<div height="100%" width="100%" align="center">
-						<groupbox height="100%" width="40%">
+						<groupbox height="100%" width="60%">
 							<caption label="${a}"
 								style="color:black; font-size: 16px; font-weight:bold" />
 							<separator></separator>
@@ -104,7 +90,7 @@
 							</vlayout>
 						</groupbox>
 					</div>
-				</vlayout>
+					</vbox>
 			</east>
 			<south class="banner" border="0" height="5%" collapsible="false">
 				<div align="center" sclass="footer">

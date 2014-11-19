@@ -2,25 +2,25 @@
 
 .z-window {
 	background-image: none;
-	background-color: #661313;
+	background-color: #800400;
 }
 
 .z-window-header {
 	color: white;
 	font-size: 18px;
 	font-weight: normal;
-	background-color: #661313;
+	background-color: #800400;
 }
 
 .z-borderlayout {
 	background-image: none;
-	background-color: #661313;
+	background-color: #800400;
 }
 
 .etiqueta {
 	font-weight: bold;
 	font-family: arial;
-	color: #771313;
+	color: #800400;
 	font-size: 11px;
 }
 
@@ -33,7 +33,17 @@
 }
 
 .z-groupbox-3d-hm {
-	background: #CE6464;
+	background: #B30000;
+}
+
+.z-groupbox-3d>.z-groupbox-header {
+	font-weight: bold;
+	color: white;
+	font-family: arial, sans-serif;
+	font-size: 18px;
+	border-bottom: 1px solid #cfcfcf;
+	padding: 3px 4px;
+	background: #B30000;
 }
 
 .z-groupbox-3d-hl .z-groupbox-3d-header {
@@ -52,7 +62,7 @@
 	-webkit-border-radius: 0.7em;
 	-moz-border-radius: 0.7em;
 	border-radius: 0.7em;
-	background: #952C2C;
+	background: #800400;
 	white-space: pre-line;
 	text-shadow: 0 0 0;
 	font-family: sans-serif;
@@ -67,7 +77,7 @@
 }
 
 .z-loading {
-	background-color: #952C2C;
+	background-color: #800400;
 	border: 1px outset #A0A0A0;
 	font-weight: bold;
 	font-size: 18px;
@@ -86,9 +96,9 @@
 	-webkit-border-radius: 0.7em;
 	-moz-border-radius: 0.7em;
 	border-radius: 0.7em;
-	background: #952C2C;
+	background: #800400;
 	white-space: pre-line;
-	text-shadow: 0 1px #3A0202;
+	text-shadow: 0 1px #800400;
 }
 
 .catalogo {
@@ -96,19 +106,22 @@
 	-webkit-border-radius: 0.7em;
 	-moz-border-radius: 0.7em;
 	border-radius: 0.7em;
-	background: #952C2C;
-		white-space: pre-line;
+	background: #800400;
+	white-space: pre-line;
 }
 
-
 .banner {
-	background-color: #661313;
+	background-color: #800400;
 }
 
 .lblIndex {
 	font-size: 26px;
-	color: #661313;
+	color: #800400;
 	font-weight: bold;
+}
+
+.gruposUsuario {
+	background: #800400;
 }
 
 .azul .z-groupbox-header {

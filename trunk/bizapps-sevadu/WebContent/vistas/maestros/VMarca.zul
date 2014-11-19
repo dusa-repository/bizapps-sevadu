@@ -1,7 +1,7 @@
 <zk>
 	<style src="../public/Estilo.css" />
 	<div id="divVMarca" apply="controlador.maestros.CMarca" width="100%">
-		<groupbox width="100%" mold="3d" title="Maestro de Marca">
+		<groupbox width="100%" mold="3d" title="Maestro de Marca (VMarca)">
 			<div id="botoneraMarca" />
 			<separator />
 			<groupbox id="gpxRegistro" width="auto" class="azul" title=""

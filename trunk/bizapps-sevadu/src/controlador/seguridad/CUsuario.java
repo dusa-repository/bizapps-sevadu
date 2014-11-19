@@ -312,7 +312,7 @@ public class CUsuario extends CGenerico {
 
 			@Override
 			public void buscar() {
-				// TODO Auto-generated method stub
+				abrirCatalogo();
 
 			}
 
@@ -342,7 +342,7 @@ public class CUsuario extends CGenerico {
 	}
 
 	public void mostrarBotones(boolean bol) {
-		botonera.getChildren().get(1).setVisible(false);
+		botonera.getChildren().get(1).setVisible(!bol);
 		botonera.getChildren().get(2).setVisible(bol);
 		botonera.getChildren().get(6).setVisible(false);
 		botonera.getChildren().get(8).setVisible(false);
@@ -379,6 +379,7 @@ public class CUsuario extends CGenerico {
 		txtApellidoUsuario.setValue("");
 		txtApellido2Usuario.setValue("");
 		txtCedulaUsuario.setValue("");
+		txtCedulaUsuario.setDisabled(false);
 		txtCorreoUsuario.setValue("");
 		txtDireccionUsuario.setValue("");
 		txtLoginUsuario.setValue("");

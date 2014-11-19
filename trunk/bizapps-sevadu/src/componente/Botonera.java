@@ -32,15 +32,15 @@ public abstract class Botonera extends Hbox {
 		this.appendChild(btnSalir);
 		this.appendChild(btnAyuda);
 
-		btnSeleccionar.setSrc("/public/imagenes/botones/seleccionar.png");
-		btnBuscar.setSrc("/public/imagenes/botones/buscar.png");
-		btnAnnadir.setSrc("/public/imagenes/botones/annadir.png");
-		btnGuardar.setSrc("/public/imagenes/botones/guardar.png");
-		btnEliminar.setSrc("/public/imagenes/botones/eliminar.png");
-		btnLimpiar.setSrc("/public/imagenes/botones/limpiar.png");
-		btnReporte.setSrc("/public/imagenes/botones/reporte.png");
-		btnSalir.setSrc("/public/imagenes/botones/salir.png");
-		btnAyuda.setSrc("/public/imagenes/botones/ayuda.png");
+		btnSeleccionar.setImage("/public/imagenes/botones/seleccionar.png");
+		btnBuscar.setImage("/public/imagenes/botones/volver.png");
+		btnAnnadir.setImage("/public/imagenes/botones/annadir.png");
+		btnGuardar.setImage("/public/imagenes/botones/guardar.png");
+		btnEliminar.setImage("/public/imagenes/botones/eliminar.png");
+		btnLimpiar.setImage("/public/imagenes/botones/limpiar.png");
+		btnReporte.setImage("/public/imagenes/botones/reporte.png");
+		btnSalir.setImage("/public/imagenes/botones/salir.png");
+		btnAyuda.setImage("/public/imagenes/botones/ayuda.png");
 		
 		
 		btnAyuda.setSclass("btn");
@@ -55,7 +55,7 @@ public abstract class Botonera extends Hbox {
 		btnSeleccionar.setWidth("115px");
 		
 		btnSeleccionar.setLabel("Seleccionar");
-		btnBuscar.setLabel("Buscar");
+		btnBuscar.setLabel("Volver");
 		btnAnnadir.setLabel("Añadir");
 		btnGuardar.setLabel("Guardar");
 		btnEliminar.setLabel("Eliminar");
@@ -65,7 +65,7 @@ public abstract class Botonera extends Hbox {
 		btnAyuda.setLabel("Ayuda");
 
 		btnSeleccionar.setTooltiptext("Seleccionar");
-		btnBuscar.setTooltiptext("Buscar");
+		btnBuscar.setTooltiptext("Volver");
 		btnAnnadir.setTooltiptext("Añadir");
 		btnGuardar.setTooltiptext("Guardar");
 		btnEliminar.setTooltiptext("Eliminar");
