@@ -108,7 +108,7 @@ public class CReporte extends CGenerico {
 			String nombre = authorities.get(i).toString();
 			if (Validador.validarNumero(nombre)) {
 				arbol = servicioArbol.buscar(Long.parseLong(nombre));
-				if (arbol.getNombre().equals("Ver Aliados Reporte"))
+				if (arbol.getNombre().equals("Ver Aliados Reporte/Grafica"))
 					rowAliado.setVisible(true);
 				if (arbol.getNombre().equals("Ver Reportes Administrador")) {
 					itm16.setVisible(true);
@@ -276,10 +276,24 @@ public class CReporte extends CGenerico {
 						tipoReporte = "EXCEL";
 						tipo = 24;
 						break;
+					case "Grafico Venta de Marcas":
+						tipo = 25;
+						HashMap<String, Object> mapaGrafica = new HashMap<String, Object>();
+						mapaGrafica.put("idAliado", aliado);
+//						mapaGrafica.put("vendedor", vendedor);
+						mapaGrafica.put("desde", desde);
+						mapaGrafica.put("hasta", hasta);
+						mapaGrafica.put("tipo", "Lineal");
+						Sessions.getCurrent().setAttribute("grafica", mapaGrafica);
+						Window ventana = (Window) Executions.createComponents(
+								"/vistas/reportes/VGrafica.zul",
+								null, mapaGrafica);
+						ventana.doModal();
+						break;
 
 					}
 
-					if (tipo != 23) {
+					if (tipo != 23 && tipo != 25) {
 						Clients.evalJavaScript("window.open('"
 								+ damePath()
 								+ "Generador?valor1="

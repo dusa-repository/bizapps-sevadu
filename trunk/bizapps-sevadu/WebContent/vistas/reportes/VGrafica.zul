@@ -1,0 +1,9 @@
+<zk>
+	<window id="wdwRecordar" title="Grafico"
+		border="normal" width="90%" height="100%" contentStyle="overflow:auto"
+		apply="controlador.reporte.CGraficador" closable="true">
+		<charts id="chart" />
+		<!-- type="line" title="Monthly Average Temperature"
+			subtitle="Source: WorldClimate.com" -->
+	</window>
+</zk>

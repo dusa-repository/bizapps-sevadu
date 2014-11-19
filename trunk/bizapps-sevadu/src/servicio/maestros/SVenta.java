@@ -89,4 +89,15 @@ public class SVenta {
 				maestroAliado, zonaAliado, nombreVendedor, maestroProducto,
 				fechaDesde, fechaHasta);
 	}
+
+	public List<Venta> buscarPorAliadoEntreFechasOrdenadoPorProducto(
+			String aliadoObjeto, Date fechaDesde2, Date fechaHasta2) {
+		List<String> ordenar = new ArrayList<String>();
+		Sort o;
+		ordenar.add("maestroProductoCodigoProductoDusa");
+		ordenar.add("fechaFactura");
+		o = new Sort(Sort.Direction.ASC, ordenar);
+		return ventaDAO.findByMaestroAliadoCodigoAliadoAndFechaFacturaBetween(
+				aliadoObjeto, fechaDesde2, fechaHasta2, o);
+	}
 }
