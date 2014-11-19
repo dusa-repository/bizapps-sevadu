@@ -1,7 +1,7 @@
 <zk>
 	<style src="../public/Estilo.css" />
 	<div id="divVAliado" apply="controlador.maestros.CAliado" width="100%">
-		<groupbox width="100%" mold="3d" title="Maestro de Aliados">
+		<groupbox width="100%" mold="3d" title="Maestro de Aliados (VAliado)">
 			<div id="botoneraAliado" />
 			<separator />
 			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
@@ -66,7 +66,7 @@
 									tooltiptext="Seleccione del Catalogo el Usuario que desea asignar al aliado" />
 							</cell>
 							<button id="btnBuscarUsuario" label="Buscar" tooltiptext="Catalogo de Usuarios"
-								image="/public/imagenes/botones/buscar.png" class="btn" />
+								image="/public/imagenes/botones/buscar.png" class="btn" autodisable="self"/>
 							<cell colspan="4">
 								<hbox />
 							</cell>

@@ -61,7 +61,7 @@ public class CF0004 extends CGenerico {
 		if (map != null) {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
-				cerrar = (String) map.get("nombre");
+				cerrar = (String) map.get("titulo");
 				map.clear();
 				map = null;
 			}
@@ -211,6 +211,8 @@ public class CF0004 extends CGenerico {
 
 			@Override
 			public void buscar() {
+				
+				abrirCatalogo();
 			}
 
 			@Override
@@ -234,7 +236,8 @@ public class CF0004 extends CGenerico {
 	}
 
 	public void mostrarBotones(boolean bol) {
-		botonera.getChildren().get(1).setVisible(false);
+	
+		botonera.getChildren().get(1).setVisible(!bol);
 		botonera.getChildren().get(2).setVisible(bol);
 		botonera.getChildren().get(6).setVisible(false);
 		botonera.getChildren().get(8).setVisible(false);
@@ -369,7 +372,7 @@ public class CF0004 extends CGenerico {
 	public void mostrarCatalogo() {
 		final List<F0004> listF0004 = servicioF0004.buscarTodosOrdenados();
 		catalogo = new Catalogo<F0004>(catalogoF0004, "F0004", listF0004,
-				false, false, true, "SY", "RT", "Descripcion", "Codigo",
+				false, false, false, "SY", "RT", "Descripcion", "Codigo",
 				"2 Linea", "Numerico") {
 
 			@Override

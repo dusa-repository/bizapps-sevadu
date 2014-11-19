@@ -1,27 +1,31 @@
 <?page id="mainPage" title="BIENVENIDO" contentType="text/html;charset=utf-8"?>
-<zk> <style>
-   .z-tree-icon .z-tree-open {
-     background-image: url('../public/imagenes/generales/abierto.png'); background-repeat:no-repeat;
-     background-size: cover;
-     width: 100%;
-   }
-   
-  	.z-tree-icon .z-tree-line z-tree-last  {
-    background-image: url('../public/imagenes/generales/hoja.png'); background-repeat:no-repeat;
-     background-size: cover;
-   }
-   
-   .z-tree-icon .z-tree-close {
-    background-image: url('../public/imagenes/generales/cerrado.png'); background-repeat:no-repeat;
-     background-size: cover;
-     width: 100%;
-   }
-   /*remove the font awesome icon*/
-   .z-tree-icon .z-tree-open::before,
-   .z-tree-icon .z-tree-close::before {
-     content: '';
-   }
-  </style>
+<zk>
+	<style>
+		.z-tree-icon .z-tree-open {
+		background-image: url('../public/imagenes/generales/abierto.png');
+		background-repeat:no-repeat;
+		background-size: cover;
+		width: 100%;
+		}
+
+		.z-tree-icon .z-tree-line z-tree-last {
+		background-image: url('../public/imagenes/generales/hoja.png');
+		background-repeat:no-repeat;
+		background-size: cover;
+		}
+
+		.z-tree-icon .z-tree-close {
+		background-image: url('../public/imagenes/generales/cerrado.png');
+		background-repeat:no-repeat;
+		background-size: cover;
+		width: 100%;
+		}
+		/*remove the font awesome icon*/
+		.z-tree-icon .z-tree-open::before,
+		.z-tree-icon .z-tree-close::before {
+		content: '';
+		}
+	</style>
 	<style src="../public/Estilo.css" />
 	<script src="/public/progress.js" />
 	<window title="" border="0" height="100%" width="100%" apply="arbol.CArbol">
@@ -66,13 +70,13 @@
 							<separator />
 							<separator />
 							<separator />
-							<separator />
 							<vbox>
 								<listbox style="border:none" width="200px" id="ltbRoles">
 									<template name="model">
 										<listitem>
-											<listcell style="font-size:14px;color:white;font-weight: bold; background:#661313"
-												label="${each.nombre}">
+											<listcell
+												style="border:none;font-size:14px;color:white;font-weight: bold"
+												class="gruposUsuario" label="${each.nombre}">
 											</listcell>
 										</listitem>
 									</template>
@@ -124,7 +128,7 @@
 				</div>
 			</south>
 		</borderlayout>
-				<menupopup id="editPopup">
+		<menupopup id="editPopup">
 			<menuitem id="mnuItem" label="Cerrar Todas" apply="arbol.CArbol" />
 		</menupopup>
 	</window>

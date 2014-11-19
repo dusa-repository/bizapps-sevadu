@@ -2,7 +2,7 @@
 	<style src="../public/Estilo.css" />
 	<div id="divVProducto" apply="controlador.maestros.CProducto"
 		width="100%">
-		<groupbox width="100%" mold="3d" title="Maestro de Producto">
+		<groupbox width="100%" mold="3d" title="Maestro de Producto (VProducto)">
 			<div id="botoneraProducto" />
 			<separator />
 			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
@@ -13,9 +13,9 @@
 				<grid width="100%">
 					<columns visible="false">
 						<column label="" width="15%" />
-						<column label="" width="15%" />
 						<column label="" width="10%" />
-						<column label="" width="10%" />
+						<column label="" width="12%" />
+						<column label="" width="13%" />
 						<column label="" width="15%" />
 						<column label="" width="15%" />
 						<column label="" width="10%" />
@@ -65,7 +65,7 @@
 							</cell>
 							<button id="btnBuscarMarca" label="Buscar"
 								tooltiptext="Catalogo de Codigos de Marcas" image="/public/imagenes/botones/buscar.png"
-								class="btn" />
+								class="btn" autodisable="self"/>
 							<hbox>
 								<label class="etiqueta" value="Volumen:" />
 								<space />
@@ -107,7 +107,7 @@
 							</cell>
 							<button visible="false" id="btnBuscarAliado" label="Buscar"
 								tooltiptext="Catalogo de Codigos de Aliados" image="/public/imagenes/botones/buscar.png"
-								class="btn" />
+								class="btn" autodisable="self" />
 							<hbox />
 						</row>
 					</rows>

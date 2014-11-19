@@ -1,7 +1,7 @@
 <zk>
 	<style src="/public/Estilo.css" />
 	<div apply="controlador.maestros.CConfiguracion" id="divConfiguracion">
-		<groupbox width="100%" mold="3d" title="Configuracion">
+		<groupbox width="100%" mold="3d" title="Configuracion (VConfiguracion)">
 			<div id="botoneraConfiguracion" />
 			<separator />
 			<grid width="100%">
@@ -19,6 +19,7 @@
 						</hbox>
 						<datebox width="100%" readonly="true" id="dtbConfiguracion"
 							tooltiptext="Seleccione la Fecha" />
+							<hbox/>
 					</row>
 				</rows>
 			</grid>

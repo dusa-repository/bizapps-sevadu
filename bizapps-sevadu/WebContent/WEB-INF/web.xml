@@ -10,6 +10,10 @@
             classpath:/META-INF/ConfiguracionAplicacion.xml
         </param-value>
   </context-param>
+  
+	<session-config>
+		<session-timeout>360</session-timeout>
+	</session-config>
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>

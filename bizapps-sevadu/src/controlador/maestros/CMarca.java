@@ -57,7 +57,7 @@ public class CMarca extends CGenerico {
 		if (map != null) {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
-				cerrar = (String) map.get("nombre");
+				cerrar = (String) map.get("titulo");
 				map.clear();
 				map = null;
 			}
@@ -188,7 +188,7 @@ public class CMarca extends CGenerico {
 
 			@Override
 			public void buscar() {
-				// TODO Auto-generated method stub
+				abrirCatalogo();
 
 			}
 
@@ -265,7 +265,7 @@ public class CMarca extends CGenerico {
 	}
 
 	protected void mostrarBotones(boolean b) {
-		botonera.getChildren().get(1).setVisible(false);
+		botonera.getChildren().get(1).setVisible(!b);
 		botonera.getChildren().get(2).setVisible(b);
 		botonera.getChildren().get(6).setVisible(false);
 		botonera.getChildren().get(8).setVisible(false);

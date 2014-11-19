@@ -1,7 +1,7 @@
 <zk>
 	<style src="../public/Estilo.css" />
 	<div id="divTipoCliente" apply="controlador.maestros.CTipoCliente">
-		<groupbox width="auto" mold="3d" title="Tipo de Cliente">
+		<groupbox width="auto" mold="3d" title="Tipo de Cliente (VTipoCliente)">
 			<div id="botoneraTipoCliente" />
 			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
 				open="false">
