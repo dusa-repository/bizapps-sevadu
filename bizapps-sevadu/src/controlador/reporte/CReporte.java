@@ -16,6 +16,7 @@ import java.util.Map;
 
 import modelo.maestros.Configuracion;
 import modelo.maestros.MaestroAliado;
+import modelo.maestros.MaestroMarca;
 import modelo.maestros.Venta;
 import modelo.seguridad.Arbol;
 import net.sf.jasperreports.engine.JRException;
@@ -41,8 +42,12 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Hbox;
 import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Row;
+import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
@@ -88,9 +93,21 @@ public class CReporte extends CGenerico {
 	private Datebox dtbHasta;
 	@Wire
 	private Row rowAliado;
+	@Wire
+	private Row rowZona;
+	@Wire
+	private Row rowVendedor;
+	@Wire
+	private Hbox box;
 	Catalogo<MaestroAliado> catalogoAliado;
 	protected Connection conexion;
 	String idAliado = null;
+	@Wire
+	private Listbox ltbMarcas;
+	@Wire
+	private Listbox ltbMarcasAgregadas;
+	List<MaestroMarca> marcas = new ArrayList<MaestroMarca>();
+	List<MaestroMarca> marcasAgregadas = new ArrayList<MaestroMarca>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -129,6 +146,7 @@ public class CReporte extends CGenerico {
 				map = null;
 			}
 		}
+		llenarLista();
 		Botonera botonera = new Botonera() {
 
 			@Override
@@ -157,6 +175,10 @@ public class CReporte extends CGenerico {
 				dtbDesde.setValue(fecha);
 				dtbHasta.setValue(fecha);
 				txtAliado.setValue("");
+				rowVendedor.setVisible(true);
+				rowZona.setVisible(true);
+				box.setVisible(false);
+				llenarLista();
 			}
 
 			@Override
@@ -192,6 +214,8 @@ public class CReporte extends CGenerico {
 						cliente = "";
 					int tipo = 0;
 					String tipoReporte = "PDF";
+					Window ventana = new Window();
+					HashMap<String, Object> mapaGrafica = new HashMap<String, Object>();
 					switch (cmbReporte.getValue()) {
 					case "(R55420001)Ventas Consolidadas por Zona y Cliente":
 						tipo = 1;
@@ -278,16 +302,32 @@ public class CReporte extends CGenerico {
 						break;
 					case "Grafico Venta de Marcas":
 						tipo = 25;
-						HashMap<String, Object> mapaGrafica = new HashMap<String, Object>();
+						mapaGrafica = new HashMap<String, Object>();
 						mapaGrafica.put("idAliado", aliado);
-//						mapaGrafica.put("vendedor", vendedor);
 						mapaGrafica.put("desde", desde);
 						mapaGrafica.put("hasta", hasta);
-						mapaGrafica.put("tipo", "Lineal");
-						Sessions.getCurrent().setAttribute("grafica", mapaGrafica);
-						Window ventana = (Window) Executions.createComponents(
-								"/vistas/reportes/VGrafica.zul",
-								null, mapaGrafica);
+						mapaGrafica.put("tipo", "line");
+						mapaGrafica.put("lista", marcasAgregadas);
+						Sessions.getCurrent().setAttribute("grafica",
+								mapaGrafica);
+						ventana = (Window) Executions.createComponents(
+								"/vistas/reportes/VGrafica.zul", null,
+								mapaGrafica);
+						ventana.doModal();
+						break;
+					case "Grafico Vendido VS Planificado Marcas":
+						tipo = 25;
+						mapaGrafica = new HashMap<String, Object>();
+						mapaGrafica.put("idAliado", aliado);
+						mapaGrafica.put("desde", desde);
+						mapaGrafica.put("hasta", hasta);
+						mapaGrafica.put("tipo", "column");
+						mapaGrafica.put("lista", marcasAgregadas);
+						Sessions.getCurrent().setAttribute("grafica",
+								mapaGrafica);
+						ventana = (Window) Executions.createComponents(
+								"/vistas/reportes/VGrafica.zul", null,
+								mapaGrafica);
 						ventana.doModal();
 						break;
 
@@ -351,6 +391,26 @@ public class CReporte extends CGenerico {
 		botonera.getChildren().get(6).setVisible(false);
 		botonera.getChildren().get(8).setVisible(false);
 		botoneraReporte.appendChild(botonera);
+	}
+
+	private void llenarLista() {
+		marcasAgregadas.clear();
+		ltbMarcasAgregadas.getItems().clear();
+		marcas = servicioMarca.buscarTodosOrdenados();
+		ltbMarcas.setModel(new ListModelList<MaestroMarca>(marcas));
+		listasMultiples();
+	}
+
+	private void listasMultiples() {
+		ltbMarcas.setMultiple(false);
+		ltbMarcas.setCheckmark(false);
+		ltbMarcas.setMultiple(true);
+		ltbMarcas.setCheckmark(true);
+
+		ltbMarcasAgregadas.setMultiple(false);
+		ltbMarcasAgregadas.setCheckmark(false);
+		ltbMarcasAgregadas.setMultiple(true);
+		ltbMarcasAgregadas.setCheckmark(true);
 	}
 
 	public byte[] reporte(String tipo, String aliado, String zona,
@@ -555,8 +615,20 @@ public class CReporte extends CGenerico {
 				if (cmbReporte.getText().compareTo("") == 0) {
 					msj.mensajeAlerta("Debe seleccionar un Reporte");
 					return false;
-				} else
-					return true;
+				} else {
+					if (box.isVisible() && marcasAgregadas.isEmpty()) {
+						msj.mensajeAlerta("Debe seleccionar al menos una Marca para generar el grafico");
+						return false;
+					} else {
+						if (cmbReporte.getValue().equals(
+								"Grafico Vendido VS Planificado Marcas")
+								&& marcasAgregadas.size() != 1) {
+							msj.mensajeAlerta("Para este Grafico solo debe agregar una Marca");
+							return false;
+						} else
+							return true;
+					}
+				}
 			}
 		}
 	}
@@ -655,6 +727,70 @@ public class CReporte extends CGenerico {
 		lista.add("TODAS");
 		lista.addAll(servicioVenta.buscarDistinctZona(idAliado));
 		cmbZona.setModel(new ListModelList<String>(lista));
+	}
+
+	@Listen("onClick = #pasar1")
+	public void derecha() {
+		List<Listitem> listitemEliminar = new ArrayList<Listitem>();
+		List<Listitem> listItem = ltbMarcas.getItems();
+		if (listItem.size() != 0) {
+			for (int i = 0; i < listItem.size(); i++) {
+				if (listItem.get(i).isSelected()) {
+					MaestroMarca marca = listItem.get(i).getValue();
+					marcas.remove(marca);
+					marcasAgregadas.add(marca);
+					ltbMarcasAgregadas
+							.setModel(new ListModelList<MaestroMarca>(
+									marcasAgregadas));
+					ltbMarcasAgregadas.renderAll();
+					listitemEliminar.add(listItem.get(i));
+					listItem.get(i).setSelected(false);
+				}
+			}
+		}
+		for (int i = 0; i < listitemEliminar.size(); i++) {
+			ltbMarcas.removeItemAt(listitemEliminar.get(i).getIndex());
+			ltbMarcas.renderAll();
+		}
+		listasMultiples();
+	}
+
+	@Listen("onClick = #pasar2")
+	public void izquierda() {
+		List<Listitem> listitemEliminar = new ArrayList<Listitem>();
+		List<Listitem> listItem2 = ltbMarcasAgregadas.getItems();
+		if (listItem2.size() != 0) {
+			for (int i = 0; i < listItem2.size(); i++) {
+				if (listItem2.get(i).isSelected()) {
+					MaestroMarca marca = listItem2.get(i).getValue();
+					marcasAgregadas.remove(marca);
+					marcas.add(marca);
+					ltbMarcas.setModel(new ListModelList<MaestroMarca>(marcas));
+					ltbMarcas.renderAll();
+					listitemEliminar.add(listItem2.get(i));
+					listItem2.get(i).setSelected(false);
+				}
+			}
+		}
+		for (int i = 0; i < listitemEliminar.size(); i++) {
+			ltbMarcasAgregadas.removeItemAt(listitemEliminar.get(i).getIndex());
+			ltbMarcasAgregadas.renderAll();
+		}
+		listasMultiples();
+	}
+
+	@Listen("onSelect = #cmbReporte")
+	public void ocultar() {
+		if (cmbReporte.getValue().startsWith("Grafico")) {
+			llenarLista();
+			rowVendedor.setVisible(false);
+			rowZona.setVisible(false);
+			box.setVisible(true);
+		} else {
+			rowVendedor.setVisible(true);
+			rowZona.setVisible(true);
+			box.setVisible(false);
+		}
 	}
 
 }

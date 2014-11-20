@@ -1,5 +1,5 @@
 <zk>
-	<div height="500px" style="background-color: white" id="divVReporte"
+	<div height="100%" style="background-color: white" id="divVReporte"
 		width="100%" apply="controlador.reporte.CReporte">
 		<div id="botoneraReporte" />
 		<separator />
@@ -27,10 +27,13 @@
 							placeholder="Seleccione un Reporte" id="cmbReporte" readonly="true"
 							width="100%">
 							<comboitem label="(R55420001)Ventas Consolidadas por Zona y Cliente" />
-							<comboitem label="(R55420002)Ventas Consolidadas por Zona/Cliente/Marca" />
-							<comboitem label="(R55420003)Ventas Consolidadas por Zona/Marca/Cliente" />
+							<comboitem
+								label="(R55420002)Ventas Consolidadas por Zona/Cliente/Marca" />
+							<comboitem
+								label="(R55420003)Ventas Consolidadas por Zona/Marca/Cliente" />
 							<comboitem label="(R55420004)Comparativo Plan de Ventas Vs Ventas" />
-							<comboitem label="(R55420005)Activacion de Marcas por Zona/Vendedor/Cliente" />
+							<comboitem
+								label="(R55420005)Activacion de Marcas por Zona/Vendedor/Cliente" />
 							<comboitem label="(R55420006)Activacion de Marcas por Vendedor Aliado" />
 							<comboitem label="(R55420007)Activacion por Marca" />
 							<comboitem label="(R55420008)Activacion por Marca/Cliente" />
@@ -38,19 +41,30 @@
 							<comboitem label="(R55420010)Ventas 80/20 por Marca" />
 							<comboitem label="(R55420011)Ventas 80/20 por Marca/Cliente" />
 							<comboitem label="(R55420014)Inventario por Marca" />
-							<comboitem label="(R55420016)Existencia Consolidada por Aliado/Marca" id="itm16" visible="false"/>
-							<comboitem label="(R55420017)Ventas Consolidada por Aliados" id="itm17" visible="false"/>
+							<comboitem label="(R55420016)Existencia Consolidada por Aliado/Marca"
+								id="itm16" visible="false" />
+							<comboitem label="(R55420017)Ventas Consolidada por Aliados"
+								id="itm17" visible="false" />
 							<comboitem label="(R55420018)Ventas por Segmentacion ON" />
 							<comboitem label="(R55420019)Ventas por Segmentacion OFF" />
-							<comboitem label="(R55420020)Ventas Consolidada por Zona Dusa/Aliado/Marca" id="itm20" visible="false"/>
-							<comboitem label="(R55420021)Ventas Consolidada Marca" id="itm21" visible="false"/>
-							<comboitem label="(R55420022)Ventas Consolidada Aliados/Marca ( Comparativos )" />
-							<comboitem label="(R55420023)Ventas Consolidada Aliados ( Comparativos )" id="itm23" visible="false"/>
-							<comboitem label="(R55420024)Inventario con Compras Calculadas Aliado/Marca" />
+							<comboitem
+								label="(R55420020)Ventas Consolidada por Zona Dusa/Aliado/Marca"
+								id="itm20" visible="false" />
+							<comboitem label="(R55420021)Ventas Consolidada Marca"
+								id="itm21" visible="false" />
+							<comboitem
+								label="(R55420022)Ventas Consolidada Aliados/Marca ( Comparativos )" />
+							<comboitem
+								label="(R55420023)Ventas Consolidada Aliados ( Comparativos )"
+								id="itm23" visible="false" />
+							<comboitem
+								label="(R55420024)Inventario con Compras Calculadas Aliado/Marca" />
 							<comboitem label="(R55420026)Reporte de Control de Subida de Archivos" />
 							<comboitem label="Grafico Venta de Marcas" />
+							<comboitem label="Grafico Vendido VS Planificado Marcas" />
 							<!-- <comboitem label="(G55420001)Grafico de Activacion/Marca" /> -->
-							<!-- <comboitem label="(R55420025)Generar Objetivos/Marca/Clientes (EXCEL)" /> -->
+							<!-- <comboitem label="(R55420025)Generar Objetivos/Marca/Clientes 
+								(EXCEL)" /> -->
 						</combobox>
 					</cell>
 					<hbox />
@@ -72,7 +86,7 @@
 					<datebox width="100%" readonly="true" id="dtbHasta"
 						onCreate="self.value = new Date()" tooltiptext="Seleccione el fin del Periodo a buscar" />
 				</row>
-				<row>
+				<row id="rowZona">
 					<label class="etiqueta" value="Zona:" />
 					<combobox tooltiptext="Seleccione una Zona" placeholder="Seleccione una Zona"
 						id="cmbZona" value="TODAS" readonly="true" width="100%">
@@ -88,7 +102,7 @@
 						</template>
 					</combobox>
 				</row>
-				<row>
+				<row id="rowVendedor">
 					<label class="etiqueta" value="Vendedor Aliado:" />
 					<combobox tooltiptext="Seleccione un Vendedor"
 						placeholder="Seleccione un Vendedor" id="cmbVendedor" value="TODOS"
@@ -102,6 +116,43 @@
 				</row>
 			</rows>
 		</grid>
+		<separator />
+		<hbox id="box" visible = "false" width="70%" widths="45%,5%,50%">
+			<listbox mold="paging" pageSize="6" id="ltbMarcas" height="280px"
+				width="100%" emptyMessage="No hay Marcas Registradas">
+				<listhead>
+					<listheader label="Nombre Marca" width="85%" />
+					<listheader label="Codigo" width="15%" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="${each.descripcion}" />
+						<listcell label="${each.marcaDusa}" />
+					</listitem>
+				</template>
+			</listbox>
+			<vbox>
+				<button class="abrir" id="pasar1"
+					image="/public/imagenes/botones/adelante.png" tooltiptext="Agregar Medicina"
+					width="30px" />
+				<separator />
+				<button class="abrir" id="pasar2" image="/public/imagenes/botones/atras.png"
+					tooltiptext="Quitar Medicina" width="30px" />
+			</vbox>
+			<listbox id="ltbMarcasAgregadas" mold="paging" pageSize="6" height="280px" width="100%"
+				emptyMessage="No ha Seleccionado Ningúna Medicina">
+				<listhead>
+					<listheader label="Nombre Marca" width="85%" />
+					<listheader label="Codigo" width="15%" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="${each.descripcion}" />
+						<listcell label="${each.marcaDusa}" />
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
 		<separator />
 		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
 	</div>
