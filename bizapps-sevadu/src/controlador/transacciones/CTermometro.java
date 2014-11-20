@@ -40,6 +40,7 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Filedownload;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Row;
@@ -80,6 +81,8 @@ public class CTermometro extends CGenerico {
 	private Combobox cmbMes;
 	@Wire
 	private Spreadsheet ss;
+	@Wire
+	private Label lblAliado;
 	Catalogo<MaestroAliado> catalogoAliado;
 	Calendar calendarioTermometro = Calendar.getInstance();
 	int habiles;
@@ -116,7 +119,7 @@ public class CTermometro extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				west = (West) map.get("west");
 				tabs = (List<Tab>) map.get("tabsGenerales");
-				cerrar = (String) map.get("nombre");
+				cerrar = (String) map.get("titulo");
 				map.clear();
 				map = null;
 			}
@@ -156,6 +159,8 @@ public class CTermometro extends CGenerico {
 						.get(Calendar.YEAR)));
 				ss.setSrc(null);
 				nombre = "";
+				lblAliado.setValue("");
+				txtAliado.setValue("");
 			}
 
 			@Override
@@ -696,7 +701,7 @@ public class CTermometro extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Aliado", listaObjetos, true, false, false, "Codigo", "Nombre",
+				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo", "Nombre",
 				"Zona", "Vendedor") {
 
 			@Override
@@ -731,7 +736,6 @@ public class CTermometro extends CGenerico {
 		};
 		catalogoAliado.setClosable(true);
 		catalogoAliado.setWidth("80%");
-		catalogoAliado.setTitle("Registros");
 		catalogoAliado.setParent(divCatalogoAliado);
 		catalogoAliado.doModal();
 	}
@@ -740,17 +744,20 @@ public class CTermometro extends CGenerico {
 	public void seleccionAliado() {
 		MaestroAliado aliado = catalogoAliado.objetoSeleccionadoDelCatalogo();
 		txtAliado.setValue(aliado.getCodigoAliado());
+		lblAliado.setValue(aliado.getNombre());
 		catalogoAliado.setParent(null);
 	}
 
-	@Listen("onChange = #txtAliado")
+	@Listen("onChange = #txtAliado; onOK = #txtAliado")
 	public void buscarNombreAliado() {
 		MaestroAliado aliado = servicioAliado.buscar(txtAliado.getValue());
 		if (aliado != null) {
 			txtAliado.setValue(aliado.getCodigoAliado());
+			lblAliado.setValue(aliado.getNombre());
 		} else {
 			msj.mensajeAlerta(Mensaje.noHayRegistros);
 			txtAliado.setValue("");
+			lblAliado.setValue("");
 			txtAliado.setFocus(true);
 		}
 	}

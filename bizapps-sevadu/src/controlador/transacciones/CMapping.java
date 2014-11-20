@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Tab;
@@ -61,6 +62,8 @@ public class CMapping extends CGenerico {
 	private Div catalogoMapping;
 	@Wire
 	private Div divCatalogoAliado;
+	@Wire
+	private Label lblAliado;
 	@Wire
 	private Row row;
 	Catalogo<MappingProducto> catalogo;
@@ -116,6 +119,8 @@ public class CMapping extends CGenerico {
 				rdoNo.setChecked(false);
 				rdoSi.setChecked(false);
 				rdoTodos.setChecked(false);
+				txtAliado.setValue("");
+				lblAliado.setValue("");
 			}
 
 			@Override
@@ -215,7 +220,7 @@ public class CMapping extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Aliado", listaObjetos, true, false, false, "Codigo",
+				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo",
 				"Nombre", "Zona", "Vendedor") {
 
 			@Override
@@ -250,7 +255,6 @@ public class CMapping extends CGenerico {
 		};
 		catalogoAliado.setClosable(true);
 		catalogoAliado.setWidth("80%");
-		catalogoAliado.setTitle("Registros");
 		catalogoAliado.setParent(divCatalogoAliado);
 		catalogoAliado.doModal();
 	}
@@ -259,14 +263,16 @@ public class CMapping extends CGenerico {
 	public void seleccionAliado() {
 		MaestroAliado aliado = catalogoAliado.objetoSeleccionadoDelCatalogo();
 		txtAliado.setValue(aliado.getCodigoAliado());
+		lblAliado.setValue(aliado.getNombre());
 		catalogoAliado.setParent(null);
 	}
 
-	@Listen("onChange = #txtAliado")
+	@Listen("onChange = #txtAliado; onOK = #txtAliado")
 	public void buscarNombreAliado() {
 		MaestroAliado aliado = servicioAliado.buscar(txtAliado.getValue());
 		if (aliado != null) {
 			txtAliado.setValue(aliado.getCodigoAliado());
+			lblAliado.setValue(aliado.getNombre());
 		} else {
 			msj.mensajeAlerta(Mensaje.noHayRegistros);
 			txtAliado.setValue("");

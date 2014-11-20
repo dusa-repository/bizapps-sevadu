@@ -2,12 +2,12 @@
 	<style src="../public/Estilo.css" />
 	<div id="divVCargarArchivo" apply="controlador.transacciones.CCargarArchivo"
 		width="100%">
-		<groupbox width="100%" mold="3d" title="Maestro de Aliados">
+		<groupbox width="100%" mold="3d" title="Subir Archivos">
 			<div id="botoneraCargarRegistro" />
 			<separator />
 			<groupbox id="gpxCargarRegistro" width="auto" class="azul"
 				title="" closable="false">
-				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+				<caption  style="font-weight:bold; font-size: 13px"
 					tooltiptext="Presione para Registrar un Nuevo Aliado" />
 				<separator />
 				<grid width="100%">

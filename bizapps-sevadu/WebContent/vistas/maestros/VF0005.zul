@@ -103,6 +103,33 @@
 			<groupbox id="gpxDatos" class="azul" width="auto">
 				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
 					tooltiptext="Presione para Visualizar los Codigos Registrados" />
+					<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="13%" />
+						<column label="" width="15%" />
+						<column label="" width="15%" />
+						<column label="" width="12%" />
+						<column label="" width="5%" />
+						<column label="" width="12%" />
+						<column label="" width="5%" />
+						<column label="" width="23%" />
+					</columns>
+					<rows>
+						<row>
+							<hbox />
+							<label class="etiqueta" value="Filtrar por F0004" />
+							<button id="btnBuscarF0004Filtro" label="Buscar"
+								tooltiptext="Catalogo de Codigos de Producto (F0004)" image="/public/imagenes/botones/buscar.png"
+								class="btn" />
+							<label class="etiqueta" value="Cd Producto:" />
+							<label id="lblSY" />
+							<label class="etiqueta" value="Cd Defin Usuario:" />
+							<label id="lblRT" />
+									<label id="lblF0004" />
+						</row>
+					</rows>
+				</grid>
 				<div id="catalogoF0005" tooltiptext="Seleccione el Codigo para Realizar una Accion" />
 			</groupbox>
 			<separator />

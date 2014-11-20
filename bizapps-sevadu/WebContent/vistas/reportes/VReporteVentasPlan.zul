@@ -1,6 +1,6 @@
 <zk>
 	<window id="wdwRecordar" title="Cajas Planificadas Vs Cajas Vendidas"
-		border="normal" width="90%" height="100%" contentStyle="overflow:auto"
+		border="normal" width="90%" height="auto" contentStyle="overflow:auto"
 		apply="controlador.reporte.CVentaPlan" closable="true">
 		<listbox width="100%" id="ltbLista" height="auto"
 			emptyMessage="No existen ventas cargadas" rows="15">

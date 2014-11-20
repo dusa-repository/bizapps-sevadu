@@ -32,6 +32,7 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Html;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
@@ -55,6 +56,8 @@ public class CTermometro2 extends CGenerico {
 	private Datebox dtbDesde;
 	@Wire
 	private Datebox dtbHasta;
+	@Wire
+	private Label lblAliado;
 	Botonera botonera = null;
 	Catalogo<MaestroAliado> catalogoAliado;
 	West west;
@@ -113,6 +116,7 @@ public class CTermometro2 extends CGenerico {
 					txtAliado.setValue("");
 					dtbDesde.setValue(fecha);
 					dtbHasta.setValue(fecha);
+					lblAliado.setValue("");
 				}
 
 				@Override
@@ -193,7 +197,7 @@ public class CTermometro2 extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Aliado", listaObjetos, true, false, false, "Codigo", "Nombre",
+				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo", "Nombre",
 				"Zona", "Vendedor") {
 
 			@Override
@@ -228,7 +232,6 @@ public class CTermometro2 extends CGenerico {
 		};
 		catalogoAliado.setClosable(true);
 		catalogoAliado.setWidth("80%");
-		catalogoAliado.setTitle("Registros");
 		catalogoAliado.setParent(divCatalogoAliado);
 		catalogoAliado.doModal();
 	}
@@ -237,18 +240,21 @@ public class CTermometro2 extends CGenerico {
 	public void seleccionAliado() {
 		MaestroAliado aliado = catalogoAliado.objetoSeleccionadoDelCatalogo();
 		txtAliado.setValue(aliado.getCodigoAliado());
+		lblAliado.setValue(aliado.getNombre());
 		catalogoAliado.setParent(null);
 	}
 
-	@Listen("onChange = #txtAliado")
+	@Listen("onChange = #txtAliado; onOK = #txtAliado")
 	public void buscarNombreAliado() {
 		MaestroAliado aliado = servicioAliado.buscar(txtAliado.getValue());
 		if (aliado != null) {
 			txtAliado.setValue(aliado.getCodigoAliado());
+			lblAliado.setValue(aliado.getNombre());
 		} else {
 			msj.mensajeAlerta(Mensaje.noHayRegistros);
 			txtAliado.setValue("");
 			txtAliado.setFocus(true);
+			lblAliado.setValue("");
 		}
 	}
 

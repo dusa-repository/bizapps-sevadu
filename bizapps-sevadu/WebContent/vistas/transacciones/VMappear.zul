@@ -1,6 +1,6 @@
 <zk>
 	<window id="wdwMappear" title="Editar Producto" border="normal"
-		width="40em" height="auto" contentStyle="overflow:auto"
+		width="50%" height="auto" contentStyle="overflow:auto"
 		apply="controlador.transacciones.CMappear" closable="true">
 		<div id="botoneraMappear" />
 		<separator />
