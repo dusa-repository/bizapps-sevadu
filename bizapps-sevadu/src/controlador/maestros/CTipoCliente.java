@@ -74,6 +74,7 @@ public class CTipoCliente extends CGenerico {
 						id = tipo.getCodigo();
 						txtCanal.setValue(tipo.getCanalVentas());
 						txtCodigo.setValue(tipo.getCodigo());
+						txtCodigo.setDisabled(true);
 						txtDescripcion.setValue(tipo.getDescripcion());
 						txtCodigo.setFocus(true);
 					} else
@@ -223,6 +224,7 @@ public class CTipoCliente extends CGenerico {
 		id = "";
 		txtCanal.setValue("");
 		txtCodigo.setValue("");
+		txtCodigo.setDisabled(false);
 		txtDescripcion.setValue("");
 	}
 

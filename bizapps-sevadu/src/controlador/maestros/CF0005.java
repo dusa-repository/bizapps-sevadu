@@ -303,7 +303,7 @@ public class CF0005 extends CGenerico {
 		}
 	}
 
-	@Listen("onChange = #txtSYF0005")
+	@Listen("onChange = #txtSYF0005; onOK = #txtSYF0005")
 	public boolean claveSYExiste() {
 		if (servicioF0004.buscarSY(txtSYF0005.getValue()).isEmpty()) {
 			msj.mensajeAlerta(Mensaje.claveSYNoEsta);
@@ -326,7 +326,8 @@ public class CF0005 extends CGenerico {
 		return false;
 	}
 
-	@Listen("onChange = #txtRTF0005")
+
+	@Listen("onChange = #txtRTF0005; onOK = #txtRTF0005")
 	public boolean claveRTExiste() {
 		if (txtSYF0005.getText().compareTo("") != 0) {
 			if (servicioF0004.buscar(txtSYF0005.getValue(),
@@ -473,7 +474,7 @@ public class CF0005 extends CGenerico {
 	@Listen("onClick = #btnBuscarF0004")
 	public void mostrarCatalogoF0004() {
 		final List<F0004> listF0004 = servicioF0004.buscarTodosOrdenados();
-		catalogoF0004 = new Catalogo<F0004>(divCatalogoF0004, "F0004",
+		catalogoF0004 = new Catalogo<F0004>(divCatalogoF0004, "Catalogo de Codigos Definidos por el Usuario",
 				listF0004, true, false, false, "SY", "RT", "Descripcion",
 				"Codigo", "2 Linea", "Numerico") {
 
@@ -515,7 +516,6 @@ public class CF0005 extends CGenerico {
 		};
 		catalogoF0004.setClosable(true);
 		catalogoF0004.setWidth("80%");
-		catalogoF0004.setTitle("Registros");
 		catalogoF0004.setParent(divCatalogoF0004);
 		catalogoF0004.doModal();
 	}

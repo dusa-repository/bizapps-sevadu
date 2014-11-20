@@ -49,13 +49,14 @@ public abstract class BuscadorUDC extends Hbox {
 		// cajaTexto.setReadonly(true);
 		cajaTexto.setMaxlength(longitud);
 		cajaTexto
-				.setTooltiptext("Seleccione del Catalogo el Codigo del Producto");
+		.setTooltiptext("Código Definido por el Usuario (DRKY de "+valor1+","+valor2+")");
 		// cajaTexto.setWidth("8px");
 		// cajaTexto.setHflex("1");
 
 		Button boton = new Button();
 		boton.setAutodisable("true");
-		boton.setTooltiptext("Buscar UDC");
+		boton.setTooltiptext("Catalogo de Codigo Definidos por el Usuario"
+				+ " " + "(" + valor1 + "," + valor2 + ")");
 		boton.setLabel("Buscar");
 		boton.setSrc("/public/imagenes/botones/buscar.png");
 		boton.setClass("btn");
@@ -167,7 +168,7 @@ public abstract class BuscadorUDC extends Hbox {
 
 		final List<F0005> listF0005 = lista;
 
-		catalogo = new Catalogo<F0005>(divCatalogo, "CatF0005", listF0005,
+		catalogo = new Catalogo<F0005>(divCatalogo, "Catalogo de Codigos Definidos por el Usuario", listF0005,
 				true, true, false, "KY", "Descripcion 01", "Descripcion 02",
 				"Gestion Especial", "Codificacion Fija") {
 

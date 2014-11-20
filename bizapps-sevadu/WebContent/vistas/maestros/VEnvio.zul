@@ -25,13 +25,18 @@
 							<cell colspan="3">
 								<div id="divBuscadorReporte" width="100%" />
 							</cell>
-							<label class="etiqueta" value="Estado:" />
+							<hbox>
+								<label class="etiqueta" value="Estado:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
 							<radiogroup id="rdbActivo">
 								<radio id="rdoSi" label="Activo" />
 								<space />
 								<radio id="rdoNo" label="Inactivo" />
 							</radiogroup>
-							<hbox/>
+							<hbox />
 						</row>
 					</rows>
 				</grid>

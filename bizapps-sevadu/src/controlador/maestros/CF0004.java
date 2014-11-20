@@ -86,7 +86,7 @@ public class CF0004 extends CGenerico {
 						txtDL01F0004.setValue(f04.getDtdl01());
 						txtLNF0004.setValue(f04.getDtln2());
 						txtNUMF0004.setValue(f04.getDtcnum());
-						if (f04.getDtcdl() != null)
+						if (f04.getDtcdl() != null && f04.getDtcdl() != 0.0)
 							txtCDLF0004.setValue(f04.getDtcdl());
 						txtDL01F0004.setFocus(true);
 					} else
@@ -125,6 +125,10 @@ public class CF0004 extends CGenerico {
 					if (txtCDLF0004.getValue() != null) {
 						a = txtCDLF0004.getValue();
 						fooo4.setDtcdl(a);
+					}
+					else
+					{
+						fooo4.setDtcdl(0.0);
 					}
 					String num = txtNUMF0004.getValue();
 					F0004PK clave = new F0004PK();

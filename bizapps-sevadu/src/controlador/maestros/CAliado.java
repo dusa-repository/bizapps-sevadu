@@ -19,6 +19,7 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
@@ -57,6 +58,8 @@ public class CAliado extends CGenerico {
 	private Div catalogoAliado;
 	@Wire
 	private Div catalogoUsuario;
+	@Wire
+	private Label lblUsuario;
 	@Wire
 	private Groupbox gpxDatos;
 	@Wire
@@ -105,7 +108,10 @@ public class CAliado extends CGenerico {
 								"03", aliado.getCiudadAliado()));
 						txtCodigo.setDisabled(true);
 						if (aliado.getUsuario() != null)
+						{
 							txtUsuario.setValue(aliado.getUsuario().getLogin());
+							lblUsuario.setValue(aliado.getUsuario().getPrimerNombre()+" "+aliado.getUsuario().getPrimerApellido());
+						}
 						txtNombre.setFocus(true);
 					} else
 						msj.mensajeAlerta(Mensaje.editarSoloUno);
@@ -331,6 +337,7 @@ public class CAliado extends CGenerico {
 		txtUsuario.setValue("");
 		txtCodigo.setValue("");
 		txtNombre.setValue("");
+		lblUsuario.setValue("");
 		buscadorCiudad.settearCampo(null);
 		buscadorEstado.settearCampo(null);
 		buscadorVendedor.settearCampo(null);
@@ -460,7 +467,7 @@ public class CAliado extends CGenerico {
 	@Listen("onClick = #btnBuscarUsuario")
 	public void mostrarCatalogoUsuario() {
 		final List<Usuario> usuario = servicioUsuario.buscarTodosSinAliado();
-		catalogoU = new Catalogo<Usuario>(catalogoUsuario, "Usuario", usuario,
+		catalogoU = new Catalogo<Usuario>(catalogoUsuario, "Usuarios sin Aliado", usuario,
 				true, false, false, "Cedula", "Correo", "Primer Nombre",
 				"Segundo Nombre", "Primer Apellido", "Segundo Apellido",
 				"Sexo", "Telefono", "Direccion") {
@@ -515,7 +522,6 @@ public class CAliado extends CGenerico {
 
 		catalogoU.setClosable(true);
 		catalogoU.setWidth("80%");
-		catalogoU.setTitle("Usuarios sin Aliado");
 		catalogoU.setParent(catalogoUsuario);
 		catalogoU.doModal();
 	}
@@ -524,15 +530,17 @@ public class CAliado extends CGenerico {
 	public void seleccionUsuario() {
 		Usuario usuario = catalogoU.objetoSeleccionadoDelCatalogo();
 		txtUsuario.setValue(usuario.getLogin());
+		lblUsuario.setValue(usuario.getPrimerNombre()+" "+usuario.getPrimerApellido());
 		catalogoU.setParent(null);
 	}
 
-	@Listen("onChange = #txtUsuario")
+	@Listen("onChange = #txtUsuario; onOK= #txtUsuario")
 	public void buscarNombreMarca() {
 		Usuario usuario = servicioUsuario.buscarPorLoginYUserNull(txtUsuario
 				.getValue());
 		if (usuario != null) {
 			txtUsuario.setValue(usuario.getLogin());
+			lblUsuario.setValue(usuario.getPrimerNombre()+" "+usuario.getPrimerApellido());
 		} else {
 			msj.mensajeAlerta(Mensaje.noHayRegistros);
 			txtUsuario.setValue("");
