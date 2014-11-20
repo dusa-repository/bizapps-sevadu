@@ -416,7 +416,9 @@ public class CProducto extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "04");
 		buscadorCaja = new BuscadorUDC("Caja", 100, listF0005, true, false,
-				false, "00", "04", "33%", "8%", "10%", "49%") {
+				false, "00", "04", "29%", "18.5%", "6.5%", "28%") 
+//				false, "00", "04", "33%", "8%", "10%", "49%") 
+		{
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "04",
@@ -426,8 +428,10 @@ public class CProducto extends CGenerico {
 		divBuscadorCaja.appendChild(buscadorCaja);
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "05");
-		buscadorBotella = new BuscadorUDC("Botella", 100, listF0005, true,
-				false, false, "00", "05", "33%", "8%", "10%", "49%") {
+		buscadorBotella = new BuscadorUDC("Botella", 100, listF0005, true,false,
+				false, "00", "04", "29%", "18.5%", "6.5%", "28%") 
+//				false, false, "00", "05", "33%", "8%", "10%", "49%") 
+		{
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "05",
@@ -438,7 +442,9 @@ public class CProducto extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "06");
 		buscadorEspecie = new BuscadorUDC("Especie", 100, listF0005, true,
-				false, false, "00", "06", "33%", "8%", "10%", "49%") {
+				false,false, "00", "04", "29%", "18.5%", "6.5%", "28%") 
+//				false, false, "00", "06", "33%", "8%", "10%", "49%") 
+		{
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "06",

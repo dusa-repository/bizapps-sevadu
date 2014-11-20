@@ -37,6 +37,7 @@ public abstract class BuscadorUDC extends Hbox {
 			final String width2, final String width3, final String width4) {
 		super();
 		this.setWidth("100%");
+		this.setSpacing("10em");
 		// this.setWidths("32%,8%,10%,50%");
 		this.setWidths(width1 + "," + width2 + "," + width3 + "," + width4);
 		this.setAlign("center");
@@ -58,7 +59,7 @@ public abstract class BuscadorUDC extends Hbox {
 		boton.setTooltiptext("Catalogo de Codigo Definidos por el Usuario"
 				+ " " + "(" + valor1 + "," + valor2 + ")");
 		boton.setLabel("Buscar");
-		boton.setSrc("/public/imagenes/botones/buscar.png");
+		boton.setImage("/public/imagenes/botones/buscar.png");
 		boton.setClass("btn");
 
 		nombre = new Label();

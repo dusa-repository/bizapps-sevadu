@@ -107,10 +107,12 @@ public class CAliado extends CGenerico {
 						buscadorCiudad.settearCampo(servicioF0005.buscar("00",
 								"03", aliado.getCiudadAliado()));
 						txtCodigo.setDisabled(true);
-						if (aliado.getUsuario() != null)
-						{
+						if (aliado.getUsuario() != null) {
 							txtUsuario.setValue(aliado.getUsuario().getLogin());
-							lblUsuario.setValue(aliado.getUsuario().getPrimerNombre()+" "+aliado.getUsuario().getPrimerApellido());
+							lblUsuario.setValue(aliado.getUsuario()
+									.getPrimerNombre()
+									+ " "
+									+ aliado.getUsuario().getPrimerApellido());
 						}
 						txtNombre.setFocus(true);
 					} else
@@ -381,7 +383,9 @@ public class CAliado extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "00");
 		buscadorVendedor = new BuscadorUDC("Vendedor", 100, listF0005, true,
-				false, false, "00", "00", "32.6%", "8%", "10%", "49.4%") {
+				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
+		// false, false, "00", "00", "32.6%", "8%", "10%", "49.4%")
+		{
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "00",
@@ -392,7 +396,9 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "01");
 		buscadorZona = new BuscadorUDC("Zona", 100, listF0005, true, false,
-				false, "00", "01", "33.3%", "8%", "10%", "48.8%") {
+		false, "00", "04", "29%", "18.5%", "6.5%", "28%")
+		// false, "00", "01", "33.3%", "8%", "10%", "48.8%")
+		{
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "01",
@@ -403,7 +409,9 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "02");
 		buscadorEstado = new BuscadorUDC("Estado", 100, listF0005, true, false,
-				false, "00", "02", "33.3%", "8%", "10%", "48.8%") {
+				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
+//				false, "00", "02", "33.3%", "8%", "10%", "48.8%") 
+		{
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "02",
@@ -414,7 +422,9 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "03");
 		buscadorCiudad = new BuscadorUDC("Ciudad", 100, listF0005, true, false,
-				false, "00", "03", "32.6%", "8%", "10%", "49.4%") {
+				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
+//				false, "00", "03", "32.6%", "8%", "10%", "49.4%") 
+		{
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "03",
@@ -467,10 +477,10 @@ public class CAliado extends CGenerico {
 	@Listen("onClick = #btnBuscarUsuario")
 	public void mostrarCatalogoUsuario() {
 		final List<Usuario> usuario = servicioUsuario.buscarTodosSinAliado();
-		catalogoU = new Catalogo<Usuario>(catalogoUsuario, "Usuarios sin Aliado", usuario,
-				true, false, false, "Cedula", "Correo", "Primer Nombre",
-				"Segundo Nombre", "Primer Apellido", "Segundo Apellido",
-				"Sexo", "Telefono", "Direccion") {
+		catalogoU = new Catalogo<Usuario>(catalogoUsuario,
+				"Usuarios sin Aliado", usuario, true, false, false, "Cedula",
+				"Correo", "Primer Nombre", "Segundo Nombre", "Primer Apellido",
+				"Segundo Apellido", "Sexo", "Telefono", "Direccion") {
 
 			@Override
 			protected List<Usuario> buscar(List<String> valores) {
@@ -530,7 +540,8 @@ public class CAliado extends CGenerico {
 	public void seleccionUsuario() {
 		Usuario usuario = catalogoU.objetoSeleccionadoDelCatalogo();
 		txtUsuario.setValue(usuario.getLogin());
-		lblUsuario.setValue(usuario.getPrimerNombre()+" "+usuario.getPrimerApellido());
+		lblUsuario.setValue(usuario.getPrimerNombre() + " "
+				+ usuario.getPrimerApellido());
 		catalogoU.setParent(null);
 	}
 
@@ -540,7 +551,8 @@ public class CAliado extends CGenerico {
 				.getValue());
 		if (usuario != null) {
 			txtUsuario.setValue(usuario.getLogin());
-			lblUsuario.setValue(usuario.getPrimerNombre()+" "+usuario.getPrimerApellido());
+			lblUsuario.setValue(usuario.getPrimerNombre() + " "
+					+ usuario.getPrimerApellido());
 		} else {
 			msj.mensajeAlerta(Mensaje.noHayRegistros);
 			txtUsuario.setValue("");

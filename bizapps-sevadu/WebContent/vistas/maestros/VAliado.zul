@@ -12,13 +12,13 @@
 				<grid width="100%">
 					<columns visible="false">
 						<column label="" width="15%" />
+						<column label="" width="10%" />
+						<column label="" width="12%" />
+						<column label="" width="13%" />
 						<column label="" width="15%" />
-						<column label="" width="5%" />
 						<column label="" width="15%" />
-						<column label="" width="15%" />
-						<column label="" width="15%" />
-						<column label="" width="5%" />
-						<column label="" width="15%" />
+						<column label="" width="10%" />
+						<column label="" width="10%" />
 					</columns>
 					<rows>
 						<row>
@@ -66,16 +66,16 @@
 								<label value="*" style="font-weight:bold;color:red">
 								</label>
 							</hbox>
-							<cell colspan="2">
-								<textbox id="txtUsuario" hflex="1" maxlength="100"
-									tooltiptext="Seleccione del Catalogo el Usuario que desea asignar al aliado" />
-							</cell>
+							<textbox id="txtUsuario" hflex="1" maxlength="100"
+								tooltiptext="Seleccione del Catalogo el Usuario que desea asignar al aliado" />
 							<button id="btnBuscarUsuario" label="Buscar" tooltiptext="Catalogo de Usuarios"
 								image="/public/imagenes/botones/buscar.png" class="btn"
 								autodisable="self" />
-							<cell colspan="4">
-								<label id="lblUsuario" />
-							</cell>
+							<label id="lblUsuario" />
+							<hbox />
+							<hbox />
+							<hbox />
+							<hbox />
 						</row>
 					</rows>
 				</grid>
