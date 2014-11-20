@@ -72,7 +72,7 @@ public abstract class Catalogo<Clase> extends Window {
 		this.setId("cmpCatalogo" + titulo);
 		this.setStyle("background-header:#FF7925; background: #f4f2f2");
 		// this.setWidth("auto");
-		crearLista(lista, campos, emergente, udc, hibrido);
+		crearLista(lista, campos, emergente, udc, hibrido,titulo);
 		lsbCatalogo.addEventListener(Events.ON_SELECT,
 				new EventListener<Event>() {
 
@@ -84,7 +84,7 @@ public abstract class Catalogo<Clase> extends Window {
 	}
 
 	public void crearLista(List<Clase> lista, String[] campos,
-			final boolean emergente, boolean udc, final boolean hibrido) {
+			final boolean emergente, boolean udc, final boolean hibrido,String titulo) {
 		exportador = new Button();
 		exportador.setTooltiptext("Exportar los Datos como un Archivo");
 		exportador.setSclass("catalogo");
@@ -195,7 +195,7 @@ public abstract class Catalogo<Clase> extends Window {
 		if (emergente) {
 			this.setClosable(true);
 			this.setWidth("80%");
-			this.setTitle("Registros");
+			this.setTitle(titulo);
 			if (udc) {
 				Div div = new Div();
 				Hbox vbox1 = new Hbox();

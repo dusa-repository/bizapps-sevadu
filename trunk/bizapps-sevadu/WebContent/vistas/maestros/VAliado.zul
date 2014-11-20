@@ -32,7 +32,12 @@
 								<textbox id="txtCodigo" maxlength="20"
 									tooltiptext="Ingrese el Codigo del Aliado" />
 							</cell>
-							<label class="etiqueta" value="Nombre:" />
+							<hbox>
+								<label class="etiqueta" value="Nombre:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
 							<cell colspan="3">
 								<textbox id="txtNombre" maxlength="100"
 									tooltiptext="Ingrese el Nombre del Aliado" />
@@ -66,9 +71,10 @@
 									tooltiptext="Seleccione del Catalogo el Usuario que desea asignar al aliado" />
 							</cell>
 							<button id="btnBuscarUsuario" label="Buscar" tooltiptext="Catalogo de Usuarios"
-								image="/public/imagenes/botones/buscar.png" class="btn" autodisable="self"/>
+								image="/public/imagenes/botones/buscar.png" class="btn"
+								autodisable="self" />
 							<cell colspan="4">
-								<hbox />
+								<label id="lblUsuario" />
 							</cell>
 						</row>
 					</rows>

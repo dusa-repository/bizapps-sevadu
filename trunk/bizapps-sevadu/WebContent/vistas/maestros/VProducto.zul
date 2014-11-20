@@ -59,13 +59,13 @@
 								<label value="*" style="font-weight:bold;color:red">
 								</label>
 							</hbox>
-							<cell colspan="2">
-								<textbox id="txtMarca" hflex="1" maxlength="100"
-									tooltiptext="Seleccione del Catalogo el Codigo de la Marca" />
-							</cell>
+
+							<textbox id="txtMarca" hflex="1" maxlength="100"
+								tooltiptext="Seleccione del Catalogo el Codigo de la Marca" />
 							<button id="btnBuscarMarca" label="Buscar"
 								tooltiptext="Catalogo de Codigos de Marcas" image="/public/imagenes/botones/buscar.png"
-								class="btn" autodisable="self"/>
+								class="btn" autodisable="self" />
+							<label id="lblMarca" />
 							<hbox>
 								<label class="etiqueta" value="Volumen:" />
 								<space />
@@ -100,14 +100,14 @@
 							<cell colspan="3">
 								<checkbox checked="true" id="chkSi" />
 							</cell>
-							<label id="lblAliado" visible="false" class="etiqueta" value="Aliado:" />
-							<cell colspan="2">
-								<textbox visible="false" id="txtAliado" hflex="1" maxlength="20"
-									tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
-							</cell>
+							<label id="lblAliado" visible="false" class="etiqueta"
+								value="Aliado:" />
+							<textbox visible="false" id="txtAliado" hflex="1"
+								maxlength="20" tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
 							<button visible="false" id="btnBuscarAliado" label="Buscar"
 								tooltiptext="Catalogo de Codigos de Aliados" image="/public/imagenes/botones/buscar.png"
 								class="btn" autodisable="self" />
+							<label id="lblNombreAliado" visible="false" />
 							<hbox />
 						</row>
 					</rows>

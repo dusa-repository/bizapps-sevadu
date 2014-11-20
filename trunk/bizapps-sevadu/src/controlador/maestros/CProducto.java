@@ -55,6 +55,10 @@ public class CProducto extends CGenerico {
 	@Wire
 	private Label lblAliado;
 	@Wire
+	private Label lblNombreAliado;
+	@Wire
+	private Label lblMarca;
+	@Wire
 	private Spinner spnPacking;
 	@Wire
 	private Doublespinner spnVolumen;
@@ -111,6 +115,7 @@ public class CProducto extends CGenerico {
 								.getDescripcionProducto());
 						txtMarca.setValue(producto.getMaestroMarca()
 								.getMarcaDusa());
+						lblMarca.setValue(producto.getMaestroMarca().getDescripcion());
 						txtMarca.setValue(producto.getMaestroMarca()
 								.getMarcaDusa());
 						buscadorCaja.settearCampo(servicioF0005.buscar("00",
@@ -128,6 +133,8 @@ public class CProducto extends CGenerico {
 							txtAliado.setVisible(true);
 							lblAliado.setVisible(true);
 							btnBuscarAliado.setVisible(true);
+							lblNombreAliado.setVisible(true);
+							lblNombreAliado.setValue(producto.getMaestroAliado().getNombre());
 							txtAliado.setValue(producto.getMaestroAliado()
 									.getCodigoAliado());
 						}
@@ -327,12 +334,15 @@ public class CProducto extends CGenerico {
 		txtCodigo.setValue("");
 		txtDescripcion.setValue("");
 		txtMarca.setValue("");
+		lblMarca.setValue("");
 		txtAliado.setValue("");
 		chkSi.setChecked(true);
 		spnPacking.setValue(0);
 		spnVolumen.setValue((double) 0);
 		txtAliado.setVisible(false);
 		lblAliado.setVisible(false);
+		lblNombreAliado.setValue("");
+		lblNombreAliado.setVisible(false);
 		btnBuscarAliado.setVisible(false);
 		buscadorCaja.settearCampo(null);
 		buscadorBotella.settearCampo(null);
@@ -484,7 +494,7 @@ public class CProducto extends CGenerico {
 	public void mostrarCatalogoMarca() {
 		final List<MaestroMarca> listaObjetos = servicioMarca
 				.buscarTodosOrdenados();
-		catalogoMarca = new Catalogo<MaestroMarca>(divCatalogoMarca, "Marca",
+		catalogoMarca = new Catalogo<MaestroMarca>(divCatalogoMarca, "Catalogo de Marcas",
 				listaObjetos, true, false, false, "Codigo", "Descripcion",
 				"Termometro") {
 
@@ -523,7 +533,6 @@ public class CProducto extends CGenerico {
 		};
 		catalogoMarca.setClosable(true);
 		catalogoMarca.setWidth("80%");
-		catalogoMarca.setTitle("Marcas");
 		catalogoMarca.setParent(divCatalogoMarca);
 		catalogoMarca.doModal();
 	}
@@ -532,14 +541,16 @@ public class CProducto extends CGenerico {
 	public void seleccionMarca() {
 		MaestroMarca marca = catalogoMarca.objetoSeleccionadoDelCatalogo();
 		txtMarca.setValue(marca.getMarcaDusa());
+		lblMarca.setValue(marca.getDescripcion());
 		catalogoMarca.setParent(null);
 	}
 
-	@Listen("onChange = #txtMarca")
+	@Listen("onChange = #txtMarca; onOK=#txtMarca")
 	public void buscarNombreMarca() {
 		MaestroMarca marca = servicioMarca.buscar(txtMarca.getValue());
 		if (marca != null) {
 			txtMarca.setValue(marca.getMarcaDusa());
+			lblMarca.setValue(marca.getDescripcion());
 		} else {
 			msj.mensajeAlerta(Mensaje.noHayRegistros);
 			txtMarca.setValue("");
@@ -552,7 +563,7 @@ public class CProducto extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Aliado", listaObjetos, true, false, false, "Codigo",
+				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo",
 				"Nombre", "Zona", "Vendedor") {
 
 			@Override
@@ -587,7 +598,6 @@ public class CProducto extends CGenerico {
 		};
 		catalogoAliado.setClosable(true);
 		catalogoAliado.setWidth("80%");
-		catalogoAliado.setTitle("Registros");
 		catalogoAliado.setParent(divCatalogoAliado);
 		catalogoAliado.doModal();
 	}
@@ -596,14 +606,16 @@ public class CProducto extends CGenerico {
 	public void seleccionAliado() {
 		MaestroAliado aliado = catalogoAliado.objetoSeleccionadoDelCatalogo();
 		txtAliado.setValue(aliado.getCodigoAliado());
+		lblNombreAliado.setValue(aliado.getNombre());
 		catalogoAliado.setParent(null);
 	}
 
-	@Listen("onChange = #txtAliado")
+	@Listen("onChange = #txtAliado; onOK=#txtAliado")
 	public void buscarNombreAliado() {
 		MaestroAliado aliado = servicioAliado.buscar(txtAliado.getValue());
 		if (aliado != null) {
 			txtAliado.setValue(aliado.getCodigoAliado());
+			lblNombreAliado.setValue(aliado.getNombre());
 		} else {
 			msj.mensajeAlerta(Mensaje.noHayRegistros);
 			txtAliado.setValue("");
@@ -616,10 +628,12 @@ public class CProducto extends CGenerico {
 		if (chkSi.isChecked()) {
 			txtAliado.setVisible(false);
 			lblAliado.setVisible(false);
+			lblNombreAliado.setVisible(false);
 			btnBuscarAliado.setVisible(false);
 		} else {
 			txtAliado.setVisible(true);
 			lblAliado.setVisible(true);
+			lblNombreAliado.setVisible(true);
 			btnBuscarAliado.setVisible(true);
 		}
 	}

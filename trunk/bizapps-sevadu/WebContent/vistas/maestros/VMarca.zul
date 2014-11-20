@@ -25,7 +25,12 @@
 								</label>
 							</hbox>
 							<textbox id="txtCodigo" maxlength="10" tooltiptext="Ingrese el codigo" />
-							<label class="etiqueta" value="Se utiliza para Termometro:" />
+							<hbox>
+								<label class="etiqueta" value="Se utiliza para Termometro:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
 							<radiogroup id="rdbActivo">
 								<radio id="rdoSi" label="Si" />
 								<space />
