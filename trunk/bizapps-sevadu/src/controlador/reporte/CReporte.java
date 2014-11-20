@@ -43,6 +43,7 @@ import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Hbox;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
@@ -106,6 +107,8 @@ public class CReporte extends CGenerico {
 	private Listbox ltbMarcas;
 	@Wire
 	private Listbox ltbMarcasAgregadas;
+	@Wire
+	private Label lblAliado;
 	List<MaestroMarca> marcas = new ArrayList<MaestroMarca>();
 	List<MaestroMarca> marcasAgregadas = new ArrayList<MaestroMarca>();
 
@@ -178,6 +181,7 @@ public class CReporte extends CGenerico {
 				rowVendedor.setVisible(true);
 				rowZona.setVisible(true);
 				box.setVisible(false);
+				lblAliado.setValue("");
 				llenarLista();
 			}
 
@@ -638,7 +642,7 @@ public class CReporte extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Aliado", listaObjetos, true, false, false, "Codigo", "Nombre",
+				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo", "Nombre",
 				"Zona", "Vendedor") {
 
 			@Override
@@ -673,7 +677,6 @@ public class CReporte extends CGenerico {
 		};
 		catalogoAliado.setClosable(true);
 		catalogoAliado.setWidth("80%");
-		catalogoAliado.setTitle("Registros");
 		catalogoAliado.setParent(divCatalogoAliado);
 		catalogoAliado.doModal();
 	}
@@ -682,27 +685,27 @@ public class CReporte extends CGenerico {
 	public void seleccionAliado() {
 		MaestroAliado aliado = catalogoAliado.objetoSeleccionadoDelCatalogo();
 		txtAliado.setValue(aliado.getCodigoAliado());
+		lblAliado.setValue(aliado.getNombre());
 		idAliado = aliado.getCodigoAliado();
 		catalogoAliado.setParent(null);
 	}
 
-	@Listen("onOK = #txtAliado")
+	@Listen("onOK = #txtAliado; onChange = #txtAliado")
 	public void buscarNombreAliado() {
 		MaestroAliado aliado = servicioAliado.buscar(txtAliado.getValue());
 		if (aliado != null) {
 			txtAliado.setValue(aliado.getCodigoAliado());
-			cmbCliente.setValue("TODOS");
-			cmbVendedor.setValue("TODOS");
-			cmbZona.setValue("TODAS");
+			lblAliado.setValue(aliado.getNombre());
 			idAliado = aliado.getCodigoAliado();
 		} else {
 			msj.mensajeAlerta(Mensaje.noHayRegistros);
 			txtAliado.setValue("");
 			txtAliado.setFocus(true);
-			cmbCliente.setValue("TODOS");
-			cmbVendedor.setValue("TODOS");
-			cmbZona.setValue("TODAS");
+			lblAliado.setValue("");
 		}
+		cmbCliente.setValue("TODOS");
+		cmbVendedor.setValue("TODOS");
+		cmbZona.setValue("TODAS");
 	}
 
 	@Listen("onOpen = #cmbCliente")

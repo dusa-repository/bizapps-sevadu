@@ -1,6 +1,6 @@
 <zk>
 	<window id="wdwGraficas" title="Grafico"
-		border="normal" width="90%" height="100%" contentStyle="overflow:auto"
+		border="normal" width="90%" height="90%" contentStyle="overflow:auto"
 		apply="controlador.reporte.CGraficador" closable="true">
 		<charts id="chart" />
 		<!-- type="line" title="Monthly Average Temperature"

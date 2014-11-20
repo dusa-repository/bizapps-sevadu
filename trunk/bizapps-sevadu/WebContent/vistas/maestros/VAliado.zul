@@ -71,9 +71,9 @@
 							<button id="btnBuscarUsuario" label="Buscar" tooltiptext="Catalogo de Usuarios"
 								image="/public/imagenes/botones/buscar.png" class="btn"
 								autodisable="self" />
-							<label id="lblUsuario" />
-							<hbox />
-							<hbox />
+							<cell colspan="3">
+								<label id="lblUsuario" />
+							</cell>
 							<hbox />
 							<hbox />
 						</row>

@@ -1,19 +1,17 @@
 <zk>
 	<div height="100%" style="background-color: white" id="divVTermometroMarca"
 		width="100%" apply="controlador.transacciones.CTermometro2">
-		<!-- <style src="/public/thermo.css" />
-		<script
-			src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script
-			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
+		<!-- <style src="/public/thermo.css" /> <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
 		<div id="botoneraTermometroMarca" />
 		<separator />
-		<grid width="70%">
+		<grid width="100%">
 			<columns visible="false">
-				<column label="" width="20%" />
-				<column label="" width="30%" />
-				<column label="" width="20%" />
-				<column label="" width="30%" />
+				<column label="" width="13%" />
+				<column label="" width="17%" />
+				<column label="" width="10%" />
+				<column label="" width="17%" />
+				<column label="" width="23%" />
 			</columns>
 			<rows>
 				<row id="rowTermometroMarca" visible="false">
@@ -23,7 +21,9 @@
 					<button id="btnBuscarAliado" label="Buscar"
 						tooltiptext="Catalogo de Codigos de Aliados" image="/public/imagenes/botones/buscar.png"
 						class="btn" />
-					<hbox />
+					<cell colspan="2">
+						<label id="lblAliado" />
+					</cell>
 				</row>
 				<row>
 					<hbox>
@@ -41,13 +41,12 @@
 					</hbox>
 					<datebox width="100%" readonly="true" id="dtbHasta"
 						onCreate="self.value = new Date()" tooltiptext="Seleccione el fin del Periodo a buscar" />
+					<hbox />
 				</row>
 			</rows>
 		</grid>
-		<!-- <separator />
-		<div style="overflow-x:scroll;" height="100%" width="100%">
-			<html id="htmlContainer" />
-		</div> -->
+		<!-- <separator /> <div style="overflow-x:scroll;" height="100%" width="100%"> 
+			<html id="htmlContainer" /> </div> -->
 		<separator />
 		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
 	</div>
