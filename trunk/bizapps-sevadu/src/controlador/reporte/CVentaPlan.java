@@ -62,12 +62,20 @@ public class CVentaPlan extends CGenerico {
 			ventasFinales.add(ventas.get(0));
 			String producto = ventas.get(0).getMaestroProducto()
 					.getCodigoProductoDusa();
+			Date fechaT = ventas.get(0).getFechaFactura();
 			for (int i = 0; i < ventas.size(); i++) {
-				if (!producto.equals(ventas.get(i).getMaestroProducto()
-						.getCodigoProductoDusa())) {
-					ventasFinales.add(ventas.get(i));
+				if (fechaT.equals(ventas.get(i).getFechaFactura())) {
+					if (!producto.equals(ventas.get(i).getMaestroProducto()
+							.getCodigoProductoDusa())) {
+						ventasFinales.add(ventas.get(i));
+						producto = ventas.get(i).getMaestroProducto()
+								.getCodigoProductoDusa();
+					}
+				} else {
+					fechaT = ventas.get(i).getFechaFactura();
 					producto = ventas.get(i).getMaestroProducto()
 							.getCodigoProductoDusa();
+					i--;
 				}
 			}
 			Double vendedido = (double) 0, porcentaje = (double) 0, vendedidoTotal = (double) 0;
@@ -111,7 +119,29 @@ public class CVentaPlan extends CGenerico {
 								.rint((vendedido * 100 / planificado) * 100) / 100);
 					else
 						objeto.setPorcentaje(0);
+				} else {
+					objeto.setMarca(String.valueOf(anno));
+					objeto.setZona(String.valueOf(mes));
+					objeto.setVendedor(ventasFinales.get(i).getNombreVendedor());
+					objeto.setCampo(ventasFinales.get(i).getMaestroProducto().getDescripcionProducto());
+					planificado = 0;
+					planificadoTotal = planificadoTotal + planificado;
+					objeto.setVendido(planificado);
+					vendedido = servicioVenta.sumar(ventasFinales.get(i)
+							.getMaestroAliado(), ventasFinales.get(i)
+							.getZonaAliado(), ventasFinales.get(i)
+							.getNombreVendedor(), ventasFinales.get(i)
+							.getMaestroProducto(), fechaDesde, fechaHasta);
+					vendedidoTotal = vendedidoTotal
+							+ (Math.rint(vendedido * 100) / 100);
+					objeto.setMeta(Math.rint(vendedido * 100) / 100);
+					if (planificado > 0)
+						objeto.setPorcentaje(Math
+								.rint((vendedido * 100 / planificado) * 100) / 100);
+					else
+						objeto.setPorcentaje(0);
 				}
+
 				lista.add(objeto);
 			}
 			// TermometroCliente objeto = new TermometroCliente();

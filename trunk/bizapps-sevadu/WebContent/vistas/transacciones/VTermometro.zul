@@ -5,7 +5,7 @@
 		}
 		}
 	</style>
-	<div height="500px" style="background-color: white" id="divVTermometro"
+	<div height="500px" style="overflow:auto;background-color: white" id="divVTermometro"
 		width="100%" apply="controlador.transacciones.CTermometro">
 		<groupbox width="100%" mold="3d" title="Termometro Cliente">
 			<div id="botoneraTermometro" />
@@ -69,7 +69,7 @@
 				</rows>
 			</grid>
 			<separator />
-			<div width="100%" height="100%">
+			<div width="100%" height="100%" >
 				<spreadsheet id="ss" width="100%" height="350px" />
 			</div>
 			<separator />
