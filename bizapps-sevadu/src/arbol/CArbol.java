@@ -197,7 +197,7 @@ public class CArbol extends CGenerico {
 					}
 				}
 				if (abrir) {
-					if (arbolItem.getUrl().equals("Termometro")) {
+					if (arbolItem.getUrl().contains("Termometro")) {
 						west.setOpen(false);
 						mapGeneral.put("west", west);
 					}
@@ -232,6 +232,7 @@ public class CArbol extends CGenerico {
 							});
 					newTab.setSelected(true);
 					Tabpanel newTabpanel = new Tabpanel();
+					newTabpanel.setWidth("100%");
 					newTabpanel.appendChild(contenido);
 					tabBox.getTabs().insertBefore(newTab, tab);
 					newTabpanel.setParent(tabBox.getTabpanels());

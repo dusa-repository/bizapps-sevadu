@@ -141,8 +141,8 @@ public class CTermometro extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divVTermometro, cerrar, tabs);
 				west.setOpen(true);
+				cerrarVentana(divVTermometro, cerrar, tabs);
 			}
 
 			@Override

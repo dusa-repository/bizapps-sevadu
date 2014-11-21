@@ -198,10 +198,10 @@ public class CCargarArchivo extends CGenerico {
 					entro = true;
 				}
 				MarcaActivadaVendedor marcaActivada = new MarcaActivadaVendedor();
-				MaestroAliado aliado = new MaestroAliado();
+				MaestroAliado aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
-				Cliente cliente = new Cliente();
+				Cliente cliente = null;
 				String idCliente = null;
 				Double refCliente = (double) 0;
 				Double marca1 = null, marca2 = null, marca3 = null, marca4 = null, marca5 = null, marca6 = null, marca7 = null, marca8 = null, marca9 = null, marca10 = null, marca11 = null, marca12 = null, marca13 = null, marca14 = null, marca15 = null, marca16 = null, marca17 = null, marca18 = null, marca19 = null, marca20 = null, marca21 = null, marca22 = null, marca23 = null, marca24 = null, marca25 = null, marca26 = null, marca27 = null, marca28 = null, marca29 = null, marca30 = null, marca31 = null, marca32 = null, marca33 = null, marca34 = null, marca35 = null, marca36 = null, marca37 = null, marca38 = null, marca39 = null, marca40 = null, marca41 = null, marca42 = null, marca43 = null, marca44 = null, marca45 = null, marca46 = null, marca47 = null, marca48 = null, marca49 = null, marca50 = null;
@@ -1145,7 +1145,7 @@ public class CCargarArchivo extends CGenerico {
 					entro = true;
 				}
 				Cliente cliente = new Cliente();
-				MaestroAliado aliado = new MaestroAliado();
+				MaestroAliado aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
 				String idCliente = null;
@@ -1167,7 +1167,7 @@ public class CCargarArchivo extends CGenerico {
 				String idSupervisor = null;
 				Double refSupervisor = (double) 0;
 				String segmentacion = null;
-				TipoCliente tipoCliente = new TipoCliente();
+				TipoCliente tipoCliente = null;
 				String idTipo = null;
 				Double refTipo = (double) 0;
 				String ruta = null;
@@ -1519,10 +1519,10 @@ public class CCargarArchivo extends CGenerico {
 					entro = true;
 				}
 				Existencia existencia = new Existencia();
-				MaestroAliado aliado = new MaestroAliado();
+				MaestroAliado aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
-				MaestroProducto producto = new MaestroProducto();
+				MaestroProducto producto = null;
 				String idProducto = null;
 				Double refProducto = (double) 0;
 				Double cantidad = null;
@@ -1616,10 +1616,6 @@ public class CCargarArchivo extends CGenerico {
 				}
 			}
 			if (!error && !errorLong) {
-				for (int i = 0; i < existencias.size(); i++) {
-					System.out.println(existencias.get(i).getId()
-							.getMaestroProd().getCodigoProductoDusa());
-				}
 				servicioExistencia.guardarVarios(existencias);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
 						+ "Cantidad de Filas evaluadas:" + (contadorRow - 1)
@@ -1661,10 +1657,10 @@ public class CCargarArchivo extends CGenerico {
 					entro = true;
 				}
 				PlanVenta planVenta = new PlanVenta();
-				MaestroAliado aliado = new MaestroAliado();
+				MaestroAliado aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
-				MaestroProducto producto = new MaestroProducto();
+				MaestroProducto producto = null;
 				String idProducto = null;
 				Double refProducto = (double) 0;
 				F0005 zona = new F0005();
@@ -1881,16 +1877,16 @@ public class CCargarArchivo extends CGenerico {
 					entro = true;
 				}
 				Venta venta = new Venta();
-				MaestroAliado aliado = new MaestroAliado();
+				MaestroAliado aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
-				MaestroProducto producto = new MaestroProducto();
+				MaestroProducto producto = null;
 				String idProducto = null;
 				Double refProducto = (double) 0;
-				MaestroMarca marca = new MaestroMarca();
+				MaestroMarca marca = null;
 				String idMarca = null;
 				Double refMarca = (double) 0;
-				TipoCliente tipoCliente = new TipoCliente();
+				TipoCliente tipoCliente = null;
 				String idTipo = null;
 				Double refTipo = (double) 0;
 				F0005 zona = new F0005();

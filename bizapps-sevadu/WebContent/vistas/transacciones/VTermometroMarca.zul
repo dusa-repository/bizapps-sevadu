@@ -3,6 +3,8 @@
 		width="100%" apply="controlador.transacciones.CTermometro2">
 		<!-- <style src="/public/thermo.css" /> <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
 			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
+		
+		<groupbox width="100%" mold="3d" title="Termometro Marca">
 		<div id="botoneraTermometroMarca" />
 		<separator />
 		<grid width="100%">
@@ -49,5 +51,6 @@
 			<html id="htmlContainer" /> </div> -->
 		<separator />
 		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
+		</groupbox>
 	</div>
 </zk>
