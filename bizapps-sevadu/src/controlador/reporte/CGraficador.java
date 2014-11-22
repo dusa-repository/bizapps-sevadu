@@ -20,6 +20,7 @@ import org.zkoss.chart.*;
 import org.zkoss.chart.model.*;
 import org.zkoss.chart.plotOptions.DataLabels;
 import org.zkoss.chart.plotOptions.LinePlotOptions;
+import org.zkoss.chart.plotOptions.PieDataLabels;
 import org.zkoss.chart.plotOptions.PiePlotOptions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
@@ -81,11 +82,101 @@ public class CGraficador extends CGenerico {
 			if (dona)
 				generarGraficaDona(aliado, fechaDesde, fechaHasta, ids);
 			else
-				break;
+				generarGraficaPie(aliado, fechaDesde, fechaHasta, ids);
+			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void generarGraficaPie(String aliado2, Date fechaDesde2,
+			Date fechaHasta2, List<String> ids) {
+
+
+		List<Venta> ventas = servicioVenta
+				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(aliado2,
+						fechaDesde2, fechaHasta2, ids);
+		chart.getYAxis().setTitle("Total porcentaje de Ventas por Marca");
+		// chart.getPlotOptions().getPie().setShadow(false);
+		// chart.getPlotOptions().getPie().setCenter("50%", "50%");
+		// chart.getTooltip().setValueSuffix("%");
+		Series serieMarca = chart.getSeries();
+		serieMarca.setName("Porcentaje Participacion:");
+		if (!ventas.isEmpty()) {
+			Double valorTotal = servicioVenta
+					.sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
+							aliado2, fechaDesde2, fechaHasta2, ids);
+			String marca = ventas.get(0).getMaestroProducto().getMaestroMarca()
+					.getMarcaDusa();
+			double vendidoMarca = 0;
+
+			List<Color> colors = chart.getColors();
+			int j = 0;
+			for (int i = 0; i < ventas.size(); i++) {
+				if (j == colors.size() - 1)
+					j = 0;
+				if (ventas.get(i).getMaestroProducto().getMaestroMarca()
+						.getMarcaDusa().equals(marca)) {
+					vendidoMarca = vendidoMarca + ventas.get(i).getCantidad();
+				} else {
+					double porcentaje = 0;
+					// vendidoMarca = Math.rint(vendidoMarca * 10) / 10;
+					if (valorTotal > 0)
+						porcentaje = Math
+								.rint((vendidoMarca * 100 / valorTotal) * 10) / 10;
+					Point browserPoint = new Point(marca, porcentaje);
+					browserPoint.setColor(colors.get(j));
+					serieMarca.addPoint(browserPoint);
+
+					vendidoMarca = 0;
+					marca = ventas.get(i).getMaestroProducto()
+							.getMaestroMarca().getMarcaDusa();
+					i--;
+					j++;
+				}
+			}
+			double porcentaje = 0;
+			if (valorTotal > 0)
+				porcentaje = Math.rint((vendidoMarca * 100 / valorTotal) * 10) / 10;
+			Point browserPoint = new Point(marca, porcentaje);
+			browserPoint.setSelected(true);
+			browserPoint.setSliced(true);
+			browserPoint.setColor(colors.get(j));
+			serieMarca.addPoint(browserPoint);
+		}
+		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
+		chart.setTitle("Porcentaje de Participacion en Ventas(Marcas)"
+				+ " desde " + formatoCorrecto.format(fechaDesde2) + " hasta  "
+				+ formatoCorrecto.format(fechaHasta2));
+		chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
+				+ aliado2 + ")");
+
+		Chart chartOptional = chart.getChart();
+		chartOptional.setBackgroundColor("");
+		chartOptional.setPlotBorderWidth(0);
+		chartOptional.setPlotShadow(false);
+
+		chart.getTooltip().setPointFormat(
+				"{series.name}: <b>{point.percentage:.1f}%</b>");
+		PiePlotOptions plotOptions = chart.getPlotOptions().getPie();
+		plotOptions.setAllowPointSelect(true);
+		plotOptions.setCursor("pointer");
+		PieDataLabels dataLabels = (PieDataLabels) plotOptions.getDataLabels();
+		dataLabels.setEnabled(true);
+		dataLabels.setColor("#000000");
+		dataLabels.setConnectorColor("#000000");
+		dataLabels.setFormat("<b>{point.name}</b>: {point.percentage:.1f} %");
+
+		if (ventas.isEmpty())
+			chart.setTitle("Porcentaje de Participacion en Ventas(Marcas)"
+					+ " desde "
+					+ formatoCorrecto.format(fechaDesde2)
+					+ " hasta  "
+					+ formatoCorrecto.format(fechaHasta2)
+					+ "\n"
+					+ " NO EXISTEN VENTAS REGISTRADAS EN ESTE INTERVALO DE TIEMPO");
+
 	}
 
 	private void generarGraficaDona(String aliado2, Date fechaDesde2,
@@ -96,7 +187,7 @@ public class CGraficador extends CGenerico {
 						fechaDesde2, fechaHasta2, ids);
 		chart.getYAxis().setTitle("Total porcentaje de Ventas por Marca");
 		chart.getPlotOptions().getPie().setShadow(false);
-//		chart.getPlotOptions().getPie().setCenter("50%", "50%");
+		// chart.getPlotOptions().getPie().setCenter("50%", "50%");
 		chart.getTooltip().setValueSuffix(" Cajas");
 		Series serieMarca = chart.getSeries();
 		Series serieProducto = chart.getSeries(1);
@@ -135,11 +226,12 @@ public class CGraficador extends CGenerico {
 								.getCodigoProductoDusa();
 						vendidoProducto = 0;
 						i--;
-//						j++;
+						// j++;
 					}
 				} else {
 
-					Point browserPoint = new Point(marca, Math.rint(vendidoMarca * 100) / 100);
+					Point browserPoint = new Point(marca,
+							Math.rint(vendidoMarca * 100) / 100);
 					browserPoint.setColor(colors.get(j));
 					// if (serieMarca < 5)
 					// browserPoint.getDataLabels().setEnabled(false);
@@ -153,7 +245,8 @@ public class CGraficador extends CGenerico {
 				}
 			}
 			// modelo = new DefaultCategoryModel();
-			Point browserPoint = new Point(marca, Math.rint(vendidoMarca * 100) / 100);
+			Point browserPoint = new Point(marca,
+					Math.rint(vendidoMarca * 100) / 100);
 			browserPoint.setColor(colors.get(j));
 			serieMarca.addPoint(browserPoint);
 		}

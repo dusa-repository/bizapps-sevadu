@@ -350,7 +350,21 @@ public class CReporte extends CGenerico {
 								mapaGrafica);
 						ventana.doModal();
 						break;
-
+					case "Grafico Porcentaje de Participacion en Ventas(Marcas)":
+						tipo = 25;
+						mapaGrafica = new HashMap<String, Object>();
+						mapaGrafica.put("idAliado", aliado);
+						mapaGrafica.put("desde", desde);
+						mapaGrafica.put("hasta", hasta);
+						mapaGrafica.put("tipo", "pie");
+						mapaGrafica.put("lista", marcasAgregadas);
+						Sessions.getCurrent().setAttribute("grafica",
+								mapaGrafica);
+						ventana = (Window) Executions.createComponents(
+								"/vistas/reportes/VGrafica.zul", null,
+								mapaGrafica);
+						ventana.doModal();
+						break;
 					}
 
 					if (tipo != 23 && tipo != 25) {
