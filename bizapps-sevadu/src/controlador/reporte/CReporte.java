@@ -334,6 +334,22 @@ public class CReporte extends CGenerico {
 								mapaGrafica);
 						ventana.doModal();
 						break;
+					case "Grafico Volumen de Ventas por Marca y Producto":
+						tipo = 25;
+						mapaGrafica = new HashMap<String, Object>();
+						mapaGrafica.put("idAliado", aliado);
+						mapaGrafica.put("desde", desde);
+						mapaGrafica.put("hasta", hasta);
+						mapaGrafica.put("tipo", "pie");
+						mapaGrafica.put("dona", true);
+						mapaGrafica.put("lista", marcasAgregadas);
+						Sessions.getCurrent().setAttribute("grafica",
+								mapaGrafica);
+						ventana = (Window) Executions.createComponents(
+								"/vistas/reportes/VGrafica.zul", null,
+								mapaGrafica);
+						ventana.doModal();
+						break;
 
 					}
 
