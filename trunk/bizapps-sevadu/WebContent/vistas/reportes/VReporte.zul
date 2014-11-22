@@ -67,6 +67,7 @@
 								<comboitem label="Grafico Venta de Marcas" />
 								<comboitem label="Grafico Vendido VS Planificado Marcas" />
 								<comboitem label="Grafico Volumen de Ventas por Marca y Producto" />
+								<comboitem label="Grafico Porcentaje de Participacion en Ventas(Marcas)" />
 								<!-- <comboitem label="(G55420001)Grafico de Activacion/Marca" /> -->
 								<!-- <comboitem label="(R55420025)Generar Objetivos/Marca/Clientes 
 									(EXCEL)" /> -->
