@@ -3,6 +3,8 @@ package servicio.maestros;
 import java.util.List;
 
 import interfacedao.maestros.IPlanVentaDAO;
+import modelo.maestros.MaestroAliado;
+import modelo.maestros.MaestroProducto;
 import modelo.maestros.PlanVenta;
 import modelo.pk.PlanVentaPK;
 
@@ -21,5 +23,22 @@ public class SPlanVenta {
 
 	public PlanVenta buscar(PlanVentaPK pk) {
 		return planVentaDAO.findOne(pk);
+	}
+
+	public List<PlanVenta> buscarPorAliados(List<MaestroAliado> eliminarLista) {
+		return planVentaDAO.findByIdMaestroAliadoIn(eliminarLista);
+	}
+
+	public List<PlanVenta> buscarPorAliado(MaestroAliado aliado) {
+		return planVentaDAO.findByIdMaestroAliado(aliado);
+	}
+
+	public List<PlanVenta> buscarPorProductos(
+			List<MaestroProducto> eliminarLista) {
+		return planVentaDAO.findByIdMaestroProductoIn(eliminarLista);
+	}
+
+	public List<PlanVenta> buscarPorProducto(String clave) {
+		return planVentaDAO.findByIdMaestroProductoCodigoProductoDusa(clave);
 	}
 }

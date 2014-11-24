@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import modelo.maestros.MaestroMarca;
+import modelo.maestros.MaestroProducto;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -49,6 +50,7 @@ public class CMarca extends CGenerico {
 	Botonera botonera;
 	Catalogo<MaestroMarca> catalogo;
 	Integer clave = 0;
+	private List<MaestroMarca> listaGeneral = new ArrayList<MaestroMarca>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -122,8 +124,8 @@ public class CMarca extends CGenerico {
 					servicioMarca.guardar(marca);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
-					catalogo.actualizarLista(
-							servicioMarca.buscarTodosOrdenados(), true);
+					listaGeneral = servicioMarca.buscarTodosOrdenados();
+					catalogo.actualizarLista(listaGeneral, true);
 				}
 			}
 
@@ -135,52 +137,66 @@ public class CMarca extends CGenerico {
 					if (validarSeleccion()) {
 						final List<MaestroMarca> eliminarLista = catalogo
 								.obtenerSeleccionados();
-						Messagebox
-								.show("¿Desea Eliminar los "
-										+ eliminarLista.size() + " Registros?",
-										"Alerta",
-										Messagebox.OK | Messagebox.CANCEL,
-										Messagebox.QUESTION,
-										new org.zkoss.zk.ui.event.EventListener<Event>() {
-											public void onEvent(Event evt)
-													throws InterruptedException {
-												if (evt.getName()
-														.equals("onOK")) {
-													servicioMarca
-															.eliminarVarios(eliminarLista);
-													msj.mensajeInformacion(Mensaje.eliminado);
-													catalogo.actualizarLista(
-															servicioMarca
-																	.buscarTodosOrdenados(),
-															true);
+						List<MaestroProducto> productos = servicioProducto
+								.buscarPorMarcas(eliminarLista);
+						if (productos.isEmpty()) {
+							Messagebox
+									.show("¿Desea Eliminar los "
+											+ eliminarLista.size()
+											+ " Registros?",
+											"Alerta",
+											Messagebox.OK | Messagebox.CANCEL,
+											Messagebox.QUESTION,
+											new org.zkoss.zk.ui.event.EventListener<Event>() {
+												public void onEvent(Event evt)
+														throws InterruptedException {
+													if (evt.getName().equals(
+															"onOK")) {
+														servicioMarca
+																.eliminarVarios(eliminarLista);
+														msj.mensajeInformacion(Mensaje.eliminado);
+														listaGeneral = servicioMarca
+																.buscarTodosOrdenados();
+														catalogo.actualizarLista(
+																listaGeneral,
+																true);
+													}
 												}
-											}
-										});
+											});
+
+						} else
+							msj.mensajeError(Mensaje.noEliminar);
 					}
 				} else {
 					/* Elimina un solo registro */
 					if (clave != 0) {
-						Messagebox
-								.show(Mensaje.deseaEliminar,
-										"Alerta",
-										Messagebox.OK | Messagebox.CANCEL,
-										Messagebox.QUESTION,
-										new org.zkoss.zk.ui.event.EventListener<Event>() {
-											public void onEvent(Event evt)
-													throws InterruptedException {
-												if (evt.getName()
-														.equals("onOK")) {
-													servicioMarca
-															.eliminarUno(clave);
-													msj.mensajeInformacion(Mensaje.eliminado);
-													limpiar();
-													catalogo.actualizarLista(
-															servicioMarca
-																	.buscarTodosOrdenados(),
-															true);
+						List<MaestroProducto> productos = servicioProducto
+								.buscarPorMarca(txtCodigo.getValue());
+						if (productos.isEmpty()) {
+							Messagebox
+									.show(Mensaje.deseaEliminar,
+											"Alerta",
+											Messagebox.OK | Messagebox.CANCEL,
+											Messagebox.QUESTION,
+											new org.zkoss.zk.ui.event.EventListener<Event>() {
+												public void onEvent(Event evt)
+														throws InterruptedException {
+													if (evt.getName().equals(
+															"onOK")) {
+														servicioMarca
+																.eliminarUno(clave);
+														msj.mensajeInformacion(Mensaje.eliminado);
+														limpiar();
+														listaGeneral = servicioMarca
+																.buscarTodosOrdenados();
+														catalogo.actualizarLista(
+																listaGeneral,
+																true);
+													}
 												}
-											}
-										});
+											});
+						} else
+							msj.mensajeError(Mensaje.noEliminar);
 					} else
 						msj.mensajeAlerta(Mensaje.noSeleccionoRegistro);
 				}
@@ -330,10 +346,9 @@ public class CMarca extends CGenerico {
 	}
 
 	private void mostrarCatalogo() {
-		final List<MaestroMarca> listaObjetos = servicioMarca
-				.buscarTodosOrdenados();
+		listaGeneral = servicioMarca.buscarTodosOrdenados();
 		catalogo = new Catalogo<MaestroMarca>(catalogoMarca, "Marca",
-				listaObjetos, false, false, false, "Codigo", "Descripcion",
+				listaGeneral, false, false, false, "Codigo", "Descripcion",
 				"Termometro") {
 
 			@Override
@@ -341,7 +356,7 @@ public class CMarca extends CGenerico {
 
 				List<MaestroMarca> lista = new ArrayList<MaestroMarca>();
 
-				for (MaestroMarca objeto : listaObjetos) {
+				for (MaestroMarca objeto : listaGeneral) {
 					String termo = "No";
 					if (objeto.isFiltroTermometro())
 						termo = "Si";

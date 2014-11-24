@@ -3,6 +3,7 @@ package interfacedao.maestros;
 import java.util.List;
 
 import modelo.maestros.MaestroAliado;
+import modelo.maestros.MaestroProducto;
 import modelo.maestros.PlanVenta;
 import modelo.pk.PlanVentaPK;
 
@@ -24,5 +25,14 @@ public interface IPlanVentaDAO extends JpaRepository<PlanVenta, PlanVentaPK> {
 	List<PlanVenta> findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdMaestroAliadoAndIdAnnoAndIdMesBetweenAndIdAnnoAndIdMesBetween(
 			boolean b, MaestroAliado aliado, int anno2, int tiempo,
 			int limiteInf, int anno, int limiteSup, int periodo, Sort o);
+
+	List<PlanVenta> findByIdMaestroAliadoIn(List<MaestroAliado> eliminarLista);
+
+	List<PlanVenta> findByIdMaestroAliado(MaestroAliado aliado);
+
+	List<PlanVenta> findByIdMaestroProductoIn(
+			List<MaestroProducto> eliminarLista);
+
+	List<PlanVenta> findByIdMaestroProductoCodigoProductoDusa(String clave);
 
 }

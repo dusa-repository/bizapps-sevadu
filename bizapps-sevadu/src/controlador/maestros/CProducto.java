@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import modelo.maestros.Existencia;
 import modelo.maestros.F0005;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;
+import modelo.maestros.MappingProducto;
+import modelo.maestros.PlanVenta;
+import modelo.maestros.Venta;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -83,6 +87,7 @@ public class CProducto extends CGenerico {
 	Catalogo<MaestroMarca> catalogoMarca;
 	Catalogo<MaestroAliado> catalogoAliado;
 	String clave = null;
+	protected List<MaestroProducto> listaGeneral = new ArrayList<MaestroProducto>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -115,7 +120,8 @@ public class CProducto extends CGenerico {
 								.getDescripcionProducto());
 						txtMarca.setValue(producto.getMaestroMarca()
 								.getMarcaDusa());
-						lblMarca.setValue(producto.getMaestroMarca().getDescripcion());
+						lblMarca.setValue(producto.getMaestroMarca()
+								.getDescripcion());
 						txtMarca.setValue(producto.getMaestroMarca()
 								.getMarcaDusa());
 						buscadorCaja.settearCampo(servicioF0005.buscar("00",
@@ -134,7 +140,8 @@ public class CProducto extends CGenerico {
 							lblAliado.setVisible(true);
 							btnBuscarAliado.setVisible(true);
 							lblNombreAliado.setVisible(true);
-							lblNombreAliado.setValue(producto.getMaestroAliado().getNombre());
+							lblNombreAliado.setValue(producto
+									.getMaestroAliado().getNombre());
 							txtAliado.setValue(producto.getMaestroAliado()
 									.getCodigoAliado());
 						}
@@ -186,8 +193,8 @@ public class CProducto extends CGenerico {
 					servicioProducto.guardar(producto);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
-					catalogo.actualizarLista(
-							servicioProducto.buscarTodosOrdenados(), true);
+					listaGeneral = servicioProducto.buscarTodosOrdenados();
+					catalogo.actualizarLista(listaGeneral, true);
 				}
 			}
 
@@ -198,52 +205,80 @@ public class CProducto extends CGenerico {
 					if (validarSeleccion()) {
 						final List<MaestroProducto> eliminarLista = catalogo
 								.obtenerSeleccionados();
-						Messagebox
-								.show("¿Desea Eliminar los "
-										+ eliminarLista.size() + " Registros?",
-										"Alerta",
-										Messagebox.OK | Messagebox.CANCEL,
-										Messagebox.QUESTION,
-										new org.zkoss.zk.ui.event.EventListener<Event>() {
-											public void onEvent(Event evt)
-													throws InterruptedException {
-												if (evt.getName()
-														.equals("onOK")) {
-													servicioProducto
-															.eliminarVarios(eliminarLista);
-													msj.mensajeInformacion(Mensaje.eliminado);
-													catalogo.actualizarLista(
-															servicioProducto
-																	.buscarTodosOrdenados(),
-															true);
+						List<Existencia> existencias = servicioExistencia
+								.buscarPorProductos(eliminarLista);
+						List<MappingProducto> mapping = servicioMapping
+								.buscarPorProductos(eliminarLista);
+						List<PlanVenta> planes = servicioPlan
+								.buscarPorProductos(eliminarLista);
+						List<Venta> ventas = servicioVenta
+								.buscarPorProductos(eliminarLista);
+						if (existencias.isEmpty() && mapping.isEmpty()
+								&& planes.isEmpty() && ventas.isEmpty()) {
+							Messagebox
+									.show("¿Desea Eliminar los "
+											+ eliminarLista.size()
+											+ " Registros?",
+											"Alerta",
+											Messagebox.OK | Messagebox.CANCEL,
+											Messagebox.QUESTION,
+											new org.zkoss.zk.ui.event.EventListener<Event>() {
+												public void onEvent(Event evt)
+														throws InterruptedException {
+													if (evt.getName().equals(
+															"onOK")) {
+														servicioProducto
+																.eliminarVarios(eliminarLista);
+														msj.mensajeInformacion(Mensaje.eliminado);
+														listaGeneral = servicioProducto
+																.buscarTodosOrdenados();
+														catalogo.actualizarLista(
+																listaGeneral,
+																true);
+													}
 												}
-											}
-										});
+											});
+
+						} else
+							msj.mensajeError(Mensaje.noEliminar);
 					}
 				} else {
 					/* Elimina un solo registro */
 					if (clave != null) {
-						Messagebox
-								.show(Mensaje.deseaEliminar,
-										"Alerta",
-										Messagebox.OK | Messagebox.CANCEL,
-										Messagebox.QUESTION,
-										new org.zkoss.zk.ui.event.EventListener<Event>() {
-											public void onEvent(Event evt)
-													throws InterruptedException {
-												if (evt.getName()
-														.equals("onOK")) {
-													servicioProducto
-															.eliminarUno(clave);
-													msj.mensajeInformacion(Mensaje.eliminado);
-													limpiar();
-													catalogo.actualizarLista(
-															servicioProducto
-																	.buscarTodosOrdenados(),
-															true);
+						List<Existencia> existencias = servicioExistencia
+								.buscarPorProducto(clave);
+						List<MappingProducto> mapping = servicioMapping
+								.buscarPorProducto(clave);
+						List<PlanVenta> planes = servicioPlan
+								.buscarPorProducto(clave);
+						List<Venta> ventas = servicioVenta
+								.buscarPorProducto(clave);
+						if (existencias.isEmpty() && mapping.isEmpty()
+								&& planes.isEmpty() && ventas.isEmpty()) {
+							Messagebox
+									.show(Mensaje.deseaEliminar,
+											"Alerta",
+											Messagebox.OK | Messagebox.CANCEL,
+											Messagebox.QUESTION,
+											new org.zkoss.zk.ui.event.EventListener<Event>() {
+												public void onEvent(Event evt)
+														throws InterruptedException {
+													if (evt.getName().equals(
+															"onOK")) {
+														servicioProducto
+																.eliminarUno(clave);
+														msj.mensajeInformacion(Mensaje.eliminado);
+														limpiar();
+														listaGeneral = servicioProducto
+																.buscarTodosOrdenados();
+														catalogo.actualizarLista(
+																listaGeneral,
+																true);
+													}
 												}
-											}
-										});
+											});
+						} else
+							msj.mensajeError(Mensaje.noEliminar);
 					} else
 						msj.mensajeAlerta(Mensaje.noSeleccionoRegistro);
 				}
@@ -416,8 +451,8 @@ public class CProducto extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "04");
 		buscadorCaja = new BuscadorUDC("Caja", 100, listF0005, true, false,
-				false, "00", "04", "29%", "18.5%", "6.5%", "28%") 
-//				false, "00", "04", "33%", "8%", "10%", "49%") 
+				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
+		// false, "00", "04", "33%", "8%", "10%", "49%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -428,9 +463,9 @@ public class CProducto extends CGenerico {
 		divBuscadorCaja.appendChild(buscadorCaja);
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "05");
-		buscadorBotella = new BuscadorUDC("Botella", 100, listF0005, true,false,
-				false, "00", "04", "29%", "18.5%", "6.5%", "28%") 
-//				false, false, "00", "05", "33%", "8%", "10%", "49%") 
+		buscadorBotella = new BuscadorUDC("Botella", 100, listF0005, true,
+				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
+		// false, false, "00", "05", "33%", "8%", "10%", "49%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -442,8 +477,8 @@ public class CProducto extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "06");
 		buscadorEspecie = new BuscadorUDC("Especie", 100, listF0005, true,
-				false,false, "00", "04", "29%", "18.5%", "6.5%", "28%") 
-//				false, false, "00", "06", "33%", "8%", "10%", "49%") 
+				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
+		// false, false, "00", "06", "33%", "8%", "10%", "49%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -455,10 +490,9 @@ public class CProducto extends CGenerico {
 	}
 
 	private void mostrarCatalogo() {
-		final List<MaestroProducto> listaObjetos = servicioProducto
-				.buscarTodosOrdenados();
+		listaGeneral = servicioProducto.buscarTodosOrdenados();
 		catalogo = new Catalogo<MaestroProducto>(catalogoProducto, "Productos",
-				listaObjetos, false, false, false, "Codigo", "Nombre", "Marca",
+				listaGeneral, false, false, false, "Codigo", "Nombre", "Marca",
 				"Descripcion Marca") {
 
 			@Override
@@ -466,7 +500,7 @@ public class CProducto extends CGenerico {
 
 				List<MaestroProducto> lista = new ArrayList<MaestroProducto>();
 
-				for (MaestroProducto objeto : listaObjetos) {
+				for (MaestroProducto objeto : listaGeneral) {
 					if (objeto.getCodigoProductoDusa().toLowerCase()
 							.contains(valores.get(0).toLowerCase())
 							&& objeto.getDescripcionProducto().toLowerCase()
@@ -500,9 +534,9 @@ public class CProducto extends CGenerico {
 	public void mostrarCatalogoMarca() {
 		final List<MaestroMarca> listaObjetos = servicioMarca
 				.buscarTodosOrdenados();
-		catalogoMarca = new Catalogo<MaestroMarca>(divCatalogoMarca, "Catalogo de Marcas",
-				listaObjetos, true, false, false, "Codigo", "Descripcion",
-				"Termometro") {
+		catalogoMarca = new Catalogo<MaestroMarca>(divCatalogoMarca,
+				"Catalogo de Marcas", listaObjetos, true, false, false,
+				"Codigo", "Descripcion", "Termometro") {
 
 			@Override
 			protected List<MaestroMarca> buscar(List<String> valores) {
@@ -569,8 +603,8 @@ public class CProducto extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo",
-				"Nombre", "Zona", "Vendedor") {
+				"Catalogo de Aliados", listaObjetos, true, false, false,
+				"Codigo", "Nombre", "Zona", "Vendedor") {
 
 			@Override
 			protected List<MaestroAliado> buscar(List<String> valores) {

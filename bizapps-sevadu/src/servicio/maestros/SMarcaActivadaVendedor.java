@@ -3,6 +3,7 @@ package servicio.maestros;
 import java.util.List;
 
 import interfacedao.maestros.IMarcaActivadaVendedorDAO;
+import modelo.maestros.MaestroAliado;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.pk.MarcaActivadaPK;
 
@@ -21,5 +22,14 @@ public class SMarcaActivadaVendedor {
 
 	public MarcaActivadaVendedor buscar(MarcaActivadaPK clave) {
 		return marcaActivadaDAO.findOne(clave);
+	}
+
+	public List<MarcaActivadaVendedor> buscarPorAliados(
+			List<MaestroAliado> eliminarLista) {
+		return marcaActivadaDAO.findByIdMaestroAliadoIn(eliminarLista);
+	}
+
+	public List<MarcaActivadaVendedor> buscarPorAliado(MaestroAliado aliado) {
+		return marcaActivadaDAO.findByIdMaestroAliado(aliado);
 	}
 }

@@ -16,4 +16,12 @@ public interface IMappingProductoDAO extends JpaRepository<MappingProducto, Mapp
 	List<MappingProducto> findByIdMaestroProductoNotInAndIdMaestroAliado(
 			List<MaestroProducto> productos, MaestroAliado aliado);
 
+	List<MappingProducto> findByIdMaestroAliadoIn(
+			List<MaestroAliado> eliminarLista);
+
+	List<MappingProducto> findByIdMaestroProductoIn(
+			List<MaestroProducto> eliminarLista);
+
+	List<MappingProducto> findByIdMaestroProductoCodigoProductoDusa(String clave);
+
 }

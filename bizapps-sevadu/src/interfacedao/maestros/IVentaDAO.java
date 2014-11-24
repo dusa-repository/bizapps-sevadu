@@ -8,6 +8,7 @@ import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;
+import modelo.maestros.TipoCliente;
 import modelo.maestros.Venta;
 
 import org.springframework.data.domain.Sort;
@@ -57,5 +58,17 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 			+ " and v.fechaFactura between ?3 and ?4")
 	Double sumByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
 			String aliado2, List<String> ids, Date fechaDesde2, Date fechaHasta2);
+
+	List<Venta> findByMaestroAliadoIn(List<MaestroAliado> eliminarLista);
+
+	List<Venta> findByMaestroAliado(MaestroAliado aliado);
+
+	List<Venta> findByTipoClienteBeanIn(List<TipoCliente> eliminarLista);
+
+	List<Venta> findByTipoClienteBeanCodigo(String id);
+
+	List<Venta> findByMaestroProductoIn(List<MaestroProducto> eliminarLista);
+
+	List<Venta> findByMaestroProductoCodigoProductoDusa(String clave);
 
 }

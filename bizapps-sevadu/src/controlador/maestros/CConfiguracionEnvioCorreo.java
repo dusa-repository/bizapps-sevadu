@@ -61,6 +61,7 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 	Botonera botonera;
 	Catalogo<ConfiguracionEnvioCorreo> catalogo;
 	long clave = 0;
+	private List<ConfiguracionEnvioCorreo> listaGeneral = new ArrayList<ConfiguracionEnvioCorreo>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -135,8 +136,8 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 					servicioEnvio.guardar(configuracion);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
-					catalogo.actualizarLista(
-							servicioEnvio.buscarTodosOrdenados(), true);
+					listaGeneral = servicioEnvio.buscarTodosOrdenados();
+					catalogo.actualizarLista(listaGeneral, true);
 				}
 			}
 
@@ -161,10 +162,8 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 													servicioEnvio
 															.eliminarVarios(eliminarLista);
 													msj.mensajeInformacion(Mensaje.eliminado);
-													catalogo.actualizarLista(
-															servicioEnvio
-																	.buscarTodosOrdenados(),
-															true);
+													listaGeneral = servicioEnvio.buscarTodosOrdenados();
+													catalogo.actualizarLista(listaGeneral, true);
 												}
 											}
 										});
@@ -186,10 +185,8 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 															.eliminarUno(clave);
 													msj.mensajeInformacion(Mensaje.eliminado);
 													limpiar();
-													catalogo.actualizarLista(
-															servicioEnvio
-																	.buscarTodosOrdenados(),
-															true);
+													listaGeneral = servicioEnvio.buscarTodosOrdenados();
+													catalogo.actualizarLista(listaGeneral, true);
 												}
 											}
 										});
@@ -340,8 +337,8 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "07");
 		buscadorReporte = new BuscadorUDC("Reporte", 50, listF0005, true,
-				false,false, "00", "04", "29%", "18.5%", "6.5%", "28%") 
-//				false, false, "00", "07", "32%", "8%", "10%", "50%") 
+				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
+		// false, false, "00", "07", "32%", "8%", "10%", "50%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -353,10 +350,10 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 	}
 
 	private void mostrarCatalogo() {
-		final List<ConfiguracionEnvioCorreo> listaObjetos = servicioEnvio
+		listaGeneral = servicioEnvio
 				.buscarTodosOrdenados();
 		catalogo = new Catalogo<ConfiguracionEnvioCorreo>(catalogoEnvio,
-				"Aliado", listaObjetos, false, false, false, "Reporte",
+				"Aliado", listaGeneral, false, false, false, "Reporte",
 				"Destinatarios", "Estado") {
 
 			@Override
@@ -364,7 +361,7 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 
 				List<ConfiguracionEnvioCorreo> lista = new ArrayList<ConfiguracionEnvioCorreo>();
 
-				for (ConfiguracionEnvioCorreo objeto : listaObjetos) {
+				for (ConfiguracionEnvioCorreo objeto : listaGeneral) {
 					String estado = "Inactivo";
 					if (objeto.isEstado())
 						estado = "Activo";
