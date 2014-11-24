@@ -60,12 +60,7 @@
 							</cell>
 						</row>
 						<row>
-							<hbox>
-								<label class="etiqueta" value="Usuario" />
-								<space />
-								<label value="*" style="font-weight:bold;color:red">
-								</label>
-							</hbox>
+							<label class="etiqueta" value="Usuario" />
 							<textbox id="txtUsuario" hflex="1" maxlength="100"
 								tooltiptext="Seleccione del Catalogo el Usuario que desea asignar al aliado" />
 							<button id="btnBuscarUsuario" label="Buscar" tooltiptext="Catalogo de Usuarios"

@@ -10,6 +10,7 @@ import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;
+import modelo.maestros.TipoCliente;
 import modelo.maestros.Venta;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,13 +111,39 @@ public class SVenta {
 		ordenar.add("maestroProductoCodigoProductoDusa");
 		ordenar.add("fechaFactura");
 		o = new Sort(Sort.Direction.ASC, ordenar);
-		return ventaDAO.findByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
-				aliadoObjeto, marcas2, fechaDesde2, fechaHasta2, o);
+		return ventaDAO
+				.findByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
+						aliadoObjeto, marcas2, fechaDesde2, fechaHasta2, o);
 	}
 
 	public Double sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
 			String aliado2, Date fechaDesde2, Date fechaHasta2, List<String> ids) {
-		return ventaDAO.sumByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
-				aliado2, ids, fechaDesde2, fechaHasta2);
+		return ventaDAO
+				.sumByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
+						aliado2, ids, fechaDesde2, fechaHasta2);
+	}
+
+	public List<Venta> buscarPorAliados(List<MaestroAliado> eliminarLista) {
+		return ventaDAO.findByMaestroAliadoIn(eliminarLista);
+	}
+
+	public List<Venta> buscarPorAliado(MaestroAliado aliado) {
+		return ventaDAO.findByMaestroAliado(aliado);
+	}
+
+	public List<Venta> buscarPorTiposCliente(List<TipoCliente> eliminarLista) {
+		return ventaDAO.findByTipoClienteBeanIn(eliminarLista);
+	}
+
+	public List<Venta> buscarPorTipoCliente(String id) {
+		return ventaDAO.findByTipoClienteBeanCodigo(id);
+	}
+
+	public List<Venta> buscarPorProductos(List<MaestroProducto> eliminarLista) {
+		return ventaDAO.findByMaestroProductoIn(eliminarLista);
+	}
+
+	public List<Venta> buscarPorProducto(String clave) {
+		return ventaDAO.findByMaestroProductoCodigoProductoDusa(clave);
 	}
 }

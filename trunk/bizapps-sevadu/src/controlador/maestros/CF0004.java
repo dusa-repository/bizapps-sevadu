@@ -53,6 +53,7 @@ public class CF0004 extends CGenerico {
 	Botonera botonera;
 	Catalogo<F0004> catalogo;
 	F0004PK clave = null;
+	protected List<F0004> listaGeneral = new ArrayList<F0004>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -125,9 +126,7 @@ public class CF0004 extends CGenerico {
 					if (txtCDLF0004.getValue() != null) {
 						a = txtCDLF0004.getValue();
 						fooo4.setDtcdl(a);
-					}
-					else
-					{
+					} else {
 						fooo4.setDtcdl(0.0);
 					}
 					String num = txtNUMF0004.getValue();
@@ -148,8 +147,8 @@ public class CF0004 extends CGenerico {
 					servicioF0004.guardar(fooo4);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
-					catalogo.actualizarLista(
-							servicioF0004.buscarTodosOrdenados(), true);
+					listaGeneral = servicioF0004.buscarTodosOrdenados();
+					catalogo.actualizarLista(listaGeneral, true);
 				}
 
 			}
@@ -175,10 +174,8 @@ public class CF0004 extends CGenerico {
 													servicioF0004
 															.eliminarVarios(eliminarLista);
 													msj.mensajeInformacion(Mensaje.eliminado);
-													catalogo.actualizarLista(
-															servicioF0004
-																	.buscarTodosOrdenados(),
-															true);
+													listaGeneral = servicioF0004.buscarTodosOrdenados();
+													catalogo.actualizarLista(listaGeneral, true);
 												}
 											}
 										});
@@ -200,10 +197,8 @@ public class CF0004 extends CGenerico {
 															.eliminarUno(clave);
 													msj.mensajeInformacion(Mensaje.eliminado);
 													limpiar();
-													catalogo.actualizarLista(
-															servicioF0004
-																	.buscarTodosOrdenados(),
-															true);
+													listaGeneral = servicioF0004.buscarTodosOrdenados();
+													catalogo.actualizarLista(listaGeneral, true);
 												}
 											}
 										});
@@ -215,7 +210,7 @@ public class CF0004 extends CGenerico {
 
 			@Override
 			public void buscar() {
-				
+
 				abrirCatalogo();
 			}
 
@@ -240,7 +235,7 @@ public class CF0004 extends CGenerico {
 	}
 
 	public void mostrarBotones(boolean bol) {
-	
+
 		botonera.getChildren().get(1).setVisible(!bol);
 		botonera.getChildren().get(2).setVisible(bol);
 		botonera.getChildren().get(6).setVisible(false);
@@ -374,8 +369,8 @@ public class CF0004 extends CGenerico {
 	}
 
 	public void mostrarCatalogo() {
-		final List<F0004> listF0004 = servicioF0004.buscarTodosOrdenados();
-		catalogo = new Catalogo<F0004>(catalogoF0004, "F0004", listF0004,
+		listaGeneral = servicioF0004.buscarTodosOrdenados();
+		catalogo = new Catalogo<F0004>(catalogoF0004, "F0004", listaGeneral,
 				false, false, false, "SY", "RT", "Descripcion", "Codigo",
 				"2 Linea", "Numerico") {
 
@@ -384,7 +379,7 @@ public class CF0004 extends CGenerico {
 
 				List<F0004> lista = new ArrayList<F0004>();
 
-				for (F0004 f0004 : listF0004) {
+				for (F0004 f0004 : listaGeneral) {
 					if (f0004.getId().getDtsy().toLowerCase()
 							.contains(valores.get(0).toLowerCase())
 							&& f0004.getId().getDtrt().toLowerCase()

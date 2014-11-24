@@ -70,4 +70,18 @@ public class SMappingProducto {
 	public void eliminarUno(MappingProductoPK id) {
 		mappingDAO.delete(id);
 	}
+
+	public List<MappingProducto> buscarPorAliados(
+			List<MaestroAliado> eliminarLista) {
+		return mappingDAO.findByIdMaestroAliadoIn(eliminarLista);
+	}
+
+	public List<MappingProducto> buscarPorProductos(
+			List<MaestroProducto> eliminarLista) {
+		return mappingDAO.findByIdMaestroProductoIn(eliminarLista);
+	}
+
+	public List<MappingProducto> buscarPorProducto(String clave) {
+		return mappingDAO.findByIdMaestroProductoCodigoProductoDusa(clave);
+	}
 }

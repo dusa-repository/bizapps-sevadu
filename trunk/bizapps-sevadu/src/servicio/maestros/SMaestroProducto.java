@@ -1,8 +1,12 @@
 package servicio.maestros;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import interfacedao.maestros.IMaestroProductoDAO;
+import modelo.maestros.MaestroAliado;
+import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +40,28 @@ public class SMaestroProducto {
 
 	public MaestroProducto buscar(String idProducto) {
 		return productoDAO.findOne(idProducto);
+	}
+
+	public List<MaestroProducto> buscarPorAliados(
+			List<MaestroAliado> eliminarLista) {
+		return productoDAO.findByMaestroAliadoIn(eliminarLista);
+	}
+
+	public List<MaestroProducto> buscarPorAliado(MaestroAliado aliado) {
+		return productoDAO.findByMaestroAliado(aliado);
+	}
+
+	public List<MaestroProducto> buscarPorMarcas(
+			List<MaestroMarca> eliminarLista) {
+		List<String> ids = new ArrayList<String>();
+		for (Iterator<MaestroMarca> iterator = eliminarLista.iterator(); iterator.hasNext();) {
+			MaestroMarca maestroMarca = (MaestroMarca) iterator.next();
+			ids.add(maestroMarca.getMarcaDusa());
+		}
+		return productoDAO.findByMaestroMarcaMarcaDusaIn(ids);
+	}
+
+	public List<MaestroProducto> buscarPorMarca(String value) {
+		return productoDAO.findByMaestroMarcaMarcaDusa(value);
 	}
 }

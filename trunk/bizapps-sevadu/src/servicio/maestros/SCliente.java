@@ -6,6 +6,7 @@ import java.util.List;
 import interfacedao.maestros.IClienteDAO;
 import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
+import modelo.maestros.TipoCliente;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -35,6 +36,18 @@ public class SCliente {
 		ordenar.add("nombre");
 		o = new Sort(Sort.Direction.ASC, ordenar);
 		return clienteDAO.findByMaestroAliado(aliado,o);
+	}
+
+	public List<Cliente> buscarPorAliados(List<MaestroAliado> eliminarLista) {
+		return clienteDAO.findByMaestroAliadoIn(eliminarLista);
+	}
+
+	public List<Cliente> buscarPorTiposCliente(List<TipoCliente> eliminarLista) {
+		return clienteDAO.findByTipoClienteIn(eliminarLista);
+	}
+
+	public List<Cliente> buscarPorTipoCliente(String id) {
+		return clienteDAO.findByTipoClienteCodigo(id);
 	}
 
 }

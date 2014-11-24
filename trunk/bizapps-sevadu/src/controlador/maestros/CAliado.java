@@ -6,10 +6,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import modelo.maestros.Cliente;
+import modelo.maestros.Existencia;
 import modelo.maestros.F0004;
 import modelo.maestros.F0005;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
+import modelo.maestros.MaestroProducto;
+import modelo.maestros.MappingProducto;
+import modelo.maestros.MarcaActivadaVendedor;
+import modelo.maestros.PlanVenta;
+import modelo.maestros.Venta;
 import modelo.pk.F0004PK;
 import modelo.seguridad.Usuario;
 
@@ -68,6 +75,7 @@ public class CAliado extends CGenerico {
 	Catalogo<MaestroAliado> catalogo;
 	Catalogo<Usuario> catalogoU;
 	String clave = null;
+	List<MaestroAliado> listaGeneral = new ArrayList<MaestroAliado>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -165,8 +173,9 @@ public class CAliado extends CGenerico {
 					servicioAliado.guardar(aliado);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
-					catalogo.actualizarLista(
-							servicioAliado.buscarTodosOrdenados(), true);
+					listaGeneral = 
+							servicioAliado.buscarTodosOrdenados();
+					catalogo.actualizarLista(listaGeneral, true);
 				}
 			}
 
@@ -177,54 +186,95 @@ public class CAliado extends CGenerico {
 					if (validarSeleccion()) {
 						final List<MaestroAliado> eliminarLista = catalogo
 								.obtenerSeleccionados();
-						Messagebox
-								.show("¿Desea Eliminar los "
-										+ eliminarLista.size() + " Registros?",
-										"Alerta",
-										Messagebox.OK | Messagebox.CANCEL,
-										Messagebox.QUESTION,
-										new org.zkoss.zk.ui.event.EventListener<Event>() {
-											public void onEvent(Event evt)
-													throws InterruptedException {
-												if (evt.getName()
-														.equals("onOK")) {
-													servicioAliado
-															.eliminarVarios(eliminarLista);
-													msj.mensajeInformacion(Mensaje.eliminado);
-													catalogo.actualizarLista(
-															servicioAliado
-																	.buscarTodosOrdenados(),
-															true);
+						List<MaestroProducto> productos = servicioProducto
+								.buscarPorAliados(eliminarLista);
+						List<Cliente> clientes = servicioCliente
+								.buscarPorAliados(eliminarLista);
+						List<Existencia> existencias = servicioExistencia
+								.buscarPorAliados(eliminarLista);
+						List<MappingProducto> mappings = servicioMapping
+								.buscarPorAliados(eliminarLista);
+						List<MarcaActivadaVendedor> activadas = servicioMarcaActivada
+								.buscarPorAliados(eliminarLista);
+						List<PlanVenta> planes = servicioPlan
+								.buscarPorAliados(eliminarLista);
+						List<Venta> ventas = servicioVenta
+								.buscarPorAliados(eliminarLista);
+						if (productos.isEmpty() && existencias.isEmpty()
+								&& clientes.isEmpty() && mappings.isEmpty()
+								&& activadas.isEmpty() && planes.isEmpty()
+								&& ventas.isEmpty()) {
+							Messagebox
+									.show("¿Desea Eliminar los "
+											+ eliminarLista.size()
+											+ " Registros?",
+											"Alerta",
+											Messagebox.OK | Messagebox.CANCEL,
+											Messagebox.QUESTION,
+											new org.zkoss.zk.ui.event.EventListener<Event>() {
+												public void onEvent(Event evt)
+														throws InterruptedException {
+													if (evt.getName().equals(
+															"onOK")) {
+														servicioAliado
+																.eliminarVarios(eliminarLista);
+														msj.mensajeInformacion(Mensaje.eliminado);
+														listaGeneral = 
+																servicioAliado.buscarTodosOrdenados();
+														catalogo.actualizarLista(listaGeneral, true);
+													}
 												}
-											}
-										});
+											});
+
+						} else
+							msj.mensajeError(Mensaje.noEliminar);
 					}
 				} else {
 					/* Elimina un solo registro */
-					if (clave != null) {
-						Messagebox
-								.show(Mensaje.deseaEliminar,
-										"Alerta",
-										Messagebox.OK | Messagebox.CANCEL,
-										Messagebox.QUESTION,
-										new org.zkoss.zk.ui.event.EventListener<Event>() {
-											public void onEvent(Event evt)
-													throws InterruptedException {
-												if (evt.getName()
-														.equals("onOK")) {
-													servicioAliado
-															.eliminarUno(clave);
-													msj.mensajeInformacion(Mensaje.eliminado);
-													limpiar();
-													catalogo.actualizarLista(
-															servicioAliado
-																	.buscarTodosOrdenados(),
-															true);
+					MaestroAliado aliado = servicioAliado.buscar(clave);
+					List<MaestroProducto> productos = servicioProducto
+							.buscarPorAliado(aliado);
+					List<Cliente> clientes = servicioCliente
+							.buscarPorAliado(aliado);
+					List<Existencia> existencias = servicioExistencia
+							.buscarPorAliado(aliado);
+					List<MappingProducto> mappings = servicioMapping
+							.buscarPorAliado(aliado);
+					List<MarcaActivadaVendedor> activadas = servicioMarcaActivada
+							.buscarPorAliado(aliado);
+					List<PlanVenta> planes = servicioPlan
+							.buscarPorAliado(aliado);
+					List<Venta> ventas = servicioVenta.buscarPorAliado(aliado);
+					if (productos.isEmpty() && existencias.isEmpty()
+							&& clientes.isEmpty() && mappings.isEmpty()
+							&& activadas.isEmpty() && planes.isEmpty()
+							&& ventas.isEmpty()) {
+						if (clave != null) {
+							Messagebox
+									.show(Mensaje.deseaEliminar,
+											"Alerta",
+											Messagebox.OK | Messagebox.CANCEL,
+											Messagebox.QUESTION,
+											new org.zkoss.zk.ui.event.EventListener<Event>() {
+												public void onEvent(Event evt)
+														throws InterruptedException {
+													if (evt.getName().equals(
+															"onOK")) {
+														servicioAliado
+																.eliminarUno(clave);
+														msj.mensajeInformacion(Mensaje.eliminado);
+														limpiar();
+														catalogo.actualizarLista(
+																servicioAliado
+																		.buscarTodosOrdenados(),
+																true);
+													}
 												}
-											}
-										});
+											});
+						} else
+							msj.mensajeAlerta(Mensaje.noSeleccionoRegistro);
 					} else
-						msj.mensajeAlerta(Mensaje.noSeleccionoRegistro);
+						msj.mensajeError(Mensaje.noEliminar);
 				}
 			}
 
@@ -396,7 +446,7 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "01");
 		buscadorZona = new BuscadorUDC("Zona", 100, listF0005, true, false,
-		false, "00", "04", "29%", "18.5%", "6.5%", "28%")
+				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
 		// false, "00", "01", "33.3%", "8%", "10%", "48.8%")
 		{
 			@Override
@@ -410,7 +460,7 @@ public class CAliado extends CGenerico {
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "02");
 		buscadorEstado = new BuscadorUDC("Estado", 100, listF0005, true, false,
 				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-//				false, "00", "02", "33.3%", "8%", "10%", "48.8%") 
+		// false, "00", "02", "33.3%", "8%", "10%", "48.8%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -423,7 +473,7 @@ public class CAliado extends CGenerico {
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "03");
 		buscadorCiudad = new BuscadorUDC("Ciudad", 100, listF0005, true, false,
 				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-//				false, "00", "03", "32.6%", "8%", "10%", "49.4%") 
+		// false, "00", "03", "32.6%", "8%", "10%", "49.4%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -435,10 +485,10 @@ public class CAliado extends CGenerico {
 	}
 
 	private void mostrarCatalogo() {
-		final List<MaestroAliado> listaObjetos = servicioAliado
-				.buscarTodosOrdenados();
+		listaGeneral = servicioAliado.buscarTodosOrdenados();
+//		final List<MaestroAliado> listaObjetos = listaGeneral;
 		catalogo = new Catalogo<MaestroAliado>(catalogoAliado, "Aliado",
-				listaObjetos, false, false, false, "Codigo", "Nombre", "Zona",
+				listaGeneral, false, false, false, "Codigo", "Nombre", "Zona",
 				"Vendedor") {
 
 			@Override
@@ -446,7 +496,7 @@ public class CAliado extends CGenerico {
 
 				List<MaestroAliado> lista = new ArrayList<MaestroAliado>();
 
-				for (MaestroAliado objeto : listaObjetos) {
+				for (MaestroAliado objeto : listaGeneral) {
 					if (objeto.getCodigoAliado().toLowerCase()
 							.contains(valores.get(0).toLowerCase())
 							&& objeto.getNombre().toLowerCase()

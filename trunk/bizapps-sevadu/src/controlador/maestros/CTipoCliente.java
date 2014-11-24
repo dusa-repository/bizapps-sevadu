@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import modelo.maestros.Cliente;
 import modelo.maestros.TipoCliente;
+import modelo.maestros.Venta;
 import modelo.seguridad.Usuario;
 
 import org.zkoss.zk.ui.Sessions;
@@ -45,6 +47,7 @@ public class CTipoCliente extends CGenerico {
 	Botonera botonera;
 	Catalogo<TipoCliente> catalogo;
 	String id = "";
+	private List<TipoCliente> listaGeneral = new ArrayList<TipoCliente>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -105,21 +108,20 @@ public class CTipoCliente extends CGenerico {
 				if (id.equals(""))
 					guardar = validar();
 				if (guardar) {
-					if(buscarPorId())
-					{
-					String canal = txtCanal.getValue();
-					String codigo = txtCodigo.getValue();
-					String descripcion = txtDescripcion.getValue();
-					TipoCliente tipo = new TipoCliente();
-					tipo.setCodigo(codigo);
-					tipo.setDescripcion(descripcion);
-					tipo.setCanalVentas(canal);
-					servicioTipoCliente.guardar(tipo);
-					msj.mensajeInformacion(Mensaje.guardado);
-					limpiar();
-					catalogo.actualizarLista(servicioTipoCliente.buscarTodos(),
-							true);
-					abrirCatalogo();
+					if (buscarPorId()) {
+						String canal = txtCanal.getValue();
+						String codigo = txtCodigo.getValue();
+						String descripcion = txtDescripcion.getValue();
+						TipoCliente tipo = new TipoCliente();
+						tipo.setCodigo(codigo);
+						tipo.setDescripcion(descripcion);
+						tipo.setCanalVentas(canal);
+						servicioTipoCliente.guardar(tipo);
+						msj.mensajeInformacion(Mensaje.guardado);
+						limpiar();
+						listaGeneral = servicioTipoCliente.buscarTodos();
+						catalogo.actualizarLista(listaGeneral, true);
+						abrirCatalogo();
 					}
 				}
 
@@ -132,53 +134,72 @@ public class CTipoCliente extends CGenerico {
 					if (validarSeleccion()) {
 						final List<TipoCliente> eliminarLista = catalogo
 								.obtenerSeleccionados();
-						Messagebox
-								.show("¿Desea Eliminar los "
-										+ eliminarLista.size() + " Registros?",
-										"Alerta",
-										Messagebox.OK | Messagebox.CANCEL,
-										Messagebox.QUESTION,
-										new org.zkoss.zk.ui.event.EventListener<Event>() {
-											public void onEvent(Event evt)
-													throws InterruptedException {
-												if (evt.getName()
-														.equals("onOK")) {
-													servicioTipoCliente
-															.eliminarVarios(eliminarLista);
-													msj.mensajeInformacion(Mensaje.eliminado);
-													catalogo.actualizarLista(
-															servicioTipoCliente
-																	.buscarTodos(),
-															true);
+						List<Cliente> clientes = servicioCliente
+								.buscarPorTiposCliente(eliminarLista);
+						List<Venta> ventas = servicioVenta
+								.buscarPorTiposCliente(eliminarLista);
+						if (clientes.isEmpty() && ventas.isEmpty()) {
+							Messagebox
+									.show("¿Desea Eliminar los "
+											+ eliminarLista.size()
+											+ " Registros?",
+											"Alerta",
+											Messagebox.OK | Messagebox.CANCEL,
+											Messagebox.QUESTION,
+											new org.zkoss.zk.ui.event.EventListener<Event>() {
+												public void onEvent(Event evt)
+														throws InterruptedException {
+													if (evt.getName().equals(
+															"onOK")) {
+														servicioTipoCliente
+																.eliminarVarios(eliminarLista);
+														msj.mensajeInformacion(Mensaje.eliminado);
+														listaGeneral = servicioTipoCliente
+																.buscarTodos();
+														catalogo.actualizarLista(
+																listaGeneral,
+																true);
+													}
 												}
-											}
-										});
+											});
+
+						} else
+							msj.mensajeError(Mensaje.noEliminar);
 					}
 				} else {
 					/* Elimina un solo registro */
 					if (!id.equals("")) {
-						Messagebox
-								.show(Mensaje.deseaEliminar,
-										"Alerta",
-										Messagebox.OK | Messagebox.CANCEL,
-										Messagebox.QUESTION,
-										new org.zkoss.zk.ui.event.EventListener<Event>() {
-											public void onEvent(Event evt)
-													throws InterruptedException {
-												if (evt.getName()
-														.equals("onOK")) {
+						List<Cliente> clientes = servicioCliente
+								.buscarPorTipoCliente(id);
+						List<Venta> ventas = servicioVenta
+								.buscarPorTipoCliente(id);
+						if (clientes.isEmpty() && ventas.isEmpty()) {
+							Messagebox
+									.show(Mensaje.deseaEliminar,
+											"Alerta",
+											Messagebox.OK | Messagebox.CANCEL,
+											Messagebox.QUESTION,
+											new org.zkoss.zk.ui.event.EventListener<Event>() {
+												public void onEvent(Event evt)
+														throws InterruptedException {
+													if (evt.getName().equals(
+															"onOK")) {
 
-													servicioTipoCliente
-															.eliminarUno(id);
-													msj.mensajeInformacion(Mensaje.eliminado);
-													limpiar();
-													catalogo.actualizarLista(
-															servicioTipoCliente
-																	.buscarTodos(),
-															true);
+														servicioTipoCliente
+																.eliminarUno(id);
+														msj.mensajeInformacion(Mensaje.eliminado);
+														limpiar();
+														listaGeneral = servicioTipoCliente
+																.buscarTodos();
+														catalogo.actualizarLista(
+																listaGeneral,
+																true);
+													}
 												}
-											}
-										});
+											});
+
+						} else
+							msj.mensajeError(Mensaje.noEliminar);
 					} else
 						msj.mensajeAlerta(Mensaje.noSeleccionoRegistro);
 				}
@@ -306,9 +327,9 @@ public class CTipoCliente extends CGenerico {
 	}
 
 	public void mostrarCatalogo() {
-		final List<TipoCliente> listCientes = servicioTipoCliente.buscarTodos();
+		listaGeneral = servicioTipoCliente.buscarTodos();
 		catalogo = new Catalogo<TipoCliente>(divCatalogoTipoCliente,
-				"TipoCliente", listCientes, false, false, false, "Codigo",
+				"TipoCliente", listaGeneral, false, false, false, "Codigo",
 				"Descripcion", "Canal") {
 
 			@Override
@@ -316,7 +337,7 @@ public class CTipoCliente extends CGenerico {
 
 				List<TipoCliente> lista = new ArrayList<TipoCliente>();
 
-				for (TipoCliente tipo : listCientes) {
+				for (TipoCliente tipo : listaGeneral) {
 					if (tipo.getCodigo().toLowerCase()
 							.contains(valores.get(0).toLowerCase())
 							&& tipo.getDescripcion().toLowerCase()
@@ -340,7 +361,7 @@ public class CTipoCliente extends CGenerico {
 		};
 		catalogo.setParent(divCatalogoTipoCliente);
 	}
-	
+
 	@Listen("onChange = #txtCodigo")
 	public boolean buscarPorId() {
 		TipoCliente tipo = servicioTipoCliente.buscarPorCodigo(txtCodigo
@@ -348,7 +369,7 @@ public class CTipoCliente extends CGenerico {
 		if (tipo == null)
 			return true;
 		else {
-			if (tipo.getCodigo()==id)
+			if (tipo.getCodigo() == id)
 				return true;
 			else {
 				msj.mensajeAlerta(Mensaje.CodigoUsado);
