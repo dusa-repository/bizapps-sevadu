@@ -138,7 +138,13 @@ public class CF0005 extends CGenerico {
 
 			@Override
 			public void guardar() {
-				if (validar()) {
+				boolean guardar = true;
+				if (clave == null && (claveSYExiste() || claveRTExiste()))
+					guardar = false;
+				else
+					guardar = validar();
+
+				if (guardar) {
 					String rt = txtRTF0005.getValue();
 					String sy = txtSYF0005.getValue();
 					String ky = txtKYF0005.getValue();
