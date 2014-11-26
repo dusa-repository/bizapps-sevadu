@@ -38,7 +38,6 @@ public abstract class BuscadorUDC extends Hbox {
 		super();
 		this.setWidth("100%");
 		this.setSpacing("10em");
-		// this.setWidths("32%,8%,10%,50%");
 		this.setWidths(width1 + "," + width2 + "," + width3 + "," + width4);
 		this.setAlign("center");
 		this.setPack("center");
@@ -47,12 +46,9 @@ public abstract class BuscadorUDC extends Hbox {
 
 		cajaTexto = new Textbox();
 		cajaTexto.setWidth("100%");
-		// cajaTexto.setReadonly(true);
 		cajaTexto.setMaxlength(longitud);
 		cajaTexto
 		.setTooltiptext("Código Definido por el Usuario (DRKY de "+valor1+","+valor2+")");
-		// cajaTexto.setWidth("8px");
-		// cajaTexto.setHflex("1");
 
 		Button boton = new Button();
 		boton.setAutodisable("true");
@@ -80,7 +76,6 @@ public abstract class BuscadorUDC extends Hbox {
 		} else {
 			this.appendChild(label);
 			label.setWidth("100%");
-			// label.setHflex("1");
 		}
 		this.appendChild(cajaTexto);
 		this.appendChild(boton);
