@@ -365,6 +365,21 @@ public class CReporte extends CGenerico {
 								mapaGrafica);
 						ventana.doModal();
 						break;
+					case "Grafico Vendido VS Planificado Marcas (Angular)":
+						tipo = 25;
+						mapaGrafica = new HashMap<String, Object>();
+						mapaGrafica.put("idAliado", aliado);
+						mapaGrafica.put("desde", desde);
+						mapaGrafica.put("hasta", hasta);
+						mapaGrafica.put("tipo", "gauge");
+						mapaGrafica.put("lista", marcasAgregadas);
+						Sessions.getCurrent().setAttribute("grafica",
+								mapaGrafica);
+						ventana = (Window) Executions.createComponents(
+								"/vistas/reportes/VGrafica.zul", null,
+								mapaGrafica);
+						ventana.doModal();
+						break;
 					}
 
 					if (tipo != 23 && tipo != 25) {
@@ -654,8 +669,10 @@ public class CReporte extends CGenerico {
 						msj.mensajeAlerta("Debe seleccionar al menos una Marca para generar el grafico");
 						return false;
 					} else {
-						if (cmbReporte.getValue().equals(
-								"Grafico Vendido VS Planificado Marcas")
+						if ((cmbReporte.getValue().equals(
+								"Grafico Vendido VS Planificado Marcas") || cmbReporte
+								.getValue()
+								.equals("Grafico Vendido VS Planificado Marcas (Angular)"))
 								&& marcasAgregadas.size() != 1) {
 							msj.mensajeAlerta("Para este Grafico solo debe agregar una Marca");
 							return false;
@@ -672,8 +689,8 @@ public class CReporte extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo", "Nombre",
-				"Zona", "Vendedor") {
+				"Catalogo de Aliados", listaObjetos, true, false, false,
+				"Codigo", "Nombre", "Zona", "Vendedor") {
 
 			@Override
 			protected List<MaestroAliado> buscar(List<String> valores) {

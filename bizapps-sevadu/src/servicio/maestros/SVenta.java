@@ -146,4 +146,15 @@ public class SVenta {
 	public List<Venta> buscarPorProducto(String clave) {
 		return ventaDAO.findByMaestroProductoCodigoProductoDusa(clave);
 	}
+
+	public List<Venta> buscarPorAliadoEntreFechasYMarcasOrdenadoPorFecha(
+			String aliado2, Date fechaDesde2, Date fechaHasta2, List<String> ids) {
+		List<String> ordenar = new ArrayList<String>();
+		Sort o;
+		ordenar.add("fechaFactura");
+		o = new Sort(Sort.Direction.ASC, ordenar);
+		return ventaDAO
+				.findByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
+						aliado2, ids, fechaDesde2, fechaHasta2, o);
+	}
 }
