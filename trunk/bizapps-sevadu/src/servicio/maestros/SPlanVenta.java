@@ -41,4 +41,12 @@ public class SPlanVenta {
 	public List<PlanVenta> buscarPorProducto(String clave) {
 		return planVentaDAO.findByIdMaestroProductoCodigoProductoDusa(clave);
 	}
+
+	public Integer sumarPlanAliado(MaestroAliado maestroAliado,
+			MaestroProducto maestroProducto, int anno, int mes) {
+		return planVentaDAO
+				.sumByIdMaestroAliadoAnIdMaestroProductoAndIdMesAndIdAnno(
+						maestroAliado, maestroProducto.getMaestroMarca()
+								.getMarcaDusa(), mes, anno);
+	}
 }
