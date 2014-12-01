@@ -103,45 +103,34 @@ public class CGraficador extends CGenerico {
 				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorFecha(aliado2,
 						fechaDesde2, fechaHasta2, ids);
 		if (!ventas.isEmpty()) {
-			String marca = ventas.get(0).getMaestroProducto().getMaestroMarca()
-					.getMarcaDusa();
-			String fecha = formatoFecha.format(ventas.get(0).getFechaFactura());
 			double vendido = 0;
-			double planificado = 0;
 			DateFormat formatoAnno = new SimpleDateFormat("yyyy");
 			DateFormat formatoMes = new SimpleDateFormat("MM");
-			int anno = Integer.parseInt(formatoAnno.format(ventas.get(0)
-					.getFechaFactura()));
-			int mes = Integer.parseInt(formatoMes.format(ventas.get(0)
-					.getFechaFactura()));
-			Integer plan2 = servicioPlan.sumarPlanAliado(ventas.get(0)
-					.getMaestroAliado(), ventas.get(0).getMaestroProducto(),
-					anno, mes);
-			System.out.println(plan2);
-			planificado = plan2;
-			for (int i = 0; i < ventas.size(); i++) {
-				if (formatoFecha.format(ventas.get(i).getFechaFactura())
-						.equals(fecha))
-					vendido = vendido + ventas.get(i).getCantidad();
-				else {
-					fecha = formatoFecha
-							.format(ventas.get(i).getFechaFactura());
-					anno = Integer.parseInt(formatoAnno.format(ventas.get(i)
-							.getFechaFactura()));
-					mes = Integer.parseInt(formatoMes.format(ventas.get(i)
-							.getFechaFactura()));
-					Integer plan = servicioPlan.sumarPlanAliado(ventas.get(i)
-							.getMaestroAliado(), ventas.get(i)
-							.getMaestroProducto(), anno, mes);
-					System.out.println(plan);
-					planificado = planificado + plan;
-					i--;
+
+			int annoPlanDesde = Integer.parseInt(formatoAnno
+					.format(fechaDesde2));
+			int mesPlanDesde = Integer.parseInt(formatoMes.format(fechaDesde2));
+			int annoPlanHasta = Integer.parseInt(formatoAnno
+					.format(fechaHasta2));
+			int mesPlanHasta = Integer.parseInt(formatoMes.format(fechaHasta2));
+			Double suma = (double) 0;
+			do {
+				if (mesPlanDesde == 13) {
+					mesPlanDesde = 1;
+					annoPlanDesde = annoPlanDesde + 1;
 				}
+				Double plan2 = servicioPlan.sumarPlanAliado(ventas.get(0)
+						.getMaestroAliado(),
+						ventas.get(0).getMaestroProducto(), annoPlanDesde,
+						mesPlanDesde);
+				suma = suma + plan2;
+				mesPlanDesde = mesPlanDesde + 1;
+			} while (annoPlanDesde != annoPlanHasta
+					|| mesPlanDesde != mesPlanHasta + 1);
+
+			for (int i = 0; i < ventas.size(); i++) {
+				vendido = vendido + ventas.get(i).getCantidad();
 			}
-			anno = Integer.parseInt(formatoAnno.format(ventas.get(
-					ventas.size() - 1).getFechaFactura()));
-			mes = Integer.parseInt(formatoMes.format(ventas.get(
-					ventas.size() - 1).getFechaFactura()));
 			vendido = Math.rint(vendido * 100) / 100;
 
 			DialModel dialmodel = new DefaultDialModel();
@@ -150,27 +139,24 @@ public class CGraficador extends CGenerico {
 			dialmodel.setFrameBgColor2(null);
 			dialmodel.setFrameFgColor(null);
 
-			Double primero = planificado * 5 / 100;
-			Double segundo = primero / 25;
+			Double primero = suma * 5 / 100;
+			Double segundo = suma * 0.01 / 100;
 
-			DialModelScale scale = dialmodel.newScale(0, planificado, -150,
+			DialModelScale scale = dialmodel.newScale(0, suma.intValue(), -150,
 					-300, primero.intValue(), segundo.intValue());
 			scale.setText("Cajas");
 			scale.setTickColor("#666666");
-			System.out.println("plan" + planificado);
-			System.out.println("vent" + vendido);
-			double cantidad = planificado - vendido;
+			double cantidad = suma - vendido;
 			if (cantidad < 0)
-				cantidad = planificado;
+				cantidad = suma;
 			else
 				cantidad = vendido;
-			// chart.getSeries().addPoint(cantidad);
 			scale.setValue(cantidad);
-			Double valor = planificado / 3;
+			Double valor = suma / 3;
 			int minimo = valor.intValue();
 			scale.newRange(0, minimo, "#DF5353", 0.9, 1); // green
 			scale.newRange(minimo, minimo * 2, "#DDDF0D", 0.9, 1); // yellow
-			scale.newRange(minimo * 2, planificado, "#55BF3B", 0.9, 1); // red
+			scale.newRange(minimo * 2, suma.intValue(), "#55BF3B", 0.9, 1); // red
 			chart.setModel(dialmodel);
 			List<PaneBackground> backgrounds = new LinkedList<PaneBackground>();
 
@@ -189,60 +175,43 @@ public class CGraficador extends CGenerico {
 			background2.setBorderWidth(1);
 			background2.setOuterRadius("107%");
 			backgrounds.add(background2);
-
-			// default background
 			backgrounds.add(new PaneBackground());
-
 			PaneBackground background3 = new PaneBackground();
 			background3.setBackgroundColor("#DDD");
 			background3.setBorderWidth(0);
 			background3.setOuterRadius("105%");
 			background3.setInnerRadius("103%");
 			backgrounds.add(background3);
-
 			chart.getPane().setBackground(backgrounds);
-
-			// the value axis
 			YAxis yAxis = chart.getYAxis();
 			yAxis.setMinorTickWidth(1);
 			yAxis.setMinorTickPosition("inside");
 			yAxis.setMinorTickColor("#666");
-
 			yAxis.setTickPixelInterval(30);
 			yAxis.setTickWidth(2);
 			yAxis.setTickPosition("inside");
 			yAxis.setTickLength(10);
-
 			yAxis.getLabels().setStep(2);
 			yAxis.getLabels().setRotation("auto");
-
 			chart.getPlotOptions().getGauge().getTooltip()
 					.setValueSuffix(" cajas");
 			chart.getSeries().setName("Cajas Vendidas");
 			MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
-
-			System.out.println("paso");
 			chart.getYAxis().getTitle().setText("Numero de Cajas");
 			chart.setTitle("Vendido VS Planificado de la Marca:"
 					+ servicioMarca.buscar(ids.get(0)).getDescripcion()
 					+ " desde " + formatoCorrecto.format(fechaDesde2)
 					+ " hasta  " + formatoCorrecto.format(fechaHasta2));
-
 			chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
 					+ aliado2 + ")");
-
-			System.out.println("paso");
 		}
 
 		if (ventas.isEmpty())
 			chart.setTitle("Vendido VS Planificado de la Marca:"
 					+ servicioMarca.buscar(ids.get(0)).getDescripcion()
-					+ " desde "
-					+ formatoCorrecto.format(fechaDesde2)
-					+ " hasta  "
-					+ formatoCorrecto.format(fechaHasta2)
-					+ "\n"
-					+ "NO EXISTEN VENTAS REGISTRADAS EN ESTE INTERVALO DE TIEMPO");
+					+ " desde " + formatoCorrecto.format(fechaDesde2)
+					+ " hasta  " + formatoCorrecto.format(fechaHasta2) + "\n"
+					+ "NO EXISTEN DATOS EN ESTE INTERVALO DE TIEMPO");
 
 	}
 
@@ -253,9 +222,6 @@ public class CGraficador extends CGenerico {
 				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(aliado2,
 						fechaDesde2, fechaHasta2, ids);
 		chart.getYAxis().setTitle("Total porcentaje de Ventas por Marca");
-		// chart.getPlotOptions().getPie().setShadow(false);
-		// chart.getPlotOptions().getPie().setCenter("50%", "50%");
-		// chart.getTooltip().setValueSuffix("%");
 		Series serieMarca = chart.getSeries();
 		serieMarca.setName("Porcentaje Participacion:");
 		if (!ventas.isEmpty()) {
@@ -276,7 +242,6 @@ public class CGraficador extends CGenerico {
 					vendidoMarca = vendidoMarca + ventas.get(i).getCantidad();
 				} else {
 					double porcentaje = 0;
-					// vendidoMarca = Math.rint(vendidoMarca * 10) / 10;
 					if (valorTotal > 0)
 						porcentaje = Math
 								.rint((vendidoMarca * 100 / valorTotal) * 10) / 10;
@@ -342,7 +307,6 @@ public class CGraficador extends CGenerico {
 						fechaDesde2, fechaHasta2, ids);
 		chart.getYAxis().setTitle("Total porcentaje de Ventas por Marca");
 		chart.getPlotOptions().getPie().setShadow(false);
-		// chart.getPlotOptions().getPie().setCenter("50%", "50%");
 		chart.getTooltip().setValueSuffix(" Cajas");
 		Series serieMarca = chart.getSeries();
 		Series serieProducto = chart.getSeries(1);
@@ -368,30 +332,22 @@ public class CGraficador extends CGenerico {
 						vendidoProducto = vendidoProducto
 								+ ventas.get(i).getCantidad();
 					else {
-						// modelo = new DefaultCategoryModel();
 						vendidoMarca = vendidoMarca + vendidoProducto;
 						Point versionPoint = new Point(producto,
 								Math.rint(vendidoProducto * 100) / 100);
 						versionPoint.setColor(colors.get(j));
-						// if (versionValue < 1) {
-						// versionPoint.getDataLabels().setEnabled(false);
-						// }
 						serieProducto.addPoint(versionPoint);
 						producto = ventas.get(i).getMaestroProducto()
 								.getCodigoProductoDusa();
 						vendidoProducto = 0;
 						i--;
-						// j++;
 					}
 				} else {
 
 					Point browserPoint = new Point(marca,
 							Math.rint(vendidoMarca * 100) / 100);
 					browserPoint.setColor(colors.get(j));
-					// if (serieMarca < 5)
-					// browserPoint.getDataLabels().setEnabled(false);
 					serieMarca.addPoint(browserPoint);
-
 					vendidoMarca = 0;
 					marca = ventas.get(i).getMaestroProducto()
 							.getMaestroMarca().getMarcaDusa();
@@ -399,7 +355,6 @@ public class CGraficador extends CGenerico {
 					j++;
 				}
 			}
-			// modelo = new DefaultCategoryModel();
 			Point browserPoint = new Point(marca,
 					Math.rint(vendidoMarca * 100) / 100);
 			browserPoint.setColor(colors.get(j));
@@ -444,78 +399,54 @@ public class CGraficador extends CGenerico {
 						fechaDesde2, fechaHasta2, ids);
 		CategoryModel modelo = new DefaultCategoryModel();
 		if (!ventas.isEmpty()) {
-			String marca = ventas.get(0).getMaestroProducto().getMaestroMarca()
-					.getMarcaDusa();
+
 			String fecha = formatoFecha.format(ventas.get(0).getFechaFactura());
 			double vendido = 0;
 			DateFormat formatoAnno = new SimpleDateFormat("yyyy");
 			DateFormat formatoMes = new SimpleDateFormat("MM");
-			for (int i = 0; i < ventas.size(); i++) {
-				if (ventas.get(i).getMaestroProducto().getMaestroMarca()
-						.getMarcaDusa().equals(marca)) {
-					if (formatoFecha.format(ventas.get(i).getFechaFactura())
-							.equals(fecha))
-						vendido = vendido + ventas.get(i).getCantidad();
-					else {
-						modelo.setValue("Vendido", fecha,
-								Math.rint(vendido * 100) / 100);
-						fecha = formatoFecha.format(ventas.get(i)
-								.getFechaFactura());
-						vendido = 0;
 
-						int anno = Integer.parseInt(formatoAnno.format(ventas
-								.get(i).getFechaFactura()));
-						int mes = Integer.parseInt(formatoMes.format(ventas
-								.get(i).getFechaFactura()));
-						PlanVentaPK pk = new PlanVentaPK();
-						pk.setAnno(anno);
-						pk.setMes(mes);
-						pk.setVendedorAliado(ventas.get(i).getNombreVendedor());
-						pk.setZonaAliado(ventas.get(i).getZonaAliado());
-						pk.setMaestroAliado(ventas.get(i).getMaestroAliado());
-						pk.setMaestroProducto(ventas.get(i)
-								.getMaestroProducto());
-						Integer plan = servicioPlan.sumarPlanAliado(
-								ventas.get(i).getMaestroAliado(), ventas.get(i)
-										.getMaestroProducto(), anno, mes);
-						// if (plan != null) {
-						modelo.setValue("Planificado", fecha, plan);
-						// } else {
-						// modelo.setValue("Planificado", fecha, 0);
-						// }
-						i--;
-					}
-				} else {
-					marca = ventas.get(i).getMaestroProducto()
-							.getMaestroMarca().getMarcaDusa();
+			int annoPlanDesde = Integer.parseInt(formatoAnno
+					.format(fechaDesde2));
+			int mesPlanDesde = Integer.parseInt(formatoMes.format(fechaDesde2));
+			int annoPlanHasta = Integer.parseInt(formatoAnno
+					.format(fechaHasta2));
+			int mesPlanHasta = Integer.parseInt(formatoMes.format(fechaHasta2));
+			do {
+				if (mesPlanDesde == 13) {
+					mesPlanDesde = 1;
+					annoPlanDesde = annoPlanDesde + 1;
+				}
+				Double plan2 = servicioPlan.sumarPlanAliado(ventas.get(0)
+						.getMaestroAliado(),
+						ventas.get(0).getMaestroProducto(), annoPlanDesde,
+						mesPlanDesde);
+				Date fechaFormato = new Date();
+				try {
+					fechaFormato = formatoNuevo.parse(annoPlanDesde + "-"
+							+ mesPlanDesde);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				String fechaReal = formatoFecha.format(fechaFormato);
+				modelo.setValue("Planificado", fechaReal, plan2);
+				mesPlanDesde = mesPlanDesde + 1;
+			} while (annoPlanDesde != annoPlanHasta
+					|| mesPlanDesde != mesPlanHasta + 1);
+
+			for (int i = 0; i < ventas.size(); i++) {
+				if (formatoFecha.format(ventas.get(i).getFechaFactura())
+						.equals(fecha))
+					vendido = vendido + ventas.get(i).getCantidad();
+				else {
+					modelo.setValue("Vendido", fecha,
+							Math.rint(vendido * 100) / 100);
+					fecha = formatoFecha
+							.format(ventas.get(i).getFechaFactura());
+					vendido = 0;
 					i--;
 				}
 			}
 			modelo.setValue("Vendido", fecha, Math.rint(vendido * 100) / 100);
-			int anno = Integer.parseInt(formatoAnno.format(ventas.get(
-					ventas.size() - 1).getFechaFactura()));
-			int mes = Integer.parseInt(formatoMes.format(ventas.get(
-					ventas.size() - 1).getFechaFactura()));
-			PlanVentaPK pk = new PlanVentaPK();
-			pk.setAnno(anno);
-			pk.setMes(mes);
-			pk.setVendedorAliado(ventas.get(ventas.size() - 1)
-					.getNombreVendedor());
-			pk.setZonaAliado(ventas.get(ventas.size() - 1).getZonaAliado());
-			pk.setMaestroAliado(ventas.get(ventas.size() - 1)
-					.getMaestroAliado());
-			pk.setMaestroProducto(ventas.get(ventas.size() - 1)
-					.getMaestroProducto());
-			Integer plan = servicioPlan.sumarPlanAliado(
-					ventas.get(ventas.size() - 1).getMaestroAliado(), ventas
-							.get(ventas.size() - 1).getMaestroProducto(), anno,
-					mes);
-			// if (plan != null) {
-			modelo.setValue("Planificado", fecha, plan);
-			// } else {
-			// modelo.setValue("Planificado", fecha, 0);
-			// }
-
 		}
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
 		chart.setModel(modelo);
@@ -569,7 +500,6 @@ public class CGraficador extends CGenerico {
 							.equals(fecha))
 						vendido = vendido + ventas.get(i).getCantidad();
 					else {
-						// modelo = new DefaultCategoryModel();
 						modelo.setValue(marca, fecha,
 								Math.rint(vendido * 100) / 100);
 						fecha = formatoFecha.format(ventas.get(i)
@@ -583,7 +513,6 @@ public class CGraficador extends CGenerico {
 					i--;
 				}
 			}
-			// modelo = new DefaultCategoryModel();
 			modelo.setValue(marca, fecha, Math.rint(vendido * 100) / 100);
 		}
 

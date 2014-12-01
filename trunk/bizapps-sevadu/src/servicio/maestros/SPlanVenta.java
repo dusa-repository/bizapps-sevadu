@@ -42,7 +42,7 @@ public class SPlanVenta {
 		return planVentaDAO.findByIdMaestroProductoCodigoProductoDusa(clave);
 	}
 
-	public Integer sumarPlanAliado(MaestroAliado maestroAliado,
+	public Double sumarPlanAliado(MaestroAliado maestroAliado,
 			MaestroProducto maestroProducto, int anno, int mes) {
 		return planVentaDAO
 				.sumByIdMaestroAliadoAnIdMaestroProductoAndIdMesAndIdAnno(
