@@ -1,5 +1,8 @@
 package com.dusa.thermometer.service.bf;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dusa.thermometer.service.config.ActivationConfig;
 import com.dusa.thermometer.service.to.ActivationTo;
 import com.dusa.thermometer.service.to.HeaderTo;
@@ -10,9 +13,6 @@ import com.dusa.thermometer.service.transformation.SupervisorData;
 import com.dusa.thermometer.service.transformation.ThermometerData;
 import com.dusa.thermometer.service.util.HtmlGenerator;
 import com.dusa.thermometer.service.util.ThermometerUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ThermometerBf {
 

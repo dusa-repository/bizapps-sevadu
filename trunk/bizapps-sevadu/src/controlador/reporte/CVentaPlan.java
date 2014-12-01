@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import modelo.maestros.MaestroAliado;
-import modelo.maestros.MaestroProducto;
 import modelo.maestros.PlanVenta;
 import modelo.maestros.Venta;
 import modelo.pk.PlanVentaPK;
@@ -17,7 +15,6 @@ import modelo.termometro.TermometroCliente;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zul.Footer;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;

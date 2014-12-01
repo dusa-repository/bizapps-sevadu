@@ -2,12 +2,6 @@ package com.dusa.thermometer.view.controller;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-
-import com.dusa.thermometer.Test;
-import com.dusa.thermometer.service.bf.ProcessDataBf;
-import com.dusa.thermometer.service.bf.ThermometerBf;
-import com.dusa.thermometer.service.to.ThermometerTo;
 
 import modelo.maestros.MaestroAliado;
 
@@ -16,7 +10,11 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Html;
-import org.zkoss.zul.ListModelList;
+
+import com.dusa.thermometer.Test;
+import com.dusa.thermometer.service.bf.ProcessDataBf;
+import com.dusa.thermometer.service.bf.ThermometerBf;
+import com.dusa.thermometer.service.to.ThermometerTo;
 
 public class ThermometerCtrl extends SelectorComposer<Component> {
 

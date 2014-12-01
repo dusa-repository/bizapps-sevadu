@@ -48,7 +48,6 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Row;
-import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
@@ -57,6 +56,7 @@ import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
+
 import controlador.maestros.CGenerico;
 
 public class CReporte extends CGenerico {
@@ -637,7 +637,6 @@ public class CReporte extends CGenerico {
 
 			} catch (JRException ex) {
 				ex.printStackTrace();
-				System.out.println(ex.toString());
 			}
 
 			if (conexion != null) {
@@ -645,7 +644,6 @@ public class CReporte extends CGenerico {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("Error de conexión: " + e.getMessage());
 			System.exit(4);
 		}
 		return fichero;

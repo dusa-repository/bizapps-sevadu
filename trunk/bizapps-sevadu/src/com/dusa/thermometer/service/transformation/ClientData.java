@@ -1,11 +1,15 @@
 package com.dusa.thermometer.service.transformation;
 
-import com.dusa.thermometer.service.to.ActivationTo;
-import com.dusa.thermometer.service.util.HtmlGenerator;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_ACTIVE;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_ACTIVE_OBJECTIVE;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_CLIENT_CODE;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_CLIENT_NAME;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_NOT_ACTIVATE_OBJECTIVE;
 
 import java.util.List;
 
-import static com.dusa.thermometer.service.config.ActivationConfig.*;
+import com.dusa.thermometer.service.to.ActivationTo;
+import com.dusa.thermometer.service.util.HtmlGenerator;
 
 public class ClientData extends ThermometerData {
 

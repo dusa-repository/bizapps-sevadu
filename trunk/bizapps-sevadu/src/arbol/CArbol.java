@@ -41,6 +41,7 @@ import org.zkoss.zul.West;
 
 import componente.Mensaje;
 import componente.Validador;
+
 import controlador.maestros.CGenerico;
 
 public class CArbol extends CGenerico {
@@ -54,9 +55,8 @@ public class CArbol extends CGenerico {
 	private Label etiqueta;
 	@Wire
 	private Image imagenes;
-	TreeModel _model;
+	TreeModel<?> _model;
 	URL url = getClass().getResource("/controlador/seguridad/usuario.png");
-	// List<String> listmenu1 = new ArrayList<String>();
 	@Wire
 	private Tab tab;
 	@Wire
@@ -65,9 +65,6 @@ public class CArbol extends CGenerico {
 	private West west;
 	@Wire
 	private Listbox ltbRoles;
-	private Tabbox tabBox2;
-	private Include contenido2;
-	private Tab tab2;
 	Mensaje msj = new Mensaje();
 	HashMap<String, Object> mapGeneral = new HashMap<String, Object>();
 
@@ -100,7 +97,7 @@ public class CArbol extends CGenerico {
 	}
 
 	/* Permite asignarle los nodos cargados con el metodo getFooRoot() al arbol */
-	public TreeModel getModel() {
+	public TreeModel<?> getModel() {
 		if (_model == null) {
 			_model = new MArbol(getFooRoot());
 		}
@@ -251,40 +248,7 @@ public class CArbol extends CGenerico {
 					arbolMenu.getSelectedItem().setOpen(false);
 			}
 		}
-		tabBox2 = tabBox;
-		contenido2 = contenido;
-		tab2 = tab;
 	}
-
-	// public void abrirVentanas(Arbol arbolItem) {
-	// boolean abrir = true;
-	// Tab taba = new Tab();
-	//
-	// if (!arbolItem.getUrl().equals("inicio")) {
-	// for (int i = 0; i < tabs.size(); i++) {
-	// if (tabs.get(i).getLabel().equals(arbolItem.getNombre())) {
-	// abrir = false;
-	// taba = tabs.get(i);
-	// }
-	// }
-	// if (abrir) {
-	// String ruta = "/vistas/" + arbolItem.getUrl() + ".zul";
-	// contenido2 = new Include();
-	// contenido2.setSrc(null);
-	// contenido2.setSrc(ruta);
-	//
-	// Tab newTab = new Tab(arbolItem.getNombre());
-	// newTab.setSelected(true);
-	// Tabpanel newTabpanel = new Tabpanel();
-	// newTabpanel.appendChild(contenido2);
-	// tabBox2.getTabs().insertBefore(newTab, tab2);
-	// newTabpanel.setParent(tabBox2.getTabpanels());
-	// tabs.add(newTab);
-	// } else {
-	// taba.setSelected(true);
-	// }
-	// }
-	// }
 
 	/* Metodo que permite abrir la ventana de editar usuario en una pestaña */
 	@Listen("onClick = #lblEditarCuenta")

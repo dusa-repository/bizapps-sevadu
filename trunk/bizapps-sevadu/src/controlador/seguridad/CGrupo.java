@@ -20,9 +20,6 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
@@ -34,11 +31,9 @@ import org.zkoss.zul.Treeitem;
 
 import arbol.MArbol;
 import arbol.Nodos;
-
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
-
 import controlador.maestros.CGenerico;
 
 public class CGrupo extends CGenerico {
@@ -62,11 +57,12 @@ public class CGrupo extends CGenerico {
 	@Wire
 	private Groupbox gpxRegistro;
 
-	TreeModel _model;
+	TreeModel<?> _model;
 	Catalogo<Grupo> catalogo;
 	public static List<String> funcionalidades = new ArrayList<String>();
 	Botonera botonera;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void inicializar() throws IOException {
 		HashMap<String, Object> map = (HashMap<String, Object>) Sessions
@@ -87,6 +83,8 @@ public class CGrupo extends CGenerico {
 		mostrarCatalogo();
 
 		botonera = new Botonera() {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void seleccionar() {
@@ -131,7 +129,6 @@ public class CGrupo extends CGenerico {
 					Set<Arbol> arboles = new HashSet<Arbol>();
 					Treechildren treeChildren = treeGrupo.getTreechildren();
 					Collection<Treeitem> lista = treeChildren.getItems();
-					String nombreGrupo = txtNombreGrupo.getValue();
 					for (int i = 0; i < listaArbol.size(); i++) {
 						for (Iterator<?> iterator = lista.iterator(); iterator
 								.hasNext();) {
@@ -247,6 +244,7 @@ public class CGrupo extends CGenerico {
 		final List<Grupo> grupos = servicioGrupo.buscarTodosOrdenados();
 		catalogo = new Catalogo<Grupo>(divCatalogoGrupo, "Catalogo de Grupos",
 				grupos, false, false, false, "Nombre") {
+			private static final long serialVersionUID = 1L;
 			@Override
 			protected String[] crearRegistros(Grupo grupo) {
 				String[] registros = new String[1];
@@ -400,116 +398,95 @@ public class CGrupo extends CGenerico {
 		}
 	}
 
-	// @Listen("onSelect = #treeGrupo")
-	// public void selectedNode(SelectEvent<Treeitem, String> event) {
-	// if (!validarNodoHijo(event)) {
-	// List<Arbol> listaArbol2 = servicioArbol.listarArbol();
-	// Treechildren treeChildren = treeGrupo.getTreechildren();
-	// Collection<Treeitem> listaItems = treeChildren.getItems();
-	// Treeitem itemSeleccionado = event.getReference();
-	// Treecell celda = (Treecell) itemSeleccionado.getChildren().get(0)
-	// .getChildren().get(0);
-	// long idArbol = Long.valueOf(celda.getContext());
-	// List<Long> ids = new ArrayList<Long>();
-	// for (int o = 0; o < listaArbol2.size(); o++) {
-	// long id = listaArbol2.get(o).getIdArbol();
-	// ids.add(id);
-	// }
-	// Collections.sort(ids);
-	// List<Arbol> listaArbol = new ArrayList<Arbol>();
-	// for (int y = 0; y < ids.size(); y++) {
-	// listaArbol.add(servicioArbol.buscar(ids.get(y)));
-	// }
-	// String nombreItem = String.valueOf(itemSeleccionado.getLabel());
-	// if (itemSeleccionado.isSelected()) {
-	// funcionalidades.add(nombreItem);
-	// ltbFuncionalidadesSeleccionados
-	// .setModel(new ListModelList<String>(funcionalidades));
-	// } else {
-	// List<Listitem> listaFuncionalidadesSeleccionadas =
-	// ltbFuncionalidadesSeleccionados
-	// .getItems();
-	// for (int i = 0; i < listaFuncionalidadesSeleccionadas.size(); i++) {
-	// if (listaFuncionalidadesSeleccionadas.get(i).getLabel()
-	// .equals(nombreItem)) {
-	// ltbFuncionalidadesSeleccionados
-	// .removeItemAt(listaFuncionalidadesSeleccionadas
-	// .get(i).getIndex());
-	// }
-	// }
-	// funcionalidades.remove(nombreItem);
-	// ltbFuncionalidadesSeleccionados
-	// .setModel(new ListModelList<String>(funcionalidades));
-	// }
-	//
-	// Arbol arbolItem = servicioArbol.buscarPorId(idArbol);
-	// listaArbol.remove(arbolItem);
-	// long temp = arbolItem.getPadre();
-	// long temp2 = 0;
-	// long temp3 = temp;
-	// boolean encontradoHermanoHijo = false;
-	// boolean encontradoHermanoPadre = false;
-	// for (int i = 0; i < listaArbol.size(); i++) {
-	// if (temp == listaArbol.get(i).getIdArbol()) {
-	// for (Iterator<?> iterator = listaItems.iterator(); iterator
-	// .hasNext();) {
-	// Treeitem item = (Treeitem) iterator.next();
-	// if (listaArbol.get(i).getNombre()
-	// .equals(item.getLabel())) {
-	// temp2 = listaArbol.get(i).getPadre();
-	// for (int j = 0; j < listaArbol.size(); j++) {
-	// if (temp3 == listaArbol.get(j).getPadre()) {
-	// for (Iterator<?> iterator2 = listaItems
-	// .iterator(); iterator2.hasNext();) {
-	// Treeitem item2 = (Treeitem) iterator2
-	// .next();
-	// if (listaArbol.get(j).getNombre()
-	// .equals(item2.getLabel())) {
-	// if (item2.isSelected()) {
-	// encontradoHermanoHijo = true;
-	// }
-	// }
-	// }
-	// }
-	// if (temp2 == listaArbol.get(j).getPadre()
-	// && listaArbol.get(i).getIdArbol() != listaArbol
-	// .get(j).getIdArbol()) {
-	// for (Iterator<?> iterator2 = listaItems
-	// .iterator(); iterator2.hasNext();) {
-	// Treeitem item2 = (Treeitem) iterator2
-	// .next();
-	// if (listaArbol.get(j).getNombre()
-	// .equals(item2.getLabel())) {
-	// if (item2.isSelected()) {
-	// encontradoHermanoPadre = true;
-	// }
-	// }
-	// }
-	// }
-	// }
-	// if (!item.isSelected()) {
-	// item.setSelected(true);
-	// } else {
-	// if (!encontradoHermanoHijo
-	// && !encontradoHermanoPadre) {
-	// item.setSelected(false);
-	// }
-	// if (!encontradoHermanoHijo
-	// && encontradoHermanoPadre
-	// && !itemSeleccionado.isSelected()) {
-	// item.setSelected(false);
-	// encontradoHermanoHijo = true;
-	// encontradoHermanoPadre = false;
-	// }
-	// }
-	// }
-	// }
-	// temp = listaArbol.get(i).getPadre();
-	// i = -1;
-	// }
-	// }
-	// }
-	// }
+	@Listen("onSelect = #treeGrupo")
+	public void selectedNode(SelectEvent<Treeitem, String> event) {
+		if (!validarNodoHijo(event)) {
+			List<Arbol> listaArbol2 = servicioArbol.listarArbol();
+			Treechildren treeChildren = treeGrupo.getTreechildren();
+			Collection<Treeitem> listaItems = treeChildren.getItems();
+			Treeitem itemSeleccionado = event.getReference();
+			Treecell celda = (Treecell) itemSeleccionado.getChildren().get(0)
+					.getChildren().get(0);
+			long idArbol = Long.valueOf(celda.getContext());
+			List<Long> ids = new ArrayList<Long>();
+			for (int o = 0; o < listaArbol2.size(); o++) {
+				long id = listaArbol2.get(o).getIdArbol();
+				ids.add(id);
+			}
+			Collections.sort(ids);
+			List<Arbol> listaArbol = new ArrayList<Arbol>();
+			for (int y = 0; y < ids.size(); y++) {
+				listaArbol.add(servicioArbol.buscar(ids.get(y)));
+			}
+
+			Arbol arbolItem = servicioArbol.buscarPorId(idArbol);
+			listaArbol.remove(arbolItem);
+			long temp = arbolItem.getPadre();
+			long temp2 = 0;
+			long temp3 = temp;
+			boolean encontradoHermanoHijo = false;
+			boolean encontradoHermanoPadre = false;
+			for (int i = 0; i < listaArbol.size(); i++) {
+				if (temp == listaArbol.get(i).getIdArbol()) {
+					for (Iterator<?> iterator = listaItems.iterator(); iterator
+							.hasNext();) {
+						Treeitem item = (Treeitem) iterator.next();
+						if (listaArbol.get(i).getNombre()
+								.equals(item.getLabel())) {
+							temp2 = listaArbol.get(i).getPadre();
+							for (int j = 0; j < listaArbol.size(); j++) {
+								if (temp3 == listaArbol.get(j).getPadre()) {
+									for (Iterator<?> iterator2 = listaItems
+											.iterator(); iterator2.hasNext();) {
+										Treeitem item2 = (Treeitem) iterator2
+												.next();
+										if (listaArbol.get(j).getNombre()
+												.equals(item2.getLabel())) {
+											if (item2.isSelected()) {
+												encontradoHermanoHijo = true;
+											}
+										}
+									}
+								}
+								if (temp2 == listaArbol.get(j).getPadre()
+										&& listaArbol.get(i).getIdArbol() != listaArbol
+												.get(j).getIdArbol()) {
+									for (Iterator<?> iterator2 = listaItems
+											.iterator(); iterator2.hasNext();) {
+										Treeitem item2 = (Treeitem) iterator2
+												.next();
+										if (listaArbol.get(j).getNombre()
+												.equals(item2.getLabel())) {
+											if (item2.isSelected()) {
+												encontradoHermanoPadre = true;
+											}
+										}
+									}
+								}
+							}
+							if (!item.isSelected()) {
+								item.setSelected(true);
+							} else {
+								if (!encontradoHermanoHijo
+										&& !encontradoHermanoPadre) {
+									item.setSelected(false);
+								}
+								if (!encontradoHermanoHijo
+										&& encontradoHermanoPadre
+										&& !itemSeleccionado.isSelected()) {
+									item.setSelected(false);
+									encontradoHermanoHijo = true;
+									encontradoHermanoPadre = false;
+								}
+							}
+						}
+					}
+					temp = listaArbol.get(i).getPadre();
+					i = -1;
+				}
+			}
+		}
+	}
 
 	public void llenarFuncionalidadesSeleccionadas() {
 		Grupo grupo = servicioGrupo.buscarGrupo(id);
@@ -534,36 +511,56 @@ public class CGrupo extends CGenerico {
 	}
 
 	public boolean validarNodoHijo(SelectEvent<Treeitem, String> event) {
+
 		Treeitem itemSeleccionado = event.getReference();
-		Treecell celda = (Treecell) itemSeleccionado.getChildren().get(0)
-				.getChildren().get(0);
-		long item = Long.valueOf(celda.getContext());
-		Arbol arbol = servicioArbol.buscarPorId(item);
-		long padre = arbol.getIdArbol();
-		boolean encontrado = false;
-		List<Arbol> listaArbol = servicioArbol.listarArbol();
-		for (int i = 0; i < listaArbol.size(); i++) {
-			if (padre == listaArbol.get(i).getPadre()) {
-				if (itemSeleccionado.isSelected()) {
-					Messagebox.show("Seleccione las Funcionalidades", "Alerta",
-							Messagebox.OK, Messagebox.EXCLAMATION);
-					itemSeleccionado.setSelected(false);
-					i = listaArbol.size();
-					encontrado = true;
-				} else {
-					Messagebox.show("Seleccione las Funcionalidades", "Error",
-							Messagebox.OK, Messagebox.ERROR);
-					itemSeleccionado.setSelected(true);
-					i = listaArbol.size();
-					encontrado = true;
+		if (itemSeleccionado.isSelected()) {
+			itemSeleccionado.setOpen(true);
+			Treecell celda = (Treecell) itemSeleccionado.getChildren().get(0)
+					.getChildren().get(0);
+			long item = Long.valueOf(celda.getContext());
+			if (itemSeleccionado.getChildren().size() > 1) {
+				Treechildren treeChildren = (Treechildren) itemSeleccionado
+						.getChildren().get(1);
+				Collection<Treeitem> listaItems = treeChildren.getItems();
+				for (Iterator<?> iterator = listaItems.iterator(); iterator
+						.hasNext();) {
+					Treeitem itemTree = (Treeitem) iterator.next();
+					celda = (Treecell) itemTree.getChildren().get(0)
+							.getChildren().get(0);
+					long itemHijo = Long.valueOf(celda.getContext());
+					Arbol arbol = servicioArbol.buscarPorId(itemHijo);
+					if (item == arbol.getPadre()) {
+						itemTree.setSelected(true);
+					}
 				}
-				return encontrado;
+
+			}
+		} else {
+			itemSeleccionado.setOpen(true);
+			Treecell celda = (Treecell) itemSeleccionado.getChildren().get(0)
+					.getChildren().get(0);
+			long item = Long.valueOf(celda.getContext());
+			if (itemSeleccionado.getChildren().size() > 1) {
+				Treechildren treeChildren = (Treechildren) itemSeleccionado
+						.getChildren().get(1);
+				Collection<Treeitem> listaItems = treeChildren.getItems();
+				for (Iterator<?> iterator = listaItems.iterator(); iterator
+						.hasNext();) {
+					Treeitem itemTree = (Treeitem) iterator.next();
+					celda = (Treecell) itemTree.getChildren().get(0)
+							.getChildren().get(0);
+					long itemHijo = Long.valueOf(celda.getContext());
+					Arbol arbol = servicioArbol.buscarPorId(itemHijo);
+					if (item == arbol.getPadre()) {
+						itemTree.setSelected(false);
+					}
+				}
 			}
 		}
-		return encontrado;
+		return false;
 	}
 
-	public TreeModel getModel() {
+	public TreeModel<?> getModel() {
 		if (_model == null) {
 			_model = new MArbol(getFooRoot());
 		}

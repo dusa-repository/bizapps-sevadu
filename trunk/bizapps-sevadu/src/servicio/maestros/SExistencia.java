@@ -1,8 +1,9 @@
 package servicio.maestros;
 
+import interfacedao.maestros.IExistenciaDAO;
+
 import java.util.List;
 
-import interfacedao.maestros.IExistenciaDAO;
 import modelo.maestros.Existencia;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroProducto;

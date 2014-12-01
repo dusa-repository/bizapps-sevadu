@@ -1,8 +1,9 @@
 package servicio.maestros;
 
+import interfacedao.maestros.IMarcaActivadaVendedorDAO;
+
 import java.util.List;
 
-import interfacedao.maestros.IMarcaActivadaVendedorDAO;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.pk.MarcaActivadaPK;

@@ -61,7 +61,6 @@ public class CCargarArchivo extends CGenerico {
 	private Media media;
 	private String titulo;
 	private Integer tipo;
-	private String valorNoEncontrado = "El valor que hace referencia no se ha encontrado en la tabla:";
 	private String udcNoEncontrada = "La siguiente UDC no fue encontrada.";
 	private String errorLongitud = "La siguiente ubicacion excede el limite establecido de longitud:";
 	private String archivoConError = "Existe un error en el siguiente archivo adjunto: ";

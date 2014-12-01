@@ -1,14 +1,16 @@
 package com.dusa.thermometer;
 
-import com.dusa.thermometer.service.to.ActivationTo;
-import com.dusa.thermometer.service.to.HeaderTo;
-import com.dusa.thermometer.service.transformation.*;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import modelo.maestros.Cliente;
+import modelo.maestros.MaestroAliado;
+import modelo.maestros.MaestroMarca;
+import modelo.maestros.MarcaActivadaVendedor;
+import modelo.maestros.Venta;
+import modelo.pk.MarcaActivadaPK;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -17,12 +19,14 @@ import servicio.maestros.SCliente;
 import servicio.maestros.SMaestroMarca;
 import servicio.maestros.SMarcaActivadaVendedor;
 import servicio.maestros.SVenta;
-import modelo.maestros.Cliente;
-import modelo.maestros.MaestroAliado;
-import modelo.maestros.MaestroMarca;
-import modelo.maestros.MarcaActivadaVendedor;
-import modelo.maestros.Venta;
-import modelo.pk.MarcaActivadaPK;
+
+import com.dusa.thermometer.service.to.ActivationTo;
+import com.dusa.thermometer.service.to.HeaderTo;
+import com.dusa.thermometer.service.transformation.ClientData;
+import com.dusa.thermometer.service.transformation.SellerData;
+import com.dusa.thermometer.service.transformation.SupervisorData;
+import com.dusa.thermometer.service.transformation.ThermometerData;
+import com.dusa.thermometer.service.transformation.ZoneData;
 
 public class Test {
 

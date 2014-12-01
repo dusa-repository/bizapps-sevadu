@@ -1,10 +1,10 @@
 package com.dusa.thermometer.service.transformation;
 
-import com.dusa.thermometer.service.to.TotalTo;
-import com.dusa.thermometer.service.util.ThermometerUtil;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.dusa.thermometer.service.to.TotalTo;
+import com.dusa.thermometer.service.util.ThermometerUtil;
 
 public abstract class ThermometerData {
 

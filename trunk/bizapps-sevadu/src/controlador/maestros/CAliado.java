@@ -1,23 +1,19 @@
 package controlador.maestros;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import modelo.maestros.Cliente;
 import modelo.maestros.Existencia;
-import modelo.maestros.F0004;
 import modelo.maestros.F0005;
 import modelo.maestros.MaestroAliado;
-import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;
 import modelo.maestros.MappingProducto;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.PlanVenta;
 import modelo.maestros.Venta;
-import modelo.pk.F0004PK;
 import modelo.seguridad.Usuario;
 
 import org.zkoss.zk.ui.Sessions;
@@ -434,7 +430,6 @@ public class CAliado extends CGenerico {
 				.buscarParaUDCOrdenados("00", "00");
 		buscadorVendedor = new BuscadorUDC("Vendedor", 100, listF0005, true,
 				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		// false, false, "00", "00", "32.6%", "8%", "10%", "49.4%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -447,7 +442,6 @@ public class CAliado extends CGenerico {
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "01");
 		buscadorZona = new BuscadorUDC("Zona", 100, listF0005, true, false,
 				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		// false, "00", "01", "33.3%", "8%", "10%", "48.8%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -460,7 +454,6 @@ public class CAliado extends CGenerico {
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "02");
 		buscadorEstado = new BuscadorUDC("Estado", 100, listF0005, true, false,
 				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		// false, "00", "02", "33.3%", "8%", "10%", "48.8%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -473,7 +466,6 @@ public class CAliado extends CGenerico {
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "03");
 		buscadorCiudad = new BuscadorUDC("Ciudad", 100, listF0005, true, false,
 				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		// false, "00", "03", "32.6%", "8%", "10%", "49.4%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -486,7 +478,6 @@ public class CAliado extends CGenerico {
 
 	private void mostrarCatalogo() {
 		listaGeneral = servicioAliado.buscarTodosOrdenados();
-//		final List<MaestroAliado> listaObjetos = listaGeneral;
 		catalogo = new Catalogo<MaestroAliado>(catalogoAliado, "Aliado",
 				listaGeneral, false, false, false, "Codigo", "Nombre", "Zona",
 				"Vendedor") {

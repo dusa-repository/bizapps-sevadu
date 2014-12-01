@@ -1,5 +1,8 @@
 package servicio.termometro;
 
+import interfacedao.maestros.IPlanVentaDAO;
+import interfacedao.maestros.IVentaDAO;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
@@ -12,8 +15,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import interfacedao.maestros.IPlanVentaDAO;
-import interfacedao.maestros.IVentaDAO;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.PlanVenta;
 import modelo.termometro.TermometroCliente;

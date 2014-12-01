@@ -27,13 +27,13 @@ public class Nodos {
 
 	public void appendChild(Nodos child) {
 		if (_children == null)
-			_children = new ArrayList();
+			_children = new ArrayList<Nodos>();
 		_children.add(child);
 	}
 
 	public List<Nodos> getChildren() {
 		if (_children == null)
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		return _children;
 	}
 

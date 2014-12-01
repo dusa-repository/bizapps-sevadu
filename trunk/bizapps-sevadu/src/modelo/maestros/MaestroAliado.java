@@ -1,14 +1,22 @@
 package modelo.maestros;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
-import modelo.seguridad.Usuario;
-
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import modelo.seguridad.Usuario;
 
 /**
  * The persistent class for the maestro_aliado database table.

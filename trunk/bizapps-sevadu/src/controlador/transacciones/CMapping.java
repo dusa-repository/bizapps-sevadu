@@ -1,23 +1,14 @@
 package controlador.transacciones;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import modelo.maestros.MaestroAliado;
-import modelo.maestros.MaestroProducto;
 import modelo.maestros.MappingProducto;
 import modelo.seguridad.Arbol;
-import modelo.seguridad.Usuario;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,12 +26,13 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import servicio.maestros.SMaestroAliado;
-import servicio.maestros.SMaestroProducto;
 import servicio.maestros.SMappingProducto;
+
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
+
 import controlador.maestros.CGenerico;
 
 public class CMapping extends CGenerico {

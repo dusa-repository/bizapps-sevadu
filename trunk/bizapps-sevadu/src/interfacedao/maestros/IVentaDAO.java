@@ -1,12 +1,10 @@
 package interfacedao.maestros;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
-import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;
 import modelo.maestros.TipoCliente;
 import modelo.maestros.Venta;

@@ -5,14 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 import modelo.maestros.ConfiguracionEnvioCorreo;
 import modelo.maestros.F0005;
-import modelo.maestros.MaestroAliado;
 import modelo.seguridad.Usuario;
 
 import org.zkoss.zk.ui.Sessions;

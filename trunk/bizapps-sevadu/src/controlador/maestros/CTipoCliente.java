@@ -8,7 +8,6 @@ import java.util.List;
 import modelo.maestros.Cliente;
 import modelo.maestros.TipoCliente;
 import modelo.maestros.Venta;
-import modelo.seguridad.Usuario;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
