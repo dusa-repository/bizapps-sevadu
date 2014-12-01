@@ -1,13 +1,15 @@
 package com.dusa.thermometer.service.transformation;
 
-import com.dusa.thermometer.service.to.TotalTo;
-import com.dusa.thermometer.service.util.HtmlGenerator;
-import com.dusa.thermometer.service.util.StringUtil;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_LABEL_FAILED;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_LABEL_SUCCESS;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_POPUP;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dusa.thermometer.service.config.ActivationConfig.*;
+import com.dusa.thermometer.service.to.TotalTo;
+import com.dusa.thermometer.service.util.HtmlGenerator;
+import com.dusa.thermometer.service.util.StringUtil;
 
 abstract class HeaderData extends ThermometerData {
 

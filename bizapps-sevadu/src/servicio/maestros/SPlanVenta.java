@@ -1,8 +1,9 @@
 package servicio.maestros;
 
+import interfacedao.maestros.IPlanVentaDAO;
+
 import java.util.List;
 
-import interfacedao.maestros.IPlanVentaDAO;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroProducto;
 import modelo.maestros.PlanVenta;

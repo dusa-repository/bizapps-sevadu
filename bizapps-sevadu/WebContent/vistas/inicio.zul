@@ -86,7 +86,7 @@
 					</div>
 				</hbox>
 			</north>
-			<west title="Menú" id="west" size="17%" splittable="true"
+			<west title="Menú" id="west" size="20%" splittable="true"
 				collapsible="true" autoscroll="true">
 				<tree id="arbolMenu" width="99%">
 					<template name="model">

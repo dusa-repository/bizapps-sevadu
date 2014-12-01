@@ -1,10 +1,13 @@
 package com.dusa.thermometer.service.util;
 
-import com.dusa.thermometer.service.to.TotalTo;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_LABEL_FAILED;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_LABEL_NEUTRAL;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_LABEL_SUCCESS;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_LABEL_TITLE;
 
 import java.util.List;
 
-import static com.dusa.thermometer.service.config.ActivationConfig.*;
+import com.dusa.thermometer.service.to.TotalTo;
 
 public class ThermometerUtil {
 

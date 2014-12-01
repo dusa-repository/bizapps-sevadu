@@ -1,8 +1,9 @@
 package servicio.maestros;
 
+import interfacedao.maestros.IConfiguracionEnvioCorreo;
+
 import java.util.List;
 
-import interfacedao.maestros.IConfiguracionEnvioCorreo;
 import modelo.maestros.ConfiguracionEnvioCorreo;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,38 +6,32 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.dusa.thermometer.Test;
-import com.dusa.thermometer.service.bf.ProcessDataBf;
-import com.dusa.thermometer.service.bf.ThermometerBf;
-import com.dusa.thermometer.service.to.ThermometerTo;
-
-import componente.Botonera;
-import componente.Catalogo;
-import componente.Mensaje;
-import componente.Validador;
-import controlador.maestros.CGenerico;
 import modelo.maestros.MaestroAliado;
 import modelo.seguridad.Arbol;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
-import org.zkoss.zul.Html;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.West;
 import org.zkoss.zul.Window;
+
+import componente.Botonera;
+import componente.Catalogo;
+import componente.Mensaje;
+import componente.Validador;
+
+import controlador.maestros.CGenerico;
 
 public class CTermometro2 extends CGenerico {
 
@@ -180,7 +174,7 @@ public class CTermometro2 extends CGenerico {
 			};
 			Button guardar = (Button) botonera.getChildren().get(3);
 			guardar.setLabel("Generar");
-			guardar.setSrc("/public/imagenes/botones/reporte.png");
+			guardar.setImage("/public/imagenes/botones/reporte.png");
 			botonera.getChildren().get(0).setVisible(false);
 			botonera.getChildren().get(1).setVisible(false);
 			botonera.getChildren().get(2).setVisible(false);

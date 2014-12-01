@@ -5,7 +5,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,24 +13,30 @@ import java.util.List;
 
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
-import modelo.maestros.PlanVenta;
 import modelo.maestros.Venta;
-import modelo.pk.PlanVentaPK;
-import modelo.termometro.TermometroCliente;
 
-import org.zkoss.chart.*;
-import org.zkoss.chart.model.*;
+import org.zkoss.chart.Chart;
+import org.zkoss.chart.Charts;
+import org.zkoss.chart.Color;
+import org.zkoss.chart.LinearGradient;
+import org.zkoss.chart.PaneBackground;
+import org.zkoss.chart.Point;
+import org.zkoss.chart.Series;
+import org.zkoss.chart.Tooltip;
+import org.zkoss.chart.YAxis;
+import org.zkoss.chart.model.CategoryModel;
+import org.zkoss.chart.model.DefaultCategoryModel;
+import org.zkoss.chart.model.DefaultDialModel;
+import org.zkoss.chart.model.DialModel;
+import org.zkoss.chart.model.DialModelScale;
 import org.zkoss.chart.plotOptions.DataLabels;
 import org.zkoss.chart.plotOptions.LinePlotOptions;
 import org.zkoss.chart.plotOptions.PieDataLabels;
 import org.zkoss.chart.plotOptions.PiePlotOptions;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zul.Div;
 import org.zkoss.zul.Window;
 
-import componente.Mensaje;
 import controlador.maestros.CGenerico;
 
 public class CGraficador extends CGenerico {

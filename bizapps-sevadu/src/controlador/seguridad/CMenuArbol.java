@@ -56,7 +56,6 @@ public class CMenuArbol extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				cerrar = (String) map.get("titulo");
-				System.out.println(tabs.size());
 				map.clear();
 				map = null;
 			}

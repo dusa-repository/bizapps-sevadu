@@ -1,11 +1,11 @@
 package com.dusa.thermometer.service.bf;
 
+import java.util.List;
+
 import com.dusa.thermometer.service.to.ActivationTo;
 import com.dusa.thermometer.service.to.TotalTo;
 import com.dusa.thermometer.service.transformation.ClientData;
 import com.dusa.thermometer.service.transformation.ThermometerData;
-
-import java.util.List;
 
 public class ProcessDataBf {
 

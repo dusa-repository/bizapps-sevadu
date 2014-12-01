@@ -1,8 +1,8 @@
 package com.dusa.thermometer.service.to;
 
-import com.dusa.thermometer.service.transformation.ThermometerData;
-
 import java.util.List;
+
+import com.dusa.thermometer.service.transformation.ThermometerData;
 
 public class ThermometerTo {
 

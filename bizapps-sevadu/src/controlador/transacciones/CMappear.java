@@ -2,14 +2,10 @@ package controlador.transacciones;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import modelo.maestros.MaestroAliado;
-import modelo.maestros.MaestroProducto;
 import modelo.maestros.MappingProducto;
-import modelo.pk.MappingProductoPK;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -25,6 +21,7 @@ import org.zkoss.zul.Window;
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
+
 import controlador.maestros.CGenerico;
 
 public class CMappear extends CGenerico {

@@ -1,9 +1,8 @@
 package servicio.maestros;
 
-import java.util.List;
-
 import interfacedao.maestros.ITipoClienteDAO;
-import interfacedao.seguridad.IArbolDAO;
+
+import java.util.List;
 
 import modelo.maestros.TipoCliente;
 

@@ -56,6 +56,7 @@ import servicio.seguridad.SArbol;
 import servicio.seguridad.SGrupo;
 import servicio.seguridad.SUsuario;
 import servicio.termometro.STermometro;
+
 import componente.Mensaje;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
@@ -332,7 +333,6 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	public String diaSemanaString(Calendar calendar) {
 		int dia = calendar.get(Calendar.DAY_OF_WEEK);
 		String diaSemana = "";
-		System.out.println("int" + dia);
 		switch (dia) {
 		case 2:
 			diaSemana = "Lunes";

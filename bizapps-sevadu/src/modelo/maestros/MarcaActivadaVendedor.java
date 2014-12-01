@@ -2,10 +2,12 @@ package modelo.maestros;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import modelo.pk.MarcaActivadaPK;
-import modelo.pk.PlanVentaPK;
 
 
 /**

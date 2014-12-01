@@ -1,7 +1,6 @@
 package componente;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -15,7 +14,6 @@ import modelo.maestros.F0004;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -71,7 +69,6 @@ public abstract class Catalogo<Clase> extends Window {
 		super("", "2", false);
 		this.setId("cmpCatalogo" + titulo);
 		this.setStyle("background-header:#FF7925; background: #f4f2f2");
-		// this.setWidth("auto");
 		crearLista(lista, campos, emergente, udc, hibrido,titulo);
 		lsbCatalogo.addEventListener(Events.ON_SELECT,
 				new EventListener<Event>() {
@@ -88,7 +85,7 @@ public abstract class Catalogo<Clase> extends Window {
 		exportador = new Button();
 		exportador.setTooltiptext("Exportar los Datos como un Archivo");
 		exportador.setSclass("catalogo");
-		exportador.setSrc("/public/imagenes/botones/exportar.png");
+		exportador.setImage("/public/imagenes/botones/exportar.png");
 		// ; float: right
 		exportador.addEventListener(Events.ON_CLICK,
 				new EventListener<Event>() {
@@ -100,7 +97,7 @@ public abstract class Catalogo<Clase> extends Window {
 		pagineo = new Button();
 		pagineo.setTooltiptext("Presione para mostrar todos los registros en una sola lista, sin pagineo");
 		pagineo.setSclass("catalogo");
-		pagineo.setSrc("/public/imagenes/botones/pagineo.png");
+		pagineo.setImage("/public/imagenes/botones/pagineo.png");
 		pagineo.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 			@Override
 			public void onEvent(Event arg0) throws Exception {
@@ -108,7 +105,6 @@ public abstract class Catalogo<Clase> extends Window {
 			}
 		});
 		Hbox box = new Hbox();
-		final Separator separador1 = new Separator();
 		final Separator separador2 = new Separator();
 		lsbCatalogo = new Listbox();
 		lsbCatalogo.setMold("paging");

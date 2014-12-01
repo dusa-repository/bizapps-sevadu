@@ -1,8 +1,9 @@
 package com.dusa.thermometer.service.transformation;
 
-import com.dusa.thermometer.service.config.ActivationConfig;
+import static com.dusa.thermometer.service.config.ActivationConfig.CSS_ZONE_NAME;
+import static com.dusa.thermometer.service.config.ActivationConfig.ZONE_SHORT_ID;
 
-import static com.dusa.thermometer.service.config.ActivationConfig.*;
+import com.dusa.thermometer.service.config.ActivationConfig;
 
 public class ZoneData extends HeaderData {
 

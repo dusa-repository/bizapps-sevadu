@@ -1,14 +1,18 @@
 package modelo.maestros;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
-import modelo.pk.MappingProductoPK;
-import modelo.pk.PlanVentaPK;
-
 import java.sql.Time;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import modelo.pk.MappingProductoPK;
 
 /**
  * The persistent class for the mapping_producto database table.

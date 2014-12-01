@@ -1,9 +1,10 @@
 package servicio.maestros;
 
+import interfacedao.maestros.IClienteDAO;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import interfacedao.maestros.IClienteDAO;
 import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.TipoCliente;

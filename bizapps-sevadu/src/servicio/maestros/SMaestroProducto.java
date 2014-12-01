@@ -1,10 +1,11 @@
 package servicio.maestros;
 
+import interfacedao.maestros.IMaestroProductoDAO;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import interfacedao.maestros.IMaestroProductoDAO;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;

@@ -8,7 +8,6 @@ import modelo.maestros.TipoCliente;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 public interface IClienteDAO extends JpaRepository<Cliente, String> {
 

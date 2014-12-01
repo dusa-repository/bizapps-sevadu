@@ -52,6 +52,7 @@ import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
+
 import controlador.maestros.CGenerico;
 
 public class CTermometro extends CGenerico {
