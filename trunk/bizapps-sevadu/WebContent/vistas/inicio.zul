@@ -33,9 +33,7 @@
 			<north height="11%" class="banner">
 				<hbox width="100%" widths="12%,55%,33%">
 					<vbox width="100%">
-						<separator />
-						<image src="../public/imagenes/generales/LogoDusa.png"
-							height="4em" width="18em" />
+					<image src="../public/imagenes/generales/LogoInicio.jpg" />
 					</vbox>
 					<div align="center" width="100%">
 						<separator />
@@ -101,7 +99,7 @@
 			<center border="none">
 				<borderlayout sclass="complex-layout">
 					<center
-						style="background-image: url('../public/imagenes/generales/LogoDusaAgua.png'); background-repeat:no-repeat; "
+						style="background-image: url('../public/imagenes/generales/LogoAgua.png'); background-repeat:no-repeat; "
 						border="none" autoscroll="true">
 						<tabbox width="100%" id="tabBox">
 							<tabs context="editPopup">
