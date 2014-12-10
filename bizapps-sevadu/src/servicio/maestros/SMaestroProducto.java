@@ -55,7 +55,8 @@ public class SMaestroProducto {
 	public List<MaestroProducto> buscarPorMarcas(
 			List<MaestroMarca> eliminarLista) {
 		List<String> ids = new ArrayList<String>();
-		for (Iterator<MaestroMarca> iterator = eliminarLista.iterator(); iterator.hasNext();) {
+		for (Iterator<MaestroMarca> iterator = eliminarLista.iterator(); iterator
+				.hasNext();) {
 			MaestroMarca maestroMarca = (MaestroMarca) iterator.next();
 			ids.add(maestroMarca.getMarcaDusa());
 		}
@@ -64,5 +65,9 @@ public class SMaestroProducto {
 
 	public List<MaestroProducto> buscarPorMarca(String value) {
 		return productoDAO.findByMaestroMarcaMarcaDusa(value);
+	}
+
+	public void guardarVarios(List<MaestroProducto> productos) {
+		productoDAO.save(productos);
 	}
 }

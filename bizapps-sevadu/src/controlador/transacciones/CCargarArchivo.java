@@ -41,6 +41,7 @@ import org.zkoss.zul.Tab;
 import componente.Botonera;
 import componente.Mensaje;
 import componente.Validador;
+
 import controlador.maestros.CGenerico;
 
 public class CCargarArchivo extends CGenerico {
@@ -98,6 +99,10 @@ public class CCargarArchivo extends CGenerico {
 		case "Subir Archivo de Activacion de Marca":
 			tipo = 5;
 			break;
+
+		case "Subir Archivo PVP":
+			tipo = 6;
+			break;
 		}
 		Botonera botonera = new Botonera() {
 
@@ -141,6 +146,9 @@ public class CCargarArchivo extends CGenerico {
 					case 5:
 						importarActivacion();
 						break;
+					case 6:
+						importarPvp();
+						break;
 					}
 				} else
 					msj.mensajeAlerta("El siguiente archivo no posee registros, por lo tanto no fue importado."
@@ -170,6 +178,204 @@ public class CCargarArchivo extends CGenerico {
 		botonera.getChildren().get(6).setVisible(false);
 		botonera.getChildren().get(8).setVisible(false);
 		botoneraCargarRegistro.appendChild(botonera);
+	}
+
+	protected void importarPvp() {
+		XSSFWorkbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(media.getStreamData());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		Iterator<Row> rowIterator = sheet.iterator();
+		String mostrarError = "";
+		boolean error = false;
+		boolean errorLong = false;
+		if (rowIterator.hasNext()) {
+			List<MaestroProducto> productos = new ArrayList<MaestroProducto>();
+			int contadorRow = 0;
+			boolean entro = false;
+			while (rowIterator.hasNext()) {
+				contadorRow = contadorRow + 1;
+				Row row = rowIterator.next();
+				if (!entro) {
+					row = rowIterator.next();
+					contadorRow = contadorRow + 1;
+					entro = true;
+				}
+				MaestroProducto producto = null;
+				String idProducto = null;
+				Double refProducto = null;
+				Double precio1 = null;
+				Double precio2 = null;
+				Double precio3 = null;
+				Double precio4 = null;
+				Double precio5 = null;
+				Double precio6 = null;
+				Double precio7 = null;
+				Double precio8 = null;
+				Double precio9 = null;
+				Double precio10 = null;
+				Iterator<Cell> cellIterator = row.cellIterator();
+				int contadorCell = 0;
+				while (cellIterator.hasNext()) {
+					contadorCell = contadorCell + 1;
+					Cell cell = cellIterator.next();
+					switch (cell.getColumnIndex()) {
+					case 0:
+						idProducto = obtenerStringCualquiera(cell, refProducto,
+								idProducto);
+						if (idProducto != null) {
+							if (idProducto.length() > 50) {
+								mostrarError = mensajeErrorLongitud(
+										mostrarError, contadorRow, contadorCell);
+								errorLong = true;
+							} else {
+								producto = servicioProducto.buscar(idProducto);
+								if (producto == null) {
+									mostrarError = mensajeErrorNoEncontrado(
+											mostrarError, idProducto,
+											contadorRow, contadorCell,
+											"Producto");
+									error = true;
+								}
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 3:
+						if (cell.getCellType() == 0) {
+							precio1 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 4:
+						if (cell.getCellType() == 0) {
+							precio2 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 5:
+						if (cell.getCellType() == 0) {
+							precio3 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 6:
+						if (cell.getCellType() == 0) {
+							precio4 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 7:
+						if (cell.getCellType() == 0) {
+							precio5 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 8:
+						if (cell.getCellType() == 0) {
+							precio6 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 9:
+						if (cell.getCellType() == 0) {
+							precio7 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 10:
+						if (cell.getCellType() == 0) {
+							precio8 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 11:
+						if (cell.getCellType() == 0) {
+							precio9 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 12:
+						if (cell.getCellType() == 0) {
+							precio10 = cell.getNumericCellValue();
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					}
+				}
+				if (!error && !errorLong && producto != null && precio1 != null
+						&& precio2 != null && precio3 != null
+						&& precio4 != null && precio5 != null
+						&& precio6 != null && precio7 != null
+						&& precio8 != null && precio9 != null
+						&& precio10 != null) {
+					producto.setPrecioA(precio1.floatValue());
+					producto.setPrecioB(precio2.floatValue());
+					producto.setPrecioC(precio3.floatValue());
+					producto.setPrecioD(precio4.floatValue());
+					producto.setPrecioE(precio5.floatValue());
+					producto.setPrecioF(precio6.floatValue());
+					producto.setPrecioG(precio7.floatValue());
+					producto.setPrecioH(precio8.floatValue());
+					producto.setPrecioI(precio9.floatValue());
+					producto.setPrecioJ(precio10.floatValue());
+					producto.setFechaAuditoria(fecha);
+					producto.setHoraAuditoria(tiempo);
+					producto.setIdUsuario(nombreUsuarioSesion());
+					productos.add(producto);
+				}
+			}
+			if (!error && !errorLong) {
+				servicioProducto.guardarVarios(productos);
+				msj.mensajeInformacion("Archivo importado con exito" + "\n"
+						+ "Cantidad de Filas evaluadas:" + (contadorRow - 1)
+						+ "\n" + "Cantidad de Filas insertadas:"
+						+ (contadorRow - 1));
+			} else
+				msj.mensajeError("El archivo no ha podido ser importado, causas:"
+						+ "\n"
+						+ mostrarError
+						+ "\n"
+						+ "Cantidad de Filas evaluadas:"
+						+ (contadorRow - 1)
+						+ "\n" + "Cantidad de Filas insertadas: 0");
+		}
 	}
 
 	protected void importarActivacion() {

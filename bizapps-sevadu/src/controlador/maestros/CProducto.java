@@ -190,6 +190,20 @@ public class CProducto extends CGenerico {
 							buscadorEspecie.obtenerCaja(), fecha, tiempo,
 							nombreUsuarioSesion(), "0", spnPacking.getValue(),
 							volumen.floatValue(), aliado, marca);
+					MaestroProducto producto2 = servicioProducto
+							.buscar(txtCodigo.getValue());
+					if (producto2 != null) {
+						producto.setPrecioA(producto2.getPrecioA());
+						producto.setPrecioB(producto2.getPrecioB());
+						producto.setPrecioC(producto2.getPrecioC());
+						producto.setPrecioD(producto2.getPrecioD());
+						producto.setPrecioE(producto2.getPrecioE());
+						producto.setPrecioF(producto2.getPrecioF());
+						producto.setPrecioG(producto2.getPrecioG());
+						producto.setPrecioH(producto2.getPrecioH());
+						producto.setPrecioI(producto2.getPrecioI());
+						producto.setPrecioJ(producto2.getPrecioJ());
+					}
 					servicioProducto.guardar(producto);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
@@ -452,7 +466,6 @@ public class CProducto extends CGenerico {
 				.buscarParaUDCOrdenados("00", "04");
 		buscadorCaja = new BuscadorUDC("Caja", 100, listF0005, true, false,
 				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		// false, "00", "04", "33%", "8%", "10%", "49%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -465,7 +478,6 @@ public class CProducto extends CGenerico {
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "05");
 		buscadorBotella = new BuscadorUDC("Botella", 100, listF0005, true,
 				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		// false, false, "00", "05", "33%", "8%", "10%", "49%")
 		{
 			@Override
 			protected F0005 buscar() {
@@ -478,7 +490,6 @@ public class CProducto extends CGenerico {
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "06");
 		buscadorEspecie = new BuscadorUDC("Especie", 100, listF0005, true,
 				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		// false, false, "00", "06", "33%", "8%", "10%", "49%")
 		{
 			@Override
 			protected F0005 buscar() {
