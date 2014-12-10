@@ -91,6 +91,36 @@ public class MaestroProducto implements Serializable {
 	@OneToMany(mappedBy = "maestroProducto")
 	private List<Venta> ventas;
 
+	@Column(name = "precio_a")
+	private Float precioA;
+
+	@Column(name = "precio_b")
+	private Float precioB;
+
+	@Column(name = "precio_c")
+	private Float precioC;
+
+	@Column(name = "precio_d")
+	private Float precioD;
+
+	@Column(name = "precio_e")
+	private Float precioE;
+
+	@Column(name = "precio_f")
+	private Float precioF;
+
+	@Column(name = "precio_g")
+	private Float precioG;
+
+	@Column(name = "precio_h")
+	private Float precioH;
+
+	@Column(name = "precio_i")
+	private Float precioI;
+
+	@Column(name = "precio_j")
+	private Float precioJ;
+
 	public MaestroProducto() {
 	}
 
@@ -315,6 +345,86 @@ public class MaestroProducto implements Serializable {
 		venta.setMaestroProducto(null);
 
 		return venta;
+	}
+
+	public Float getPrecioA() {
+		return precioA;
+	}
+
+	public void setPrecioA(Float precioA) {
+		this.precioA = precioA;
+	}
+
+	public Float getPrecioB() {
+		return precioB;
+	}
+
+	public void setPrecioB(Float precioB) {
+		this.precioB = precioB;
+	}
+
+	public Float getPrecioC() {
+		return precioC;
+	}
+
+	public void setPrecioC(Float precioC) {
+		this.precioC = precioC;
+	}
+
+	public Float getPrecioD() {
+		return precioD;
+	}
+
+	public void setPrecioD(Float precioD) {
+		this.precioD = precioD;
+	}
+
+	public Float getPrecioE() {
+		return precioE;
+	}
+
+	public void setPrecioE(Float precioE) {
+		this.precioE = precioE;
+	}
+
+	public Float getPrecioF() {
+		return precioF;
+	}
+
+	public void setPrecioF(Float precioF) {
+		this.precioF = precioF;
+	}
+
+	public Float getPrecioG() {
+		return precioG;
+	}
+
+	public void setPrecioG(Float precioG) {
+		this.precioG = precioG;
+	}
+
+	public Float getPrecioH() {
+		return precioH;
+	}
+
+	public void setPrecioH(Float precioH) {
+		this.precioH = precioH;
+	}
+
+	public Float getPrecioI() {
+		return precioI;
+	}
+
+	public void setPrecioI(Float precioI) {
+		this.precioI = precioI;
+	}
+
+	public Float getPrecioJ() {
+		return precioJ;
+	}
+
+	public void setPrecioJ(Float precioJ) {
+		this.precioJ = precioJ;
 	}
 
 }
