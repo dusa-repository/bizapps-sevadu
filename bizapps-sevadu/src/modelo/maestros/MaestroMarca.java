@@ -49,6 +49,10 @@ public class MaestroMarca implements Serializable {
 	@Column(name="filtro_termometro")
 	private boolean filtroTermometro;
 
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	@Column(name="filtro_activacion")
+	private Boolean activacion;
+
 	@Column(name="hora_auditoria")
 	private Time horaAuditoria;
 
@@ -70,7 +74,7 @@ public class MaestroMarca implements Serializable {
 
 	public MaestroMarca(int id, String marcaDusa, String descripcion,
 			Date fechaAuditoria, int filtroImpresion, boolean filtroTermometro,
-			Time horaAuditoria, String idUsuario, String loteUpload, Integer orden) {
+			Time horaAuditoria, String idUsuario, String loteUpload, Integer orden, Boolean activacion) {
 		super();
 		this.id = id;
 		this.marcaDusa = marcaDusa;
@@ -82,6 +86,7 @@ public class MaestroMarca implements Serializable {
 		this.idUsuario = idUsuario;
 		this.loteUpload = loteUpload;
 		this.orden = orden;
+		this.activacion = activacion;
 	}
 
 
@@ -186,6 +191,14 @@ public class MaestroMarca implements Serializable {
 
 	public void setOrden(Integer orden) {
 		this.orden = orden;
+	}
+
+	public Boolean getActivacion() {
+		return activacion;
+	}
+
+	public void setActivacion(Boolean activacion) {
+		this.activacion = activacion;
 	}
 
 }

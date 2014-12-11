@@ -156,4 +156,9 @@ public class SVenta {
 				.findByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
 						aliado2, ids, fechaDesde2, fechaHasta2, o);
 	}
+
+	public Integer buscarVentasDeMarcasActivas(String aliado2,
+			Date fechaDesde2, Date fechaHasta2, String cliente) {
+		return ventaDAO.countDistinctMaestroProductoMaestroMarcaCodigoDusaBetween(aliado2,fechaDesde2,fechaHasta2, cliente);
+	}
 }

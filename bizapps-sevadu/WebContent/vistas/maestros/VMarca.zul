@@ -47,6 +47,20 @@
 							<textbox id="txtDescripcion" maxlength="50"
 								tooltiptext="Ingrese la descripcion" />
 							<hbox>
+								<label class="etiqueta" value="Se utiliza para Activacion:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<radiogroup id="rdbActivacion">
+								<radio id="rdoSiActivacion" label="Si" />
+								<space />
+								<radio id="rdoNoActivacion" label="No" />
+							</radiogroup>
+
+						</row>
+						<row>
+							<hbox>
 								<label class="etiqueta" value="Orden de Impresion:" />
 								<space />
 								<label value="*" style="font-weight:bold;color:red">
@@ -54,6 +68,8 @@
 							</hbox>
 							<spinner id="spnOrden" step="1" constraint="min 0 max 1000"
 								value="0" width="100%" />
+							<hbox />
+							<hbox />
 						</row>
 					</rows>
 				</grid>

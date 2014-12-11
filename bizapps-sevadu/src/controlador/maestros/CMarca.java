@@ -36,6 +36,10 @@ public class CMarca extends CGenerico {
 	@Wire
 	private Radio rdoNo;
 	@Wire
+	private Radio rdoSiActivacion;
+	@Wire
+	private Radio rdoNoActivacion;
+	@Wire
 	private Spinner spnOrden;
 	@Wire
 	private Div divVMarca;
@@ -52,6 +56,7 @@ public class CMarca extends CGenerico {
 	Integer clave = 0;
 	private List<MaestroMarca> listaGeneral = new ArrayList<MaestroMarca>();
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void inicializar() throws IOException {
 		HashMap<String, Object> map = (HashMap<String, Object>) Sessions
@@ -67,6 +72,7 @@ public class CMarca extends CGenerico {
 		mostrarCatalogo();
 		txtCodigo.setFocus(true);
 		botonera = new Botonera() {
+			private static final long serialVersionUID = 2405291709627695301L;
 
 			@Override
 			public void seleccionar() {
@@ -85,6 +91,16 @@ public class CMarca extends CGenerico {
 							rdoNo.setChecked(true);
 						if (marca.getOrden() != null)
 							spnOrden.setValue(marca.getOrden());
+						if (marca.getActivacion() != null) {
+							if (marca.getActivacion())
+								rdoSiActivacion.setChecked(true);
+							else
+								rdoNoActivacion.setChecked(true);
+						} else {
+							rdoNoActivacion.setChecked(false);
+							rdoSiActivacion.setChecked(false);
+						}
+
 						txtCodigo.setDisabled(true);
 						txtDescripcion.setFocus(true);
 					} else
@@ -117,10 +133,13 @@ public class CMarca extends CGenerico {
 					boolean filtro = false;
 					if (rdoSi.isChecked())
 						filtro = true;
+					boolean activacion = false;
+					if (rdoSiActivacion.isChecked())
+						activacion = true;
 					MaestroMarca marca = new MaestroMarca(clave,
 							txtCodigo.getValue(), txtDescripcion.getValue(),
 							fecha, 0, filtro, tiempo, nombreUsuarioSesion(),
-							"", spnOrden.getValue());
+							"", spnOrden.getValue(), activacion);
 					servicioMarca.guardar(marca);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
@@ -243,7 +262,9 @@ public class CMarca extends CGenerico {
 	private boolean camposLLenos() {
 		if (txtCodigo.getText().compareTo("") == 0
 				|| txtDescripcion.getText().compareTo("") == 0
-				|| (!rdoNo.isChecked() && !rdoSi.isChecked())) {
+				|| (!rdoNo.isChecked() && !rdoSi.isChecked())
+				|| (!rdoNoActivacion.isChecked() && !rdoSiActivacion
+						.isChecked())) {
 			return false;
 		} else
 			return true;
@@ -271,6 +292,8 @@ public class CMarca extends CGenerico {
 		rdoSi.setChecked(false);
 		clave = 0;
 		spnOrden.setValue(0);
+		rdoNoActivacion.setChecked(false);
+		rdoSiActivacion.setChecked(false);
 	}
 
 	@Listen("onClick = #gpxRegistro")
@@ -339,7 +362,8 @@ public class CMarca extends CGenerico {
 		if (txtCodigo.getText().compareTo("") != 0
 				|| txtDescripcion.getText().compareTo("") != 0
 				|| spnOrden.getValue() != 0
-				|| (rdoSi.isChecked() || rdoSi.isChecked())) {
+				|| (rdoSi.isChecked() || rdoNo.isChecked())
+				|| (rdoSiActivacion.isChecked() || rdoNoActivacion.isChecked())) {
 			return true;
 		} else
 			return false;
@@ -349,7 +373,8 @@ public class CMarca extends CGenerico {
 		listaGeneral = servicioMarca.buscarTodosOrdenados();
 		catalogo = new Catalogo<MaestroMarca>(catalogoMarca, "Marca",
 				listaGeneral, false, false, false, "Codigo", "Descripcion",
-				"Termometro") {
+				"Termometro", "Activacion") {
+			private static final long serialVersionUID = -4075514893997896082L;
 
 			@Override
 			protected List<MaestroMarca> buscar(List<String> valores) {
@@ -360,12 +385,21 @@ public class CMarca extends CGenerico {
 					String termo = "No";
 					if (objeto.isFiltroTermometro())
 						termo = "Si";
+					String activacion = "N/A";
+					if (objeto.getActivacion() != null) {
+						if (objeto.getActivacion())
+							activacion = "Si";
+						else
+							activacion = "No";
+					}
 					if (objeto.getMarcaDusa().toLowerCase()
 							.contains(valores.get(0).toLowerCase())
 							&& objeto.getDescripcion().toLowerCase()
 									.contains(valores.get(1).toLowerCase())
 							&& termo.toLowerCase().contains(
-									valores.get(2).toLowerCase())) {
+									valores.get(2).toLowerCase())
+							&& activacion.toLowerCase().contains(
+									valores.get(3).toLowerCase())) {
 						lista.add(objeto);
 					}
 				}
@@ -377,10 +411,18 @@ public class CMarca extends CGenerico {
 				String termo = "No";
 				if (objeto.isFiltroTermometro())
 					termo = "Si";
-				String[] registros = new String[3];
+				String activacion = "N/A";
+				if (objeto.getActivacion() != null) {
+					if (objeto.getActivacion())
+						activacion = "Si";
+					else
+						activacion = "No";
+				}
+				String[] registros = new String[4];
 				registros[0] = objeto.getMarcaDusa();
 				registros[1] = objeto.getDescripcion();
 				registros[2] = termo;
+				registros[3] = activacion;
 				return registros;
 			}
 		};
