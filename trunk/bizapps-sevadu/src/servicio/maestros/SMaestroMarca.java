@@ -38,4 +38,8 @@ public class SMaestroMarca {
 	public List<MaestroMarca> buscarActivasTermometro() {
 		return marcaDAO.findByFiltroTermometroTrueOrderByOrdenAsc();
 	}
+
+	public List<MaestroMarca> buscarActivasActivacion() {
+		return marcaDAO.findByActivacionTrueOrderByOrdenAsc();
+	}
 }

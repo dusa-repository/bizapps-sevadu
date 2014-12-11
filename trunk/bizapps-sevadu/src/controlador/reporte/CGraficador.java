@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.Venta;
@@ -51,6 +52,7 @@ public class CGraficador extends CGenerico {
 	private Date fechaHasta;
 	private String tipoGrafica;
 	private boolean dona = false;
+	private boolean angular2 = false;
 	private List<MaestroMarca> marcas = new ArrayList<MaestroMarca>();
 	protected DateFormat formatoFecha = new SimpleDateFormat("MMM");
 	protected DateFormat formatoCorrecto = new SimpleDateFormat("dd-MM-yyyy");
@@ -69,6 +71,9 @@ public class CGraficador extends CGenerico {
 			marcas = (List<MaestroMarca>) map.get("lista");
 			if (map.get("dona") != null) {
 				dona = true;
+			}
+			if (map.get("tipo2") != null) {
+				angular2 = true;
 			}
 			map.clear();
 			map = null;
@@ -94,12 +99,94 @@ public class CGraficador extends CGenerico {
 				generarGraficaPie(aliado, fechaDesde, fechaHasta, ids);
 			break;
 		case "gauge":
-			generarGraficaAngular(aliado, fechaDesde, fechaHasta, ids);
+			if (!angular2)
+				generarGraficaAngular(aliado, fechaDesde, fechaHasta, ids);
+			else
+				generarGraficaAngular2(aliado, fechaDesde, fechaHasta);
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void generarGraficaAngular2(String aliado2, Date fechaDesde2,
+			Date fechaHasta2) {
+		MaestroAliado aliado = servicioAliado.buscar(aliado2);
+		List<Cliente> list = servicioCliente.buscarPorAliado(aliado);
+		int cantidadClientes = list.size();
+		List<MaestroMarca> listMark = servicioMarca.buscarActivasActivacion();
+		int cantidadMarcasActivas = listMark.size();
+		int cantidadVentasActivas = 0;
+		for (int i = 0; i < list.size(); i++) {
+			cantidadVentasActivas = cantidadVentasActivas
+					+ servicioVenta.buscarVentasDeMarcasActivas(aliado2,
+							fechaDesde2, fechaHasta2, list.get(i)
+									.getCodigoCliente());
+		}
+		int total = cantidadClientes * cantidadMarcasActivas;
+		DialModel dialmodel = new DefaultDialModel();
+		dialmodel.setFrameBgColor(null);
+		dialmodel.setFrameBgColor1(null);
+		dialmodel.setFrameBgColor2(null);
+		dialmodel.setFrameFgColor(null);
+		Double primero = (double) (total * 5 / 100);
+		Double segundo = total * 0.01 / 100;
+		DialModelScale scale = dialmodel.newScale(0, total, -150, -300,
+				primero.intValue(), segundo.intValue());
+		scale.setText("Cajas");
+		scale.setTickColor("#666666");
+		if (cantidadVentasActivas > total)
+			cantidadVentasActivas = total;
+		scale.setValue(cantidadVentasActivas);
+		Double valor = (double) (total / 2);
+		int minimo = valor.intValue();
+		scale.newRange(0, minimo, "#DF5353", 0.9, 1); // green
+		scale.newRange(minimo, minimo + minimo * 0.5, "#DDDF0D", 0.9, 1); // yellow
+		scale.newRange(minimo + minimo * 0.5, total, "#55BF3B", 0.9, 1); // red
+		chart.setModel(dialmodel);
+		List<PaneBackground> backgrounds = new LinkedList<PaneBackground>();
+		PaneBackground background1 = new PaneBackground();
+		LinearGradient linearGradient1 = new LinearGradient(0, 0, 0, 1);
+		linearGradient1.setStops("#FFF", "#333");
+		background1.setBackgroundColor(linearGradient1);
+		background1.setBorderWidth(0);
+		background1.setOuterRadius("109%");
+		backgrounds.add(background1);
+		PaneBackground background2 = new PaneBackground();
+		LinearGradient linearGradient2 = new LinearGradient(0, 0, 0, 1);
+		linearGradient2.setStops("#333", "#FFF");
+		background2.setBackgroundColor(linearGradient2);
+		background2.setBorderWidth(1);
+		background2.setOuterRadius("107%");
+		backgrounds.add(background2);
+		backgrounds.add(new PaneBackground());
+		PaneBackground background3 = new PaneBackground();
+		background3.setBackgroundColor("#DDD");
+		background3.setBorderWidth(0);
+		background3.setOuterRadius("105%");
+		background3.setInnerRadius("103%");
+		backgrounds.add(background3);
+		chart.getPane().setBackground(backgrounds);
+		YAxis yAxis = chart.getYAxis();
+		yAxis.setMinorTickWidth(1);
+		yAxis.setMinorTickPosition("inside");
+		yAxis.setMinorTickColor("#666");
+		yAxis.setTickPixelInterval(30);
+		yAxis.setTickWidth(2);
+		yAxis.setTickPosition("inside");
+		yAxis.setTickLength(10);
+		yAxis.getLabels().setStep(2);
+		yAxis.getLabels().setRotation("auto");
+		chart.getPlotOptions().getGauge().getTooltip().setValueSuffix(" marcas");
+		chart.getSeries().setName("Marcas Vendidas");
+		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
+		chart.getYAxis().getTitle().setText("Marcas Vendidas");
+		chart.setTitle("Marcas Activadas VS Marcas Vendidas" + " desde "
+				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
+				+ formatoCorrecto.format(fechaHasta2));
+		chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
+				+ aliado2 + ")");
 	}
 
 	private void generarGraficaAngular(String aliado2, Date fechaDesde2,

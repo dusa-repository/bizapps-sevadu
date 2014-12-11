@@ -16,4 +16,6 @@ public interface IMaestroMarcaDAO extends JpaRepository<MaestroMarca, Integer> {
 
 	List<MaestroMarca> findByFiltroTermometroTrueOrderByOrdenAsc();
 
+	List<MaestroMarca> findByActivacionTrueOrderByOrdenAsc();
+
 }

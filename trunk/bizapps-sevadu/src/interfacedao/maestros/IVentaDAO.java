@@ -69,4 +69,10 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 
 	List<Venta> findByMaestroProductoCodigoProductoDusa(String clave);
 
+	@Query("select coalesce(count(distinct v.maestroProducto.maestroMarca.marcaDusa), '0') from Venta v "
+			+ "where v.maestroAliado.codigoAliado = ?1 and v.maestroProducto.maestroMarca.activacion = true "
+			+ "and v.fechaFactura between ?2 and ?3 and v.codigoCliente.codigoCliente = ?4")
+	Integer countDistinctMaestroProductoMaestroMarcaCodigoDusaBetween(
+			String aliado2, Date fechaDesde2, Date fechaHasta2, String cliente);
+
 }

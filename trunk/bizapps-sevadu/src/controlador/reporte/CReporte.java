@@ -190,26 +190,14 @@ public class CReporte extends CGenerico {
 				if (validar()) {
 
 					Date desde = dtbDesde.getValue();
-					// Calendar calendario = Calendar.getInstance();
-					// calendario.setTime(desde);
-					// calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
-					// calendario.add(Calendar.DAY_OF_YEAR, -1);
-					// desde = calendario.getTime();
 					Date hasta = dtbHasta.getValue();
-					// calendario.setTime(hasta);
-					// calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
-					// calendario.add(Calendar.DAY_OF_YEAR, 1);
-					// hasta = calendario.getTime();
-
 					DateFormat fechaF = new SimpleDateFormat("yyyy-MM-dd");
 					String fecha1 = fechaF.format(desde);
 					String fecha2 = fechaF.format(hasta);
-
 					String aliado = idAliado;
 					String vendedor = cmbVendedor.getValue();
 					String zona = cmbZona.getValue();
 					String cliente = cmbCliente.getValue();
-
 					if (vendedor.equals("TODOS"))
 						vendedor = "";
 					if (zona.equals("TODAS"))
@@ -372,6 +360,22 @@ public class CReporte extends CGenerico {
 						mapaGrafica.put("desde", desde);
 						mapaGrafica.put("hasta", hasta);
 						mapaGrafica.put("tipo", "gauge");
+						mapaGrafica.put("lista", marcasAgregadas);
+						Sessions.getCurrent().setAttribute("grafica",
+								mapaGrafica);
+						ventana = (Window) Executions.createComponents(
+								"/vistas/reportes/VGrafica.zul", null,
+								mapaGrafica);
+						ventana.doModal();
+						break;
+					case "Grafico Vendido VS Activado Marcas (Angular)":
+						tipo = 25;
+						mapaGrafica = new HashMap<String, Object>();
+						mapaGrafica.put("idAliado", aliado);
+						mapaGrafica.put("desde", desde);
+						mapaGrafica.put("hasta", hasta);
+						mapaGrafica.put("tipo", "gauge");
+						mapaGrafica.put("tipo2", "activado");
 						mapaGrafica.put("lista", marcasAgregadas);
 						Sessions.getCurrent().setAttribute("grafica",
 								mapaGrafica);
@@ -830,10 +834,13 @@ public class CReporte extends CGenerico {
 	@Listen("onSelect = #cmbReporte")
 	public void ocultar() {
 		if (cmbReporte.getValue().startsWith("Grafico")) {
-			llenarLista();
-			rowVendedor.setVisible(false);
-			rowZona.setVisible(false);
-			box.setVisible(true);
+			if (!cmbReporte.getValue().equals(
+					"Grafico Vendido VS Activado Marcas (Angular)")) {
+				llenarLista();
+				rowVendedor.setVisible(false);
+				rowZona.setVisible(false);
+				box.setVisible(true);
+			}
 		} else {
 			rowVendedor.setVisible(true);
 			rowZona.setVisible(true);
