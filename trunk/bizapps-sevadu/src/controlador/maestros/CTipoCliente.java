@@ -56,6 +56,7 @@ public class CTipoCliente extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				cerrar = (String) map.get("titulo");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				map.clear();
 				map = null;
 			}
@@ -86,7 +87,7 @@ public class CTipoCliente extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divTipoCliente, cerrar, tabs);
+				cerrarVentana(divTipoCliente, cerrar, tabs, grxGraficoGeneral);
 
 			}
 

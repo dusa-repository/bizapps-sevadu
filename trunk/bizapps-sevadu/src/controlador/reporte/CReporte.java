@@ -42,6 +42,7 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
@@ -56,7 +57,6 @@ import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
-
 import controlador.maestros.CGenerico;
 
 public class CReporte extends CGenerico {
@@ -145,6 +145,7 @@ public class CReporte extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				cerrar = (String) map.get("nombre");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				map.clear();
 				map = null;
 			}
@@ -160,7 +161,7 @@ public class CReporte extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divVReporte, cerrar, tabs);
+				cerrarVentana(divVReporte, cerrar, tabs, grxGraficoGeneral);
 			}
 
 			@Override

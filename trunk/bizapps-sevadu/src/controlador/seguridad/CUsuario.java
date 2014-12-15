@@ -109,7 +109,6 @@ public class CUsuario extends CGenerico {
 	private Groupbox gpxDatos;
 	@Wire
 	private Groupbox gpxRegistro;
-	private CArbol cArbol = new CArbol();
 	long id = 0;
 	Catalogo<Usuario> catalogo;
 	List<Grupo> gruposDisponibles = new ArrayList<Grupo>();
@@ -124,6 +123,7 @@ public class CUsuario extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				cerrar = (String) map.get("titulo");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				map.clear();
 				map = null;
 			}
@@ -186,7 +186,7 @@ public class CUsuario extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divUsuario, cerrar, tabs);
+				cerrarVentana(divUsuario, cerrar, tabs, grxGraficoGeneral);
 			}
 
 			@Override

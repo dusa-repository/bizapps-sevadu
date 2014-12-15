@@ -10,6 +10,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Tab;
 
 import componente.Botonera;
@@ -34,6 +35,7 @@ public class CConfiguracion extends CGenerico {
 		if (map != null) {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				nombre = (String) map.get("titulo");
 				map.clear();
 				map = null;
@@ -50,7 +52,7 @@ public class CConfiguracion extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divConfiguracion, nombre, tabs);
+				cerrarVentana(divConfiguracion, nombre, tabs, grxGraficoGeneral);
 			}
 
 			@Override

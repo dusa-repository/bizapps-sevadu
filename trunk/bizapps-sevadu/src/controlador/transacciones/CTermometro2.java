@@ -19,6 +19,7 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Tab;
@@ -30,7 +31,6 @@ import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
-
 import controlador.maestros.CGenerico;
 
 public class CTermometro2 extends CGenerico {
@@ -79,6 +79,7 @@ public class CTermometro2 extends CGenerico {
 				west = (West) map.get("west");
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				cerrar = (String) map.get("nombre");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				map.clear();
 				map = null;
 			}
@@ -96,7 +97,7 @@ public class CTermometro2 extends CGenerico {
 				@Override
 				public void salir() {
 					west.setOpen(true);
-					cerrarVentana(divVTermometroMarca, cerrar, tabs);
+					cerrarVentana(divVTermometroMarca, cerrar, tabs, grxGraficoGeneral);
 				}
 
 				@Override

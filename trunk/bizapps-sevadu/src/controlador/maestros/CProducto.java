@@ -96,6 +96,7 @@ public class CProducto extends CGenerico {
 		if (map != null) {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				cerrar = (String) map.get("titulo");
 				map.clear();
 				map = null;
@@ -154,7 +155,7 @@ public class CProducto extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divVProducto, cerrar, tabs);
+				cerrarVentana(divVProducto, cerrar, tabs, grxGraficoGeneral);
 			}
 
 			@Override

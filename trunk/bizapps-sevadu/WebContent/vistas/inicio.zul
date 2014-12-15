@@ -2,20 +2,24 @@
 <zk>
 	<style>
 		.z-tree-icon .z-tree-open {
-		background-image: url('../public/imagenes/generales/abierto.png');
+		background-image:
+		url('../public/imagenes/generales/abierto.png');
 		background-repeat:no-repeat;
 		background-size: cover;
 		width: 100%;
 		}
 
 		.z-tree-icon .z-tree-line z-tree-last {
-		background-image: url('../public/imagenes/generales/hoja.png');
+		background-image:
+		url('../public/imagenes/generales/hoja.png');
 		background-repeat:no-repeat;
 		background-size: cover;
 		}
 
-		.z-tree-icon .z-tree-close {
-		background-image: url('../public/imagenes/generales/cerrado.png');
+		.z-tree-icon
+		.z-tree-close {
+		background-image:
+		url('../public/imagenes/generales/cerrado.png');
 		background-repeat:no-repeat;
 		background-size: cover;
 		width: 100%;
@@ -33,7 +37,7 @@
 			<north height="11%" class="banner">
 				<hbox width="100%" widths="12%,55%,33%">
 					<vbox width="100%">
-					<image src="../public/imagenes/generales/LogoInicio.jpg" />
+						<image src="../public/imagenes/generales/LogoInicio.jpg" />
 					</vbox>
 					<div align="center" width="100%">
 						<separator />
@@ -101,19 +105,27 @@
 					<center
 						style="background-image: url('../public/imagenes/generales/LogoAgua.png'); background-repeat:no-repeat; "
 						border="none" autoscroll="true">
-						<tabbox width="100%" id="tabBox">
-							<tabs context="editPopup">
-								<tab visible="false">Tab A</tab>
-								<tab id="tab" label="+" visible="false">
-								</tab>
-							</tabs>
-							<tabpanels>
-								<tabpanel>
-									<include id="contenido"></include>
-								</tabpanel>
-							</tabpanels>
+						<div vflex="1" hflex="1" width="100%" style="border:none">
+							<tabbox width="100%" id="tabBox">
+								<tabs context="editPopup">
+									<tab visible="false">Tab A</tab>
+									<tab id="tab" label="+" visible="false">
+									</tab>
+								</tabs>
+								<tabpanels>
+									<tabpanel>
+										<include id="contenido"></include>
+									</tabpanel>
+								</tabpanels>
 
-						</tabbox>
+							</tabbox>
+							<groupbox id="grxGrafico" width="100%"
+								style="border:none" visible="false">
+								<div style="border:none" hflex="1" vflex="1" id="divGrafico"
+									width="100%">
+								</div>
+							</groupbox>
+						</div>
 					</center>
 				</borderlayout>
 			</center>
@@ -127,7 +139,7 @@
 			</south>
 		</borderlayout>
 		<menupopup id="editPopup">
-			<menuitem id="mnuItem" label="Cerrar Todas" apply="arbol.CArbol" />
+			<menuitem id="mnuItem" label="Cerrar Todas" />
 		</menupopup>
 	</window>
 </zk>

@@ -114,8 +114,8 @@ public class CGraficador extends CGenerico {
 			Date fechaHasta2) {
 		MaestroAliado aliado = servicioAliado.buscar(aliado2);
 		List<Cliente> list = servicioCliente.buscarPorAliado(aliado);
-		int cantidadClientes = list.size();
 		List<MaestroMarca> listMark = servicioMarca.buscarActivasActivacion();
+		int cantidadClientes = list.size();
 		int cantidadMarcasActivas = listMark.size();
 		int cantidadVentasActivas = 0;
 		for (int i = 0; i < list.size(); i++) {

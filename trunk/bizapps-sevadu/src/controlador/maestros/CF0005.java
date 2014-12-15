@@ -80,6 +80,7 @@ public class CF0005 extends CGenerico {
 		if (map != null) {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				cerrar = (String) map.get("titulo");
 				map.clear();
 				map = null;
@@ -119,7 +120,7 @@ public class CF0005 extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divVF0005, cerrar, tabs);
+				cerrarVentana(divVF0005, cerrar, tabs, grxGraficoGeneral);
 
 			}
 

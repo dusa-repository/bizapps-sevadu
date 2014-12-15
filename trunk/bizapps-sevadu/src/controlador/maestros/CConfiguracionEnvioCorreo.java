@@ -64,6 +64,7 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 		if (map != null) {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				cerrar = (String) map.get("titulo");
 				map.clear();
 				map = null;
@@ -101,7 +102,7 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divVEnvio, cerrar, tabs);
+				cerrarVentana(divVEnvio, cerrar, tabs, grxGraficoGeneral);
 			}
 
 			@Override

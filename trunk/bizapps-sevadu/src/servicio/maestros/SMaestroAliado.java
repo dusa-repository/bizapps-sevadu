@@ -2,6 +2,7 @@ package servicio.maestros;
 
 import interfacedao.maestros.IMaestroAliadoDAO;
 
+import java.util.Collection;
 import java.util.List;
 
 import modelo.maestros.MaestroAliado;
@@ -41,5 +42,10 @@ public class SMaestroAliado {
 
 	public MaestroAliado buscarPorLoginUsuario(String nombreUsuarioSesion) {
 		return aliadoDAO.findByUsuarioLogin(nombreUsuarioSesion);
+	}
+
+	public List<MaestroAliado> buscarRestantes(
+			List<String> listaAliados) {
+		return aliadoDAO.findByCodigoAliadoNotIn(listaAliados);
 	}
 }

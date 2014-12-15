@@ -73,6 +73,7 @@ public class CGrupo extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				cerrar = (String) map.get("titulo");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				map.clear();
 				map = null;
 			}
@@ -106,7 +107,7 @@ public class CGrupo extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divGrupo, cerrar, tabs);
+				cerrarVentana(divGrupo, cerrar, tabs, grxGraficoGeneral);
 
 			}
 
