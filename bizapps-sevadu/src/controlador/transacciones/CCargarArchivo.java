@@ -74,6 +74,7 @@ public class CCargarArchivo extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				titulo = (String) map.get("titulo");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				map.clear();
 				map = null;
 			}
@@ -112,7 +113,7 @@ public class CCargarArchivo extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divVCargarArchivo, titulo, tabs);
+				cerrarVentana(divVCargarArchivo, titulo, tabs, grxGraficoGeneral);
 			}
 
 			@Override

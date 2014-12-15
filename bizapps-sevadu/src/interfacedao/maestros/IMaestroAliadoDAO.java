@@ -16,4 +16,6 @@ public interface IMaestroAliadoDAO extends JpaRepository<MaestroAliado, String> 
 
 	MaestroAliado findByUsuarioLogin(String nombreUsuarioSesion);
 
+	List<MaestroAliado> findByCodigoAliadoNotIn(List<String> listaAliados);
+
 }

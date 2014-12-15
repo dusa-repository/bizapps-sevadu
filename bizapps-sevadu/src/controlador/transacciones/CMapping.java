@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Row;
@@ -27,12 +28,10 @@ import org.zkoss.zul.Window;
 
 import servicio.maestros.SMaestroAliado;
 import servicio.maestros.SMappingProducto;
-
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
-
 import controlador.maestros.CGenerico;
 
 public class CMapping extends CGenerico {
@@ -86,6 +85,7 @@ public class CMapping extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				cerrar = (String) map.get("nombre");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				map.clear();
 				map = null;
 			}
@@ -99,7 +99,7 @@ public class CMapping extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divMapping, cerrar, tabs);
+				cerrarVentana(divMapping, cerrar, tabs, grxGraficoGeneral);
 			}
 
 			@Override

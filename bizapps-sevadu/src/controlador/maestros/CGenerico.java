@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Tab;
 
 import servicio.maestros.SCliente;
@@ -56,7 +57,6 @@ import servicio.seguridad.SArbol;
 import servicio.seguridad.SGrupo;
 import servicio.seguridad.SUsuario;
 import servicio.termometro.STermometro;
-
 import componente.Mensaje;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
@@ -108,6 +108,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected static SimpleDateFormat formatoFechaRara = new SimpleDateFormat(
 			"yyyyMMdd");
 	public List<Tab> tabs = new ArrayList<Tab>();
+	public Groupbox grxGraficoGeneral;
 	protected DateFormat df = new SimpleDateFormat("HH:mm:ss");
 	public Calendar calendario = Calendar.getInstance();
 	// Cambio en la hora borrados los :
@@ -233,7 +234,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 
 	public abstract void inicializar() throws IOException;
 
-	public void cerrarVentana(Div div, String id, List<Tab> tabs2) {
+	public void cerrarVentana(Div div, String id, List<Tab> tabs2, Groupbox group) {
 		div.setVisible(false);
 		tabs = tabs2;
 		for (int i = 0; i < tabs.size(); i++) {
@@ -243,6 +244,12 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 				}
 				tabs.get(i).onClose();
 				tabs.remove(i);
+			}
+		}
+		if (tabs.size() == 0) {
+			if (group.isVisible()
+					&& !group.isOpen()) {
+				group.setOpen(true);
 			}
 		}
 	}

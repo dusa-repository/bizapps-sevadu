@@ -56,6 +56,7 @@ public class CMenuArbol extends CGenerico {
 			if (map.get("tabsGenerales") != null) {
 				tabs = (List<Tab>) map.get("tabsGenerales");
 				cerrar = (String) map.get("titulo");
+				grxGraficoGeneral = (Groupbox) map.get("grxGraficoGeneral");
 				map.clear();
 				map = null;
 			}
@@ -84,7 +85,7 @@ public class CMenuArbol extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divVMenuArbol, cerrar, tabs);
+				cerrarVentana(divVMenuArbol, cerrar, tabs, grxGraficoGeneral);
 
 			}
 

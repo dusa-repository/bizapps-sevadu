@@ -75,4 +75,16 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 	Integer countDistinctMaestroProductoMaestroMarcaCodigoDusaBetween(
 			String aliado2, Date fechaDesde2, Date fechaHasta2, String cliente);
 
+	// @Query(value = "select distinct(codigo_aliado) from  ventas v order by "
+	// +
+	// "(select sum(cantidad) from ventas a where v.codigo_aliado = a.codigo_aliado and "
+	// + "a.fecha_factura between ?1 and ?2 )  desc", nativeQuery = true)
+	@Query(value = "select distinct(codigo_aliado) from  ventas v order by (select coalesce(sum(cantidad),'0') from ventas a "
+			+ "where v.codigo_aliado = a.codigo_aliado and a.fecha_factura between ?1 and ?2)  * 100  "
+			+ "/ (select coalesce(sum(cajas_planificadas),'0') from plan_ventas p where v.codigo_aliado = p.codigo_aliado "
+			+ "and p.anno = ?3  and mes between ?4 and ?4) desc, (select coalesce(sum(cantidad),'0') from ventas a where "
+			+ "v.codigo_aliado = a.codigo_aliado and a.fecha_factura between ?1 and ?2 ) desc", nativeQuery = true)
+	List<String> findByCodigoAliadoMostSellerBetween(Date fecha1, Date fecha2,
+			int anno, int mes);
+
 }

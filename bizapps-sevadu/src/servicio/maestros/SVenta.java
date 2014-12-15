@@ -161,4 +161,8 @@ public class SVenta {
 			Date fechaDesde2, Date fechaHasta2, String cliente) {
 		return ventaDAO.countDistinctMaestroProductoMaestroMarcaCodigoDusaBetween(aliado2,fechaDesde2,fechaHasta2, cliente);
 	}
+
+	public List<String> buscarAliadosMasVendedores(Date fecha1, Date fecha2, int anno, int mes) {
+		return ventaDAO.findByCodigoAliadoMostSellerBetween(fecha1, fecha2, anno, mes);
+	}
 }
