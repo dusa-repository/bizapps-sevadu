@@ -157,6 +157,17 @@ public class SVenta {
 						aliado2, ids, fechaDesde2, fechaHasta2, o);
 	}
 
+	public List<Venta> buscarPorAliadoEntreFechasYMarcasOrdenadoPorFecha2(
+			String aliado2, Date fechaDesde2, Date fechaHasta2) {
+		List<String> ordenar = new ArrayList<String>();
+		Sort o;
+		ordenar.add("fechaFactura");
+		o = new Sort(Sort.Direction.ASC, ordenar);
+		return ventaDAO
+				.findByMaestroAliadoCodigoAliadoAndFechaFacturaBetween(
+						aliado2, fechaDesde2, fechaHasta2, o);
+	}
+
 	public Integer buscarVentasDeMarcasActivas(String aliado2,
 			Date fechaDesde2, Date fechaHasta2, String cliente) {
 		return ventaDAO.countDistinctMaestroProductoMaestroMarcaCodigoDusaBetween(aliado2,fechaDesde2,fechaHasta2, cliente);

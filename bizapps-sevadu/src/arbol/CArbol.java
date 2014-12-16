@@ -38,6 +38,7 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Cell;
+import org.zkoss.zul.Center;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Hbox;
@@ -46,7 +47,7 @@ import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Separator;
+import org.zkoss.zul.Space;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabpanel;
@@ -57,7 +58,6 @@ import org.zkoss.zul.West;
 
 import componente.AngularActivacion;
 import componente.AngularVenta;
-import componente.Mensaje;
 import componente.Validador;
 import controlador.maestros.CGenerico;
 
@@ -86,6 +86,8 @@ public class CArbol extends CGenerico {
 	private Groupbox grxGrafico;
 	@Wire
 	private Div divGrafico;
+	@Wire
+	private Center center;
 	private AngularActivacion angular;
 	private AngularVenta angularVenta;
 	private boolean todosAngular = false;
@@ -136,14 +138,17 @@ public class CArbol extends CGenerico {
 			e.printStackTrace();
 		}
 		if (unAngular) {
+			center.setStyle("background-image: none;");
 			MaestroAliado aliado = servicioAliado
 					.buscarPorLoginUsuario(nombreUsuarioSesion());
 			if (aliado != null) {
 				pintarGraficasAliado(aliado, fechaPrimero, fechaHoy);
 			}
 		}
-		if (todosAngular)
+		if (todosAngular) {
 			pintarGraficasAdmin(fechaPrimero, fechaHoy);
+			center.setStyle("background-image: none;");
+		}
 	}
 
 	private void pintarGraficasAdmin(Date fecha1, Date fecha2) {
@@ -168,18 +173,52 @@ public class CArbol extends CGenerico {
 			listaAliados.add(maestroAliado.getCodigoAliado());
 		}
 		if (!listaAliados.isEmpty()) {
+			int valor = 0;
+			boolean entro = false;
+			boolean entroSegundo = false;
+			Hbox cajaHorizontal = new Hbox();
 			for (int i = 0; i < listaAliados.size(); i++) {
+				if (i > 2 && i < 6) {
+					if (!entro) {
+						entro = true;
+						valor = listaAliados.size();
+					}
+					valor = valor - 1;
+				} else {
+					if (i >= 6) {
+						if (!entroSegundo) {
+							entroSegundo = true;
+							valor = 2;
+						}
+						valor = valor + 1;
+						if (valor == listaAliados.size() - 4)
+							i = listaAliados.size();
+					} else
+						valor = i;
+				}
 				MaestroAliado aliado = servicioAliado.buscar(listaAliados
-						.get(i));
+						.get(valor));
 				angularVenta = new AngularVenta(aliado, servicioVenta,
-						servicioPlan, fecha1, fecha2, ids);
-				Hbox caja = new Hbox();
+						servicioPlan, fecha1, fecha2);
 				Cell celda = new Cell();
-				celda.setWidth("33,33%");
+				celda.setWidth("33%");
 				celda.appendChild(angularVenta);
-				caja.appendChild(celda);
-				caja.setWidth("100%");
-				divGrafico.appendChild(caja);
+				cajaHorizontal.appendChild(celda);
+				if ((i + 1) % 3 == 0) {
+					if (i == listaAliados.size()) {
+						Cell celda2 = new Cell();
+						celda2.setWidth("33%");
+						celda2.appendChild(new Space());
+						cajaHorizontal.appendChild(celda2);
+					}
+					cajaHorizontal.setWidth("100%");
+					divGrafico.appendChild(cajaHorizontal);
+					cajaHorizontal = new Hbox();
+				}
+			}
+			if ((listaAliados.size() + 1) % 2 != 0) {
+				cajaHorizontal.setWidth("100%");
+				divGrafico.appendChild(cajaHorizontal);
 			}
 		}
 	}
@@ -190,23 +229,20 @@ public class CArbol extends CGenerico {
 		List<MaestroMarca> listMark = servicioMarca.buscarActivasActivacion();
 		angular = new AngularActivacion(listMark, list, aliado, servicioVenta,
 				fecha1, fecha2);
-		List<MaestroMarca> marcas = servicioMarca.buscarTodosOrdenados();
-		List<String> ids = new ArrayList<String>();
-		for (Iterator<MaestroMarca> iterator = marcas.iterator(); iterator
-				.hasNext();) {
-			MaestroMarca marca = (MaestroMarca) iterator.next();
-			ids.add(marca.getMarcaDusa());
-		}
 		angularVenta = new AngularVenta(aliado, servicioVenta, servicioPlan,
-				fecha1, fecha2, ids);
+				fecha1, fecha2);
 		Hbox caja = new Hbox();
 		Cell celda = new Cell();
-		celda.setWidth("50%");
+		celda.setWidth("35%");
 		celda.appendChild(angular);
 		caja.appendChild(celda);
 		celda = new Cell();
-		celda.setWidth("50%");
+		celda.setWidth("35%");
 		celda.appendChild(angularVenta);
+		caja.appendChild(celda);
+		celda = new Cell();
+		celda.setWidth("30%");
+		celda.appendChild(new Space());
 		caja.appendChild(celda);
 		caja.setWidth("100%");
 		divGrafico.appendChild(caja);

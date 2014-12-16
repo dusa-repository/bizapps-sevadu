@@ -50,4 +50,10 @@ public class SPlanVenta {
 						maestroAliado, maestroProducto.getMaestroMarca()
 								.getMarcaDusa(), mes, anno);
 	}
+
+	public Double sumarPlanAliado2(MaestroAliado maestroAliado, int anno, int mes) {
+		return planVentaDAO
+				.sumByIdMaestroAliadoAnIdMaestroProductoAndIdMesAndIdAnno2(
+						maestroAliado, mes, anno);
+	}
 }
