@@ -30,13 +30,12 @@ public class AngularVenta extends Charts {
 	DateFormat formatoMes = new SimpleDateFormat("MM");
 
 	public AngularVenta(MaestroAliado aliado, SVenta servicioVenta,
-			SPlanVenta servicioPlan, Date fechaDesde2, Date fechaHasta2,
-			List<String> ids) {
+			SPlanVenta servicioPlan, Date fechaDesde2, Date fechaHasta2) {
 		super();
 		this.setType("gauge");
 		List<Venta> ventas = servicioVenta
-				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorFecha(
-						aliado.getCodigoAliado(), fechaDesde2, fechaHasta2, ids);
+				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorFecha2(
+						aliado.getCodigoAliado(), fechaDesde2, fechaHasta2);
 		// if (!ventas.isEmpty()) {
 		double vendido = 0;
 
@@ -52,9 +51,8 @@ public class AngularVenta extends Charts {
 			}
 			Double plan2 = (double) 0;
 			if (!ventas.isEmpty()) {
-				plan2 = servicioPlan.sumarPlanAliado(ventas.get(0)
-						.getMaestroAliado(),
-						ventas.get(0).getMaestroProducto(), annoPlanDesde,
+				plan2 = servicioPlan.sumarPlanAliado2(ventas.get(0)
+						.getMaestroAliado(), annoPlanDesde,
 						mesPlanDesde);
 			}
 			suma = suma + plan2;
