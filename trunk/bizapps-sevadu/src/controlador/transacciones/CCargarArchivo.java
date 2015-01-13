@@ -113,7 +113,8 @@ public class CCargarArchivo extends CGenerico {
 
 			@Override
 			public void salir() {
-				cerrarVentana(divVCargarArchivo, titulo, tabs, grxGraficoGeneral);
+				cerrarVentana(divVCargarArchivo, titulo, tabs,
+						grxGraficoGeneral);
 			}
 
 			@Override
@@ -200,11 +201,11 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-				if (!entro) {
-					row = rowIterator.next();
-					contadorRow = contadorRow + 1;
-					entro = true;
-				}
+//				if (!entro) {
+//					row = rowIterator.next();
+//					contadorRow = contadorRow + 1;
+//					entro = true;
+//				}
 				MaestroProducto producto = null;
 				String idProducto = null;
 				Double refProducto = null;
@@ -398,11 +399,11 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-				if (!entro) {
-					row = rowIterator.next();
-					contadorRow = contadorRow + 1;
-					entro = true;
-				}
+//				if (!entro) {
+//					row = rowIterator.next();
+//					contadorRow = contadorRow + 1;
+//					entro = true;
+//				}
 				MarcaActivadaVendedor marcaActivada = new MarcaActivadaVendedor();
 				MaestroAliado aliado = null;
 				String idAliado = null;
@@ -1345,11 +1346,11 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-				if (!entro) {
-					row = rowIterator.next();
-					contadorRow = contadorRow + 1;
-					entro = true;
-				}
+//				if (!entro) {
+//					row = rowIterator.next();
+//					contadorRow = contadorRow + 1;
+//					entro = true;
+//				}
 				Cliente cliente = new Cliente();
 				MaestroAliado aliado = null;
 				String idAliado = null;
@@ -1719,11 +1720,11 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-				if (!entro) {
-					row = rowIterator.next();
-					contadorRow = contadorRow + 1;
-					entro = true;
-				}
+//				if (!entro) {
+//					row = rowIterator.next();
+//					contadorRow = contadorRow + 1;
+//					entro = true;
+//				}
 				Existencia existencia = new Existencia();
 				MaestroAliado aliado = null;
 				String idAliado = null;
@@ -1857,11 +1858,13 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-				if (!entro) {
-					row = rowIterator.next();
-					contadorRow = contadorRow + 1;
-					entro = true;
-				}
+//				if (!entro) {
+//					if (rowIterator.hasNext()) {
+//						row = rowIterator.next();
+//						contadorRow = contadorRow + 1;
+//						entro = true;
+//					}
+//				}
 				PlanVenta planVenta = new PlanVenta();
 				MaestroAliado aliado = null;
 				String idAliado = null;
@@ -2077,11 +2080,13 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-				if (!entro) {
-					row = rowIterator.next();
-					contadorRow = contadorRow + 1;
-					entro = true;
-				}
+//				if (!entro) {
+//					if (rowIterator.hasNext()) {
+//						row = rowIterator.next();
+//						contadorRow = contadorRow + 1;
+//						entro = true;
+//					}
+//				}
 				Venta venta = new Venta();
 				MaestroAliado aliado = null;
 				String idAliado = null;
