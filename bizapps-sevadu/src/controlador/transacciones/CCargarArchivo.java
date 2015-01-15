@@ -1448,6 +1448,7 @@ public class CCargarArchivo extends CGenerico {
 								errorLong = true;
 							} else {
 								zona = servicioF0005.buscar("00", "01", idZona);
+								zona= new F0005();
 								if (zona == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "01", idZona,
@@ -1472,6 +1473,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								ciudad = servicioF0005.buscar("00", "03",
 										idCiudad);
+								ciudad= new F0005();
 								if (ciudad == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "03", idCiudad,
@@ -1496,6 +1498,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								estado = servicioF0005.buscar("00", "02",
 										idEstado);
+								estado = new F0005();
 								if (estado == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "02", idEstado,
@@ -1520,6 +1523,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								vendedor = servicioF0005.buscar("00", "00",
 										idVendedor);
+								vendedor = new F0005();
 								if (vendedor == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "00",
@@ -1545,6 +1549,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								supervisor = servicioF0005.buscar("00", "00",
 										idSupervisor);
+								supervisor = new F0005();
 								if (supervisor == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "00",
@@ -1952,6 +1957,7 @@ public class CCargarArchivo extends CGenerico {
 								errorLong = true;
 							} else {
 								zona = servicioF0005.buscar("00", "01", idZona);
+								zona = new F0005();
 								if (zona == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "01", idZona,
@@ -1976,6 +1982,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								vendedor = servicioF0005.buscar("00", "00",
 										idVendedor);
+								vendedor= new F0005();
 								if (vendedor == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "00",
@@ -2205,6 +2212,7 @@ public class CCargarArchivo extends CGenerico {
 								errorLong = true;
 							} else {
 								zona = servicioF0005.buscar("00", "01", idZona);
+								zona= new F0005();
 								if (zona == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "01", idZona,
@@ -2229,6 +2237,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								ciudad = servicioF0005.buscar("00", "03",
 										idCiudad);
+								ciudad= new F0005();
 								if (ciudad == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "03", idCiudad,
@@ -2324,6 +2333,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								especie = servicioF0005.buscar("00", "06",
 										idEspecie);
+								especie= new F0005();
 								if (especie == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "06",
@@ -2358,6 +2368,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								vendedor = servicioF0005.buscar("00", "00",
 										idVendedor);
+								vendedor = new F0005();
 								if (vendedor == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "00",
@@ -2458,6 +2469,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								supervisor = servicioF0005.buscar("00", "00",
 										idSupervisor);
+								supervisor = new F0005();
 								if (supervisor == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "00",
