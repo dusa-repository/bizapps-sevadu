@@ -58,31 +58,31 @@ public class SUsuario {
 	public Usuario buscarPorLogin(String value) {
 		return usuarioDAO.findByLogin(value);
 	}
-
-	public List<Usuario> buscarTodosSinAliado() {
-		List<MaestroAliado> list = aliadoDAO.findByUsuarioNotNull();
-		List<Long> lista = new ArrayList<Long>();
-		if (list.isEmpty())
-			return usuarioDAO.findAll();
-		else {
-			for (int i = 0; i < list.size(); i++) {
-				lista.add(list.get(i).getUsuario().getIdUsuario());
-			}
-			return usuarioDAO.findByIdUsuarioNotIn(lista);
-		}
-	}
-
-	public Usuario buscarPorLoginYUserNull(String value) {
-		List<MaestroAliado> list = aliadoDAO.findByUsuarioNotNull();
-		List<Long> lista = new ArrayList<Long>();
-		if (list.isEmpty())
-			return usuarioDAO.findByLogin(value);
-		else {
-			for (int i = 0; i < list.size(); i++) {
-				lista.add(list.get(i).getUsuario().getIdUsuario());
-			}
-			return usuarioDAO.findByLoginAndIdUsuarioNotIn(value, lista);
-		}
-	}
+//
+//	public List<Usuario> buscarTodosSinAliado() {
+//		List<MaestroAliado> list = aliadoDAO.findByUsuarioNotNull();
+//		List<Long> lista = new ArrayList<Long>();
+//		if (list.isEmpty())
+//			return usuarioDAO.findAll();
+//		else {
+//			for (int i = 0; i < list.size(); i++) {
+//				lista.add(list.get(i).getUsuario().getIdUsuario());
+//			}
+//			return usuarioDAO.findByIdUsuarioNotIn(lista);
+//		}
+//	}
+//
+//	public Usuario buscarPorLoginYUserNull(String value) {
+//		List<MaestroAliado> list = aliadoDAO.findByUsuarioNotNull();
+//		List<Long> lista = new ArrayList<Long>();
+//		if (list.isEmpty())
+//			return usuarioDAO.findByLogin(value);
+//		else {
+//			for (int i = 0; i < list.size(); i++) {
+//				lista.add(list.get(i).getUsuario().getIdUsuario());
+//			}
+//			return usuarioDAO.findByLoginAndIdUsuarioNotIn(value, lista);
+//		}
+//	}
 
 }

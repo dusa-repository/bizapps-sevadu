@@ -12,9 +12,9 @@ public interface IMaestroAliadoDAO extends JpaRepository<MaestroAliado, String> 
 	@Query("select m from MaestroAliado m order by m.nombre asc")
 	List<MaestroAliado> findAllOrderByNombreAsc();
 
-	List<MaestroAliado> findByUsuarioNotNull();
-
-	MaestroAliado findByUsuarioLogin(String nombreUsuarioSesion);
+//	List<MaestroAliado> findByUsuarioNotNull();
+//
+//	MaestroAliado findByUsuarioLogin(String nombreUsuarioSesion);
 
 	List<MaestroAliado> findByCodigoAliadoNotIn(List<String> listaAliados);
 

@@ -8,7 +8,8 @@
 				<columns visible="false">
 					<column label="" width="25%" />
 					<column label="" width="25%" />
-					<column label="" width="50%" />
+					<column label="" width="25%" />
+					<column label="" width="25%" />
 				</columns>
 				<rows>
 					<row>
@@ -19,7 +20,17 @@
 						</hbox>
 						<datebox width="100%" readonly="true" id="dtbConfiguracion"
 							tooltiptext="Seleccione la Fecha" />
-							<hbox/>
+						<hbox>
+							<label class="etiqueta" value="Porcentaje color Amarillo (Angular):" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red">
+							</label>
+						</hbox>
+						<cell colspan="3">
+							<doublespinner value="0" id="spnPorcentaje" width="100%"
+								tooltiptext="Ingrese el porcentaje que debe representar el color amarillo en los graficos angulares"
+								step="1" format="#.##" constraint="min 0 max 100" />
+						</cell>
 					</row>
 				</rows>
 			</grid>

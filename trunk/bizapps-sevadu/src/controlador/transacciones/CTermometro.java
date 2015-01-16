@@ -17,6 +17,7 @@ import java.util.TimeZone;
 
 import modelo.maestros.MaestroAliado;
 import modelo.seguridad.Arbol;
+import modelo.seguridad.Usuario;
 import modelo.termometro.TermometroCliente;
 
 import org.springframework.security.core.Authentication;
@@ -98,6 +99,7 @@ public class CTermometro extends CGenerico {
 			"Diciembre" };
 	String nombre = "";
 	West west;
+
 	@Override
 	public void inicializar() throws IOException {
 		Authentication authe = SecurityContextHolder.getContext()
@@ -217,42 +219,14 @@ public class CTermometro extends CGenerico {
 						if (rowTermometro.isVisible())
 							aliado = servicioAliado
 									.buscar(txtAliado.getValue());
-						else
-							aliado = servicioAliado
-									.buscarPorLoginUsuario(nombreUsuarioSesion());
-						if (aliado != null) {
-							int diasHabiles = 0;
-							int diasRecorridos = 0;
-							int diasFaltantes = 0;
-							List<Integer> enteros = new ArrayList<Integer>();
-							if (anno2 != 0) {
-								for (int i = tiempo; i < 13; i++) {
-									enteros = calcularDias(anno2, i);
-									diasHabiles = diasHabiles + enteros.get(0);
-									diasRecorridos = diasRecorridos
-											+ enteros.get(1);
-									diasFaltantes = diasFaltantes
-											+ enteros.get(2);
-								}
-								for (int i = 1; i < periodo + 1; i++) {
-									enteros = calcularDias(anno, i);
-									diasHabiles = diasHabiles + enteros.get(0);
-									diasRecorridos = diasRecorridos
-											+ enteros.get(1);
-									diasFaltantes = diasFaltantes
-											+ enteros.get(2);
-								}
-							} else {
-								for (int i = tiempo; i < periodo + 1; i++) {
-									enteros = calcularDias(anno, i);
-									diasHabiles = diasHabiles + enteros.get(0);
-									diasRecorridos = diasRecorridos
-											+ enteros.get(1);
-									diasFaltantes = diasFaltantes
-											+ enteros.get(2);
-								}
-								diasRecorridos = diasHabiles - diasFaltantes;
+						else {
+							Usuario user = servicioUsuario
+									.buscarPorLogin(nombreUsuarioSesion());
+							if (user.getMaestroAliado() != null) {
+								aliado = user.getMaestroAliado();
 							}
+						}
+						if (aliado != null) {
 							switch (tipo) {
 							case 1:
 								ss.setSrc("/public/plantilla.xlsx");
@@ -350,7 +324,7 @@ public class CTermometro extends CGenerico {
 		};
 		Button guardar = (Button) botonera.getChildren().get(3);
 		guardar.setLabel("Generar");
-		guardar.setSrc("/public/imagenes/botones/reporte.png");
+		guardar.setImage("/public/imagenes/botones/reporte.png");
 		botonera.getChildren().get(0).setVisible(false);
 		botonera.getChildren().get(1).setVisible(false);
 		botonera.getChildren().get(2).setVisible(false);
@@ -703,8 +677,8 @@ public class CTermometro extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo", "Nombre",
-				"Zona", "Vendedor") {
+				"Catalogo de Aliados", listaObjetos, true, false, false,
+				"Codigo", "Nombre", "Zona", "Vendedor") {
 
 			@Override
 			protected List<MaestroAliado> buscar(List<String> valores) {
@@ -795,7 +769,8 @@ public class CTermometro extends CGenerico {
 				}
 			}
 			try {
-				Filedownload.save(new AMedia(nombre+".xlsx", null, null, file, true));
+				Filedownload.save(new AMedia(nombre + ".xlsx", null, null,
+						file, true));
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -805,55 +780,4 @@ public class CTermometro extends CGenerico {
 			msj.mensajeAlerta("Debe generar el termometro antes de exportarlo");
 	}
 
-	protected List<Integer> calcularDias(int anno2, int tiempo) {
-		List<Integer> enteros = new ArrayList<Integer>();
-		String fechaString = anno2 + "-" + tiempo;
-		formato.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
-		if (tiempo != 12 && tiempo != 11 && tiempo != 10)
-			fechaString = anno2 + "-" + "0" + tiempo;
-		Date fecha = new Date();
-		try {
-			fecha = formato.parse(fechaString);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		int tiempo2 = tiempo + 1;
-		String fechaString2 = anno2 + "-" + tiempo2;
-		if (tiempo2 != 13 && tiempo2 != 12 && tiempo2 != 11 && tiempo2 != 10)
-			fechaString2 = anno2 + "-" + "0" + tiempo2;
-		Date fecha2 = new Date();
-		try {
-			fecha2 = formato.parse(fechaString2);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Calendar calendario = new GregorianCalendar();
-		calendario.setTime(fecha2);
-		calendario.add(Calendar.DAY_OF_YEAR, -1);
-		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
-		fecha2 = calendario.getTime();
-		habiles = obtenerDiasHabiles(fecha, fecha2);
-		Date fechaHoy = null;
-		calendario = Calendar.getInstance();
-		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
-		fechaHoy = calendario.getTime();
-		recorridos = 0;
-		faltantes = 0;
-		if (fechaHoy.after(fecha)) {
-			recorridos = obtenerDiasHabiles(fecha, fechaHoy);
-			if (recorridos >= habiles)
-				recorridos = 0;
-			else
-				faltantes = habiles - recorridos;
-		} else {
-			faltantes = habiles;
-			recorridos = 0;
-		}
-		enteros.add(habiles);
-		enteros.add(recorridos);
-		enteros.add(faltantes);
-		return enteros;
-	}
 }

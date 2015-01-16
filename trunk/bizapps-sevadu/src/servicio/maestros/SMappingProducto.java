@@ -85,4 +85,15 @@ public class SMappingProducto {
 	public List<MappingProducto> buscarPorProducto(String clave) {
 		return mappingDAO.findByIdMaestroProductoCodigoProductoDusa(clave);
 	}
+
+	public MappingProducto buscarPorAliadoyProductoNoDusa(MaestroAliado aliado,
+			String idProducto) {
+		List<MappingProducto> list = mappingDAO
+				.findByIdMaestroAliadoAndCodigoProductoCliente(aliado,
+						idProducto);
+		if (!list.isEmpty())
+			return list.get(0);
+		else
+			return null;
+	}
 }

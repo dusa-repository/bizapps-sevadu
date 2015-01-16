@@ -96,7 +96,8 @@ public class CArbol extends CGenerico {
 
 	@Override
 	public void inicializar() throws IOException {
-		Clients.confirmClose("Mensaje de la Aplicacion:");
+		// Clients.confirmClose("Mensaje de la Aplicacion:"); comentarizado
+		// mientras se encuentra solucion a los graficos
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		Usuario u = servicioUsuario.buscarUsuarioPorNombre(auth.getName());
@@ -118,16 +119,6 @@ public class CArbol extends CGenerico {
 			tabs.clear();
 		}
 		Date fechaHoy = new Date();
-		Calendar calendar = new GregorianCalendar();
-		calendar = Calendar.getInstance();
-		calendar.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
-		calendar.setTime(fechaHoy);
-		calendar.set(Calendar.HOUR, 0);
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		fechaHoy = calendario.getTime();
 		DateFormat formatoNuevo = new SimpleDateFormat("MM-yyyy");
 		String parteFecha = "01-" + formatoNuevo.format(fechaHoy);
 		SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
@@ -137,21 +128,39 @@ public class CArbol extends CGenerico {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		String parteFecha2 = lastDay(fechaHoy) + formatoNuevo.format(fechaHoy);
+		Date fechaUltimo = new Date();
+		try {
+			fechaUltimo = formato.parse(parteFecha2);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		String hoy = formato.format(fechaHoy);
+		try {
+			fechaHoy = formato.parse(hoy);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		int habilesHoy = obtenerDiasHabiles(fechaPrimero, fechaHoy);
+		int habilesTotal = obtenerDiasHabiles(fechaPrimero, fechaUltimo);
 		if (unAngular) {
 			center.setStyle("background-image: none;");
-			MaestroAliado aliado = servicioAliado
-					.buscarPorLoginUsuario(nombreUsuarioSesion());
-			if (aliado != null) {
-				pintarGraficasAliado(aliado, fechaPrimero, fechaHoy);
+			Usuario usuario = servicioUsuario
+					.buscarPorLogin(nombreUsuarioSesion());
+			if (usuario.getMaestroAliado() != null) {
+				pintarGraficasAliado(usuario.getMaestroAliado(), fechaPrimero,
+						fechaHoy, fechaUltimo, habilesHoy, habilesTotal);
 			}
 		}
 		if (todosAngular) {
-			pintarGraficasAdmin(fechaPrimero, fechaHoy);
+			pintarGraficasAdmin(fechaPrimero, fechaHoy, fechaUltimo,
+					habilesHoy, habilesTotal);
 			center.setStyle("background-image: none;");
 		}
 	}
 
-	private void pintarGraficasAdmin(Date fecha1, Date fecha2) {
+	private void pintarGraficasAdmin(Date fecha1, Date fecha2,
+			Date fechaUltimo, int habilesHoy, int habilesTotal) {
 		DateFormat formatoAnno = new SimpleDateFormat("yyyy");
 		DateFormat formatoMes = new SimpleDateFormat("MM");
 		int annoPlanDesde = Integer.parseInt(formatoAnno.format(fecha1));
@@ -199,7 +208,8 @@ public class CArbol extends CGenerico {
 				MaestroAliado aliado = servicioAliado.buscar(listaAliados
 						.get(valor));
 				angularVenta = new AngularVenta(aliado, servicioVenta,
-						servicioPlan, fecha1, fecha2);
+						servicioPlan, fecha1, fecha2, servicioConfiguracion,
+						habilesHoy, habilesTotal);
 				Cell celda = new Cell();
 				celda.setWidth("33%");
 				celda.appendChild(angularVenta);
@@ -224,13 +234,13 @@ public class CArbol extends CGenerico {
 	}
 
 	private void pintarGraficasAliado(MaestroAliado aliado, Date fecha1,
-			Date fecha2) {
+			Date fecha2, Date fechaUltimo, int habilesHoy, int habilesTotal) {
 		List<Cliente> list = servicioCliente.buscarPorAliado(aliado);
 		List<MaestroMarca> listMark = servicioMarca.buscarActivasActivacion();
 		angular = new AngularActivacion(listMark, list, aliado, servicioVenta,
-				fecha1, fecha2);
+				fecha1, fecha2, servicioConfiguracion);
 		angularVenta = new AngularVenta(aliado, servicioVenta, servicioPlan,
-				fecha1, fecha2);
+				fecha1, fecha2, servicioConfiguracion, habilesHoy, habilesTotal);
 		Hbox caja = new Hbox();
 		Cell celda = new Cell();
 		celda.setWidth("35%");

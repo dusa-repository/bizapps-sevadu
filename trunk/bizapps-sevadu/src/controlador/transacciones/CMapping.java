@@ -9,6 +9,7 @@ import java.util.List;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MappingProducto;
 import modelo.seguridad.Arbol;
+import modelo.seguridad.Usuario;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -212,8 +213,8 @@ public class CMapping extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo",
-				"Nombre", "Zona", "Vendedor") {
+				"Catalogo de Aliados", listaObjetos, true, false, false,
+				"Codigo", "Nombre", "Zona", "Vendedor") {
 
 			@Override
 			protected List<MaestroAliado> buscar(List<String> valores) {
@@ -313,8 +314,11 @@ public class CMapping extends CGenerico {
 				if (row.isVisible())
 					aliado = servicioAliado.buscar(txtAliado.getValue());
 				else {
-					aliado = servicioAliado
-							.buscarPorLoginUsuario(nombreUsuarioSesion());
+					Usuario user = servicioUsuario
+							.buscarPorLogin(nombreUsuarioSesion());
+					if (user.getMaestroAliado() != null) {
+						aliado = user.getMaestroAliado();
+					}
 				}
 				if (aliado != null) {
 					switch (tipo) {

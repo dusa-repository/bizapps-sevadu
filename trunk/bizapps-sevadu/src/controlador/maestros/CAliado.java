@@ -14,7 +14,6 @@ import modelo.maestros.MappingProducto;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.PlanVenta;
 import modelo.maestros.Venta;
-import modelo.seguridad.Usuario;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -22,7 +21,6 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
@@ -52,24 +50,17 @@ public class CAliado extends CGenerico {
 	@Wire
 	private Textbox txtNombre;
 	@Wire
-	private Textbox txtUsuario;
-	@Wire
 	private Div divVAliado;
 	@Wire
 	private Div botoneraAliado;
 	@Wire
 	private Div catalogoAliado;
 	@Wire
-	private Div catalogoUsuario;
-	@Wire
-	private Label lblUsuario;
-	@Wire
 	private Groupbox gpxDatos;
 	@Wire
 	private Groupbox gpxRegistro;
 	Botonera botonera;
 	Catalogo<MaestroAliado> catalogo;
-	Catalogo<Usuario> catalogoU;
 	String clave = null;
 	List<MaestroAliado> listaGeneral = new ArrayList<MaestroAliado>();
 
@@ -112,13 +103,6 @@ public class CAliado extends CGenerico {
 						buscadorCiudad.settearCampo(servicioF0005.buscar("00",
 								"03", aliado.getCiudadAliado()));
 						txtCodigo.setDisabled(true);
-						if (aliado.getUsuario() != null) {
-							txtUsuario.setValue(aliado.getUsuario().getLogin());
-							lblUsuario.setValue(aliado.getUsuario()
-									.getPrimerNombre()
-									+ " "
-									+ aliado.getUsuario().getPrimerApellido());
-						}
 						txtNombre.setFocus(true);
 					} else
 						msj.mensajeAlerta(Mensaje.editarSoloUno);
@@ -149,9 +133,6 @@ public class CAliado extends CGenerico {
 
 				if (validar()) {
 					MaestroAliado aliado = new MaestroAliado();
-					String usuario = txtUsuario.getValue();
-					Usuario user = servicioUsuario.buscarPorLogin(usuario);
-					aliado.setUsuario(user);
 					aliado.setCodigoAliado(txtCodigo.getValue());
 					aliado.setNombre(txtNombre.getValue());
 					aliado.setCiudadAliado(buscadorCiudad.obtenerCaja());
@@ -384,10 +365,8 @@ public class CAliado extends CGenerico {
 	}
 
 	protected void limpiarCampos() {
-		txtUsuario.setValue("");
 		txtCodigo.setValue("");
 		txtNombre.setValue("");
-		lblUsuario.setValue("");
 		buscadorCiudad.settearCampo(null);
 		buscadorEstado.settearCampo(null);
 		buscadorVendedor.settearCampo(null);
@@ -511,92 +490,5 @@ public class CAliado extends CGenerico {
 			}
 		};
 		catalogo.setParent(catalogoAliado);
-	}
-
-	@Listen("onClick = #btnBuscarUsuario")
-	public void mostrarCatalogoUsuario() {
-		final List<Usuario> usuario = servicioUsuario.buscarTodosSinAliado();
-		catalogoU = new Catalogo<Usuario>(catalogoUsuario,
-				"Usuarios sin Aliado", usuario, true, false, false, "Cedula",
-				"Correo", "Primer Nombre", "Segundo Nombre", "Primer Apellido",
-				"Segundo Apellido", "Sexo", "Telefono", "Direccion") {
-
-			@Override
-			protected List<Usuario> buscar(List<String> valores) {
-
-				List<Usuario> user = new ArrayList<Usuario>();
-
-				for (Usuario actividadord : usuario) {
-					if (actividadord.getCedula().toLowerCase()
-							.contains(valores.get(0).toLowerCase())
-							&& actividadord.getEmail().toLowerCase()
-									.contains(valores.get(1).toLowerCase())
-							&& actividadord.getPrimerNombre().toLowerCase()
-									.contains(valores.get(2).toLowerCase())
-							&& actividadord.getSegundoNombre().toLowerCase()
-									.contains(valores.get(3).toLowerCase())
-							&& actividadord.getPrimerApellido().toLowerCase()
-									.contains(valores.get(4).toLowerCase())
-							&& actividadord.getSegundoApellido().toLowerCase()
-									.contains(valores.get(5).toLowerCase())
-							&& actividadord.getSexo().toLowerCase()
-									.contains(valores.get(6).toLowerCase())
-							&& actividadord.getTelefono().toLowerCase()
-									.contains(valores.get(7).toLowerCase())
-							&& actividadord.getDireccion().toLowerCase()
-									.contains(valores.get(8).toLowerCase())) {
-
-						user.add(actividadord);
-					}
-				}
-				return user;
-			}
-
-			@Override
-			protected String[] crearRegistros(Usuario usuarios) {
-				String[] registros = new String[9];
-				registros[0] = usuarios.getCedula();
-				registros[1] = usuarios.getEmail();
-				registros[2] = usuarios.getPrimerNombre();
-				registros[3] = usuarios.getSegundoNombre();
-				registros[4] = usuarios.getPrimerApellido();
-				registros[5] = usuarios.getSegundoApellido();
-				registros[6] = usuarios.getSexo();
-				registros[7] = usuarios.getTelefono();
-				registros[8] = usuarios.getDireccion();
-				return registros;
-			}
-
-		};
-
-		catalogoU.setClosable(true);
-		catalogoU.setWidth("80%");
-		catalogoU.setParent(catalogoUsuario);
-		catalogoU.doModal();
-	}
-
-	@Listen("onSeleccion = #catalogoUsuario")
-	public void seleccionUsuario() {
-		Usuario usuario = catalogoU.objetoSeleccionadoDelCatalogo();
-		txtUsuario.setValue(usuario.getLogin());
-		lblUsuario.setValue(usuario.getPrimerNombre() + " "
-				+ usuario.getPrimerApellido());
-		catalogoU.setParent(null);
-	}
-
-	@Listen("onChange = #txtUsuario; onOK= #txtUsuario")
-	public void buscarNombreMarca() {
-		Usuario usuario = servicioUsuario.buscarPorLoginYUserNull(txtUsuario
-				.getValue());
-		if (usuario != null) {
-			txtUsuario.setValue(usuario.getLogin());
-			lblUsuario.setValue(usuario.getPrimerNombre() + " "
-					+ usuario.getPrimerApellido());
-		} else {
-			msj.mensajeAlerta(Mensaje.noHayRegistros);
-			txtUsuario.setValue("");
-			txtUsuario.setFocus(true);
-			lblUsuario.setValue("");
-		}
 	}
 }
