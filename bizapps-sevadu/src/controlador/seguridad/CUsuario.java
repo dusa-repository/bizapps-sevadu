@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import modelo.maestros.MaestroAliado;
 import modelo.seguridad.Grupo;
 import modelo.seguridad.Usuario;
 
@@ -27,6 +28,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Fileupload;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Image;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
@@ -37,12 +39,10 @@ import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 
 import arbol.CArbol;
-
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
-
 import controlador.maestros.CGenerico;
 
 public class CUsuario extends CGenerico {
@@ -99,11 +99,19 @@ public class CUsuario extends CGenerico {
 	@Wire
 	private Radio rdoSexoMUsuario;
 	@Wire
+	private Textbox txtAliado;
+	@Wire
+	private Button btnBuscarAliado;
+	@Wire
+	private Label lblNombreAliado;
+	@Wire
 	private Image imagen;
 	@Wire
 	private Fileupload fudImagenUsuario;
 	@Wire
 	private Media media;
+	@Wire
+	private Div divCatalogoAliado;
 	Botonera botonera;
 	@Wire
 	private Groupbox gpxDatos;
@@ -113,6 +121,7 @@ public class CUsuario extends CGenerico {
 	Catalogo<Usuario> catalogo;
 	List<Grupo> gruposDisponibles = new ArrayList<Grupo>();
 	List<Grupo> gruposOcupados = new ArrayList<Grupo>();
+	Catalogo<MaestroAliado> catalogoAliado;
 	URL url = getClass().getResource("usuario.png");
 
 	@Override
@@ -178,6 +187,12 @@ public class CUsuario extends CGenerico {
 						txtCedulaUsuario.setDisabled(true);
 						id = usuario.getIdUsuario();
 						llenarListas(usuario);
+						if (usuario.getMaestroAliado() != null) {
+							lblNombreAliado.setValue(usuario.getMaestroAliado()
+									.getNombre());
+							txtAliado.setValue(usuario.getMaestroAliado()
+									.getCodigoAliado());
+						}
 					} else
 						msj.mensajeAlerta(Mensaje.editarSoloUno);
 				}
@@ -199,53 +214,60 @@ public class CUsuario extends CGenerico {
 			public void guardar() {
 				if (validar()) {
 					if (buscarPorLogin()) {
-					Set<Grupo> gruposUsuario = new HashSet<Grupo>();
-					for (int i = 0; i < ltbGruposAgregados.getItemCount(); i++) {
-						Grupo grupo = ltbGruposAgregados.getItems().get(i)
-								.getValue();
-						gruposUsuario.add(grupo);
-					}
-					String cedula = txtCedulaUsuario.getValue();
-					String correo = txtCorreoUsuario.getValue();
-					String direccion = txtDireccionUsuario.getValue();
-					String login = txtLoginUsuario.getValue();
-					String password = txtPasswordUsuario.getValue();
-					String nombre = txtNombreUsuario.getValue();
-					String apellido = txtApellidoUsuario.getValue();
-					String nombre2 = txtNombre2Usuario.getValue();
-					String apellido2 = txtApellido2Usuario.getValue();
-					String telefono = txtTelefonoUsuario.getValue();
-
-					String sexo = "";
-					if (rdoSexoFUsuario.isChecked())
-						sexo = "F";
-					else
-						sexo = "M";
-					byte[] imagenUsuario = null;
-					if (media instanceof org.zkoss.image.Image) {
-						imagenUsuario = imagen.getContent().getByteData();
-
-					} else {
-						try {
-							imagen.setContent(new AImage(url));
-						} catch (IOException e) {
-							e.printStackTrace();
+						Set<Grupo> gruposUsuario = new HashSet<Grupo>();
+						for (int i = 0; i < ltbGruposAgregados.getItemCount(); i++) {
+							Grupo grupo = ltbGruposAgregados.getItems().get(i)
+									.getValue();
+							gruposUsuario.add(grupo);
 						}
-						imagenUsuario = imagen.getContent().getByteData();
+						String cedula = txtCedulaUsuario.getValue();
+						String correo = txtCorreoUsuario.getValue();
+						String direccion = txtDireccionUsuario.getValue();
+						String login = txtLoginUsuario.getValue();
+						String password = txtPasswordUsuario.getValue();
+						String nombre = txtNombreUsuario.getValue();
+						String apellido = txtApellidoUsuario.getValue();
+						String nombre2 = txtNombre2Usuario.getValue();
+						String apellido2 = txtApellido2Usuario.getValue();
+						String telefono = txtTelefonoUsuario.getValue();
+
+						String sexo = "";
+						if (rdoSexoFUsuario.isChecked())
+							sexo = "F";
+						else
+							sexo = "M";
+						byte[] imagenUsuario = null;
+						if (media instanceof org.zkoss.image.Image) {
+							imagenUsuario = imagen.getContent().getByteData();
+
+						} else {
+							try {
+								imagen.setContent(new AImage(url));
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							imagenUsuario = imagen.getContent().getByteData();
+						}
+
+						MaestroAliado aliado = new MaestroAliado();
+						if (txtAliado.getValue().compareTo("") != 0)
+							aliado = servicioAliado
+									.buscar(txtAliado.getValue());
+						else
+							aliado = null;
+
+						Usuario usuario = new Usuario(id, cedula, correo,
+								login, password, imagenUsuario, true,
+								gruposUsuario, nombre, apellido, nombre2,
+								apellido2, sexo, telefono, direccion, aliado);
+
+						servicioUsuario.guardar(usuario);
+						limpiar();
+						msj.mensajeInformacion(Mensaje.guardado);
+						catalogo.actualizarLista(servicioUsuario.buscarTodos(),
+								true);
+						abrirCatalogo();
 					}
-
-					Usuario usuario = new Usuario(id, cedula, correo, login,
-							password, imagenUsuario, true, gruposUsuario,
-							nombre, apellido, nombre2, apellido2, sexo,
-							telefono, direccion);
-
-					servicioUsuario.guardar(usuario);
-					limpiar();
-					msj.mensajeInformacion(Mensaje.guardado);
-					catalogo.actualizarLista(servicioUsuario.buscarTodos(),
-							true);
-					abrirCatalogo();
-				}
 				}
 			}
 
@@ -388,6 +410,8 @@ public class CUsuario extends CGenerico {
 		txtTelefonoUsuario.setValue("");
 		rdoSexoFUsuario.setChecked(false);
 		rdoSexoMUsuario.setChecked(false);
+		txtAliado.setValue("");
+		lblNombreAliado.setValue("");
 		try {
 			imagen.setContent(new AImage(url));
 		} catch (IOException e1) {
@@ -622,7 +646,7 @@ public class CUsuario extends CGenerico {
 		catalogo = new Catalogo<Usuario>(catalogoUsuario, "Usuario", usuario,
 				false, false, false, "Cedula", "Correo", "Primer Nombre",
 				"Segundo Nombre", "Primer Apellido", "Segundo Apellido",
-				"Sexo", "Telefono", "Direccion") {
+				"Sexo", "Telefono", "Direccion", "Aliado Asociado") {
 
 			@Override
 			protected List<Usuario> buscar(List<String> valores) {
@@ -630,6 +654,10 @@ public class CUsuario extends CGenerico {
 				List<Usuario> user = new ArrayList<Usuario>();
 
 				for (Usuario actividadord : usuario) {
+					String nombreAliado = "N/A";
+					if (actividadord.getMaestroAliado() != null)
+						nombreAliado = actividadord.getMaestroAliado()
+								.getNombre();
 					if (actividadord.getCedula().toLowerCase()
 							.contains(valores.get(0).toLowerCase())
 							&& actividadord.getEmail().toLowerCase()
@@ -647,7 +675,9 @@ public class CUsuario extends CGenerico {
 							&& actividadord.getTelefono().toLowerCase()
 									.contains(valores.get(7).toLowerCase())
 							&& actividadord.getDireccion().toLowerCase()
-									.contains(valores.get(8).toLowerCase())) {
+									.contains(valores.get(8).toLowerCase())
+							&& nombreAliado.toLowerCase().contains(
+									valores.get(9).toLowerCase())) {
 
 						user.add(actividadord);
 					}
@@ -657,7 +687,10 @@ public class CUsuario extends CGenerico {
 
 			@Override
 			protected String[] crearRegistros(Usuario usuarios) {
-				String[] registros = new String[9];
+				String nombreAliado = "N/A";
+				if (usuarios.getMaestroAliado() != null)
+					nombreAliado = usuarios.getMaestroAliado().getNombre();
+				String[] registros = new String[10];
 				registros[0] = usuarios.getCedula();
 				registros[1] = usuarios.getEmail();
 				registros[2] = usuarios.getPrimerNombre();
@@ -667,13 +700,13 @@ public class CUsuario extends CGenerico {
 				registros[6] = usuarios.getSexo();
 				registros[7] = usuarios.getTelefono();
 				registros[8] = usuarios.getDireccion();
+				registros[9] = nombreAliado;
 				return registros;
 			}
 
 		};
 		catalogo.setParent(catalogoUsuario);
 	}
-	
 
 	/* Busca si existe un usuario con el mismo login */
 	@Listen("onChange = #txtLoginUsuario")
@@ -683,7 +716,7 @@ public class CUsuario extends CGenerico {
 		if (usuario == null)
 			return true;
 		else {
-			if (usuario.getIdUsuario()==id)
+			if (usuario.getIdUsuario() == id)
 				return true;
 			else {
 				msj.mensajeAlerta(Mensaje.loginUsado);
@@ -691,6 +724,71 @@ public class CUsuario extends CGenerico {
 				txtLoginUsuario.setFocus(true);
 				return false;
 			}
+		}
+	}
+
+	@Listen("onClick = #btnBuscarAliado")
+	public void mostrarCatalogoAliado() {
+		final List<MaestroAliado> listaObjetos = servicioAliado
+				.buscarTodosOrdenados();
+		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
+				"Catalogo de Aliados", listaObjetos, true, false, false,
+				"Codigo", "Nombre", "Zona", "Vendedor") {
+
+			@Override
+			protected List<MaestroAliado> buscar(List<String> valores) {
+
+				List<MaestroAliado> lista = new ArrayList<MaestroAliado>();
+
+				for (MaestroAliado objeto : listaObjetos) {
+					if (objeto.getCodigoAliado().toLowerCase()
+							.contains(valores.get(0).toLowerCase())
+							&& objeto.getNombre().toLowerCase()
+									.contains(valores.get(1).toLowerCase())
+							&& objeto.getDescripcionZona().toLowerCase()
+									.contains(valores.get(2).toLowerCase())
+							&& objeto.getDescripcionVendedor().toLowerCase()
+									.contains(valores.get(3).toLowerCase())) {
+						lista.add(objeto);
+					}
+				}
+				return lista;
+			}
+
+			@Override
+			protected String[] crearRegistros(MaestroAliado objeto) {
+				String[] registros = new String[4];
+				registros[0] = objeto.getCodigoAliado();
+				registros[1] = objeto.getNombre();
+				registros[2] = objeto.getDescripcionZona();
+				registros[3] = objeto.getDescripcionVendedor();
+				return registros;
+			}
+		};
+		catalogoAliado.setClosable(true);
+		catalogoAliado.setWidth("80%");
+		catalogoAliado.setParent(divCatalogoAliado);
+		catalogoAliado.doModal();
+	}
+
+	@Listen("onSeleccion = #divCatalogoAliado")
+	public void seleccionAliado() {
+		MaestroAliado aliado = catalogoAliado.objetoSeleccionadoDelCatalogo();
+		txtAliado.setValue(aliado.getCodigoAliado());
+		lblNombreAliado.setValue(aliado.getNombre());
+		catalogoAliado.setParent(null);
+	}
+
+	@Listen("onChange = #txtAliado; onOK=#txtAliado")
+	public void buscarNombreAliado() {
+		MaestroAliado aliado = servicioAliado.buscar(txtAliado.getValue());
+		if (aliado != null) {
+			txtAliado.setValue(aliado.getCodigoAliado());
+			lblNombreAliado.setValue(aliado.getNombre());
+		} else {
+			msj.mensajeAlerta(Mensaje.noHayRegistros);
+			txtAliado.setValue("");
+			txtAliado.setFocus(true);
 		}
 	}
 }

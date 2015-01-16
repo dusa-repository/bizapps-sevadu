@@ -13,6 +13,7 @@ import modelo.maestros.F0005;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.MaestroProducto;
+import modelo.maestros.MappingProducto;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.PlanVenta;
 import modelo.maestros.TipoCliente;
@@ -20,6 +21,7 @@ import modelo.maestros.Venta;
 import modelo.pk.ExistenciaPK;
 import modelo.pk.MarcaActivadaPK;
 import modelo.pk.PlanVentaPK;
+import net.sf.jasperreports.olap.mapping.Mapping;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -41,7 +43,6 @@ import org.zkoss.zul.Tab;
 import componente.Botonera;
 import componente.Mensaje;
 import componente.Validador;
-
 import controlador.maestros.CGenerico;
 
 public class CCargarArchivo extends CGenerico {
@@ -201,11 +202,11 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-//				if (!entro) {
-//					row = rowIterator.next();
-//					contadorRow = contadorRow + 1;
-//					entro = true;
-//				}
+				// if (!entro) {
+				// row = rowIterator.next();
+				// contadorRow = contadorRow + 1;
+				// entro = true;
+				// }
 				MaestroProducto producto = null;
 				String idProducto = null;
 				Double refProducto = null;
@@ -366,16 +367,16 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioProducto.guardarVarios(productos);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow - 1)
+						+ "Cantidad de Filas evaluadas:" + (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow - 1));
+						+ (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
 						+ mostrarError
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow - 1)
+						+ (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas: 0");
 		}
 	}
@@ -399,11 +400,11 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-//				if (!entro) {
-//					row = rowIterator.next();
-//					contadorRow = contadorRow + 1;
-//					entro = true;
-//				}
+				// if (!entro) {
+				// row = rowIterator.next();
+				// contadorRow = contadorRow + 1;
+				// entro = true;
+				// }
 				MarcaActivadaVendedor marcaActivada = new MarcaActivadaVendedor();
 				MaestroAliado aliado = null;
 				String idAliado = null;
@@ -1313,16 +1314,16 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioMarcaActivada.guardarVarios(marcas);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow - 1)
+						+ "Cantidad de Filas evaluadas:" + (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow - 1));
+						+ (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
 						+ mostrarError
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow - 1)
+						+ (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas: 0");
 		}
 	}
@@ -1346,11 +1347,11 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-//				if (!entro) {
-//					row = rowIterator.next();
-//					contadorRow = contadorRow + 1;
-//					entro = true;
-//				}
+				// if (!entro) {
+				// row = rowIterator.next();
+				// contadorRow = contadorRow + 1;
+				// entro = true;
+				// }
 				Cliente cliente = new Cliente();
 				MaestroAliado aliado = null;
 				String idAliado = null;
@@ -1692,16 +1693,16 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioCliente.guardarVarios(clientes);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow - 1)
+						+ "Cantidad de Filas evaluadas:" + (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow - 1));
+						+ (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
 						+ mostrarError
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow - 1)
+						+ (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas: 0");
 		}
 	}
@@ -1725,11 +1726,11 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-//				if (!entro) {
-//					row = rowIterator.next();
-//					contadorRow = contadorRow + 1;
-//					entro = true;
-//				}
+				// if (!entro) {
+				// row = rowIterator.next();
+				// contadorRow = contadorRow + 1;
+				// entro = true;
+				// }
 				Existencia existencia = new Existencia();
 				MaestroAliado aliado = null;
 				String idAliado = null;
@@ -1786,13 +1787,20 @@ public class CCargarArchivo extends CGenerico {
 										mostrarError, contadorRow, contadorCell);
 								errorLong = true;
 							} else {
-								producto = servicioProducto.buscar(idProducto);
-								if (producto == null) {
-									mostrarError = mensajeErrorNoEncontrado(
-											mostrarError, idProducto,
-											contadorRow, contadorCell,
-											"Producto");
-									error = true;
+								if (aliado != null) {
+									MappingProducto object = servicioMapping
+											.buscarPorAliadoyProductoNoDusa(
+													aliado, idProducto);
+									if (object == null) {
+										producto = null;
+										mostrarError = mensajeErrorNoEncontrado(
+												mostrarError, idProducto,
+												contadorRow, contadorCell,
+												"Mapping Producto (Codigo de Producto de Cliente)");
+										error = true;
+									} else
+										producto = object.getId()
+												.getMaestroProducto();
 								}
 							}
 						} else {
@@ -1830,16 +1838,16 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioExistencia.guardarVarios(existencias);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow - 1)
+						+ "Cantidad de Filas evaluadas:" + (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow - 1));
+						+ (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
 						+ mostrarError
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow - 1)
+						+ (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas: 0");
 		}
 	}
@@ -1863,13 +1871,13 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-//				if (!entro) {
-//					if (rowIterator.hasNext()) {
-//						row = rowIterator.next();
-//						contadorRow = contadorRow + 1;
-//						entro = true;
-//					}
-//				}
+				// if (!entro) {
+				// if (rowIterator.hasNext()) {
+				// row = rowIterator.next();
+				// contadorRow = contadorRow + 1;
+				// entro = true;
+				// }
+				// }
 				PlanVenta planVenta = new PlanVenta();
 				MaestroAliado aliado = null;
 				String idAliado = null;
@@ -2006,13 +2014,20 @@ public class CCargarArchivo extends CGenerico {
 										mostrarError, contadorRow, contadorCell);
 								errorLong = true;
 							} else {
-								producto = servicioProducto.buscar(idProducto);
-								if (producto == null) {
-									mostrarError = mensajeErrorNoEncontrado(
-											mostrarError, idProducto,
-											contadorRow, contadorCell,
-											"Producto");
-									error = true;
+								if (aliado != null) {
+									MappingProducto object = servicioMapping
+											.buscarPorAliadoyProductoNoDusa(
+													aliado, idProducto);
+									if (object == null) {
+										producto = null;
+										mostrarError = mensajeErrorNoEncontrado(
+												mostrarError, idProducto,
+												contadorRow, contadorCell,
+												"Mapping Producto (Codigo de Producto de Cliente)");
+										error = true;
+									} else
+										producto = object.getId()
+												.getMaestroProducto();
 								}
 							}
 						} else {
@@ -2054,16 +2069,16 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioPlan.guardarVarios(planesVentas);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow - 1)
+						+ "Cantidad de Filas evaluadas:" + (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow - 1));
+						+ (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
 						+ mostrarError
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow - 1)
+						+ (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas: 0");
 		}
 	}
@@ -2087,13 +2102,13 @@ public class CCargarArchivo extends CGenerico {
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
-//				if (!entro) {
-//					if (rowIterator.hasNext()) {
-//						row = rowIterator.next();
-//						contadorRow = contadorRow + 1;
-//						entro = true;
-//					}
-//				}
+				// if (!entro) {
+				// if (rowIterator.hasNext()) {
+				// row = rowIterator.next();
+				// contadorRow = contadorRow + 1;
+				// entro = true;
+				// }
+				// }
 				Venta venta = new Venta();
 				MaestroAliado aliado = null;
 				String idAliado = null;
@@ -2101,8 +2116,8 @@ public class CCargarArchivo extends CGenerico {
 				MaestroProducto producto = null;
 				String idProducto = null;
 				Double refProducto = (double) 0;
-				MaestroMarca marca = null;
-				String idMarca = null;
+				// MaestroMarca marca = null;
+				String marca = null;
 				Double refMarca = (double) 0;
 				TipoCliente tipoCliente = null;
 				String idTipo = null;
@@ -2260,13 +2275,20 @@ public class CCargarArchivo extends CGenerico {
 										mostrarError, contadorRow, contadorCell);
 								errorLong = true;
 							} else {
-								producto = servicioProducto.buscar(idProducto);
-								if (producto == null) {
-									mostrarError = mensajeErrorNoEncontrado(
-											mostrarError, idProducto,
-											contadorRow, contadorCell,
-											"Producto");
-									error = true;
+								if (aliado != null) {
+									MappingProducto object = servicioMapping
+											.buscarPorAliadoyProductoNoDusa(
+													aliado, idProducto);
+									if (object == null) {
+										producto = null;
+										mostrarError = mensajeErrorNoEncontrado(
+												mostrarError, idProducto,
+												contadorRow, contadorCell,
+												"Mapping Producto (Codigo de Producto de Cliente)");
+										error = true;
+									} else
+										producto = object.getId()
+												.getMaestroProducto();
 								}
 							}
 						} else {
@@ -2300,21 +2322,12 @@ public class CCargarArchivo extends CGenerico {
 						}
 						break;
 					case 8:
-						idMarca = obtenerStringCualquiera(cell, refMarca,
-								idMarca);
-						if (idMarca != null) {
-							if (idMarca.length() > 50) {
+						marca = obtenerStringCualquiera(cell, refMarca, marca);
+						if (marca != null) {
+							if (marca.length() > 50) {
 								mostrarError = mensajeErrorLongitud(
 										mostrarError, contadorRow, contadorCell);
 								errorLong = true;
-							} else {
-								marca = servicioMarca.buscar(idMarca);
-								if (marca == null) {
-									mostrarError = mensajeErrorNoEncontrado(
-											mostrarError, idMarca, contadorRow,
-											contadorCell, "Marca");
-									error = true;
-								}
 							}
 						} else {
 							mostrarError = mensajeErrorNull(mostrarError,
@@ -2519,7 +2532,7 @@ public class CCargarArchivo extends CGenerico {
 					venta.setLoteUpload("");
 					venta.setMaestroAliado(aliado);
 					venta.setMaestroProducto(producto);
-					venta.setMarca(idMarca);
+					venta.setMarca(marca);
 					venta.setNombreCliente(nombreCliente);
 					venta.setNombreVendedor(idVendedor);
 					venta.setNumeroDocumento(factura.toString());
@@ -2535,16 +2548,16 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioVenta.guardarVarios(ventas);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow - 1)
+						+ "Cantidad de Filas evaluadas:" + (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow - 1));
+						+ (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
 						+ mostrarError
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow - 1)
+						+ (contadorRow)
 						+ "\n" + "Cantidad de Filas insertadas: 0");
 		}
 	}

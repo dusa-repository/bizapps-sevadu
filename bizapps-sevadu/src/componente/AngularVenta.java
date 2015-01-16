@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import modelo.maestros.Cliente;
+import modelo.maestros.Configuracion;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.Venta;
@@ -19,6 +20,7 @@ import org.zkoss.chart.model.DefaultDialModel;
 import org.zkoss.chart.model.DialModel;
 import org.zkoss.chart.model.DialModelScale;
 
+import servicio.maestros.SConfiguracion;
 import servicio.maestros.SPlanVenta;
 import servicio.maestros.SVenta;
 
@@ -30,7 +32,9 @@ public class AngularVenta extends Charts {
 	DateFormat formatoMes = new SimpleDateFormat("MM");
 
 	public AngularVenta(MaestroAliado aliado, SVenta servicioVenta,
-			SPlanVenta servicioPlan, Date fechaDesde2, Date fechaHasta2) {
+			SPlanVenta servicioPlan, Date fechaDesde2, Date fechaHasta2,
+			SConfiguracion servicioConfiguracion, int habilesHoy,
+			int habilesTotal) {
 		super();
 		this.setType("gauge");
 		List<Venta> ventas = servicioVenta
@@ -52,8 +56,7 @@ public class AngularVenta extends Charts {
 			Double plan2 = (double) 0;
 			if (!ventas.isEmpty()) {
 				plan2 = servicioPlan.sumarPlanAliado2(ventas.get(0)
-						.getMaestroAliado(), annoPlanDesde,
-						mesPlanDesde);
+						.getMaestroAliado(), annoPlanDesde, mesPlanDesde);
 			}
 			suma = suma + plan2;
 			mesPlanDesde = mesPlanDesde + 1;
@@ -70,24 +73,36 @@ public class AngularVenta extends Charts {
 		dialmodel.setFrameBgColor2(null);
 		dialmodel.setFrameFgColor(null);
 
-		Double primero = suma * 5 / 100;
-		Double segundo = suma * 0.01 / 100;
+		int minimo = 10;
+		Configuracion actual = servicioConfiguracion.buscar(1);
+		Double valorPorcentual = (double) minimo;
+		if (actual != null) {
+			if (actual.getPorcentaje() != null) {
+				valorPorcentual = actual.getPorcentaje().doubleValue();
+				minimo = valorPorcentual.intValue();
+			}
+		}
+		// buscar dias habiles para regla de tres
+		double limiteSuperior = habilesHoy * suma / habilesTotal;
+		double cantidad = suma - vendido;
+		Double tope = (double) 0;
+		if (cantidad < 0)
+			tope = vendido;
+		else
+			tope = suma;
 
-		DialModelScale scale = dialmodel.newScale(0, suma.intValue(), -150,
+		Double primero = tope * 5 / 100;
+		Double segundo = tope * 0.01 / 100;
+		DialModelScale scale = dialmodel.newScale(0, tope.intValue(), -150,
 				-300, primero.intValue(), segundo.intValue());
 		scale.setText("Cajas");
 		scale.setTickColor("#666666");
-		double cantidad = suma - vendido;
-		if (cantidad < 0)
-			cantidad = suma;
-		else
-			cantidad = vendido;
-		scale.setValue(cantidad);
-		Double valor = suma / 3;
-		int minimo = valor.intValue();
-		scale.newRange(0, minimo, "#DF5353", 0.9, 1); // green
-		scale.newRange(minimo, minimo * 2, "#DDDF0D", 0.9, 1); // yellow
-		scale.newRange(minimo * 2, suma.intValue(), "#55BF3B", 0.9, 1); // red
+		scale.setValue(vendido);
+		scale.newRange(0, limiteSuperior - (limiteSuperior * minimo / 100),
+				"#DF5353", 0.9, 1); 
+		scale.newRange(limiteSuperior - (limiteSuperior * minimo / 100),
+				limiteSuperior, "#DDDF0D", 0.9, 1);
+		scale.newRange(limiteSuperior, tope.intValue(), "#55BF3B", 0.9, 1);
 		this.setModel(dialmodel);
 		List<PaneBackground> backgrounds = new LinkedList<PaneBackground>();
 		PaneBackground background1 = new PaneBackground();
@@ -125,7 +140,7 @@ public class AngularVenta extends Charts {
 		this.getPlotOptions().getGauge().getTooltip().setValueSuffix(" cajas");
 		this.getSeries().setName("Cajas Vendidas");
 		this.getYAxis().getTitle().setText("Numero de Cajas");
-		this.setTitle("Vendido VS Planificado:" + " desde "
+		this.setTitle("Vendido VS Planificado(Obj):" + " desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
 		this.setSubtitle("Aliado: " + aliado.getNombre() + " ("
@@ -133,7 +148,7 @@ public class AngularVenta extends Charts {
 		// }
 
 		if (ventas.isEmpty())
-			this.setTitle("Vendido VS Planificado:" + " desde "
+			this.setTitle("Vendido VS Planificado(Obj):" + " desde "
 					+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 					+ formatoCorrecto.format(fechaHasta2) + "\n"
 					+ "NO EXISTEN DATOS EN ESTE INTERVALO DE TIEMPO");

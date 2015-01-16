@@ -234,7 +234,8 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 
 	public abstract void inicializar() throws IOException;
 
-	public void cerrarVentana(Div div, String id, List<Tab> tabs2, Groupbox group) {
+	public void cerrarVentana(Div div, String id, List<Tab> tabs2,
+			Groupbox group) {
 		div.setVisible(false);
 		tabs = tabs2;
 		for (int i = 0; i < tabs.size(); i++) {
@@ -247,8 +248,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 			}
 		}
 		if (tabs.size() == 0) {
-			if (group.isVisible()
-					&& !group.isOpen()) {
+			if (group.isVisible() && !group.isOpen()) {
 				group.setOpen(true);
 			}
 		}
@@ -545,24 +545,26 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 		Calendar calendario = Calendar.getInstance();
 		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
 		calendario.setTime(fecha2);
+		calendario.add(Calendar.DAY_OF_YEAR, +1);
 		calendario.set(Calendar.HOUR, 0);
 		calendario.set(Calendar.HOUR_OF_DAY, 0);
 		calendario.set(Calendar.SECOND, 0);
 		calendario.set(Calendar.MILLISECOND, 0);
 		calendario.set(Calendar.MINUTE, 0);
-		calendario.add(Calendar.DAY_OF_YEAR, +1);
 		fecha2 = calendario.getTime();
 		calendario.setTime(fecha);
+		String fija = formatoFecha.format(fecha2);
+		String hoy ="";
 		int contador = 0;
 		do {
 			calendario.setTime(fecha);
 			if (calendario.get(Calendar.DAY_OF_WEEK) != 1
 					&& calendario.get(Calendar.DAY_OF_WEEK) != 7)
 				contador++;
-
 			calendario.add(Calendar.DAY_OF_YEAR, +1);
 			fecha = calendario.getTime();
-		} while (!fecha.equals(fecha2));
+			hoy = formatoFecha.format(fecha);
+		} while (!hoy.equals(fija));
 		return contador;
 	}
 
@@ -576,6 +578,29 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 			bd = bd.setScale(places, RoundingMode.HALF_UP);
 		}
 		return bd.doubleValue();
+	}
+
+	public String lastDay(Date fechaHoy) {
+		DateFormat formatoNuevo = new SimpleDateFormat("MM");
+		String month = formatoNuevo.format(fechaHoy);
+		String last = "30";
+		switch (month) {
+		case "01":
+		case "03":
+		case "05":
+		case "07":
+		case "08":
+		case "10":
+		case "12":
+			last = "31-";
+			break;
+		case "02":
+			last = "28-";
+			break;
+		default:
+			break;
+		}
+		return last;
 	}
 
 }

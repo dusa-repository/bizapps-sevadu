@@ -586,28 +586,55 @@ public class STermometro {
 		return termometro;
 	}
 
-	private int obtenerDiasHabiles(Date fecha, Date fecha2) {
+//	private int obtenerDiasHabiles(Date fecha, Date fecha2) {
+//		Calendar calendario = Calendar.getInstance();
+//		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+//		calendario.setTime(fecha2);
+//		calendario.set(Calendar.HOUR, 0);
+//		calendario.set(Calendar.HOUR_OF_DAY, 0);
+//		calendario.set(Calendar.SECOND, 0);
+//		calendario.set(Calendar.MILLISECOND, 0);
+//		calendario.set(Calendar.MINUTE, 0);
+//		calendario.add(Calendar.DAY_OF_YEAR, +1);
+//		fecha2 = calendario.getTime();
+//		calendario.setTime(fecha);
+//		int contador = 0;
+//		do {
+//			calendario.setTime(fecha);
+//			if (calendario.get(Calendar.DAY_OF_WEEK) != 1
+//					&& calendario.get(Calendar.DAY_OF_WEEK) != 7)
+//				contador++;
+//
+//			calendario.add(Calendar.DAY_OF_YEAR, +1);
+//			fecha = calendario.getTime();
+//		} while (!fecha.equals(fecha2));
+//		return contador;
+//	}
+	
+	public int obtenerDiasHabiles(Date fecha, Date fecha2) {
 		Calendar calendario = Calendar.getInstance();
 		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
 		calendario.setTime(fecha2);
+		calendario.add(Calendar.DAY_OF_YEAR, +1);
 		calendario.set(Calendar.HOUR, 0);
 		calendario.set(Calendar.HOUR_OF_DAY, 0);
 		calendario.set(Calendar.SECOND, 0);
 		calendario.set(Calendar.MILLISECOND, 0);
 		calendario.set(Calendar.MINUTE, 0);
-		calendario.add(Calendar.DAY_OF_YEAR, +1);
 		fecha2 = calendario.getTime();
 		calendario.setTime(fecha);
+		String fija = formatoFecha.format(fecha2);
+		String hoy ="";
 		int contador = 0;
 		do {
 			calendario.setTime(fecha);
 			if (calendario.get(Calendar.DAY_OF_WEEK) != 1
 					&& calendario.get(Calendar.DAY_OF_WEEK) != 7)
 				contador++;
-
 			calendario.add(Calendar.DAY_OF_YEAR, +1);
 			fecha = calendario.getTime();
-		} while (!fecha.equals(fecha2));
+			hoy = formatoFecha.format(fecha);
+		} while (!hoy.equals(fija));
 		return contador;
 	}
 

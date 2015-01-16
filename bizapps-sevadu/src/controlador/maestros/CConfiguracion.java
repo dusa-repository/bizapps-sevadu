@@ -10,6 +10,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Tab;
 
@@ -26,6 +27,8 @@ public class CConfiguracion extends CGenerico {
 	private Div divConfiguracion;
 	@Wire
 	private Datebox dtbConfiguracion;
+	@Wire
+	private Doublespinner spnPorcentaje;
 	private String nombre;
 
 	@Override
@@ -70,6 +73,7 @@ public class CConfiguracion extends CGenerico {
 				Configuracion confi = new Configuracion();
 				confi.setId(1);
 				confi.setInicioFyActual(dtbConfiguracion.getValue());
+				confi.setPorcentaje(spnPorcentaje.getValue().floatValue());
 				servicioConfiguracion.guardar(confi);
 				msj.mensajeInformacion(Mensaje.guardado);
 				actualizarEstado();
@@ -113,7 +117,8 @@ public class CConfiguracion extends CGenerico {
 		Configuracion actual = servicioConfiguracion.buscar(1);
 		if (actual != null) {
 			dtbConfiguracion.setValue(actual.getInicioFyActual());
-
+			if (actual.getPorcentaje() != null)
+				spnPorcentaje.setValue(actual.getPorcentaje().doubleValue());
 		}
 	}
 

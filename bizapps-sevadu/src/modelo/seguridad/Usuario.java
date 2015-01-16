@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -34,8 +36,9 @@ public class Usuario implements Serializable {
 	@Column(name = "id_usuario", unique = true, nullable = false)
 	private long idUsuario;
 	
-	@OneToOne(mappedBy="usuario")
-	private MaestroAliado aliado;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="codigo_aliado", nullable=true)
+	private MaestroAliado maestroAliado;
 	
 	@Column(length = 50)
 	private String email;
@@ -98,7 +101,7 @@ public class Usuario implements Serializable {
 			String password, byte[] imagen, boolean estado, Set<Grupo> grupos,
 			String nombre, String apellido, String segundoNombre,
 			String segundoApellido, String sexo, String telefono,
-			String direccion) {
+			String direccion, MaestroAliado aliado) {
 		super();
 		this.idUsuario = cedula;
 		this.cedula = cedulas;
@@ -116,6 +119,7 @@ public class Usuario implements Serializable {
 		this.sexo = sexo;
 		this.telefono = telefono;
 		this.direccion = direccion;
+		this.maestroAliado = aliado;
 		// this.fechaAuditoria = fechaAuditoria;
 	}
 
@@ -263,12 +267,11 @@ public class Usuario implements Serializable {
 		this.direccion = direccion;
 	}
 
-	public MaestroAliado getAliado() {
-		return aliado;
+	public MaestroAliado getMaestroAliado() {
+		return maestroAliado;
 	}
 
-	public void setAliado(MaestroAliado aliado) {
-		this.aliado = aliado;
+	public void setMaestroAliado(MaestroAliado maestroAliado) {
+		this.maestroAliado = maestroAliado;
 	}
-
 }

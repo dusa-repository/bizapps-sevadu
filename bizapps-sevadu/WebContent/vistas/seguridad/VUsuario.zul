@@ -13,7 +13,7 @@
 						<column label="" width="12%" />
 						<column label="" width="16%" />
 						<column label="" width="25%" />
-							<column label="" width="6%" />
+						<column label="" width="6%" />
 					</columns>
 					<rows>
 						<row>
@@ -112,6 +112,15 @@
 											tooltiptext="Ingrese el Numero de Telefono del Usuario"
 											multiline="true" />
 									</row>
+									<row>
+										<label class="etiqueta" value="Aliado:" />
+										<textbox id="txtAliado" hflex="1" maxlength="100"
+											tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
+										<button id="btnBuscarAliado" label="Buscar"
+											tooltiptext="Catalogo de Aliados" image="/public/imagenes/botones/buscar.png"
+											class="btn" autodisable="self" />
+										<label id="lblNombreAliado" />
+									</row>
 								</rows>
 							</grid>
 							<div align="right" style="float: right;">
@@ -175,11 +184,11 @@
 										</template>
 									</listbox>
 									<vbox>
-										<button class="abrir" id="pasar1" image="/public/imagenes/botones/adelante.png"
-											tooltiptext="Agregar Grupos" />
+										<button class="abrir" id="pasar1"
+											image="/public/imagenes/botones/adelante.png" tooltiptext="Agregar Grupos" />
 										<separator />
-										<button id="pasar2" class="abrir" image="/public/imagenes/botones/atras.png"
-											tooltiptext="Quitar Grupos" />
+										<button id="pasar2" class="abrir"
+											image="/public/imagenes/botones/atras.png" tooltiptext="Quitar Grupos" />
 									</vbox>
 									<listbox id="ltbGruposAgregados" height="160px"
 										emptyMessage="No ha Seleccionado ningun Grupo" checkmark="true">
@@ -193,7 +202,7 @@
 								</hbox>
 							</groupbox>
 							<div align="left" style="float: right;">
-							<separator/>
+								<separator />
 								<button label="Anterior" class="btn" id="btnAnteriorPestanna"
 									image="/public/imagenes/botones/atras.png" />
 							</div>
@@ -208,5 +217,6 @@
 				<div id="catalogoUsuario" tooltiptext="Seleccione el usuario para Realizar una Accion" />
 			</groupbox>
 		</groupbox>
+		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
 	</div>
 </zk>

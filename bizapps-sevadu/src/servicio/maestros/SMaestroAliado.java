@@ -1,11 +1,13 @@
 package servicio.maestros;
 
 import interfacedao.maestros.IMaestroAliadoDAO;
+import interfacedao.seguridad.IUsuarioDAO;
 
 import java.util.Collection;
 import java.util.List;
 
 import modelo.maestros.MaestroAliado;
+import modelo.seguridad.Usuario;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class SMaestroAliado {
 
 	@Autowired
 	private IMaestroAliadoDAO aliadoDAO;
+	@Autowired
+	private IUsuarioDAO usuarioDAO;
 
 	public boolean existe(String value) {
 		return aliadoDAO.exists(value);
@@ -40,9 +44,9 @@ public class SMaestroAliado {
 		return aliadoDAO.findOne(value);
 	}
 
-	public MaestroAliado buscarPorLoginUsuario(String nombreUsuarioSesion) {
-		return aliadoDAO.findByUsuarioLogin(nombreUsuarioSesion);
-	}
+//	public MaestroAliado buscarPorLoginUsuario(String nombreUsuarioSesion) {
+//		return aliadoDAO.findByUsuarioLogin(nombreUsuarioSesion);
+//	}
 
 	public List<MaestroAliado> buscarRestantes(
 			List<String> listaAliados) {

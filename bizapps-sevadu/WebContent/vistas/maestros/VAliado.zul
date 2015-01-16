@@ -59,19 +59,6 @@
 								<div id="divBuscadorCiudad" width="100%" />
 							</cell>
 						</row>
-						<row>
-							<label class="etiqueta" value="Usuario" />
-							<textbox id="txtUsuario" hflex="1" maxlength="100"
-								tooltiptext="Seleccione del Catalogo el Usuario que desea asignar al aliado" />
-							<button id="btnBuscarUsuario" label="Buscar" tooltiptext="Catalogo de Usuarios"
-								image="/public/imagenes/botones/buscar.png" class="btn"
-								autodisable="self" />
-							<cell colspan="3">
-								<label id="lblUsuario" />
-							</cell>
-							<hbox />
-							<hbox />
-						</row>
 					</rows>
 				</grid>
 			</groupbox>
@@ -84,6 +71,5 @@
 			<separator />
 			<separator />
 		</groupbox>
-		<div id="catalogoUsuario" tooltiptext="Seleccione el Aliado para Realizar una Accion" />
 	</div>
 </zk>

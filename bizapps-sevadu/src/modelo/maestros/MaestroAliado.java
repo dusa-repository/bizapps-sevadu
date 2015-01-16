@@ -8,10 +8,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,9 +30,8 @@ public class MaestroAliado implements Serializable {
 	@Column(name = "codigo_aliado")
 	private String codigoAliado;
 
-	@OneToOne
-	@JoinColumn(name = "id_usuario_sistema", referencedColumnName = "id_usuario", nullable = true)
-	private Usuario usuario;
+	@OneToMany(mappedBy = "maestroAliado")
+	private List<Usuario> usuarios;
 
 	@Column(name = "ciudad_aliado")
 	private String ciudadAliado;
@@ -335,20 +332,20 @@ public class MaestroAliado implements Serializable {
 		this.clientes = clientes;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
 	public List<MarcaActivadaVendedor> getActivaciones() {
 		return activaciones;
 	}
 
 	public void setActivaciones(List<MarcaActivadaVendedor> activaciones) {
 		this.activaciones = activaciones;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
 }

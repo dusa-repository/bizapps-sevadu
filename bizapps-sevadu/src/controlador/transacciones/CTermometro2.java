@@ -8,6 +8,7 @@ import java.util.List;
 
 import modelo.maestros.MaestroAliado;
 import modelo.seguridad.Arbol;
+import modelo.seguridad.Usuario;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -97,7 +98,8 @@ public class CTermometro2 extends CGenerico {
 				@Override
 				public void salir() {
 					west.setOpen(true);
-					cerrarVentana(divVTermometroMarca, cerrar, tabs, grxGraficoGeneral);
+					cerrarVentana(divVTermometroMarca, cerrar, tabs,
+							grxGraficoGeneral);
 				}
 
 				@Override
@@ -126,11 +128,15 @@ public class CTermometro2 extends CGenerico {
 						if (rowTermometroMarca.isVisible())
 							aliado = servicioAliado
 									.buscar(txtAliado.getValue());
-						else
-							aliado = servicioAliado
-									.buscarPorLoginUsuario(nombreUsuarioSesion());
+						else {
+							Usuario user = servicioUsuario
+									.buscarPorLogin(nombreUsuarioSesion());
+							if (user.getMaestroAliado() != null) {
+								aliado = user.getMaestroAliado();
+							}
+						}
 						if (aliado != null) {
-							
+
 							HashMap<String, Object> mapiin = new HashMap<String, Object>();
 							mapiin.put("id", "id");
 							mapiin.put("aliado", aliado);
@@ -138,9 +144,10 @@ public class CTermometro2 extends CGenerico {
 							mapiin.put("hasta", fechaHasta);
 							Sessions.getCurrent().setAttribute("termometro",
 									mapiin);
-							Window window = (Window) Executions.createComponents(
-									"/vistas/transacciones/VTermometro2.zul", null,
-									mapiin);
+							Window window = (Window) Executions
+									.createComponents(
+											"/vistas/transacciones/VTermometro2.zul",
+											null, mapiin);
 							window.doModal();
 
 						} else
@@ -192,8 +199,8 @@ public class CTermometro2 extends CGenerico {
 		final List<MaestroAliado> listaObjetos = servicioAliado
 				.buscarTodosOrdenados();
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Catalogo de Aliados", listaObjetos, true, false, false, "Codigo", "Nombre",
-				"Zona", "Vendedor") {
+				"Catalogo de Aliados", listaObjetos, true, false, false,
+				"Codigo", "Nombre", "Zona", "Vendedor") {
 
 			@Override
 			protected List<MaestroAliado> buscar(List<String> valores) {

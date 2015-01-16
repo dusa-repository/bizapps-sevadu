@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import modelo.maestros.Cliente;
+import modelo.maestros.Configuracion;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.Venta;
@@ -182,7 +183,7 @@ public class CGraficador extends CGenerico {
 		chart.getSeries().setName("Marcas Vendidas");
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
 		chart.getYAxis().getTitle().setText("Marcas Vendidas");
-		chart.setTitle("Marcas Activadas VS Marcas Vendidas" + " desde "
+		chart.setTitle("Marcas a Activar(Obj) VS Marcas Vendidas" + " desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
 		chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
@@ -231,24 +232,38 @@ public class CGraficador extends CGenerico {
 			dialmodel.setFrameBgColor2(null);
 			dialmodel.setFrameFgColor(null);
 
-			Double primero = suma * 5 / 100;
-			Double segundo = suma * 0.01 / 100;
+			int minimo = 10;
+			Configuracion actual = servicioConfiguracion.buscar(1);
+			Double valorPorcentual = (double) minimo;
+			if (actual != null) {
+				if (actual.getPorcentaje() != null) {
+					valorPorcentual = actual.getPorcentaje().doubleValue();
+					minimo = valorPorcentual.intValue();
+				}
+			}
+			// buscar dias habiles para regla de tres
+			double limiteSuperior = suma ;
+			double cantidad = suma - vendido;
+			Double tope = (double) 0;
+			if (cantidad < 0)
+				tope = vendido;
+			else
+				tope = suma;
 
-			DialModelScale scale = dialmodel.newScale(0, suma.intValue(), -150,
+			Double primero = tope * 5 / 100;
+			Double segundo = tope * 0.01 / 100;
+			DialModelScale scale = dialmodel.newScale(0, tope.intValue(), -150,
 					-300, primero.intValue(), segundo.intValue());
 			scale.setText("Cajas");
 			scale.setTickColor("#666666");
-			double cantidad = suma - vendido;
-			if (cantidad < 0)
-				cantidad = suma;
-			else
-				cantidad = vendido;
-			scale.setValue(cantidad);
-			Double valor = suma / 3;
-			int minimo = valor.intValue();
-			scale.newRange(0, minimo, "#DF5353", 0.9, 1); // green
-			scale.newRange(minimo, minimo * 2, "#DDDF0D", 0.9, 1); // yellow
-			scale.newRange(minimo * 2, suma.intValue(), "#55BF3B", 0.9, 1); // red
+			scale.setValue(vendido);
+			scale.newRange(0, limiteSuperior - (limiteSuperior * minimo / 100),
+					"#DF5353", 0.9, 1); 
+			scale.newRange(limiteSuperior - (limiteSuperior * minimo / 100),
+					limiteSuperior, "#DDDF0D", 0.9, 1);
+			scale.newRange(limiteSuperior, tope.intValue(), "#55BF3B", 0.9, 1);
+			
+			
 			chart.setModel(dialmodel);
 			List<PaneBackground> backgrounds = new LinkedList<PaneBackground>();
 
@@ -290,7 +305,7 @@ public class CGraficador extends CGenerico {
 			chart.getSeries().setName("Cajas Vendidas");
 			MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
 			chart.getYAxis().getTitle().setText("Numero de Cajas");
-			chart.setTitle("Vendido VS Planificado de la Marca:"
+			chart.setTitle("Vendido VS Planificado(Obj) de la Marca:"
 					+ servicioMarca.buscar(ids.get(0)).getDescripcion()
 					+ " desde " + formatoCorrecto.format(fechaDesde2)
 					+ " hasta  " + formatoCorrecto.format(fechaHasta2));
@@ -299,7 +314,7 @@ public class CGraficador extends CGenerico {
 		}
 
 		if (ventas.isEmpty())
-			chart.setTitle("Vendido VS Planificado de la Marca:"
+			chart.setTitle("Vendido VS Planificado(Obj) de la Marca:"
 					+ servicioMarca.buscar(ids.get(0)).getDescripcion()
 					+ " desde " + formatoCorrecto.format(fechaDesde2)
 					+ " hasta  " + formatoCorrecto.format(fechaHasta2) + "\n"

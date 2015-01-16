@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import modelo.maestros.Cliente;
+import modelo.maestros.Configuracion;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 
@@ -18,18 +19,17 @@ import org.zkoss.chart.model.DefaultDialModel;
 import org.zkoss.chart.model.DialModel;
 import org.zkoss.chart.model.DialModelScale;
 
+import servicio.maestros.SConfiguracion;
 import servicio.maestros.SVenta;
 
 public class AngularActivacion extends Charts {
 
 	private static final long serialVersionUID = -142373619572772555L;
-	private DateFormat formatoFecha = new SimpleDateFormat("MMM");
 	private DateFormat formatoCorrecto = new SimpleDateFormat("dd-MM-yyyy");
-	private DateFormat formatoNuevo = new SimpleDateFormat("yyyy-MM");
 
 	public AngularActivacion(List<MaestroMarca> listMark, List<Cliente> list,
 			MaestroAliado aliado, SVenta servicioVenta, Date fechaDesde2,
-			Date fechaHasta2) {
+			Date fechaHasta2, SConfiguracion servicioConfiguracion) {
 		super();
 		this.setType("gauge");
 		int cantidadClientes = list.size();
@@ -58,9 +58,17 @@ public class AngularActivacion extends Charts {
 		scale.setValue(cantidadVentasActivas);
 		Double valor = (double) (total / 2);
 		int minimo = valor.intValue();
-		scale.newRange(0, minimo, "#DF5353", 0.9, 1); // green
-		scale.newRange(minimo, minimo + minimo * 0.5, "#DDDF0D", 0.9, 1); // yellow
-		scale.newRange(minimo + minimo * 0.5, total, "#55BF3B", 0.9, 1); // red
+
+		Configuracion actual = servicioConfiguracion.buscar(1);
+		Double valorPorcentual = (double) minimo;
+		if (actual != null) {
+			valorPorcentual = actual.getPorcentaje().doubleValue();
+			minimo = valorPorcentual.intValue();
+		}
+		scale.newRange(0, total - (total * 4 * minimo)/ 100, "#DF5353", 0.9, 1); // green
+		scale.newRange(total - (total * 4 * minimo) / 100, total
+				- (total *2* minimo) / 100, "#DDDF0D", 0.9, 1); // yellow
+		scale.newRange(total - (total *2* minimo) / 100, total, "#55BF3B", 0.9, 1); // red
 		this.setModel(dialmodel);
 		List<PaneBackground> backgrounds = new LinkedList<PaneBackground>();
 		PaneBackground background1 = new PaneBackground();
@@ -95,11 +103,10 @@ public class AngularActivacion extends Charts {
 		yAxis.setTickLength(10);
 		yAxis.getLabels().setStep(2);
 		yAxis.getLabels().setRotation("auto");
-		this.getPlotOptions().getGauge().getTooltip()
-				.setValueSuffix(" marcas");
+		this.getPlotOptions().getGauge().getTooltip().setValueSuffix(" marcas");
 		this.getSeries().setName("Marcas Vendidas");
 		this.getYAxis().getTitle().setText("Marcas Vendidas");
-		this.setTitle("Marcas Activadas VS Marcas Vendidas" + " desde "
+		this.setTitle("Marcas a Activar(Obj) VS Marcas Vendidas:" + " desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
 		this.setSubtitle("Aliado: " + aliado.getNombre() + " ("

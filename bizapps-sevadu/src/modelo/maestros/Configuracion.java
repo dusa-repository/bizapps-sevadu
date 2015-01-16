@@ -30,6 +30,9 @@ public class Configuracion implements Serializable {
 	@Column(name="inicio_fy_actual")
 	private Date inicioFyActual;
 
+	@Column(name = "porcentaje")
+	private Float porcentaje;
+
 	public Configuracion() {
 	}
 
@@ -47,6 +50,14 @@ public class Configuracion implements Serializable {
 
 	public void setInicioFyActual(Date inicioFyActual) {
 		this.inicioFyActual = inicioFyActual;
+	}
+
+	public Float getPorcentaje() {
+		return porcentaje;
+	}
+
+	public void setPorcentaje(Float porcentaje) {
+		this.porcentaje = porcentaje;
 	}
 
 }

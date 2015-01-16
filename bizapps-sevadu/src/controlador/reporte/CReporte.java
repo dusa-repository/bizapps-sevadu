@@ -19,6 +19,7 @@ import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.Venta;
 import modelo.seguridad.Arbol;
+import modelo.seguridad.Usuario;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -118,10 +119,9 @@ public class CReporte extends CGenerico {
 				.getAuthentication();
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(
 				authe.getAuthorities());
-		MaestroAliado aliado = servicioAliado
-				.buscarPorLoginUsuario(nombreUsuarioSesion());
-		if (aliado != null) {
-			idAliado = aliado.getCodigoAliado();
+		Usuario user = servicioUsuario.buscarPorLogin(nombreUsuarioSesion());
+		if (user.getMaestroAliado() != null) {
+			idAliado = user.getMaestroAliado().getCodigoAliado();
 		}
 		for (int i = 0; i < authorities.size(); i++) {
 			Arbol arbol;
