@@ -1224,6 +1224,11 @@ public class CCargarArchivo extends CGenerico {
 						break;
 					}
 				}
+				
+				
+				
+				
+				
 				if (!error && !errorLong && aliado != null && marca1 != null
 						&& marca2 != null && marca3 != null && marca4 != null
 						&& marca5 != null && marca6 != null && marca7 != null
@@ -2459,7 +2464,7 @@ public class CCargarArchivo extends CGenerico {
 						if (cell.getCellType() == 1) {
 							ruta = cell.getStringCellValue();
 							if (ruta != null)
-								if (ruta.length() > 20) {
+								if (ruta.length() > 50) {
 									mostrarError = mensajeErrorLongitud(
 											mostrarError, contadorRow,
 											contadorCell);
