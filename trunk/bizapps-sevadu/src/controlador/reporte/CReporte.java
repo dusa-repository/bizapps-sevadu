@@ -131,11 +131,16 @@ public class CReporte extends CGenerico {
 				if (arbol.getNombre().equals("Ver Aliados Reporte/Grafica"))
 					rowAliado.setVisible(true);
 				if (arbol.getNombre().equals("Ver Reportes Administrador")) {
-					itm16.setVisible(true);
-					itm17.setVisible(true);
-					itm20.setVisible(true);
-					itm21.setVisible(true);
-					itm23.setVisible(true);
+					if (itm16 != null)
+						itm16.setVisible(true);
+					if (itm17 != null)
+						itm17.setVisible(true);
+					if (itm20 != null)
+						itm20.setVisible(true);
+					if (itm21 != null)
+						itm21.setVisible(true);
+					if (itm23 != null)
+						itm23.setVisible(true);
 				}
 			}
 		}
@@ -314,7 +319,7 @@ public class CReporte extends CGenerico {
 						mapaGrafica.put("idAliado", aliado);
 						mapaGrafica.put("desde", desde);
 						mapaGrafica.put("hasta", hasta);
-						mapaGrafica.put("tipo", "column");
+						mapaGrafica.put("tipo", "bar");
 						mapaGrafica.put("lista", marcasAgregadas);
 						Sessions.getCurrent().setAttribute("grafica",
 								mapaGrafica);
@@ -519,7 +524,8 @@ public class CReporte extends CGenerico {
 				numeroClientes = getServicioVenta().contarPorAliadoEntreFechas(
 						aliado, fecha1, fecha2);
 				parameters.put("numclientes", numeroClientes);
-				numclientesaliado = getServicioCliente().contarPorAliado(aliado);
+				numclientesaliado = getServicioCliente()
+						.contarPorAliado(aliado);
 				parameters.put("numclientesaliado", numclientesaliado);
 				fis = (cl.getResourceAsStream("/reporte/R55420005.jasper"));
 				break;
@@ -527,7 +533,8 @@ public class CReporte extends CGenerico {
 				numeroClientes = getServicioVenta().contarPorAliadoEntreFechas(
 						aliado, fecha1, fecha2);
 				parameters.put("numclientes", numeroClientes);
-				numclientesaliado = getServicioCliente().contarPorAliado(aliado);
+				numclientesaliado = getServicioCliente()
+						.contarPorAliado(aliado);
 				parameters.put("numclientesaliado", numclientesaliado);
 				fis = (cl.getResourceAsStream("/reporte/R55420006.jasper"));
 				break;
@@ -541,7 +548,8 @@ public class CReporte extends CGenerico {
 				numeroClientes = getServicioVenta().contarPorAliadoEntreFechas(
 						aliado, fecha1, fecha2);
 				parameters.put("numclientes", numeroClientes);
-				numclientesaliado = getServicioCliente().contarPorAliado(aliado);
+				numclientesaliado = getServicioCliente()
+						.contarPorAliado(aliado);
 				parameters.put("numclientesaliado", numclientesaliado);
 				fis = (cl.getResourceAsStream("/reporte/R55420008.jasper"));
 				break;
@@ -679,10 +687,9 @@ public class CReporte extends CGenerico {
 						msj.mensajeAlerta("Debe seleccionar al menos una Marca para generar el grafico");
 						return false;
 					} else {
-						if ((cmbReporte.getValue().equals(
-								"Grafico Vendido VS Planificado Marcas") || cmbReporte
+						if (cmbReporte
 								.getValue()
-								.equals("Grafico Vendido VS Planificado Marcas (Angular)"))
+								.equals("Grafico Vendido VS Planificado Marcas (Angular)")
 								&& marcasAgregadas.size() != 1) {
 							msj.mensajeAlerta("Para este Grafico solo debe agregar una Marca");
 							return false;

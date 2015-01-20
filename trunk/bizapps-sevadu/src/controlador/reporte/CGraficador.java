@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,6 +21,7 @@ import modelo.maestros.Venta;
 import org.zkoss.chart.Chart;
 import org.zkoss.chart.Charts;
 import org.zkoss.chart.Color;
+import org.zkoss.chart.Legend;
 import org.zkoss.chart.LinearGradient;
 import org.zkoss.chart.PaneBackground;
 import org.zkoss.chart.Point;
@@ -90,7 +92,7 @@ public class CGraficador extends CGenerico {
 		case "line":
 			generarGrafica(aliado, fechaDesde, fechaHasta, ids);
 			break;
-		case "column":
+		case "bar":
 			generarGraficaColumnas(aliado, fechaDesde, fechaHasta, ids);
 			break;
 		case "pie":
@@ -195,7 +197,7 @@ public class CGraficador extends CGenerico {
 			Date fechaHasta2, List<String> ids) {
 		List<Venta> ventas = servicioVenta
 				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorFecha(aliado2,
-						fechaDesde2, fechaHasta2, ids);
+						fechaDesde2, fechaHasta2, ids, false);
 		if (!ventas.isEmpty()) {
 			double vendido = 0;
 			DateFormat formatoAnno = new SimpleDateFormat("yyyy");
@@ -517,61 +519,59 @@ public class CGraficador extends CGenerico {
 			Date fechaHasta2, List<String> ids) {
 		List<Venta> ventas = servicioVenta
 				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorFecha(aliado2,
-						fechaDesde2, fechaHasta2, ids);
+						fechaDesde2, fechaHasta2, ids, true);
 		CategoryModel modelo = new DefaultCategoryModel();
 		if (!ventas.isEmpty()) {
 
-			String fecha = formatoFecha.format(ventas.get(0).getFechaFactura());
 			double vendido = 0;
 			DateFormat formatoAnno = new SimpleDateFormat("yyyy");
 			DateFormat formatoMes = new SimpleDateFormat("MM");
-
-			int annoPlanDesde = Integer.parseInt(formatoAnno
-					.format(fechaDesde2));
-			int mesPlanDesde = Integer.parseInt(formatoMes.format(fechaDesde2));
-			int annoPlanHasta = Integer.parseInt(formatoAnno
-					.format(fechaHasta2));
-			int mesPlanHasta = Integer.parseInt(formatoMes.format(fechaHasta2));
-			do {
-				if (mesPlanDesde == 13) {
-					mesPlanDesde = 1;
-					annoPlanDesde = annoPlanDesde + 1;
-				}
-				Double plan2 = servicioPlan.sumarPlanAliado(ventas.get(0)
-						.getMaestroAliado(),
-						ventas.get(0).getMaestroProducto(), annoPlanDesde,
-						mesPlanDesde);
-				Date fechaFormato = new Date();
-				try {
-					fechaFormato = formatoNuevo.parse(annoPlanDesde + "-"
-							+ mesPlanDesde);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				String fechaReal = formatoFecha.format(fechaFormato);
-				modelo.setValue("Planificado", fechaReal, plan2);
-				mesPlanDesde = mesPlanDesde + 1;
-			} while (annoPlanDesde != annoPlanHasta
-					|| mesPlanDesde != mesPlanHasta + 1);
-
+			Collections.sort(ids);
+			for (int i = 0; i < ids.size(); i++) {
+				String marca = ids.get(i);
+				int annoPlanDesde = Integer.parseInt(formatoAnno
+						.format(fechaDesde2));
+				int mesPlanDesde = Integer.parseInt(formatoMes
+						.format(fechaDesde2));
+				int annoPlanHasta = Integer.parseInt(formatoAnno
+						.format(fechaHasta2));
+				int mesPlanHasta = Integer.parseInt(formatoMes
+						.format(fechaHasta2));
+				Double planTotal = (double) 0;
+				do {
+					if (mesPlanDesde == 13) {
+						mesPlanDesde = 1;
+						annoPlanDesde = annoPlanDesde + 1;
+					}
+					Double plan2 = servicioPlan.sumarPlanAliado2(ventas.get(0)
+							.getMaestroAliado(), marca, annoPlanDesde,
+							mesPlanDesde);
+					planTotal = planTotal + plan2;
+					mesPlanDesde = mesPlanDesde + 1;
+				} while (annoPlanDesde != annoPlanHasta
+						|| mesPlanDesde != mesPlanHasta + 1);
+				modelo.setValue("Planificado", marca, planTotal);
+			}
+			String marca = ventas.get(0).getMaestroProducto().getMaestroMarca()
+					.getMarcaDusa();
 			for (int i = 0; i < ventas.size(); i++) {
-				if (formatoFecha.format(ventas.get(i).getFechaFactura())
-						.equals(fecha))
+				if (marca.equals(ventas.get(i).getMaestroProducto()
+						.getMaestroMarca().getMarcaDusa()))
 					vendido = vendido + ventas.get(i).getCantidad();
 				else {
-					modelo.setValue("Vendido", fecha,
+					modelo.setValue("Vendido", marca,
 							Math.rint(vendido * 100) / 100);
-					fecha = formatoFecha
-							.format(ventas.get(i).getFechaFactura());
+					marca = ventas.get(i).getMaestroProducto()
+							.getMaestroMarca().getMarcaDusa();
 					vendido = 0;
 					i--;
 				}
 			}
-			modelo.setValue("Vendido", fecha, Math.rint(vendido * 100) / 100);
+			modelo.setValue("Vendido", marca, Math.rint(vendido * 100) / 100);
 		}
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
 		chart.setModel(modelo);
-		chart.getYAxis().getTitle().setText("Numero de Cajas");
+		chart.getXAxis().getTitle().setText("Numero de Cajas");
 		chart.setTitle("Vendido VS Planificado de la Marca:"
 				+ servicioMarca.buscar(ids.get(0)).getDescripcion() + " desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
@@ -579,18 +579,38 @@ public class CGraficador extends CGenerico {
 
 		chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
 				+ aliado2 + ")");
+		YAxis yAxis = chart.getYAxis();
+		yAxis.setMin(0);
+		yAxis.setTitle("Cajas");
+		yAxis.getTitle().setAlign("high");
+		yAxis.getLabels().setOverflow("justfy");
 
-		chart.getXAxis().setMin(0);
-		Tooltip tooltip = chart.getTooltip();
-		tooltip.setHeaderFormat("<span style=\"font-size:10px\">{point.key}</span><table>");
-		tooltip.setPointFormat("<tr><td style=\"color:{series.color};padding:0\">{series.name}: </td>"
-				+ "<td style=\"padding:0\"><b>{point.y:.0f} Cajas</b></td></tr>");
-		tooltip.setFooterFormat("</table>");
-		tooltip.setShared(true);
-		tooltip.setUseHTML(true);
+		chart.getTooltip().setValueSuffix(" cajas");
 
-		chart.getPlotOptions().getColumn().setPointPadding(0.2);
-		chart.getPlotOptions().getColumn().setBorderWidth(0);
+		chart.getPlotOptions().getBar().getDataLabels().setEnabled(true);
+
+		Legend legend = chart.getLegend();
+		legend.setLayout("vertical");
+		legend.setAlign("right");
+		legend.setVerticalAlign("top");
+		legend.setX(-40);
+		legend.setY(100);
+		legend.setFloating(true);
+		legend.setBorderWidth(1);
+		legend.setShadow(true);
+
+		chart.getCredits().setEnabled(false);
+		// chart.getXAxis().setMin(0);
+		// Tooltip tooltip = chart.getTooltip();
+		// tooltip.setHeaderFormat("<span style=\"font-size:10px\">{point.key}</span><table>");
+		// tooltip.setPointFormat("<tr><td style=\"color:{series.color};padding:0\">{series.name}: </td>"
+		// + "<td style=\"padding:0\"><b>{point.y:.0f} Cajas</b></td></tr>");
+		// tooltip.setFooterFormat("</table>");
+		// tooltip.setShared(true);
+		// tooltip.setUseHTML(true);
+		//
+		// chart.getPlotOptions().getColumn().setPointPadding(0.2);
+		// chart.getPlotOptions().getColumn().setBorderWidth(0);
 
 		if (ventas.isEmpty())
 			chart.setTitle("Vendido VS Planificado de la Marca:"

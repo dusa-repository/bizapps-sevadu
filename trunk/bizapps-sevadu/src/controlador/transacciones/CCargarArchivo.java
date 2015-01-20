@@ -368,10 +368,17 @@ public class CCargarArchivo extends CGenerico {
 				}
 			}
 			if (!error && !errorLong) {
-				servicioProducto.guardarVarios(productos);
-				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
-						+ "Cantidad de Filas insertadas:" + (contadorRow));
+				if (productos.size() == contadorRow) {
+					servicioProducto.guardarVarios(productos);
+					msj.mensajeInformacion("Archivo importado con exito" + "\n"
+							+ "Cantidad de Filas evaluadas:" + (contadorRow)
+							+ "\n" + "Cantidad de Filas insertadas:"
+							+ (contadorRow));
+
+				} else {
+					msj.mensajeError("El archivo no ha podido ser importado, causas:"
+							+ "Faltan columnas en el archivo");
+				}
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -1227,11 +1234,7 @@ public class CCargarArchivo extends CGenerico {
 						break;
 					}
 				}
-				
-				
-				
-				
-				
+
 				if (!error && !errorLong && aliado != null && marca1 != null
 						&& marca2 != null && marca3 != null && marca4 != null
 						&& marca5 != null && marca6 != null && marca7 != null
@@ -1320,10 +1323,17 @@ public class CCargarArchivo extends CGenerico {
 				}
 			}
 			if (!error && !errorLong) {
-				servicioMarcaActivada.guardarVarios(marcas);
-				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
-						+ "Cantidad de Filas insertadas:" + (contadorRow));
+				if (marcas.size() == contadorRow) {
+					servicioMarcaActivada.guardarVarios(marcas);
+					msj.mensajeInformacion("Archivo importado con exito" + "\n"
+							+ "Cantidad de Filas evaluadas:" + (contadorRow)
+							+ "\n" + "Cantidad de Filas insertadas:"
+							+ (contadorRow));
+
+				} else {
+					msj.mensajeError("El archivo no ha podido ser importado, causas:"
+							+ "Faltan columnas en el archivo");
+				}
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -1699,10 +1709,17 @@ public class CCargarArchivo extends CGenerico {
 				}
 			}
 			if (!error && !errorLong) {
-				servicioCliente.guardarVarios(clientes);
-				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
-						+ "Cantidad de Filas insertadas:" + (contadorRow));
+				if (clientes.size() == contadorRow) {
+					servicioCliente.guardarVarios(clientes);
+					msj.mensajeInformacion("Archivo importado con exito" + "\n"
+							+ "Cantidad de Filas evaluadas:" + (contadorRow)
+							+ "\n" + "Cantidad de Filas insertadas:"
+							+ (contadorRow));
+
+				} else {
+					msj.mensajeError("El archivo no ha podido ser importado, causas:"
+							+ "Faltan columnas en el archivo");
+				}
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -1844,10 +1861,17 @@ public class CCargarArchivo extends CGenerico {
 				}
 			}
 			if (!error && !errorLong) {
-				servicioExistencia.guardarVarios(existencias);
-				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
-						+ "Cantidad de Filas insertadas:" + (contadorRow));
+				if (existencias.size() == contadorRow) {
+					servicioExistencia.guardarVarios(existencias);
+					msj.mensajeInformacion("Archivo importado con exito" + "\n"
+							+ "Cantidad de Filas evaluadas:" + (contadorRow)
+							+ "\n" + "Cantidad de Filas insertadas:"
+							+ (contadorRow));
+
+				} else {
+					msj.mensajeError("El archivo no ha podido ser importado, causas:"
+							+ "Faltan columnas en el archivo");
+				}
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -2075,10 +2099,17 @@ public class CCargarArchivo extends CGenerico {
 				}
 			}
 			if (!error && !errorLong) {
-				servicioPlan.guardarVarios(planesVentas);
-				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
-						+ "Cantidad de Filas insertadas:" + (contadorRow));
+				if (planesVentas.size() == contadorRow) {
+					servicioPlan.guardarVarios(planesVentas);
+					msj.mensajeInformacion("Archivo importado con exito" + "\n"
+							+ "Cantidad de Filas evaluadas:" + (contadorRow)
+							+ "\n" + "Cantidad de Filas insertadas:"
+							+ (contadorRow));
+
+				} else {
+					msj.mensajeError("El archivo no ha podido ser importado, causas:"
+							+ "Faltan columnas en el archivo");
+				}
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -2639,10 +2670,17 @@ public class CCargarArchivo extends CGenerico {
 				}
 			}
 			if (!error && !errorLong) {
-				servicioVenta.guardarVarios(ventas);
-				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
-						+ "Cantidad de Filas insertadas:" + (contadorRow));
+				if (ventas.size() == contadorRow) {
+					servicioVenta.guardarVarios(ventas);
+					msj.mensajeInformacion("Archivo importado con exito" + "\n"
+							+ "Cantidad de Filas evaluadas:" + (contadorRow)
+							+ "\n" + "Cantidad de Filas insertadas:"
+							+ (contadorRow));
+
+				} else {
+					msj.mensajeError("El archivo no ha podido ser importado, causas:"
+							+ "Faltan columnas en el archivo");
+				}
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"

@@ -91,7 +91,9 @@ public class Test {
 			SellerData sellerData = new SellerData(1, clientes.get(0)
 					.getVendedor());
 			ZoneData zoneData = new ZoneData(1, clientes.get(0).getZona());
+			boolean marcaNula = false;
 			for (int i = 0; i < clientes.size(); i++) {
+				marcaNula = false;
 				if (supervisor.equals(clientes.get(i).getSupervisor())) {
 
 					if (vendedor.equals(clientes.get(i).getVendedor())) {
@@ -109,31 +111,44 @@ public class Test {
 							if (cliente != null) {
 								MarcaActivadaVendedor marcaActivada = getServicioMarcaActivada()
 										.buscar(clave);
-								for (int j = 0; j < marcas.size(); j++) {
-									boolean primero = false;
-									boolean segundo = false;
-									List<Venta> ventas = getServicioVenta()
-											.buscarPorAliadoYVendedorYClienteYMarcaYZona(
-													aliado,
-													clientes.get(i)
-															.getVendedor(),
-													cliente, marcas.get(j).getMarcaDusa(),
-													desde, hasta,
-													clientes.get(i).getZona());
-									if (!ventas.isEmpty()) {
-										if (obtenerGet(marcaActivada, j) != null) {
-											if (obtenerGet(marcaActivada, j) == 1) {
-												primero = true;
-												segundo = true;
-											} else {
-												primero = true;
+								if (marcaActivada != null) {
+									for (int j = 0; j < marcas.size(); j++) {
+										boolean primero = false;
+										boolean segundo = false;
+										List<Venta> ventas = getServicioVenta()
+												.buscarPorAliadoYVendedorYClienteYMarcaYZona(
+														aliado,
+														clientes.get(i)
+																.getVendedor(),
+														cliente,
+														marcas.get(j)
+																.getMarcaDusa(),
+														desde,
+														hasta,
+														clientes.get(i)
+																.getZona());
+										if (!ventas.isEmpty()) {
+											if (obtenerGet(marcaActivada, j) != null) {
+												if (obtenerGet(marcaActivada, j) == 1) {
+													primero = true;
+													segundo = true;
+												} else {
+													primero = true;
+												}
 											}
 										}
+										ActivationTo activacion = new ActivationTo(
+												primero, segundo);
+										activations.add(activacion);
 									}
-									ActivationTo activacion = new ActivationTo(
-											primero, segundo);
-									activations.add(activacion);
+								} else {
+									for (int j = 0; j < marcas.size(); j++) {
+										ActivationTo activacion = new ActivationTo(
+												false, false);
+										activations.add(activacion);
+									}
 								}
+								// marcaNula = true;
 							} else {
 								for (int j = 0; j < marcas.size(); j++) {
 									ActivationTo activacion = new ActivationTo(
@@ -141,10 +156,12 @@ public class Test {
 									activations.add(activacion);
 								}
 							}
+							// if (!marcaNula) {
 							ClientData clientData = new ClientData(clientes
 									.get(i).getNombre(), clientes.get(i)
 									.getCodigoCliente(), activations, 1);
 							zoneData.addChild(clientData);
+							// }
 						} else {
 							sellerData.addChild(zoneData);
 							zoneData = new ZoneData(i, clientes.get(i)
@@ -180,19 +197,23 @@ public class Test {
 			sellerData.addChild(zoneData);
 			supervisorData.addChild(sellerData);
 			thermometerDatas.add(supervisorData);
-		}else{
-			SupervisorData supervisorData = new SupervisorData(1, "No hay informacion que mostrar");
-	        thermometerDatas.add(supervisorData);
-	        SellerData sellerData = new SellerData(1, "No hay informacion que mostrar");
-	        supervisorData.addChild(sellerData);
-	        ZoneData zoneData = new ZoneData(1, "No hay informacion que mostrar");
-	        sellerData.addChild(zoneData);
-	        List<ActivationTo> activations = new ArrayList<ActivationTo>();
-	        for (int j = 0; j < marcas.size(); j++) {
-	            activations.add(new ActivationTo(false, false));
-	        } 
-	        ClientData clientData = new ClientData("No hay informacion que mostrar", "0", activations, 1);
-	        zoneData.addChild(clientData);
+		} else {
+			SupervisorData supervisorData = new SupervisorData(1,
+					"No hay informacion que mostrar");
+			thermometerDatas.add(supervisorData);
+			SellerData sellerData = new SellerData(1,
+					"No hay informacion que mostrar");
+			supervisorData.addChild(sellerData);
+			ZoneData zoneData = new ZoneData(1,
+					"No hay informacion que mostrar");
+			sellerData.addChild(zoneData);
+			List<ActivationTo> activations = new ArrayList<ActivationTo>();
+			for (int j = 0; j < marcas.size(); j++) {
+				activations.add(new ActivationTo(false, false));
+			}
+			ClientData clientData = new ClientData(
+					"No hay informacion que mostrar", "0", activations, 1);
+			zoneData.addChild(clientData);
 		}
 		return thermometerDatas;
 	}

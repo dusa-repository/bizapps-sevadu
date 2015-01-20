@@ -150,9 +150,12 @@ public class SVenta {
 	}
 
 	public List<Venta> buscarPorAliadoEntreFechasYMarcasOrdenadoPorFecha(
-			String aliado2, Date fechaDesde2, Date fechaHasta2, List<String> ids) {
+			String aliado2, Date fechaDesde2, Date fechaHasta2,
+			List<String> ids, boolean columnas) {
 		List<String> ordenar = new ArrayList<String>();
 		Sort o;
+		if (columnas)
+			ordenar.add("maestroProductoMaestroMarcaMarcaDusa");
 		ordenar.add("fechaFactura");
 		o = new Sort(Sort.Direction.ASC, ordenar);
 		return ventaDAO
