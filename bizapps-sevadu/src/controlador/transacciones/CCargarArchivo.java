@@ -370,9 +370,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioProducto.guardarVarios(productos);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow));
+						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
+						+ "Cantidad de Filas insertadas:" + (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -380,7 +379,8 @@ public class CCargarArchivo extends CGenerico {
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
 						+ (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas: 0");
+						+ "\n"
+						+ "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -1322,9 +1322,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioMarcaActivada.guardarVarios(marcas);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow));
+						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
+						+ "Cantidad de Filas insertadas:" + (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -1332,7 +1331,8 @@ public class CCargarArchivo extends CGenerico {
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
 						+ (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas: 0");
+						+ "\n"
+						+ "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -1457,7 +1457,7 @@ public class CCargarArchivo extends CGenerico {
 								errorLong = true;
 							} else {
 								zona = servicioF0005.buscar("00", "01", idZona);
-								zona= new F0005();
+								zona = new F0005();
 								if (zona == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "01", idZona,
@@ -1482,7 +1482,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								ciudad = servicioF0005.buscar("00", "03",
 										idCiudad);
-								ciudad= new F0005();
+								ciudad = new F0005();
 								if (ciudad == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "03", idCiudad,
@@ -1701,9 +1701,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioCliente.guardarVarios(clientes);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow));
+						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
+						+ "Cantidad de Filas insertadas:" + (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -1711,7 +1710,8 @@ public class CCargarArchivo extends CGenerico {
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
 						+ (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas: 0");
+						+ "\n"
+						+ "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -1846,9 +1846,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioExistencia.guardarVarios(existencias);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow));
+						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
+						+ "Cantidad de Filas insertadas:" + (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -1856,7 +1855,8 @@ public class CCargarArchivo extends CGenerico {
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
 						+ (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas: 0");
+						+ "\n"
+						+ "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -1998,7 +1998,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								vendedor = servicioF0005.buscar("00", "00",
 										idVendedor);
-								vendedor= new F0005();
+								vendedor = new F0005();
 								if (vendedor == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "00",
@@ -2077,9 +2077,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioPlan.guardarVarios(planesVentas);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow));
+						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
+						+ "Cantidad de Filas insertadas:" + (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -2087,7 +2086,8 @@ public class CCargarArchivo extends CGenerico {
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
 						+ (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas: 0");
+						+ "\n"
+						+ "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -2151,11 +2151,19 @@ public class CCargarArchivo extends CGenerico {
 				String idCliente = null;
 				Double refCliente = (double) 0;
 				String nombreCliente = null;
+				Double idUnidad = null;
 				String unidad = null;
 				Date fechaFactura = null;
 				Double factura = null;
 				String segmentacion = null;
 				String ruta = null;
+				Boolean formatoCaja = null;
+				Integer packingSize = 0;
+				MappingProducto object = null;
+				Double idFuturo1 = null;
+				String futuro1 = "";
+				Double idFuturo2 = null;
+				String futuro2 = "";
 				Iterator<Cell> cellIterator = row.cellIterator();
 				int contadorCell = 0;
 				while (cellIterator.hasNext()) {
@@ -2235,7 +2243,7 @@ public class CCargarArchivo extends CGenerico {
 								errorLong = true;
 							} else {
 								zona = servicioF0005.buscar("00", "01", idZona);
-								zona= new F0005();
+								zona = new F0005();
 								if (zona == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "01", idZona,
@@ -2260,7 +2268,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								ciudad = servicioF0005.buscar("00", "03",
 										idCiudad);
-								ciudad= new F0005();
+								ciudad = new F0005();
 								if (ciudad == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "03", idCiudad,
@@ -2278,26 +2286,33 @@ public class CCargarArchivo extends CGenerico {
 						idProducto = obtenerStringCualquiera(cell, refProducto,
 								idProducto);
 						if (idProducto != null) {
-							if (idProducto.length() > 50) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
-								errorLong = true;
-							} else {
-								if (aliado != null) {
-									MappingProducto object = servicioMapping
-											.buscarPorAliadoyProductoNoDusa(
-													aliado, idProducto);
-									if (object == null) {
-										producto = null;
-										mostrarError = mensajeErrorNoEncontrado(
-												mostrarError, idProducto,
-												contadorRow, contadorCell,
-												"Mapping Producto (Codigo de Producto de Cliente)");
-										error = true;
-									} else
-										producto = object.getId()
-												.getMaestroProducto();
+							if (!idProducto.equals("")) {
+								if (idProducto.length() > 50) {
+									mostrarError = mensajeErrorLongitud(
+											mostrarError, contadorRow,
+											contadorCell);
+									errorLong = true;
+								} else {
+									if (aliado != null) {
+										object = servicioMapping
+												.buscarPorAliadoyProductoNoDusa(
+														aliado, idProducto);
+										if (object == null) {
+											producto = null;
+											mostrarError = mensajeErrorNoEncontrado(
+													mostrarError, idProducto,
+													contadorRow, contadorCell,
+													"Mapping Producto (Codigo de Producto de Cliente)");
+											error = true;
+										} else
+											producto = object.getId()
+													.getMaestroProducto();
+									}
 								}
+							} else {
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
 							}
 						} else {
 							mostrarError = mensajeErrorNull(mostrarError,
@@ -2306,8 +2321,35 @@ public class CCargarArchivo extends CGenerico {
 						}
 						break;
 					case 6:
-						if (cell.getCellType() == 1) {
-							unidad = cell.getStringCellValue();
+						unidad = obtenerStringCualquiera(cell, idUnidad, unidad);
+						if (unidad != null) {
+							if (object != null) {
+								if (unidad
+										.equals(object.getCodigoCajaCliente())) {
+									formatoCaja = true;
+								} else {
+									if (unidad.equals(object
+											.getCodigoBotellaCliente())) {
+										formatoCaja = false;
+										packingSize = object.getId()
+												.getMaestroProducto()
+												.getPackingSizeDusa();
+										unidad = object.getCodigoCajaCliente();
+									} else {
+										mostrarError = mostrarError
+												+ " El valor "
+												+ unidad
+												+ " no se ha encontrado en la columna codigo botella"
+												+ " o codigo caja de la tabla  "
+												+ "Mapping de Producto"
+												+ ".  Fila: " + contadorRow
+												+ ". Columna: " + contadorCell
+												+ "\n";
+										error = true;
+									}
+
+								}
+							}
 						} else {
 							mostrarError = mensajeErrorNull(mostrarError,
 									contadorRow, contadorCell);
@@ -2318,11 +2360,30 @@ public class CCargarArchivo extends CGenerico {
 								mostrarError = mensajeErrorLongitud(
 										mostrarError, contadorRow, contadorCell);
 								errorLong = true;
+								formatoCaja = null;
 							}
 						break;
 					case 7:
 						if (cell.getCellType() == 0) {
 							cantidad = cell.getNumericCellValue();
+							if (formatoCaja != null) {
+								if (!formatoCaja) {
+									if (packingSize != 0)
+										cantidad = round(
+												cantidad / packingSize, 2);
+									else {
+										mostrarError = mostrarError
+												+ " El Packing Size asociado al Producto "
+												+ idProducto
+												+ " tiene valor 0 por lo "
+												+ "cual no se puede realizar la transformacion necesaria de botella a caja, "
+												+ "verifique este valor en el maestro de producto.  Fila: "
+												+ contadorRow + ". Columna: "
+												+ contadorCell + "\n";
+										error = true;
+									}
+								}
+							}
 						} else {
 							mostrarError = mensajeErrorNull(mostrarError,
 									contadorRow, contadorCell);
@@ -2354,7 +2415,7 @@ public class CCargarArchivo extends CGenerico {
 							} else {
 								especie = servicioF0005.buscar("00", "06",
 										idEspecie);
-								especie= new F0005();
+								especie = new F0005();
 								if (especie == null) {
 									mostrarError = mensajeErrorUdcNoEncontrada(
 											mostrarError, "00", "06",
@@ -2514,6 +2575,30 @@ public class CCargarArchivo extends CGenerico {
 							error = true;
 						}
 						break;
+					case 18:
+						futuro1 = obtenerStringCualquiera(cell, idFuturo1,
+								futuro1);
+						if (futuro1 != null) {
+							if (futuro1.length() > 50) {
+								mostrarError = mensajeErrorLongitud(
+										mostrarError, contadorRow, contadorCell);
+								errorLong = true;
+							}
+						} else
+							futuro1 = "";
+						break;
+					case 19:
+						futuro2 = obtenerStringCualquiera(cell, idFuturo2,
+								futuro2);
+						if (futuro2 != null) {
+							if (futuro2.length() > 50) {
+								mostrarError = mensajeErrorLongitud(
+										mostrarError, contadorRow, contadorCell);
+								errorLong = true;
+							}
+						} else
+							futuro2 = "";
+						break;
 					}
 				}
 				if (!error && !errorLong && aliado != null && producto != null
@@ -2525,8 +2610,8 @@ public class CCargarArchivo extends CGenerico {
 						&& unidad != null && fechaFactura != null
 						&& factura != null && segmentacion != null
 						&& ruta != null) {
-					venta.setCampoAux1("");
-					venta.setCampoAux2("");
+					venta.setCampoAux1(futuro1);
+					venta.setCampoAux2(futuro2);
 					venta.setCanalVentas(segmentacion);
 					venta.setCantidad(cantidad.floatValue());
 					venta.setCiudadAliado(idCiudad);
@@ -2556,9 +2641,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				servicioVenta.guardarVarios(ventas);
 				msj.mensajeInformacion("Archivo importado con exito" + "\n"
-						+ "Cantidad de Filas evaluadas:" + (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas:"
-						+ (contadorRow));
+						+ "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
+						+ "Cantidad de Filas insertadas:" + (contadorRow));
 			} else
 				msj.mensajeError("El archivo no ha podido ser importado, causas:"
 						+ "\n"
@@ -2566,7 +2650,8 @@ public class CCargarArchivo extends CGenerico {
 						+ "\n"
 						+ "Cantidad de Filas evaluadas:"
 						+ (contadorRow)
-						+ "\n" + "Cantidad de Filas insertadas: 0");
+						+ "\n"
+						+ "Cantidad de Filas insertadas: 0");
 		}
 	}
 

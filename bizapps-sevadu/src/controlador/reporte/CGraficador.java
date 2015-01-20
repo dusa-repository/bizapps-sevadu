@@ -179,7 +179,8 @@ public class CGraficador extends CGenerico {
 		yAxis.setTickLength(10);
 		yAxis.getLabels().setStep(2);
 		yAxis.getLabels().setRotation("auto");
-		chart.getPlotOptions().getGauge().getTooltip().setValueSuffix(" marcas");
+		chart.getPlotOptions().getGauge().getTooltip()
+				.setValueSuffix(" marcas");
 		chart.getSeries().setName("Marcas Vendidas");
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
 		chart.getYAxis().getTitle().setText("Marcas Vendidas");
@@ -242,7 +243,7 @@ public class CGraficador extends CGenerico {
 				}
 			}
 			// buscar dias habiles para regla de tres
-			double limiteSuperior = suma ;
+			double limiteSuperior = suma;
 			double cantidad = suma - vendido;
 			Double tope = (double) 0;
 			if (cantidad < 0)
@@ -258,12 +259,11 @@ public class CGraficador extends CGenerico {
 			scale.setTickColor("#666666");
 			scale.setValue(vendido);
 			scale.newRange(0, limiteSuperior - (limiteSuperior * minimo / 100),
-					"#DF5353", 0.9, 1); 
+					"#DF5353", 0.9, 1);
 			scale.newRange(limiteSuperior - (limiteSuperior * minimo / 100),
 					limiteSuperior, "#DDDF0D", 0.9, 1);
 			scale.newRange(limiteSuperior, tope.intValue(), "#55BF3B", 0.9, 1);
-			
-			
+
 			chart.setModel(dialmodel);
 			List<PaneBackground> backgrounds = new LinkedList<PaneBackground>();
 
@@ -327,7 +327,7 @@ public class CGraficador extends CGenerico {
 
 		List<Venta> ventas = servicioVenta
 				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(aliado2,
-						fechaDesde2, fechaHasta2, ids);
+						fechaDesde2, fechaHasta2, ids, false);
 		chart.getYAxis().setTitle("Total porcentaje de Ventas por Marca");
 		Series serieMarca = chart.getSeries();
 		serieMarca.setName("Porcentaje Participacion:");
@@ -411,7 +411,7 @@ public class CGraficador extends CGenerico {
 
 		List<Venta> ventas = servicioVenta
 				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(aliado2,
-						fechaDesde2, fechaHasta2, ids);
+						fechaDesde2, fechaHasta2, ids, false);
 		chart.getYAxis().setTitle("Total porcentaje de Ventas por Marca");
 		chart.getPlotOptions().getPie().setShadow(false);
 		chart.getTooltip().setValueSuffix(" Cajas");
@@ -450,6 +450,14 @@ public class CGraficador extends CGenerico {
 						i--;
 					}
 				} else {
+					vendidoMarca = vendidoMarca + vendidoProducto;
+					Point versionPoint = new Point(producto,
+							Math.rint(vendidoProducto * 100) / 100);
+					versionPoint.setColor(colors.get(j));
+					serieProducto.addPoint(versionPoint);
+					producto = ventas.get(i).getMaestroProducto()
+							.getCodigoProductoDusa();
+					vendidoProducto = 0;
 
 					Point browserPoint = new Point(marca,
 							Math.rint(vendidoMarca * 100) / 100);
@@ -462,6 +470,12 @@ public class CGraficador extends CGenerico {
 					j++;
 				}
 			}
+			vendidoMarca = vendidoMarca + vendidoProducto;
+			Point versionPoint = new Point(producto,
+					Math.rint(vendidoProducto * 100) / 100);
+			versionPoint.setColor(colors.get(j));
+			serieProducto.addPoint(versionPoint);
+
 			Point browserPoint = new Point(marca,
 					Math.rint(vendidoMarca * 100) / 100);
 			browserPoint.setColor(colors.get(j));
@@ -593,7 +607,7 @@ public class CGraficador extends CGenerico {
 			Date fechaHasta2, List<String> marcas2) {
 		List<Venta> ventas = servicioVenta
 				.buscarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
-						aliadoObjeto, fechaDesde2, fechaHasta2, marcas2);
+						aliadoObjeto, fechaDesde2, fechaHasta2, marcas2, true);
 		CategoryModel modelo = new DefaultCategoryModel();
 		if (!ventas.isEmpty()) {
 			String marca = ventas.get(0).getMaestroProducto().getMaestroMarca()
@@ -615,6 +629,11 @@ public class CGraficador extends CGenerico {
 						i--;
 					}
 				} else {
+					modelo.setValue(marca, fecha,
+							Math.rint(vendido * 100) / 100);
+					vendido = 0;
+					fecha = formatoFecha
+							.format(ventas.get(i).getFechaFactura());
 					marca = ventas.get(i).getMaestroProducto()
 							.getMaestroMarca().getMarcaDusa();
 					i--;

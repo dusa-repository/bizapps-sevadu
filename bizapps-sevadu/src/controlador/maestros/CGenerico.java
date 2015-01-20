@@ -128,6 +128,10 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 		return app.getBean(SMaestroAliado.class);
 	}
 
+	public static SCliente getServicioCliente() {
+		return app.getBean(SCliente.class);
+	}
+
 	public static SVenta getServicioVenta() {
 		return app.getBean(SVenta.class);
 	}

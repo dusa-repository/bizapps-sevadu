@@ -36,7 +36,7 @@ public class SCliente {
 		ordenar.add("zona");
 		ordenar.add("nombre");
 		o = new Sort(Sort.Direction.ASC, ordenar);
-		return clienteDAO.findByMaestroAliado(aliado,o);
+		return clienteDAO.findByMaestroAliado(aliado, o);
 	}
 
 	public List<Cliente> buscarPorAliados(List<MaestroAliado> eliminarLista) {
@@ -49,6 +49,12 @@ public class SCliente {
 
 	public List<Cliente> buscarPorTipoCliente(String id) {
 		return clienteDAO.findByTipoClienteCodigo(id);
+	}
+
+	public Integer contarPorAliado(String aliado) {
+		List<Cliente> lista = clienteDAO
+				.findByMaestroAliadoCodigoAliado(aliado);
+		return lista.size();
 	}
 
 }

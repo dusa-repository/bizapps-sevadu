@@ -492,6 +492,7 @@ public class CReporte extends CGenerico {
 			String url = lista.get(2);
 			List<Configuracion> configuracion = new ArrayList<Configuracion>();
 			Integer numeroClientes = 0;
+			Integer numclientesaliado = 0;
 			Integer sugerido = 0;
 			DateFormat fechaF = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -518,12 +519,16 @@ public class CReporte extends CGenerico {
 				numeroClientes = getServicioVenta().contarPorAliadoEntreFechas(
 						aliado, fecha1, fecha2);
 				parameters.put("numclientes", numeroClientes);
+				numclientesaliado = getServicioCliente().contarPorAliado(aliado);
+				parameters.put("numclientesaliado", numclientesaliado);
 				fis = (cl.getResourceAsStream("/reporte/R55420005.jasper"));
 				break;
 			case "5":
 				numeroClientes = getServicioVenta().contarPorAliadoEntreFechas(
 						aliado, fecha1, fecha2);
 				parameters.put("numclientes", numeroClientes);
+				numclientesaliado = getServicioCliente().contarPorAliado(aliado);
+				parameters.put("numclientesaliado", numclientesaliado);
 				fis = (cl.getResourceAsStream("/reporte/R55420006.jasper"));
 				break;
 			case "6":
@@ -536,6 +541,8 @@ public class CReporte extends CGenerico {
 				numeroClientes = getServicioVenta().contarPorAliadoEntreFechas(
 						aliado, fecha1, fecha2);
 				parameters.put("numclientes", numeroClientes);
+				numclientesaliado = getServicioCliente().contarPorAliado(aliado);
+				parameters.put("numclientesaliado", numclientesaliado);
 				fis = (cl.getResourceAsStream("/reporte/R55420008.jasper"));
 				break;
 			case "8":
@@ -817,7 +824,7 @@ public class CReporte extends CGenerico {
 				if (listItem2.get(i).isSelected()) {
 					MaestroMarca marca = listItem2.get(i).getValue();
 					marcasAgregadas.remove(marca);
-					marcas.add(marca);
+					marcas.add(0, marca);
 					ltbMarcas.setModel(new ListModelList<MaestroMarca>(marcas));
 					ltbMarcas.renderAll();
 					listitemEliminar.add(listItem2.get(i));

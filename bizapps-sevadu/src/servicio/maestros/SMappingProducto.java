@@ -23,12 +23,12 @@ public class SMappingProducto {
 	private IMaestroProductoDAO productoDAO;
 
 	public List<MappingProducto> buscarPorAliado(MaestroAliado aliado) {
-		return mappingDAO.findByIdMaestroAliado(aliado);
+		return mappingDAO.findByIdMaestroAliadoAndEstadoMapeo(aliado,1);
 	}
 
 	public List<MappingProducto> buscarPorAliadoNot(MaestroAliado aliado) {
 
-		List<MappingProducto> lista = mappingDAO.findByIdMaestroAliado(aliado);
+		List<MappingProducto> lista = mappingDAO.findByIdMaestroAliadoAndEstadoMapeo(aliado, 1);
 		List<MaestroProducto> productos = new ArrayList<MaestroProducto>();
 		List<String> ids = new ArrayList<String>();
 		if (lista.isEmpty())
@@ -55,7 +55,7 @@ public class SMappingProducto {
 	}
 
 	public List<MappingProducto> buscarTodosMasAliado(MaestroAliado aliado) {
-		List<MappingProducto> lista = mappingDAO.findByIdMaestroAliado(aliado);
+		List<MappingProducto> lista = mappingDAO.findByIdMaestroAliadoAndEstadoMapeo(aliado,1);
 		lista.addAll(buscarPorAliadoNot(aliado));
 		return lista;
 	}
@@ -89,8 +89,8 @@ public class SMappingProducto {
 	public MappingProducto buscarPorAliadoyProductoNoDusa(MaestroAliado aliado,
 			String idProducto) {
 		List<MappingProducto> list = mappingDAO
-				.findByIdMaestroAliadoAndCodigoProductoCliente(aliado,
-						idProducto);
+				.findByIdMaestroAliadoAndCodigoProductoClienteAndEstadoMapeo(aliado,
+						idProducto, 1);
 		if (!list.isEmpty())
 			return list.get(0);
 		else
