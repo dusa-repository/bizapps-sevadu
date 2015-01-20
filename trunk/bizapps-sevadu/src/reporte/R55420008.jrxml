@@ -24,6 +24,9 @@
 	<parameter name="zona" class="java.lang.String"/>
 	<parameter name="vendedor" class="java.lang.String"/>
 	<parameter name="cliente" class="java.lang.String"/>
+	<parameter name="numclientesaliado" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select ventas.codigo_aliado,maestro_producto.marca_dusa,maestro_marca.descripcion,ventas.codigo_cliente,nombre_cliente,sum(cantidad) as cantidad from ventas inner join maestro_producto on maestro_producto.codigo_producto_dusa= ventas.codigo_producto join maestro_marca on maestro_producto.marca_dusa= maestro_marca.marca_dusa where  fecha_factura>=$P{fecha_desde} and  fecha_factura<=$P{fecha_hasta} and ventas.codigo_aliado=$P{aliado}  and ventas.zona_aliado like '%$P!{zona}%' and ventas.nombre_vendedor like '%$P!{vendedor}%' and ventas.codigo_cliente like '%$P!{cliente}%' group by ventas.codigo_aliado,maestro_producto.marca_dusa,maestro_marca.descripcion,ventas.codigo_cliente,nombre_cliente order by ventas.codigo_aliado,maestro_producto.marca_dusa,sum(cantidad) desc,ventas.codigo_cliente]]>
 	</queryString>
@@ -293,7 +296,7 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="34" splitType="Stretch">
+		<band height="50" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-3" x="21" y="10" width="47" height="18" uuid="f0fbfdf0-0b55-428a-9b67-b67e04ecbc73"/>
 				<box>
@@ -378,6 +381,30 @@
 				</textElement>
 				<text><![CDATA[CJ]]></text>
 			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="431" y="34" width="87" height="13" uuid="0af0543e-a338-428b-9ffe-86d863936ef5"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[# Clientes aliado:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="518" y="34" width="39" height="16" uuid="eebc556f-fb79-4023-a4ab-f3b1e6430f12"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{numclientesaliado}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
