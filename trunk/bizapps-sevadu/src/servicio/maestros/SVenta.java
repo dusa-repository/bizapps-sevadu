@@ -103,11 +103,14 @@ public class SVenta {
 
 	public List<Venta> buscarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
 			String aliadoObjeto, Date fechaDesde2, Date fechaHasta2,
-			List<String> marcas2) {
+			List<String> marcas2, boolean ordenarPorMarca) {
 
 		List<String> ordenar = new ArrayList<String>();
 		Sort o;
-		ordenar.add("maestroProductoCodigoProductoDusa");
+		if (!ordenarPorMarca)
+			ordenar.add("maestroProductoCodigoProductoDusa");
+		else
+			ordenar.add("maestroProductoMaestroMarcaMarcaDusa");
 		ordenar.add("fechaFactura");
 		o = new Sort(Sort.Direction.ASC, ordenar);
 		return ventaDAO
@@ -163,17 +166,20 @@ public class SVenta {
 		Sort o;
 		ordenar.add("fechaFactura");
 		o = new Sort(Sort.Direction.ASC, ordenar);
-		return ventaDAO
-				.findByMaestroAliadoCodigoAliadoAndFechaFacturaBetween(
-						aliado2, fechaDesde2, fechaHasta2, o);
+		return ventaDAO.findByMaestroAliadoCodigoAliadoAndFechaFacturaBetween(
+				aliado2, fechaDesde2, fechaHasta2, o);
 	}
 
 	public Integer buscarVentasDeMarcasActivas(String aliado2,
 			Date fechaDesde2, Date fechaHasta2, String cliente) {
-		return ventaDAO.countDistinctMaestroProductoMaestroMarcaCodigoDusaBetween(aliado2,fechaDesde2,fechaHasta2, cliente);
+		return ventaDAO
+				.countDistinctMaestroProductoMaestroMarcaCodigoDusaBetween(
+						aliado2, fechaDesde2, fechaHasta2, cliente);
 	}
 
-	public List<String> buscarAliadosMasVendedores(Date fecha1, Date fecha2, int anno, int mes) {
-		return ventaDAO.findByCodigoAliadoMostSellerBetween(fecha1, fecha2, anno, mes);
+	public List<String> buscarAliadosMasVendedores(Date fecha1, Date fecha2,
+			int anno, int mes) {
+		return ventaDAO.findByCodigoAliadoMostSellerBetween(fecha1, fecha2,
+				anno, mes);
 	}
 }

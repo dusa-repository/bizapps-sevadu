@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IMappingProductoDAO extends JpaRepository<MappingProducto, MappingProductoPK> {
 
-	List<MappingProducto> findByIdMaestroAliado(MaestroAliado aliado);
+	List<MappingProducto> findByIdMaestroAliadoAndEstadoMapeo(MaestroAliado aliado, int a);
 
 	List<MappingProducto> findByIdMaestroProductoNotInAndIdMaestroAliado(
 			List<MaestroProducto> productos, MaestroAliado aliado);
@@ -24,7 +24,10 @@ public interface IMappingProductoDAO extends JpaRepository<MappingProducto, Mapp
 
 	List<MappingProducto> findByIdMaestroProductoCodigoProductoDusa(String clave);
 
-	List<MappingProducto> findByIdMaestroAliadoAndCodigoProductoCliente(
-			MaestroAliado aliado, String idProducto);
+//	List<MappingProducto> findByIdMaestroAliadoAndCodigoProductoCliente(
+//			MaestroAliado aliado, String idProducto);
+
+	List<MappingProducto> findByIdMaestroAliadoAndCodigoProductoClienteAndEstadoMapeo(
+			MaestroAliado aliado, String idProducto, int i);
 
 }
