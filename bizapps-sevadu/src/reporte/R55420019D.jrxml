@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="R55420018" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="789d6aaa-3334-4809-b719-61afdb9fe249">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="R55420019" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="789d6aaa-3334-4809-b719-61afdb9fe249">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -22,8 +22,14 @@
 	<parameter name="vendedor" class="java.lang.String"/>
 	<parameter name="cliente" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select tipo_cliente.canal_ventas,tipo_cliente.codigo,tipo_cliente.descripcion,sum(cantidad) as cantidad , round((sum(cantidad) / (select sum(cantidad) from ventas inner join tipo_cliente on ventas.tipo_cliente= tipo_cliente.codigo where tipo_cliente.canal_ventas='ON' and fecha_factura>=$P{fecha_desde} and  fecha_factura<=$P{fecha_hasta}  and ventas.codigo_aliado=$P{aliado}  and ventas.zona_aliado like '%$P!{zona}%' and ventas.nombre_vendedor like '%$P!{vendedor}%' and ventas.codigo_cliente like '%$P!{cliente}%' )*100),2) as porcentaje from ventas inner join tipo_cliente on ventas.tipo_cliente= tipo_cliente.codigo where tipo_cliente.canal_ventas IN ('ON') and fecha_factura>=$P{fecha_desde} and  fecha_factura<=$P{fecha_hasta} and ventas.codigo_aliado=$P{aliado}  and ventas.zona_aliado like '%$P!{zona}%' and ventas.nombre_vendedor like '%$P!{vendedor}%' and ventas.codigo_cliente like '%$P!{cliente}%' group by tipo_cliente.canal_ventas,tipo_cliente.codigo,tipo_cliente.descripcion order by canal_ventas,sum(cantidad)]]>
+		<![CDATA[select codigo_cliente,nombre_cliente,tipo_cliente.canal_ventas,tipo_cliente.codigo,tipo_cliente.descripcion,sum(cantidad) as cantidad , round((sum(cantidad) / (select sum(cantidad) from ventas inner join tipo_cliente on ventas.tipo_cliente= tipo_cliente.codigo where tipo_cliente.canal_ventas='OFF' and fecha_factura>=$P{fecha_desde} and  fecha_factura<=$P{fecha_hasta}  and ventas.codigo_aliado=$P{aliado}  and ventas.zona_aliado like '%$P!{zona}%' and ventas.nombre_vendedor like '%$P!{vendedor}%' and ventas.codigo_cliente like '%$P!{cliente}%' )*100),2) as porcentaje from ventas inner join tipo_cliente on ventas.tipo_cliente= tipo_cliente.codigo where tipo_cliente.canal_ventas IN ('OFF') and fecha_factura>=$P{fecha_desde} and  fecha_factura<=$P{fecha_hasta} and ventas.codigo_aliado=$P{aliado}  and ventas.zona_aliado like '%$P!{zona}%' and ventas.nombre_vendedor like '%$P!{vendedor}%' and ventas.codigo_cliente like '%$P!{cliente}%'  group by  tipo_cliente.canal_ventas,tipo_cliente.codigo,tipo_cliente.descripcion,codigo_cliente,nombre_cliente order by cantidad desc, canal_ventas,codigo_cliente,nombre_cliente,sum(cantidad)]]>
 	</queryString>
+	<field name="codigo_cliente" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_cliente" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="canal_ventas" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -132,7 +138,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[R55420018]]></text>
+				<text><![CDATA[R55420019]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="staticText" x="190" y="25" width="26" height="20" uuid="d402c543-50fa-4ddd-adde-b75a8c13c3fc"/>
@@ -308,18 +314,26 @@
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{porcentaje}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="155" y="1" width="192" height="15" uuid="cc408588-dd4d-4830-9b90-c1261df72150"/>
-				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="78" y="1" width="65" height="16" uuid="8655a5aa-1618-47c1-9579-9058c5b0b9bf"/>
-				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
-			</textField>
 			<textField pattern="#,##0">
 				<reportElement x="369" y="1" width="65" height="20" uuid="ba59c562-bbb4-46d6-9f5d-7bea59baccbc"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="227" y="2" width="65" height="20" uuid="fe344611-eaff-4e0b-8819-438ffe40165b"/>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="2" width="45" height="20" uuid="d3aa3c17-7f3b-4f3c-9bd9-a391d3b5c5e6"/>
+				<textFieldExpression><![CDATA[$F{codigo_cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="2" width="136" height="20" uuid="ca104dd9-40e1-455b-aa67-c5ca97d95e81"/>
+				<textFieldExpression><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="292" y="1" width="61" height="21" uuid="abbaafe9-ffef-4522-a40f-1b8fe85ecf20"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -362,6 +376,6 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="81" splitType="Stretch"/>
+		<band splitType="Stretch"/>
 	</summary>
 </jasperReport>

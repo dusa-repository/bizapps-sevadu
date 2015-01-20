@@ -24,6 +24,9 @@
 	<parameter name="zona" class="java.lang.String"/>
 	<parameter name="vendedor" class="java.lang.String"/>
 	<parameter name="cliente" class="java.lang.String"/>
+	<parameter name="numclientesaliado" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT maestro_aliado.zona,maestro_aliado.descripcion_zona,ventas.codigo_aliado,maestro_aliado.codigo_vendedor,descripcion_vendedor,ventas.nombre_vendedor,count(marca) as marcas_activadas , (select count(distinct(marca_dusa)) from maestro_marca) as total_marcas, (select count(distinct(codigo_cliente)) as cantidad from ventas as v1 where v1.codigo_aliado=$P{aliado}  and v1.fecha_factura>=$P{fecha_desde} and  v1.fecha_factura<=$P{fecha_hasta} and v1.nombre_vendedor=ventas.nombre_vendedor) as cantidadClientes  FROM ventas INNER JOIN maestro_aliado ON ventas.codigo_aliado = maestro_aliado.codigo_aliado  INNER JOIN  maestro_producto  ON ventas.codigo_producto  = maestro_producto.codigo_producto_dusa where  fecha_factura>=$P{fecha_desde} and  fecha_factura<=$P{fecha_hasta} and ventas.codigo_aliado=$P{aliado} and cantidad<>0  and ventas.zona_aliado like '%$P!{zona}%' and ventas.nombre_vendedor like '%$P!{vendedor}%' and ventas.codigo_cliente like '%$P!{cliente}%'  group by maestro_aliado.zona,ventas.codigo_aliado,maestro_aliado.codigo_vendedor,ventas.nombre_vendedor order by maestro_aliado.zona,ventas.codigo_aliado,maestro_aliado.codigo_vendedor,ventas.codigo_cliente,ventas.nombre_vendedor]]>
 	</queryString>
@@ -69,7 +72,7 @@
 	<group name="zona" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{zona}]]></groupExpression>
 		<groupHeader>
-			<band height="21" splitType="Stretch">
+			<band height="34" splitType="Stretch">
 				<textField isBlankWhenNull="false">
 					<reportElement key="textField" x="21" y="0" width="100" height="18" uuid="bea6bebc-6a59-489f-b772-ac0a990adffc"/>
 					<box>
@@ -120,6 +123,30 @@
 					<textElement textAlignment="Center" verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{total_marcas}]]></textFieldExpression>
 				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="504" y="18" width="39" height="16" uuid="320c12d3-4fae-46ea-96f7-40eacfd64ecb"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$P{numclientesaliado}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-4" x="417" y="18" width="87" height="13" uuid="52db388f-4fc8-4b08-bbc2-587ce8549b15"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[# Clientes aliado:]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
