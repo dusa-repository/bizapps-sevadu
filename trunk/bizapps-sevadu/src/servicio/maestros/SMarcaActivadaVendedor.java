@@ -2,13 +2,16 @@ package servicio.maestros;
 
 import interfacedao.maestros.IMarcaActivadaVendedorDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.pk.MarcaActivadaPK;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service("SMarcaActivadaVendedor")
@@ -32,5 +35,34 @@ public class SMarcaActivadaVendedor {
 
 	public List<MarcaActivadaVendedor> buscarPorAliado(MaestroAliado aliado) {
 		return marcaActivadaDAO.findByIdMaestroAliado(aliado);
+	}
+
+	public List<MarcaActivadaVendedor> buscarPorClientes(
+			List<Cliente> eliminarLista) {
+		return marcaActivadaDAO.findByIdClienteIn(eliminarLista);
+	}
+
+	public List<MarcaActivadaVendedor> buscarPorCliente(Cliente cliente) {
+		return marcaActivadaDAO.findByIdCliente(cliente);
+	}
+
+	public List<MarcaActivadaVendedor> buscarTodosOrdenados() {
+		List<String> ordenar = new ArrayList<String>();
+		Sort o;
+		ordenar.add("idMaestroAliadoCodigoAliado");
+		o = new Sort(Sort.Direction.ASC, ordenar);
+		return marcaActivadaDAO.findAll(o);
+	}
+
+	public void guardar(MarcaActivadaVendedor marcaActivadaVendedor) {
+		marcaActivadaDAO.save(marcaActivadaVendedor);
+	}
+
+	public void eliminarVarios(List<MarcaActivadaVendedor> eliminarLista) {
+		marcaActivadaDAO.delete(eliminarLista);
+	}
+
+	public void eliminarUno(MarcaActivadaPK clave) {
+		marcaActivadaDAO.delete(clave);
 	}
 }

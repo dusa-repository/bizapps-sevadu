@@ -2,6 +2,7 @@ package interfacedao.maestros;
 
 import java.util.List;
 
+import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.pk.MarcaActivadaPK;
@@ -14,5 +15,9 @@ public interface IMarcaActivadaVendedorDAO extends JpaRepository<MarcaActivadaVe
 			List<MaestroAliado> eliminarLista);
 
 	List<MarcaActivadaVendedor> findByIdMaestroAliado(MaestroAliado aliado);
+
+	List<MarcaActivadaVendedor> findByIdClienteIn(List<Cliente> eliminarLista);
+
+	List<MarcaActivadaVendedor> findByIdCliente(Cliente cliente);
 
 }
