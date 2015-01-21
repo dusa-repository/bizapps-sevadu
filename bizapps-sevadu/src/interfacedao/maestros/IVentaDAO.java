@@ -86,4 +86,8 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 	List<String> findByCodigoAliadoMostSellerBetween(Date fecha1, Date fecha2,
 			int anno, int mes);
 
+	List<Venta> findByCodigoClienteIn(List<Cliente> eliminarLista);
+
+	List<Venta> findByCodigoCliente(Cliente cliente);
+
 }

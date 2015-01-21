@@ -1,0 +1,89 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVActivacion" apply="controlador.maestros.CActivacion"
+		width="100%">
+		<groupbox width="100%" mold="3d"
+			title="Maestro de Activacion de Marca (VActivacion)">
+			<div id="botoneraActivacion" />
+			<separator />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar una nueva Activacion de Marca" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="15%" />
+						<column label="" width="35%" />
+						<column label="" width="15%" />
+						<column label="" width="35%" />
+					</columns>
+					<rows>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Aliado:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<textbox id="txtAliado" hflex="1" maxlength="100"
+								tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
+							<button id="btnBuscarAliado" label="Buscar" tooltiptext="Catalogo de Aliados"
+								image="/public/imagenes/botones/buscar.png" class="btn"
+								autodisable="self" />
+							<label id="lblAliado" />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Cliente:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<textbox id="txtCliente" hflex="1" maxlength="100"
+								tooltiptext="Seleccione del Catalogo el Codigo del Cliente (Debe seleccionar un Aliado Previamente)" />
+							<button id="btnBuscarCliente" label="Buscar"
+								tooltiptext="Catalogo de Clientes (Debe seleccionar un Aliado Previamente)"
+								image="/public/imagenes/botones/buscar.png" class="btn"
+								autodisable="self" />
+							<label id="lblCliente" />
+						</row>
+						<row>
+							<label class="etiqueta" value="Campo 1:" />
+							<textbox id="txtCampo1" maxlength="50" tooltiptext="Campo Futuro 1" />
+							<label class="etiqueta" value="Campo 2:" />
+							<textbox id="txtCampo2" maxlength="50" tooltiptext="Campo Futuro 2" />
+						</row>
+					</rows>
+				</grid>
+				<separator />
+				<hbox width="100%">
+					<listbox mold="paging" pageSize="10" id="ltbMarcas" height="230px"
+						width="100%" emptyMessage="No hay Marcas Registradas">
+						<listhead>
+							<listheader label="Nombre Marca" width="85%" />
+							<listheader label="Codigo" width="15%" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="${each.descripcion}" />
+								<listcell label="${each.marcaDusa}" />
+							</listitem>
+						</template>
+					</listbox>
+				</hbox>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
+					tooltiptext="Presione para Visualizar la Activacion de las Marcas" />
+				<div id="catalogoActivacion"
+					tooltiptext="Seleccione la Activacion de las Marcas para Realizar una Accion" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
+		<div id="divCatalogoCliente" tooltiptext="Click para Seleccionar un Cliente" />
+	</div>
+</zk>

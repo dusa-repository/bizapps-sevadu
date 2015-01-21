@@ -1,0 +1,167 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVCartera" apply="controlador.maestros.CCartera" width="100%">
+		<groupbox width="100%" mold="3d"
+			title="Maestro de Cartera de Clientes (VCartera)">
+			<div id="botoneraCartera" />
+			<separator />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
+					tooltiptext="Presione para Registrar un Nuevo Cliente" />
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="15%" />
+						<column label="" width="10%" />
+						<column label="" width="12%" />
+						<column label="" width="13%" />
+						<column label="" width="15%" />
+						<column label="" width="15%" />
+						<column label="" width="10%" />
+						<column label="" width="10%" />
+					</columns>
+					<rows>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Codigo:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<textbox id="txtCodigo" maxlength="50"
+									tooltiptext="Ingrese el Codigo del Cliente" />
+							</cell>
+							<hbox>
+								<label class="etiqueta" value="Nombre:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<textbox id="txtNombre" maxlength="100"
+									tooltiptext="Ingrese el Nombre del Cliente" />
+							</cell>
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Rif:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<textbox id="txtRif" maxlength="20"
+									tooltiptext="Ingrese el Rif del Cliente" />
+							</cell>
+							<hbox>
+								<label class="etiqueta" value="Direccion:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<textbox id="txtDireccion" maxlength="100"
+									tooltiptext="Ingrese la Direccion del Cliente" />
+							</cell>
+						</row>
+						<row>
+							<cell colspan="4">
+								<div id="divBuscadorEstado" width="100%" />
+							</cell>
+							<cell colspan="4">
+								<div id="divBuscadorCiudad" width="100%" />
+							</cell>
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Ruta de Distribucion:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<textbox id="txtRuta" maxlength="20"
+									tooltiptext="Ingrese la Ruta de Distribucion del Cliente" />
+							</cell>
+							<hbox>
+								<label class="etiqueta" value="Canal de Segmentacion:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<cell colspan="3">
+								<combobox tooltiptext="Seleccione un Canal"
+									placeholder="Seleccione un Canal" id="cmbCanal" readonly="true"
+									width="100%">
+									<comboitem label="ON" />
+									<comboitem label="OFF" />
+								</combobox>
+							</cell>
+						</row>
+						<row>
+							<cell colspan="4">
+								<div id="divBuscadorSupervisor" width="100%" />
+							</cell>
+							<cell colspan="4">
+								<div id="divBuscadorVendedor" width="100%" />
+							</cell>
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Tipo de Cliente:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<textbox id="txtTipo" hflex="1" maxlength="4"
+								tooltiptext="Ingrese el Codigo de Tipo de Cliente" width="100%" />
+							<button id="btnBuscarTipo" label="Buscar"
+								tooltiptext="Catalogo de Tipos de Cliente" image="/public/imagenes/botones/buscar.png"
+								class="btn" autodisable="self" />
+							<label id="lblTipo" />
+							<cell colspan="4">
+								<div id="divBuscadorZona" width="100%" />
+							</cell>
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Aliado:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<textbox id="txtAliado" hflex="1" maxlength="100"
+								tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
+							<button id="btnBuscarAliado" label="Buscar" tooltiptext="Catalogo de Aliados"
+								image="/public/imagenes/botones/buscar.png" class="btn"
+								autodisable="self" />
+							<label id="lblAliado" />
+						</row>
+						<row>
+							<label class="etiqueta" value="Campo 1:" />
+							<cell colspan="3">
+								<textbox id="txtCampo1" maxlength="50" tooltiptext="Campo Futuro 1" />
+							</cell>
+							<label class="etiqueta" value="Campo 2:" />
+							<cell colspan="3">
+								<textbox id="txtCampo2" maxlength="50" tooltiptext="Campo Futuro 2" />
+							</cell>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;"
+					tooltiptext="Presione para Visualizar los Clientes Registrados" />
+				<div id="catalogoCartera" tooltiptext="Seleccione el Cliente para Realizar una Accion" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+		<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
+		<div id="divCatalogoTipoCliente" tooltiptext="Click para Seleccionar un Tipo de Cliente" />
+	</div>
+</zk>

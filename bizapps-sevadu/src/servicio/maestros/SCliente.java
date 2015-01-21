@@ -57,4 +57,33 @@ public class SCliente {
 		return lista.size();
 	}
 
+	public List<Cliente> buscarTodosOrdenados() {
+		List<String> ordenar = new ArrayList<String>();
+		Sort o;
+		ordenar.add("codigoCliente");
+		ordenar.add("nombre");
+		o = new Sort(Sort.Direction.ASC, ordenar);
+		return clienteDAO.findAll(o);
+	}
+
+	public void guardar(Cliente cliente) {
+		clienteDAO.save(cliente);
+	}
+
+	public void eliminarVarios(List<Cliente> eliminarLista) {
+		clienteDAO.delete(eliminarLista);
+	}
+
+	public Cliente buscarPorCodigo(String clave) {
+		return clienteDAO.findOne(clave);
+	}
+
+	public void eliminarUno(String clave) {
+		clienteDAO.delete(clave);
+	}
+
+	public boolean existe(String value) {
+		return clienteDAO.exists(value);
+	}
+
 }

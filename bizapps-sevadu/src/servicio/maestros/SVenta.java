@@ -185,4 +185,12 @@ public class SVenta {
 		return ventaDAO.findByCodigoAliadoMostSellerBetween(fecha1, fecha2,
 				anno, mes);
 	}
+
+	public List<Venta> buscarPorClientes(List<Cliente> eliminarLista) {
+		return ventaDAO.findByCodigoClienteIn(eliminarLista);
+	}
+
+	public List<Venta> buscarPorCliente(Cliente cliente) {
+		return ventaDAO.findByCodigoCliente(cliente);
+	}
 }
