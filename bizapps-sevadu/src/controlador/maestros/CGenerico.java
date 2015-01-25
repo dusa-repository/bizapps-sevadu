@@ -25,6 +25,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import modelo.maestros.MaestroAliado;
+import modelo.seguridad.Usuario;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -39,6 +42,8 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Tab;
 
+import servicio.bitacora.SBitacoraEliminacion;
+import servicio.bitacora.SBitacoraLogin;
 import servicio.maestros.SCliente;
 import servicio.maestros.SConfiguracion;
 import servicio.maestros.SConfiguracionEnvioCorreo;
@@ -98,6 +103,10 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected SConfiguracion servicioConfiguracion;
 	@WireVariable("SCliente")
 	protected SCliente servicioCliente;
+	@WireVariable("SBitacoraEliminacion")
+	protected SBitacoraEliminacion servicioBitacoraEliminacion;
+	@WireVariable("SBitacoraLogin")
+	protected SBitacoraLogin servicioBitacoraLogin;
 	@WireVariable("STermometro")
 	protected STermometro servicioTermometro;
 	private static ApplicationContext app = new ClassPathXmlApplicationContext(
@@ -262,6 +271,55 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 		Authentication sesion = SecurityContextHolder.getContext()
 				.getAuthentication();
 		return sesion.getName();
+	}
+
+	protected boolean enviarEmailNotificacionEliminacion(MaestroAliado aliado,
+			String tablaEliminada, Date fecha, Usuario user) {
+		try {
+
+			String cc = "NOTIFICACION DEL SISTEMA SEVADU";
+			Properties props = new Properties();
+			props.setProperty("mail.smtp.host", "172.23.20.66");
+			props.setProperty("mail.smtp.starttls.enable", "true");
+			props.setProperty("mail.smtp.port", "2525");
+			props.setProperty("mail.smtp.auth", "true");
+
+			Authenticator auth = new SMTPAuthenticator();
+			Session session = Session.getInstance(props, auth);
+			String remitente = "cdusa@dusa.com.ve";
+			String destino = aliado.getEmail();
+			String mensaje = "Se ha eliminado informacion de la tabla: "
+					+ tablaEliminada
+					+ " ,asociada a su aliado dentro del sistema, dicha "
+					+ "accion fue realizada por " + user.getPrimerApellido()
+					+ " " + user.getPrimerNombre() + ". El dia "
+					+ formatoFecha.format(fecha) + " a las: " + horaAuditoria;
+			String destinos[] = destino.split(",");
+			Message message = new MimeMessage(session);
+
+			message.setFrom(new InternetAddress(remitente));
+
+			Address[] receptores = new Address[destinos.length];
+			int j = 0;
+			while (j < destinos.length) {
+				receptores[j] = new InternetAddress(destinos[j]);
+				j++;
+			}
+
+			message.addRecipients(Message.RecipientType.TO, receptores);
+			message.setSubject(cc);
+			message.setText(mensaje);
+
+			Transport.send(message);
+
+			return true;
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 
 	public boolean enviarEmailNotificacion(String correo, String mensajes) {
@@ -558,7 +616,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 		fecha2 = calendario.getTime();
 		calendario.setTime(fecha);
 		String fija = formatoFecha.format(fecha2);
-		String hoy ="";
+		String hoy = "";
 		int contador = 0;
 		do {
 			calendario.setTime(fecha);

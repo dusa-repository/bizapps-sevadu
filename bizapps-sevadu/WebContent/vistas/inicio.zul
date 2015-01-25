@@ -58,7 +58,7 @@
 								<separator />
 								<label style="color: white;font-weight: bold"
 									value="Usuario: ${desktop.execution.userPrincipal.name}" />
-								<a href="../j_spring_security_logout" style="color: white">
+								<a id="cerrar" href="../j_spring_security_logout" style="color: white">
 									<space />
 									<label value="Cerrar Sesion" />
 								</a>

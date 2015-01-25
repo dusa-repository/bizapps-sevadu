@@ -1,0 +1,65 @@
+<zk>
+	<div height="100%" style="background-color: white" id="divVEliminar"
+		width="100%" apply="controlador.mantenimiento.CEliminarData">
+		<groupbox width="100%" mold="3d" title="Eliminar Data">
+			<div id="botoneraEliminar" />
+			<separator />
+			<grid width="100%">
+				<columns visible="false">
+					<column label="" width="13%" />
+					<column label="" width="17%" />
+					<column label="" width="10%" />
+					<column label="" width="17%" />
+					<column label="" width="23%" />
+				</columns>
+				<rows>
+					<row>
+						<label class="etiqueta" value="Eliminar Data de la Tabla:" />
+						<cell colspan="3">
+							<combobox tooltiptext="Seleccione la Tabla a la cual desea eliminar data"
+								placeholder="Seleccione una Tabla" id="cmbTabla" readonly="true"
+								width="100%">
+								<comboitem label="Ventas" />
+								<comboitem label="Plan de Ventas" />
+								<comboitem label="Existencia" />
+								<comboitem label="Cartera de Clientes" />
+								<comboitem label="Activacion de Marca" />
+							</combobox>
+						</cell>
+						<hbox />
+					</row>
+					<row id="rowAliado" visible="false">
+						<label class="etiqueta" value="Aliado:" />
+						<textbox id="txtAliado" hflex="1" maxlength="20"
+							tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
+						<button autodisable="self" id="btnBuscarAliado" label="Buscar"
+							tooltiptext="Catalogo de Codigos de Aliados" image="/public/imagenes/botones/buscar.png"
+							class="btn" />
+						<cell colspan="2">
+							<label id="lblAliado" />
+						</cell>
+					</row>
+					<row>
+						<hbox>
+							<label class="etiqueta" value="Desde:" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red" />
+						</hbox>
+						<datebox width="100%" readonly="true" id="dtbDesde"
+							constraint="no future" onCreate="self.value = new Date()"
+							tooltiptext="Seleccione el inicio del Periodo a buscar" />
+						<hbox>
+							<label class="etiqueta" value="Hasta:" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red" />
+						</hbox>
+						<datebox width="100%" readonly="true" id="dtbHasta"
+							onCreate="self.value = new Date()" tooltiptext="Seleccione el fin del Periodo a buscar" />
+						<hbox />
+					</row>
+				</rows>
+			</grid>
+			<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
+		</groupbox>
+	</div>
+</zk>

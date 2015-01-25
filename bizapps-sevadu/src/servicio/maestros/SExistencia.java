@@ -2,6 +2,7 @@ package servicio.maestros;
 
 import interfacedao.maestros.IExistenciaDAO;
 
+import java.util.Date;
 import java.util.List;
 
 import modelo.maestros.Existencia;
@@ -36,5 +37,16 @@ public class SExistencia {
 
 	public List<Existencia> buscarPorProducto(String clave) {
 		return existenciaDAO.findByIdMaestroProdCodigoProductoDusa(clave);
+	}
+
+	public List<Existencia> buscarPorAliadoEntreFechasRegistro(String idAliado,
+			Date desde, Date hasta) {
+		return existenciaDAO
+				.findByIdMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+						idAliado, desde, hasta);
+	}
+
+	public void eliminar(List<Existencia> existencias) {
+		existenciaDAO.delete(existencias);
 	}
 }

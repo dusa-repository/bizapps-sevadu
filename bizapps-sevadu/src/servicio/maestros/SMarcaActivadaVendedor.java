@@ -3,6 +3,7 @@ package servicio.maestros;
 import interfacedao.maestros.IMarcaActivadaVendedorDAO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import modelo.maestros.Cliente;
@@ -64,5 +65,12 @@ public class SMarcaActivadaVendedor {
 
 	public void eliminarUno(MarcaActivadaPK clave) {
 		marcaActivadaDAO.delete(clave);
+	}
+
+	public List<MarcaActivadaVendedor> buscarPorAliadoEntreFechasRegistro(
+			String idAliado, Date desde, Date hasta) {
+		return marcaActivadaDAO
+				.findByIdMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+						idAliado, desde, hasta);
 	}
 }

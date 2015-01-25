@@ -70,7 +70,10 @@ public class MaestroAliado implements Serializable {
 	private String tipoCliente;
 
 	private String zona;
-	
+
+	@Column(length = 50, name = "email")
+	private String email;
+
 	@OneToMany(mappedBy = "id.maestroAliado")
 	private List<MarcaActivadaVendedor> activaciones;
 
@@ -346,6 +349,14 @@ public class MaestroAliado implements Serializable {
 
 	public void setUsuarios(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }

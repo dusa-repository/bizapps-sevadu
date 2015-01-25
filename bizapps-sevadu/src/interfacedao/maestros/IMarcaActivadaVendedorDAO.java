@@ -1,5 +1,6 @@
 package interfacedao.maestros;
 
+import java.util.Date;
 import java.util.List;
 
 import modelo.maestros.Cliente;
@@ -19,5 +20,8 @@ public interface IMarcaActivadaVendedorDAO extends JpaRepository<MarcaActivadaVe
 	List<MarcaActivadaVendedor> findByIdClienteIn(List<Cliente> eliminarLista);
 
 	List<MarcaActivadaVendedor> findByIdCliente(Cliente cliente);
+
+	List<MarcaActivadaVendedor> findByIdMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+			String idAliado, Date desde, Date hasta);
 
 }

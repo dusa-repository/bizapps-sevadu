@@ -1,6 +1,7 @@
 package modelo.seguridad;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -14,9 +15,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import modelo.bitacora.BitacoraEliminacion;
+import modelo.bitacora.BitacoraLogin;
 import modelo.maestros.MaestroAliado;
 
 import org.hibernate.annotations.Type;
@@ -91,6 +95,12 @@ public class Usuario implements Serializable {
 
 	@Column(length = 500)
 	private String direccion;
+
+	@OneToMany(mappedBy = "usuario")
+	private List<BitacoraEliminacion> bitacorasEliminacion;
+
+	@OneToMany(mappedBy = "usuario")
+	private List<BitacoraLogin> bitacorasLogin;
 
 	public Usuario() {
 		super();
@@ -273,5 +283,22 @@ public class Usuario implements Serializable {
 
 	public void setMaestroAliado(MaestroAliado maestroAliado) {
 		this.maestroAliado = maestroAliado;
+	}
+
+	public List<BitacoraEliminacion> getBitacorasEliminacion() {
+		return bitacorasEliminacion;
+	}
+
+	public void setBitacorasEliminacion(
+			List<BitacoraEliminacion> bitacorasEliminacion) {
+		this.bitacorasEliminacion = bitacorasEliminacion;
+	}
+
+	public List<BitacoraLogin> getBitacorasLogin() {
+		return bitacorasLogin;
+	}
+
+	public void setBitacorasLogin(List<BitacoraLogin> bitacorasLogin) {
+		this.bitacorasLogin = bitacorasLogin;
 	}
 }

@@ -1319,6 +1319,8 @@ public class CCargarArchivo extends CGenerico {
 					marcaActivada.setMarcaZX(marca50.intValue());
 					marcaActivada.setTotal(total.intValue());
 					marcaActivada.setPorcentaje(porcentaje.floatValue());
+					marcaActivada.setFechaAuditoria(fecha);
+					marcaActivada.setHoraAuditoria(tiempo);
 					marcas.add(marcaActivada);
 				}
 			}

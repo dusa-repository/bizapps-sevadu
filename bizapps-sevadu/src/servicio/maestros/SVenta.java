@@ -193,4 +193,15 @@ public class SVenta {
 	public List<Venta> buscarPorCliente(Cliente cliente) {
 		return ventaDAO.findByCodigoCliente(cliente);
 	}
+
+	public List<Venta> buscarPorAliadoEntreFechasRegistro(String idAliado,
+			Date desde, Date hasta) {
+		return ventaDAO
+				.findByMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+						idAliado, desde, hasta);
+	}
+
+	public void eliminar(List<Venta> ventas) {
+		ventaDAO.delete(ventas);
+	}
 }
