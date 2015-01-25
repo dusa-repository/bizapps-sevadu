@@ -2,11 +2,13 @@ package servicio.maestros;
 
 import interfacedao.maestros.IPlanVentaDAO;
 
+import java.util.Date;
 import java.util.List;
 
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroProducto;
 import modelo.maestros.PlanVenta;
+import modelo.maestros.Venta;
 import modelo.pk.PlanVentaPK;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,16 +53,28 @@ public class SPlanVenta {
 								.getMarcaDusa(), mes, anno);
 	}
 
-	public Double sumarPlanAliado2(MaestroAliado maestroAliado,
-			String marca, int anno, int mes) {
+	public Double sumarPlanAliado2(MaestroAliado maestroAliado, String marca,
+			int anno, int mes) {
 		return planVentaDAO
 				.sumByIdMaestroAliadoAnIdMaestroProductoAndIdMesAndIdAnno(
 						maestroAliado, marca, mes, anno);
 	}
 
-	public Double sumarPlanAliado2(MaestroAliado maestroAliado, int anno, int mes) {
+	public Double sumarPlanAliado2(MaestroAliado maestroAliado, int anno,
+			int mes) {
 		return planVentaDAO
 				.sumByIdMaestroAliadoAnIdMaestroProductoAndIdMesAndIdAnno2(
 						maestroAliado, mes, anno);
+	}
+
+	public List<PlanVenta> buscarPorAliadoEntreFechasRegistro(String idAliado,
+			Date desde, Date hasta) {
+		return planVentaDAO
+				.findByIdMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+						idAliado, desde, hasta);
+	}
+
+	public void eliminar(List<PlanVenta> planes) {
+		planVentaDAO.delete(planes);
 	}
 }

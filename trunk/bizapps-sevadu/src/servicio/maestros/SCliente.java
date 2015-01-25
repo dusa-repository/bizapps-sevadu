@@ -3,6 +3,7 @@ package servicio.maestros;
 import interfacedao.maestros.IClienteDAO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import modelo.maestros.Cliente;
@@ -84,6 +85,13 @@ public class SCliente {
 
 	public boolean existe(String value) {
 		return clienteDAO.exists(value);
+	}
+
+	public List<Cliente> buscarPorAliadoEntreFechasRegistro(String idAliado,
+			Date desde, Date hasta) {
+		return clienteDAO
+				.findByMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+						idAliado, desde, hasta);
 	}
 
 }

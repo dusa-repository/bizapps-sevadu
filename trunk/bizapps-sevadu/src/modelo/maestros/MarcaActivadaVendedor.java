@@ -1,11 +1,16 @@
 package modelo.maestros;
 
 import java.io.Serializable;
+import java.sql.Time;
+import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import modelo.pk.MarcaActivadaPK;
 
@@ -130,6 +135,13 @@ public class MarcaActivadaVendedor implements Serializable {
 	private String campoA;
 	
 	private String campoB;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "fecha_auditoria")
+	private Date fechaAuditoria;
+
+	@Column(name = "hora_auditoria")
+	private Time horaAuditoria;
 	
 	public MarcaActivadaVendedor() {
 	}
@@ -572,6 +584,22 @@ public class MarcaActivadaVendedor implements Serializable {
 
 	public void setCampoB(String campoB) {
 		this.campoB = campoB;
+	}
+
+	public Date getFechaAuditoria() {
+		return fechaAuditoria;
+	}
+
+	public void setFechaAuditoria(Date fechaAuditoria) {
+		this.fechaAuditoria = fechaAuditoria;
+	}
+
+	public Time getHoraAuditoria() {
+		return horaAuditoria;
+	}
+
+	public void setHoraAuditoria(Time horaAuditoria) {
+		this.horaAuditoria = horaAuditoria;
 	}
 	
 	

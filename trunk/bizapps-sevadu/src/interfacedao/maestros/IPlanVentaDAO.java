@@ -1,5 +1,6 @@
 package interfacedao.maestros;
 
+import java.util.Date;
 import java.util.List;
 
 import modelo.maestros.MaestroAliado;
@@ -49,5 +50,8 @@ public interface IPlanVentaDAO extends JpaRepository<PlanVenta, PlanVentaPK> {
 			" and v.id.anno = ?3 and v.id.mes=?2")
 	Double sumByIdMaestroAliadoAnIdMaestroProductoAndIdMesAndIdAnno2(
 			MaestroAliado maestroAliado, int mes, int anno);
+
+	List<PlanVenta> findByIdMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+			String idAliado, Date desde, Date hasta);
 
 }

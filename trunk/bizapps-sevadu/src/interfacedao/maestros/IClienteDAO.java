@@ -1,5 +1,6 @@
 package interfacedao.maestros;
 
+import java.util.Date;
 import java.util.List;
 
 import modelo.maestros.Cliente;
@@ -24,6 +25,9 @@ public interface IClienteDAO extends JpaRepository<Cliente, String> {
 	List<Cliente> findByTipoClienteCodigo(String id);
 
 	List<Cliente> findByMaestroAliadoCodigoAliado(String aliado);
+
+	List<Cliente> findByMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+			String idAliado, Date desde, Date hasta);
 
 
 }

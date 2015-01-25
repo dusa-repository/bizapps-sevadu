@@ -90,4 +90,7 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 
 	List<Venta> findByCodigoCliente(Cliente cliente);
 
+	List<Venta> findByMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+			String idAliado, Date desde, Date hasta);
+
 }

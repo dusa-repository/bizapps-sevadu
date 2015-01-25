@@ -1,5 +1,6 @@
 package interfacedao.maestros;
 
+import java.util.Date;
 import java.util.List;
 
 import modelo.maestros.Existencia;
@@ -18,5 +19,8 @@ public interface IExistenciaDAO extends JpaRepository<Existencia, ExistenciaPK> 
 	List<Existencia> findByIdMaestroProdIn(List<MaestroProducto> eliminarLista);
 
 	List<Existencia> findByIdMaestroProdCodigoProductoDusa(String clave);
+
+	List<Existencia> findByIdMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+			String idAliado, Date desde, Date hasta);
 
 }

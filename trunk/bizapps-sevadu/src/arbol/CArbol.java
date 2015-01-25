@@ -18,7 +18,10 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import modelo.bitacora.BitacoraLogin;
 import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
@@ -29,7 +32,12 @@ import modelo.seguridad.Usuario;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.zkoss.image.AImage;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -37,6 +45,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.A;
 import org.zkoss.zul.Cell;
 import org.zkoss.zul.Center;
 import org.zkoss.zul.Div;
@@ -88,11 +97,14 @@ public class CArbol extends CGenerico {
 	private Div divGrafico;
 	@Wire
 	private Center center;
+	@Wire
+	private A cerrar;
 	private AngularActivacion angular;
 	private AngularVenta angularVenta;
 	private boolean todosAngular = false;
 	private boolean unAngular = false;
 	HashMap<String, Object> mapGeneral = new HashMap<String, Object>();
+	long idSession = 0;
 
 	@Override
 	public void inicializar() throws IOException {
@@ -118,6 +130,18 @@ public class CArbol extends CGenerico {
 		if (tabs.size() != 0) {
 			tabs.clear();
 		}
+		// String ip = Executions.getCurrent().getRemoteAddr();
+		// System.out.println(ip);
+		// String ip2 = Executions.getCurrent().getLocalAddr();
+		// System.out.println(ip2);
+		WebAuthenticationDetails details = (WebAuthenticationDetails) auth
+				.getDetails();
+		BitacoraLogin login = new BitacoraLogin(idSession, u,
+				details.getRemoteAddress(), fecha, tiempo, null, null);
+		servicioBitacoraLogin.guardar(login);
+		login = servicioBitacoraLogin.buscarUltimo(u);
+		if (login != null)
+			idSession = login.getIdLogin();
 		Date fechaHoy = new Date();
 		DateFormat formatoNuevo = new SimpleDateFormat("MM-yyyy");
 		String parteFecha = "01-" + formatoNuevo.format(fechaHoy);
@@ -158,6 +182,15 @@ public class CArbol extends CGenerico {
 			center.setStyle("background-image: none;");
 		}
 	}
+
+//	@Listen("onClick = #cerrar")
+//	public void tomarDatosSalida() {
+//		BitacoraLogin login = servicioBitacoraLogin.buscarPorId(idSession);
+//		BitacoraLogin loginNuevo = new BitacoraLogin(login.getIdLogin(),
+//				login.getUsuario(), login.getDireccionIp(),
+//				login.getFechaIngreso(), login.getHoraIngreso(), fecha, tiempo);
+//		servicioBitacoraLogin.guardar(loginNuevo);
+//	}
 
 	private void pintarGraficasAdmin(Date fecha1, Date fecha2,
 			Date fechaUltimo, int habilesHoy, int habilesTotal) {
@@ -291,7 +324,9 @@ public class CArbol extends CGenerico {
 								"Ver Aliados Reporte/Grafica")
 						&& !arbol.getNombre().equals(
 								"Ver Reportes Administrador")
-						&& !arbol.getNombre().contains("Dashboard"))
+						&& !arbol.getNombre().contains("Dashboard")
+						&& !arbol.getNombre().contains(
+								"Ver Aliados Eliminar Data"))
 					ids.add(arbol.getIdArbol());
 				if (arbol != null && arbol.getNombre().contains("Dashboard")) {
 					grxGrafico.setVisible(true);
