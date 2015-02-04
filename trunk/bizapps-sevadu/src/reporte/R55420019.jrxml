@@ -21,6 +21,9 @@
 	<parameter name="zona" class="java.lang.String"/>
 	<parameter name="vendedor" class="java.lang.String"/>
 	<parameter name="cliente" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\nando\\workspace\\bizapps-sevadu\\src\\reporte\\"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select tipo_cliente.canal_ventas,tipo_cliente.codigo,tipo_cliente.descripcion,sum(cantidad) as cantidad , round((sum(cantidad) / (select sum(cantidad) from ventas inner join tipo_cliente on ventas.tipo_cliente= tipo_cliente.codigo where tipo_cliente.canal_ventas='OFF' and fecha_factura>=$P{fecha_desde} and  fecha_factura<=$P{fecha_hasta}  and ventas.codigo_aliado=$P{aliado}  and ventas.zona_aliado like '%$P!{zona}%' and ventas.nombre_vendedor like '%$P!{vendedor}%' and ventas.codigo_cliente like '%$P!{cliente}%' )*100),2) as porcentaje from ventas inner join tipo_cliente on ventas.tipo_cliente= tipo_cliente.codigo where tipo_cliente.canal_ventas IN ('OFF') and fecha_factura>=$P{fecha_desde} and  fecha_factura<=$P{fecha_hasta} and ventas.codigo_aliado=$P{aliado}  and ventas.zona_aliado like '%$P!{zona}%' and ventas.nombre_vendedor like '%$P!{vendedor}%' and ventas.codigo_cliente like '%$P!{cliente}%' group by tipo_cliente.canal_ventas,tipo_cliente.codigo,tipo_cliente.descripcion order by canal_ventas,sum(cantidad)]]>
 	</queryString>
@@ -362,6 +365,33 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band splitType="Stretch"/>
+		<band height="81" splitType="Stretch">
+			<subreport>
+				<reportElement x="22" y="0" width="535" height="81" uuid="a462b13f-7073-4b14-8115-ff9b77a4fa6d"/>
+				<subreportParameter name="fecha_desde">
+					<subreportParameterExpression><![CDATA[$P{fecha_desde}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha_hasta">
+					<subreportParameterExpression><![CDATA[$P{fecha_hasta}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="aliado">
+					<subreportParameterExpression><![CDATA[$P{aliado}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="naliado">
+					<subreportParameterExpression><![CDATA[$P{naliado}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="zona">
+					<subreportParameterExpression><![CDATA[$P{zona}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="vendedor">
+					<subreportParameterExpression><![CDATA[$P{vendedor}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="cliente">
+					<subreportParameterExpression><![CDATA[$P{cliente}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "R55420019D.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
 	</summary>
 </jasperReport>
