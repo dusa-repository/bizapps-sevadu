@@ -1,6 +1,8 @@
 package controlador.transacciones;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -1774,14 +1776,31 @@ public class CCargarArchivo extends CGenerico {
 					Cell cell = cellIterator.next();
 					switch (cell.getColumnIndex()) {
 					case 0:
+						
+						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+						
 						if (cell.getCellType() == 0) {
 							fechaFactura = cell.getDateCellValue();
-						} else {
+						} else if (cell.getCellType() == 1) {
+							
+							try {
+								fechaFactura = sdf.parse(cell.getStringCellValue());
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						
+						}
+						else
+						{
 							mostrarError = mensajeErrorNull(mostrarError,
 									contadorRow, contadorCell);
 							error = true;
 						}
 						break;
+						
 					case 1:
 						idAliado = obtenerStringCualquiera(cell, refAliado,
 								idAliado);
@@ -2464,9 +2483,26 @@ public class CCargarArchivo extends CGenerico {
 						}
 						break;
 					case 10:
+						
+						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+						
 						if (cell.getCellType() == 0) {
 							fechaFactura = cell.getDateCellValue();
-						} else {
+						} else if (cell.getCellType() == 1) {
+							
+							
+							try {
+								fechaFactura = sdf.parse(cell.getStringCellValue());
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								mostrarError = mensajeErrorNull(mostrarError,
+										contadorRow, contadorCell);
+								error = true;
+							}
+						
+						}
+						else
+						{
 							mostrarError = mensajeErrorNull(mostrarError,
 									contadorRow, contadorCell);
 							error = true;
@@ -2499,6 +2535,7 @@ public class CCargarArchivo extends CGenerico {
 						}
 						break;
 					case 12:
+						
 						if (cell.getCellType() == 0) {
 							factura = cell.getNumericCellValue();
 						} else {
