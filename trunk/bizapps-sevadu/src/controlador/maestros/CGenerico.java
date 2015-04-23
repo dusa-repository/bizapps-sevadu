@@ -645,7 +645,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	public String lastDay(Date fechaHoy) {
 		DateFormat formatoNuevo = new SimpleDateFormat("MM");
 		String month = formatoNuevo.format(fechaHoy);
-		String last = "30";
+		String last = "30-";
 		switch (month) {
 		case "01":
 		case "03":

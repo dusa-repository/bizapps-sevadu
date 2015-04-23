@@ -34,8 +34,8 @@
 	<script src="/public/progress.js" />
 	<window title="" border="0" height="100%" width="100%" apply="arbol.CArbol">
 		<borderlayout height="100%" style="background-color:#fff;">
-			<north height="11%" class="banner">
-				<hbox width="100%" widths="12%,55%,33%">
+			<north height="17%" class="banner">
+				<hbox width="100%" widths="12%,50%,38%">
 					<vbox width="100%">
 						<image src="../public/imagenes/generales/LogoInicio.jpg" />
 					</vbox>
@@ -58,12 +58,11 @@
 								<separator />
 								<label style="color: white;font-weight: bold"
 									value="Usuario: ${desktop.execution.userPrincipal.name}" />
+								<label style="color: white;font-weight: bold" id="lblUsuario" value="Sin Aliado" />
 								<a id="cerrar" href="../j_spring_security_logout" style="color: white">
-									<space />
 									<label value="Cerrar Sesion" />
 								</a>
 								<a style="color: white">
-									<space />
 									<label id="lblEditarCuenta" value="Editar Cuenta" />
 									<!-- onClick='contenido.src="../vistas/seguridad/VEditarUsuario.zul"' -->
 								</a>
@@ -119,8 +118,8 @@
 								</tabpanels>
 
 							</tabbox>
-							<groupbox id="grxGrafico" width="100%"
-								style="border:none" visible="false">
+							<groupbox id="grxGrafico" width="100%" style="border:none"
+								visible="false">
 								<div style="border:none" hflex="1" vflex="1" id="divGrafico"
 									width="auto">
 								</div>
