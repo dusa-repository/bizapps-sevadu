@@ -57,18 +57,28 @@ public class AngularActivacion extends Charts {
 			cantidadVentasActivas = total;
 		scale.setValue(cantidadVentasActivas);
 		Double valor = (double) (total / 2);
-		int minimo = valor.intValue();
+		Double minimo = valor;
 
 		Configuracion actual = servicioConfiguracion.buscar(1);
 		Double valorPorcentual = (double) minimo;
 		if (actual != null) {
-			valorPorcentual = actual.getPorcentaje().doubleValue();
-			minimo = valorPorcentual.intValue();
+			if (actual.getPorcentaje() != null) {
+				valorPorcentual = actual.getPorcentaje().doubleValue();
+				minimo = valorPorcentual;
+			}
 		}
-		scale.newRange(0, total - (total * 4 * minimo)/ 100, "#DF5353", 0.9, 1); // green
-		scale.newRange(total - (total * 4 * minimo) / 100, total
-				- (total *2* minimo) / 100, "#DDDF0D", 0.9, 1); // yellow
-		scale.newRange(total - (total *2* minimo) / 100, total, "#55BF3B", 0.9, 1); // red
+		// scale.newRange(0, total - (total * 4 * minimo) / 100, "#DF5353", 0.9,
+		// 1); // green
+		// scale.newRange(total - (total * 4 * minimo) / 100, total
+		// - (total * 2 * minimo) / 100, "#DDDF0D", 0.9, 1); // yellow
+		// scale.newRange(total - (total * 2 * minimo) / 100, total, "#55BF3B",
+		// 0.9, 1); // red
+		scale.newRange(0, total * (minimo / 100), "#DF5353", 0.9, 1); // green
+		scale.newRange(total * (minimo / 100),
+				(total - (total * (minimo / 100))) / 1.5
+						+ (total * (minimo / 100)), "#DDDF0D", 0.9, 1); // yellow
+		scale.newRange((total - (total * (minimo / 100))) / 1.5
+				+ (total * (minimo / 100)), total, "#55BF3B", 0.9, 1); // red
 		this.setModel(dialmodel);
 		List<PaneBackground> backgrounds = new LinkedList<PaneBackground>();
 		PaneBackground background1 = new PaneBackground();

@@ -21,7 +21,7 @@
 						<datebox width="100%" readonly="true" id="dtbConfiguracion"
 							tooltiptext="Seleccione la Fecha" />
 						<hbox>
-							<label class="etiqueta" value="Porcentaje color Amarillo (Angular):" />
+							<label class="etiqueta" value="Porcentaje color Rojo (Angular):" />
 							<space />
 							<label value="*" style="font-weight:bold;color:red">
 							</label>

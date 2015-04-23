@@ -92,6 +92,8 @@ public class CArbol extends CGenerico {
 	@Wire
 	private Listbox ltbRoles;
 	@Wire
+	private Label lblUsuario;
+	@Wire
 	private Groupbox grxGrafico;
 	@Wire
 	private Div divGrafico;
@@ -113,6 +115,9 @@ public class CArbol extends CGenerico {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		Usuario u = servicioUsuario.buscarUsuarioPorNombre(auth.getName());
+		if (u.getMaestroAliado() != null) {
+			lblUsuario.setValue("Aliado: " + u.getMaestroAliado().getNombre());
+		}
 		List<Grupo> grupos = servicioGrupo.buscarGruposUsuario(u);
 		ltbRoles.setModel(new ListModelList<Grupo>(grupos));
 		if (u.getImagen() == null) {
@@ -183,14 +188,14 @@ public class CArbol extends CGenerico {
 		}
 	}
 
-//	@Listen("onClick = #cerrar")
-//	public void tomarDatosSalida() {
-//		BitacoraLogin login = servicioBitacoraLogin.buscarPorId(idSession);
-//		BitacoraLogin loginNuevo = new BitacoraLogin(login.getIdLogin(),
-//				login.getUsuario(), login.getDireccionIp(),
-//				login.getFechaIngreso(), login.getHoraIngreso(), fecha, tiempo);
-//		servicioBitacoraLogin.guardar(loginNuevo);
-//	}
+	// @Listen("onClick = #cerrar")
+	// public void tomarDatosSalida() {
+	// BitacoraLogin login = servicioBitacoraLogin.buscarPorId(idSession);
+	// BitacoraLogin loginNuevo = new BitacoraLogin(login.getIdLogin(),
+	// login.getUsuario(), login.getDireccionIp(),
+	// login.getFechaIngreso(), login.getHoraIngreso(), fecha, tiempo);
+	// servicioBitacoraLogin.guardar(loginNuevo);
+	// }
 
 	private void pintarGraficasAdmin(Date fecha1, Date fecha2,
 			Date fechaUltimo, int habilesHoy, int habilesTotal) {
