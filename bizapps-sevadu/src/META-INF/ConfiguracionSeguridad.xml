@@ -11,7 +11,8 @@
 		<form-login login-page="/index.zul" login-processing-url="/j_spring_security_check"
 			default-target-url="/vistas/inicio.zul"
 			authentication-failure-url="/index.zul?respuesta=USUARIO O CONTRASEÑA INCORRECTOS" />
-		<logout logout-success-url="/index.zul" delete-cookies="JSESSIONID" />
+		<logout delete-cookies="JSESSIONID"
+			success-handler-ref="logoutSuccessHandler" />
 		<session-management session-fixation-protection="newSession">
 			<concurrency-control max-sessions="1"
 				error-if-maximum-exceeded="false" />
@@ -22,6 +23,8 @@
 
 	<beans:bean id='bCryptPasswordEncoder'
 		class='org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder' />
+
+	<beans:bean id="logoutSuccessHandler" class="modelo.seguridad.Cerrar" />
 
 
 	<authentication-manager>

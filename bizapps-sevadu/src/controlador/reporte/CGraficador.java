@@ -143,10 +143,27 @@ public class CGraficador extends CGenerico {
 			cantidadVentasActivas = total;
 		scale.setValue(cantidadVentasActivas);
 		Double valor = (double) (total / 2);
-		int minimo = valor.intValue();
-		scale.newRange(0, minimo, "#DF5353", 0.9, 1); // green
-		scale.newRange(minimo, minimo + minimo * 0.5, "#DDDF0D", 0.9, 1); // yellow
-		scale.newRange(minimo + minimo * 0.5, total, "#55BF3B", 0.9, 1); // red
+		// int minimo = valor.intValue();
+		// scale.newRange(0, minimo, "#DF5353", 0.9, 1); // green
+		// scale.newRange(minimo, minimo + minimo * 0.5, "#DDDF0D", 0.9, 1); //
+		// yellow
+		// scale.newRange(minimo + minimo * 0.5, total, "#55BF3B", 0.9, 1); //
+		// red
+		Double minimo = valor;
+		Configuracion actual = servicioConfiguracion.buscar(1);
+		Double valorPorcentual = (double) minimo;
+		if (actual != null) {
+			if (actual.getPorcentaje() != null) {
+				valorPorcentual = actual.getPorcentaje().doubleValue();
+				minimo = valorPorcentual;
+			}
+		}
+		scale.newRange(0, total * (minimo / 100), "#DF5353", 0.9, 1); // green
+		scale.newRange(total * (minimo / 100),
+				(total - (total * (minimo / 100))) / 1.5
+						+ (total * (minimo / 100)), "#DDDF0D", 0.9, 1); // yellow
+		scale.newRange((total - (total * (minimo / 100))) / 1.5
+				+ (total * (minimo / 100)), total, "#55BF3B", 0.9, 1); // red
 		chart.setModel(dialmodel);
 		List<PaneBackground> backgrounds = new LinkedList<PaneBackground>();
 		PaneBackground background1 = new PaneBackground();
@@ -235,16 +252,15 @@ public class CGraficador extends CGenerico {
 			dialmodel.setFrameBgColor2(null);
 			dialmodel.setFrameFgColor(null);
 
-			int minimo = 10;
+			Double minimo = (double) 10;
 			Configuracion actual = servicioConfiguracion.buscar(1);
 			Double valorPorcentual = (double) minimo;
 			if (actual != null) {
 				if (actual.getPorcentaje() != null) {
 					valorPorcentual = actual.getPorcentaje().doubleValue();
-					minimo = valorPorcentual.intValue();
+					minimo = valorPorcentual;
 				}
 			}
-			// buscar dias habiles para regla de tres
 			double limiteSuperior = suma;
 			double cantidad = suma - vendido;
 			Double tope = (double) 0;
@@ -255,16 +271,25 @@ public class CGraficador extends CGenerico {
 
 			Double primero = tope * 5 / 100;
 			Double segundo = tope * 0.01 / 100;
-			DialModelScale scale = dialmodel.newScale(0, tope.intValue(), -150,
-					-300, primero.intValue(), segundo.intValue());
+			DialModelScale scale = dialmodel.newScale(0, tope, -150, -300,
+					primero.intValue(), segundo.intValue());
 			scale.setText("Cajas");
 			scale.setTickColor("#666666");
 			scale.setValue(vendido);
-			scale.newRange(0, limiteSuperior - (limiteSuperior * minimo / 100),
-					"#DF5353", 0.9, 1);
-			scale.newRange(limiteSuperior - (limiteSuperior * minimo / 100),
-					limiteSuperior, "#DDDF0D", 0.9, 1);
-			scale.newRange(limiteSuperior, tope.intValue(), "#55BF3B", 0.9, 1);
+			scale.newRange(0, tope * (minimo / 100), "#DF5353", 0.9, 1); // green
+			scale.newRange(tope * (minimo / 100),
+					(tope - (tope * (minimo / 100))) / 1.5
+							+ (tope * (minimo / 100)), "#DDDF0D", 0.9, 1); // yellow
+			scale.newRange((tope - (tope * (minimo / 100))) / 1.5
+					+ (tope * (minimo / 100)), tope, "#55BF3B", 0.9, 1); // red
+
+			// scale.newRange(0, limiteSuperior - (limiteSuperior * minimo /
+			// 100),
+			// "#DF5353", 0.9, 1);
+			// scale.newRange(limiteSuperior - (limiteSuperior * minimo / 100),
+			// limiteSuperior, "#DDDF0D", 0.9, 1);
+			// scale.newRange(limiteSuperior, tope.intValue(), "#55BF3B", 0.9,
+			// 1);
 
 			chart.setModel(dialmodel);
 			List<PaneBackground> backgrounds = new LinkedList<PaneBackground>();

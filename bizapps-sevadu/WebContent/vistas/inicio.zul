@@ -34,7 +34,7 @@
 	<script src="/public/progress.js" />
 	<window title="" border="0" height="100%" width="100%" apply="arbol.CArbol">
 		<borderlayout height="100%" style="background-color:#fff;">
-			<north height="17%" class="banner">
+			<north height="14%" class="banner">
 				<hbox width="100%" widths="12%,50%,38%">
 					<vbox width="100%">
 						<image src="../public/imagenes/generales/LogoInicio.jpg" />
@@ -43,7 +43,7 @@
 						<separator />
 						<separator />
 						<hbox>
-							<label style="font-size:23px;color:white;font-weight: bold"
+							<label style="font-size:20px;color:white;font-weight: bold"
 								value="SISTEMA DE ESTADISTICA DE VENTAS DE ALIADOS" />
 						</hbox>
 					</div>
@@ -58,7 +58,7 @@
 								<separator />
 								<label style="color: white;font-weight: bold"
 									value="Usuario: ${desktop.execution.userPrincipal.name}" />
-								<label style="color: white;font-weight: bold" id="lblUsuario" value="Sin Aliado" />
+								<label style="color: white;" id="lblUsuario" value="Sin Aliado" />
 								<a id="cerrar" href="../j_spring_security_logout" style="color: white">
 									<label value="Cerrar Sesion" />
 								</a>
@@ -72,7 +72,7 @@
 							<separator />
 							<separator />
 							<vbox>
-								<listbox style="border:none" width="200px" id="ltbRoles">
+								<listbox style="border:none" width="150px" id="ltbRoles">
 									<template name="model">
 										<listitem>
 											<listcell

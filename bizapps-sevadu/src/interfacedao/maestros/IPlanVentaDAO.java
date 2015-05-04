@@ -53,5 +53,23 @@ public interface IPlanVentaDAO extends JpaRepository<PlanVenta, PlanVentaPK> {
 
 	List<PlanVenta> findByIdMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
 			String idAliado, Date desde, Date hasta);
+	
+	@Query("select coalesce(sum(v.cajasPlanificadas), '0') from PlanVenta v where v.id.maestroAliado.codigoAliado = ?1 " +
+			"and v.id.maestroProducto.codigoProductoDusa = ?2 and v.id.anno = ?4 and v.id.mes=?3")
+	Integer sumByIdMaestroAliadoAnIdMaestroProductoProductoAndIdMesAndIdAnno(
+			String maestroAliado, String maestroProducto,
+			int mes, int anno);
+
+	List<PlanVenta> findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdAnnoAndIdMes(
+			boolean b, int anno, int tiempo, Sort o);
+
+	List<PlanVenta> findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdAnnoAndIdMesBetween(
+			boolean b, int anno, int tiempo, int periodo, Sort o);
+
+	@Query("select p from PlanVenta p where p.id.maestroProducto.maestroMarca.filtroTermometro = ?1 "
+			+ "and ((id.anno = ?2 and id.mes between ?3 and ?4) or (id.anno = ?5 and id.mes between ?6 and ?7))")
+	List<PlanVenta> findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdAnnoAndIdMesBetweenAndIdAnnoAndIdMesBetween(
+			boolean b, int anno2, int tiempo, int limiteInf, int anno,
+			int limiteSup, int periodo, Sort o);
 
 }

@@ -135,10 +135,6 @@ public class CArbol extends CGenerico {
 		if (tabs.size() != 0) {
 			tabs.clear();
 		}
-		// String ip = Executions.getCurrent().getRemoteAddr();
-		// System.out.println(ip);
-		// String ip2 = Executions.getCurrent().getLocalAddr();
-		// System.out.println(ip2);
 		WebAuthenticationDetails details = (WebAuthenticationDetails) auth
 				.getDetails();
 		BitacoraLogin login = new BitacoraLogin(idSession, u,

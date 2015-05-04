@@ -1,0 +1,68 @@
+<zk>
+	<style>
+		.z-borderlayout {
+		background-color: white;
+		}
+		}
+	</style>
+	<div height="500px" vflex="1" style="overflow:auto;background-color: white" id="divVTermometroConsolidado"
+		width="100%" apply="controlador.transacciones.CTermometroConsolidado">
+		<groupbox vflex="1" width="100%" mold="3d" title="Termometro Consolidado">
+			<div id="botoneraTermometroConsolidado" />
+			<separator />
+			<grid width="100%">
+				<columns visible="false">
+					<column label="" width="13%" />
+					<column label="" width="17%" />
+					<column label="" width="10%" />
+					<column label="" width="17%" />
+					<column label="" width="23%" />
+				</columns>
+				<rows>
+					<row>
+						<label class="etiqueta" value="Año:" />
+						<combobox tooltiptext="Seleccione un Año" placeholder="Seleccione un Año"
+							id="cmbAnno" readonly="true" width="100%">
+							<template name="model">
+								<comboitem label="${each}" />
+							</template>
+						</combobox>
+						<label class="etiqueta" value="Mes:" />
+						<combobox tooltiptext="Seleccione un Mes" placeholder="Seleccione un Mes"
+							id="cmbMes" readonly="true" width="100%">
+							<template name="model">
+								<comboitem label="${each}" />
+							</template>
+						</combobox>
+						<hbox />
+					</row>
+					<row>
+						<label class="etiqueta" value="Periodo a Consultar:" />
+						<cell colspan="2" align="center">
+							<radiogroup>
+								<hbox>
+									<radio label="Mensual" value="si" id="rdoMensual" />
+									<separator />
+									<radio label="Trimestral" value="no" id="rdoTrimestral" />
+									<separator />
+									<radio label="Semestral" value="no" id="rdoSemestral" />
+									<separator />
+									<radio label="Anual" value="no" id="rdoAnual" />
+								</hbox>
+							</radiogroup>
+						</cell>
+						<button class="btn" autodisable="self" id="btnExportar"
+							label="Exportar" image="/public/imagenes/botones/importar.png" />
+						<hbox />
+					</row>
+				</rows>
+			</grid>
+			<separator />
+			<div width="100%" height="100%" vflex="1">
+				<spreadsheet id="ss" width="100%" height="350px" vflex="1"/>
+			</div>
+			<separator />
+			<div id="divCatalogoAliado" tooltiptext="Click para Seleccionar un Aliado" />
+		</groupbox>
+	</div>
+</zk>

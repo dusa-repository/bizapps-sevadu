@@ -106,11 +106,8 @@ public class STermometro {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// mes enero
 		Date mesEnero = null;
-		// mes diciembre
 		Date mesDiciembre = null;
-
 		int habiles = 0;
 		if (anno2 == 0)
 			habiles = obtenerDiasHabiles(fechaDesde, fechaHasta);
@@ -124,7 +121,6 @@ public class STermometro {
 			habiles = obtenerDiasHabiles(fechaDesde, mesDiciembre);
 			habiles = habiles + obtenerDiasHabiles(mesEnero, fechaHasta);
 		}
-		// probar los dias habiles
 		Date fechaHoy = null;
 		calendario = Calendar.getInstance();
 		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
@@ -586,31 +582,734 @@ public class STermometro {
 		return termometro;
 	}
 
-//	private int obtenerDiasHabiles(Date fecha, Date fecha2) {
-//		Calendar calendario = Calendar.getInstance();
-//		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
-//		calendario.setTime(fecha2);
-//		calendario.set(Calendar.HOUR, 0);
-//		calendario.set(Calendar.HOUR_OF_DAY, 0);
-//		calendario.set(Calendar.SECOND, 0);
-//		calendario.set(Calendar.MILLISECOND, 0);
-//		calendario.set(Calendar.MINUTE, 0);
-//		calendario.add(Calendar.DAY_OF_YEAR, +1);
-//		fecha2 = calendario.getTime();
-//		calendario.setTime(fecha);
-//		int contador = 0;
-//		do {
-//			calendario.setTime(fecha);
-//			if (calendario.get(Calendar.DAY_OF_WEEK) != 1
-//					&& calendario.get(Calendar.DAY_OF_WEEK) != 7)
-//				contador++;
-//
-//			calendario.add(Calendar.DAY_OF_YEAR, +1);
-//			fecha = calendario.getTime();
-//		} while (!fecha.equals(fecha2));
-//		return contador;
-//	}
-	
+	public List<TermometroCliente> buscarPorMes(int tiempo, int anno) {
+		List<TermometroCliente> termometro = new ArrayList<TermometroCliente>();
+		ordenar = new ArrayList<String>();
+		ordenar.add("idMaestroAliadoCodigoAliado");
+		ordenar.add("idMaestroProductoMaestroMarcaMarcaDusa");
+		ordenar.add("idMaestroProductoCodigoProductoDusa");
+		o = new Sort(Sort.Direction.ASC, ordenar);
+		List<PlanVenta> plan = planDAO
+				.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdAnnoAndIdMes(
+						true, anno, tiempo, o);
+		String fechaString = anno + "-" + tiempo;
+		formato.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		if (tiempo != 12 && tiempo != 11 && tiempo != 10)
+			fechaString = anno + "-" + "0" + tiempo;
+		Date fecha = new Date();
+		try {
+			fecha = formato.parse(fechaString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int tiempo2 = tiempo + 1;
+		String fechaString2 = anno + "-" + tiempo2;
+		if (tiempo2 != 13 && tiempo2 != 12 && tiempo2 != 11 && tiempo2 != 10)
+			fechaString2 = anno + "-" + "0" + tiempo2;
+		Date fecha2 = new Date();
+		try {
+			fecha2 = formato.parse(fechaString2);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Calendar calendario = new GregorianCalendar();
+		calendario.setTime(fecha2);
+		calendario.add(Calendar.DAY_OF_YEAR, -1);
+		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		fecha2 = calendario.getTime();
+		int habiles = obtenerDiasHabiles(fecha, fecha2);
+		Date fechaHoy = null;
+		calendario = Calendar.getInstance();
+		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		fechaHoy = calendario.getTime();
+		int recorridos = 0;
+		int faltantes = 0;
+		if (fechaHoy.after(fecha)) {
+			recorridos = obtenerDiasHabiles(fecha, fechaHoy);
+			if (recorridos >= habiles)
+				recorridos = 0;
+			else
+				faltantes = habiles - recorridos;
+		} else {
+			faltantes = habiles;
+			recorridos = 0;
+		}
+		if (!plan.isEmpty()) {
+			String aliado = plan.get(0).getId().getMaestroAliado()
+					.getCodigoAliado();
+			String marca = plan.get(0).getId().getMaestroProducto()
+					.getMaestroMarca().getMarcaDusa();
+			String descripcion = plan.get(0).getId().getMaestroProducto()
+					.getMaestroMarca().getDescripcion();
+			Double acumVentas = (double) 0;
+			Double acumPlanificadas = (double) 0;
+			Double acumProyeccion = (double) 0;
+			Double acumVentasFooter = (double) 0;
+			Double acumPlanificadasFooter = (double) 0;
+			Double acumProyeccionFooter = (double) 0;
+
+			String stringDesde = formatoFecha.format(fecha);
+			String stringHasta = formatoFecha.format(fecha2);
+			String stringHoy = formatoFecha.format(new Date());
+			// hacer los footers
+			TermometroCliente termo = new TermometroCliente();
+			boolean suma = true;
+			for (int i = 0; i < plan.size(); i++) {
+				PlanVenta planEspecifico = plan.get(i);
+				if (plan.get(i).getId().getMaestroAliado().getCodigoAliado()
+						.equals(aliado)) {
+					if (plan.get(i).getId().getMaestroProducto()
+							.getMaestroMarca().getMarcaDusa().equals(marca)) {
+						if (suma) {
+							Double sumaVentas = (Math.rint(ventaDAO
+
+							.sumByAliadoAndMarcaAndFecha(aliado, planEspecifico
+									.getId().getMaestroProducto()
+									.getMaestroMarca().getMarcaDusa(), fecha,
+									fecha2) * 1) / 1);
+							acumVentas = acumVentas + sumaVentas;
+							suma = false;
+						}
+						acumPlanificadas = acumPlanificadas
+								+ planEspecifico.getCajasPlanificadas();
+
+					} else {
+						suma = true;
+						termo.setFaltantes(faltantes);
+						termo.setRecorridos(recorridos);
+						termo.setHabiles(habiles);
+						termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+								+ stringDesde + " al " + stringHasta);
+						termo.setZona(planEspecifico.getId().getMaestroAliado()
+								.getCodigoAliado());
+						termo.setVendedor(planEspecifico.getId()
+								.getMaestroAliado().getNombre());
+						termo.setMarca(descripcion);
+						termo.setMes1(acumPlanificadas.intValue());
+						termo.setCuota(acumPlanificadas.intValue());
+						termo.setVendido(acumVentas.intValue());
+						if (acumPlanificadas.intValue() > 0)
+							termo.setPorcentaje(round((acumVentas * 100)
+									/ acumPlanificadas, 2));
+						termo.setExcendente(acumVentas.intValue()
+								- acumPlanificadas.intValue());
+						termo.setSugerido(round(acumPlanificadas / habiles, 2));
+						if (faltantes > 0)
+							termo.setMeta(round((acumVentas - acumPlanificadas)
+									/ faltantes, 2));
+						else
+							termo.setMeta(0);
+						if (recorridos > 0)
+							acumProyeccion = acumProyeccion
+									+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+						termo.setProyeccion(acumProyeccion.intValue());
+						termometro.add(termo);
+						termo = new TermometroCliente();
+						marca = plan.get(i).getId().getMaestroProducto()
+								.getMaestroMarca().getMarcaDusa();
+						descripcion = plan.get(i).getId().getMaestroProducto()
+								.getMaestroMarca().getDescripcion();
+						acumPlanificadasFooter = acumPlanificadasFooter
+								+ acumPlanificadas;
+						acumProyeccionFooter = acumProyeccionFooter
+								+ acumProyeccion;
+						acumVentasFooter = acumVentasFooter + acumVentas;
+						acumVentas = (double) 0;
+						acumPlanificadas = (double) 0;
+						acumProyeccion = (double) 0;
+						i--;
+					}
+
+				} else {
+					suma = true;
+					termo.setFaltantes(faltantes);
+					termo.setRecorridos(recorridos);
+					termo.setHabiles(habiles);
+					termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+							+ stringDesde + " al " + stringHasta);
+					termo.setZona(planEspecifico.getId().getMaestroAliado()
+							.getCodigoAliado());
+					termo.setVendedor(planEspecifico.getId().getMaestroAliado()
+							.getNombre());
+					termo.setMarca(descripcion);
+					termo.setMes1(acumPlanificadas.intValue());
+					termo.setCuota(acumPlanificadas.intValue());
+					termo.setVendido(acumVentas.intValue());
+					if (acumPlanificadas.intValue() > 0)
+						termo.setPorcentaje(round((acumVentas * 100)
+								/ acumPlanificadas, 2));
+					termo.setExcendente(acumVentas.intValue()
+							- acumPlanificadas.intValue());
+					termo.setSugerido(round(acumPlanificadas / habiles, 2));
+					if (faltantes > 0)
+						termo.setMeta(round((acumVentas - acumPlanificadas)
+								/ faltantes, 2));
+					else
+						termo.setMeta(0);
+					if (recorridos > 0)
+						acumProyeccion = acumProyeccion
+								+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+					termo.setProyeccion(acumProyeccion.intValue());
+					termometro.add(termo);
+					termo = new TermometroCliente();
+					acumPlanificadasFooter = acumPlanificadasFooter
+							+ acumPlanificadas;
+					acumProyeccionFooter = acumProyeccionFooter
+							+ acumProyeccion;
+					acumVentasFooter = acumVentasFooter + acumVentas;
+					acumVentas = (double) 0;
+					acumPlanificadas = (double) 0;
+					acumProyeccion = (double) 0;
+					TermometroCliente footer = new TermometroCliente();
+					footer.setMarca("Total: ");
+					footer.setMes1(acumPlanificadasFooter.intValue());
+					footer.setCuota(acumPlanificadasFooter.intValue());
+					footer.setVendido(acumVentasFooter.intValue());
+					if (acumPlanificadasFooter.intValue() > 0)
+						footer.setPorcentaje(round((acumVentasFooter * 100)
+								/ acumPlanificadasFooter, 2));
+					else
+						footer.setPorcentaje(0);
+					footer.setExcendente(acumVentasFooter.intValue()
+							- acumPlanificadasFooter.intValue());
+					footer.setSugerido(round(acumPlanificadasFooter / habiles,
+							2));
+					if (faltantes > 0)
+						footer.setMeta(round(
+								(acumVentasFooter - acumPlanificadasFooter)
+										/ faltantes, 2));
+					else
+						footer.setMeta(0);
+					if (recorridos > 0)
+						acumProyeccionFooter = (double) ((acumVentasFooter
+								.intValue() / recorridos) * habiles);
+					footer.setProyeccion(acumProyeccionFooter.intValue());
+					termometro.add(footer);
+					acumVentasFooter = (double) 0;
+					acumPlanificadasFooter = (double) 0;
+					acumProyeccionFooter = (double) 0;
+					aliado = plan.get(i).getId().getMaestroAliado()
+							.getCodigoAliado();
+					marca = plan.get(i).getId().getMaestroProducto()
+							.getMaestroMarca().getMarcaDusa();
+					descripcion = plan.get(i).getId().getMaestroProducto()
+							.getMaestroMarca().getDescripcion();
+					i--;
+				}
+			}
+			if (!plan.isEmpty()) {
+				termo.setFaltantes(faltantes);
+				termo.setRecorridos(recorridos);
+				termo.setHabiles(habiles);
+				termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+						+ stringDesde + " al " + stringHasta);
+				termo.setZona(plan.get(plan.size() - 1).getId()
+						.getMaestroAliado().getCodigoAliado());
+				termo.setVendedor(plan.get(plan.size() - 1).getId()
+						.getMaestroAliado().getNombre());
+				termo.setMarca(descripcion);
+				termo.setMes1(acumPlanificadas.intValue());
+				termo.setCuota(acumPlanificadas.intValue());
+				termo.setVendido(acumVentas.intValue());
+				if (acumPlanificadas.intValue() > 0)
+					termo.setPorcentaje(round((acumVentas * 100)
+							/ acumPlanificadas, 2));
+				termo.setExcendente(acumVentas.intValue()
+						- acumPlanificadas.intValue());
+				termo.setSugerido(round(acumPlanificadas / habiles, 2));
+				if (faltantes > 0)
+					termo.setMeta(round((acumVentas - acumPlanificadas)
+							/ faltantes, 2));
+				else
+					termo.setMeta(0);
+				if (recorridos > 0)
+					acumProyeccion = acumProyeccion
+							+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+				termo.setProyeccion(acumProyeccion.intValue());
+				termometro.add(termo);
+				acumPlanificadasFooter = acumPlanificadasFooter
+						+ acumPlanificadas;
+				acumProyeccionFooter = acumProyeccionFooter + acumProyeccion;
+				acumVentasFooter = acumVentasFooter + acumVentas;
+				TermometroCliente footer = new TermometroCliente();
+				footer.setMarca("Total: ");
+				footer.setMes1(acumPlanificadasFooter.intValue());
+				footer.setCuota(acumPlanificadasFooter.intValue());
+				footer.setVendido(acumVentasFooter.intValue());
+				if (acumPlanificadasFooter.intValue() > 0)
+					footer.setPorcentaje(round((acumVentasFooter * 100)
+							/ acumPlanificadasFooter, 2));
+				else
+					footer.setPorcentaje(0);
+				footer.setExcendente(acumVentasFooter.intValue()
+						- acumPlanificadasFooter.intValue());
+				footer.setSugerido(round(acumPlanificadasFooter / habiles, 2));
+				if (faltantes > 0)
+					footer.setMeta(round(
+							(acumVentasFooter - acumPlanificadasFooter)
+									/ faltantes, 2));
+				else
+					footer.setMeta(0);
+				if (recorridos > 0)
+					acumProyeccionFooter = (double) ((acumVentasFooter
+							.intValue() / recorridos) * habiles);
+				footer.setProyeccion(acumProyeccionFooter.intValue());
+				termometro.add(footer);
+			}
+		}
+		return termometro;
+	}
+
+	public List<TermometroCliente> buscarEntreMeses(int tiempo, int periodo,
+			int anno, int anno2, int tipo) {
+		List<TermometroCliente> termometro = new ArrayList<TermometroCliente>();
+		List<PlanVenta> plan = new ArrayList<PlanVenta>();
+		ordenar = new ArrayList<String>();
+		int limiteSup = 0;
+		int limiteInf = 0;
+		if (anno2 == 0) {
+			ordenar.add("idMaestroAliadoCodigoAliado");
+			ordenar.add("idMaestroProductoMaestroMarcaMarcaDusa");
+			ordenar.add("idMaestroProductoCodigoProductoDusa");
+			o = new Sort(Sort.Direction.ASC, ordenar);
+			plan = planDAO
+					.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdAnnoAndIdMesBetween(
+							true, anno, tiempo, periodo, o);
+		} else {
+			ordenar.add("id.maestroAliado.codigoAliado");
+			ordenar.add("id.maestroProducto.maestroMarca.marcaDusa");
+			ordenar.add("id.maestroProducto.codigoProductoDusa");
+			o = new Sort(Sort.Direction.ASC, ordenar);
+			limiteSup = 1;
+			limiteInf = 12;
+			plan = planDAO
+					.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdAnnoAndIdMesBetweenAndIdAnnoAndIdMesBetween(
+							true, anno2, tiempo, limiteInf, anno, limiteSup,
+							periodo, o);
+		}
+
+		formato.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		int mesHasta = periodo + 1;
+		String fechaString2 = anno + "-" + mesHasta;
+		if (mesHasta != 13 && mesHasta != 12 && mesHasta != 11
+				&& mesHasta != 10)
+			fechaString2 = anno + "-" + "0" + mesHasta;
+		Date fechaHasta = new Date();
+		try {
+			fechaHasta = formato.parse(fechaString2);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Calendar calendario = new GregorianCalendar();
+		calendario.setTime(fechaHasta);
+		calendario.add(Calendar.DAY_OF_YEAR, -1);
+		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		fechaHasta = calendario.getTime();
+		String fechaString = anno + "-" + tiempo;
+		if (tiempo != 12 && tiempo != 11 && tiempo != 10)
+			fechaString = anno + "-" + "0" + tiempo;
+
+		if (anno2 != 0) {
+			fechaString = anno2 + "-" + tiempo;
+			if (tiempo != 12 && tiempo != 11 && tiempo != 10)
+				fechaString = anno2 + "-" + "0" + tiempo;
+		}
+		Date fechaDesde = new Date();
+		try {
+			fechaDesde = formato.parse(fechaString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Date mesEnero = null;
+		Date mesDiciembre = null;
+		int habiles = 0;
+		if (anno2 == 0)
+			habiles = obtenerDiasHabiles(fechaDesde, fechaHasta);
+		else {
+			mesEnero = dameTuFecha(anno, 1);
+			Calendar calendarioFinalMes = new GregorianCalendar();
+			calendarioFinalMes.setTime(mesEnero);
+			calendarioFinalMes.add(Calendar.DAY_OF_YEAR, -1);
+			calendarioFinalMes.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+			mesDiciembre = calendarioFinalMes.getTime();
+			habiles = obtenerDiasHabiles(fechaDesde, mesDiciembre);
+			habiles = habiles + obtenerDiasHabiles(mesEnero, fechaHasta);
+		}
+		Date fechaHoy = null;
+		calendario = Calendar.getInstance();
+		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+		fechaHoy = calendario.getTime();
+		int recorridos = 0;
+		int faltantes = 0;
+		if (fechaHoy.after(fechaDesde) && fechaHoy.before(fechaHasta)) {
+			calendario = Calendar.getInstance();
+			calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
+			calendario.setTime(fechaHoy);
+			calendario.set(Calendar.HOUR, 0);
+			calendario.set(Calendar.HOUR_OF_DAY, 0);
+			calendario.set(Calendar.SECOND, 0);
+			calendario.set(Calendar.MILLISECOND, 0);
+			calendario.set(Calendar.MINUTE, 0);
+			fechaHoy = calendario.getTime();
+			faltantes = obtenerDiasHabiles(fechaHoy, fechaHasta);
+			recorridos = habiles - faltantes;
+		} else {
+			if (fechaHoy.before(fechaDesde)) {
+				faltantes = habiles;
+				recorridos = 0;
+			} else {
+				if (fechaHoy.after(fechaHasta)) {
+					faltantes = 0;
+					recorridos = 0;
+				}
+			}
+		}
+		if (!plan.isEmpty()) {
+			String aliado = plan.get(0).getId().getMaestroAliado()
+					.getCodigoAliado();
+			String marca = plan.get(0).getId().getMaestroProducto()
+					.getMaestroMarca().getMarcaDusa();
+			String descripcion = plan.get(0).getId().getMaestroProducto()
+					.getMaestroMarca().getDescripcion();
+			Double acumVentas = (double) 0;
+			Double mes1 = (double) 0;
+			Double mes2 = (double) 0;
+			Double mes3 = (double) 0;
+			Double mes4 = (double) 0;
+			Double mes5 = (double) 0;
+			Double mes6 = (double) 0;
+			Double mes7 = (double) 0;
+			Double mes8 = (double) 0;
+			Double mes9 = (double) 0;
+			Double mes10 = (double) 0;
+			Double mes11 = (double) 0;
+			Double mes12 = (double) 0;
+			Double acumPlanificadas = (double) 0;
+			Double acumProyeccion = (double) 0;
+			Double acumVentasFooter = (double) 0;
+			Double acumPlanificadasFooter = (double) 0;
+			Double acumProyeccionFooter = (double) 0;
+			// hacer los footers
+			String stringDesde = formatoFecha.format(fechaDesde);
+			String stringHasta = formatoFecha.format(fechaHasta);
+			String stringHoy = formatoFecha.format(new Date());
+			TermometroCliente termo = new TermometroCliente();
+
+			boolean suma = true;
+			for (int i = 0; i < plan.size(); i++) {
+				PlanVenta planEspecifico = plan.get(i);
+				if (plan.get(i).getId().getMaestroAliado().getCodigoAliado()
+						.equals(aliado)) {
+					if (plan.get(i).getId().getMaestroProducto()
+							.getMaestroMarca().getMarcaDusa().equals(marca)) {
+						if (suma) {
+							Double sumaVentas = (double) 0;
+							sumaVentas = (Math.rint(ventaDAO
+									.sumByAliadoAndMarcaAndFecha(aliado,
+											planEspecifico.getId()
+													.getMaestroProducto()
+													.getMaestroMarca()
+													.getMarcaDusa(),
+											fechaDesde, fechaHasta) * 1) / 1);
+							acumVentas = acumVentas + sumaVentas;
+							suma = false;
+						}
+						acumPlanificadas = acumPlanificadas
+								+ planEspecifico.getCajasPlanificadas();
+						switch (planEspecifico.getId().getMes()) {
+						case 1:
+							mes1 = mes1 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 2:
+							mes2 = mes2 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 3:
+							mes3 = mes3 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 4:
+							mes4 = mes4 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 5:
+							mes5 = mes5 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 6:
+							mes6 = mes6 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 7:
+							mes7 = mes7 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 8:
+							mes8 = mes8 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 9:
+							mes9 = mes9 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 10:
+							mes10 = mes10
+									+ planEspecifico.getCajasPlanificadas();
+							break;
+						case 11:
+							mes11 = mes11
+									+ planEspecifico.getCajasPlanificadas();
+							break;
+						case 12:
+							mes12 = mes12
+									+ planEspecifico.getCajasPlanificadas();
+							break;
+						}
+					} else {
+						suma = true;
+						termo.setFaltantes(faltantes);
+						termo.setRecorridos(recorridos);
+						termo.setHabiles(habiles);
+						termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+								+ stringDesde + " al " + stringHasta);
+						termo.setZona(planEspecifico.getId().getMaestroAliado()
+								.getCodigoAliado());
+						termo.setVendedor(planEspecifico.getId()
+								.getMaestroAliado().getNombre());
+						termo.setMarca(descripcion);
+						termo.setCuota(acumPlanificadas.intValue());
+						termo.setVendido(acumVentas.intValue());
+						if (acumPlanificadas.intValue() > 0)
+							termo.setPorcentaje(round((acumVentas * 100)
+									/ acumPlanificadas, 2));
+						termo.setExcendente(acumVentas.intValue()
+								- acumPlanificadas.intValue());
+						termo.setSugerido(round(acumPlanificadas / habiles, 2));
+						if (faltantes > 0)
+							termo.setMeta(round((acumVentas - acumPlanificadas)
+									/ faltantes, 2));
+						else
+							termo.setMeta(0);
+						if (recorridos > 0)
+							acumProyeccion = acumProyeccion
+									+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+						termo.setProyeccion(acumProyeccion.intValue());
+						termo.setMes1(mes1.intValue());
+						termo.setMes2(mes2.intValue());
+						termo.setMes3(mes3.intValue());
+						termo.setMes4(mes4.intValue());
+						termo.setMes5(mes5.intValue());
+						termo.setMes6(mes6.intValue());
+						termo.setMes7(mes7.intValue());
+						termo.setMes8(mes8.intValue());
+						termo.setMes9(mes9.intValue());
+						termo.setMes10(mes10.intValue());
+						termo.setMes11(mes11.intValue());
+						termo.setMes12(mes12.intValue());
+						termometro.add(termo);
+						termo = new TermometroCliente();
+						descripcion = plan.get(i).getId().getMaestroProducto()
+								.getMaestroMarca().getDescripcion();
+						marca = plan.get(i).getId().getMaestroProducto()
+								.getMaestroMarca().getMarcaDusa();
+						acumPlanificadasFooter = acumPlanificadasFooter
+								+ acumPlanificadas;
+						acumProyeccionFooter = acumProyeccionFooter
+								+ acumProyeccion;
+						acumVentasFooter = acumVentasFooter + acumVentas;
+						acumVentas = (double) 0;
+						acumPlanificadas = (double) 0;
+						acumProyeccion = (double) 0;
+						mes1 = (double) 0;
+						mes2 = (double) 0;
+						mes3 = (double) 0;
+						mes4 = (double) 0;
+						mes5 = (double) 0;
+						mes6 = (double) 0;
+						mes7 = (double) 0;
+						mes8 = (double) 0;
+						mes9 = (double) 0;
+						mes10 = (double) 0;
+						mes11 = (double) 0;
+						mes12 = (double) 0;
+						i--;
+
+					}
+
+				} else {
+					suma = true;
+					termo.setFaltantes(faltantes);
+					termo.setRecorridos(recorridos);
+					termo.setHabiles(habiles);
+					termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+							+ stringDesde + " al " + stringHasta);
+					termo.setZona(planEspecifico.getId().getMaestroAliado()
+							.getCodigoAliado());
+					termo.setVendedor(planEspecifico.getId().getMaestroAliado()
+							.getNombre());
+					termo.setMarca(descripcion);
+					termo.setCuota(acumPlanificadas.intValue());
+					termo.setVendido(acumVentas.intValue());
+					if (acumPlanificadas.intValue() > 0)
+						termo.setPorcentaje(round((acumVentas * 100)
+								/ acumPlanificadas, 2));
+					termo.setExcendente(acumVentas.intValue()
+							- acumPlanificadas.intValue());
+					termo.setSugerido(round(acumPlanificadas / habiles, 2));
+					if (faltantes > 0)
+						termo.setMeta(round((acumVentas - acumPlanificadas)
+								/ faltantes, 2));
+					else
+						termo.setMeta(0);
+					if (recorridos > 0)
+						acumProyeccion = acumProyeccion
+								+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+					termo.setProyeccion(acumProyeccion.intValue());
+					termo.setMes1(mes1.intValue());
+					termo.setMes2(mes2.intValue());
+					termo.setMes3(mes3.intValue());
+					termo.setMes4(mes4.intValue());
+					termo.setMes5(mes5.intValue());
+					termo.setMes6(mes6.intValue());
+					termo.setMes7(mes7.intValue());
+					termo.setMes8(mes8.intValue());
+					termo.setMes9(mes9.intValue());
+					termo.setMes10(mes10.intValue());
+					termo.setMes11(mes11.intValue());
+					termo.setMes12(mes12.intValue());
+					termometro.add(termo);
+
+					acumPlanificadasFooter = acumPlanificadasFooter
+							+ acumPlanificadas;
+					acumProyeccionFooter = acumProyeccionFooter
+							+ acumProyeccion;
+					acumVentasFooter = acumVentasFooter + acumVentas;
+					
+					TermometroCliente footer = new TermometroCliente();
+					footer.setMarca("Total: ");
+					footer.setCuota(acumPlanificadasFooter.intValue());
+					footer.setVendido(acumVentasFooter.intValue());
+					if (acumPlanificadasFooter.intValue() > 0)
+						footer.setPorcentaje(round((acumVentasFooter * 100)
+								/ acumPlanificadasFooter, 2));
+					else
+						footer.setPorcentaje(0);
+					footer.setExcendente(acumVentasFooter.intValue()
+							- acumPlanificadasFooter.intValue());
+					footer.setSugerido(round(acumPlanificadasFooter / habiles,
+							2));
+					if (faltantes > 0)
+						footer.setMeta(round(
+								(acumVentasFooter - acumPlanificadasFooter)
+										/ faltantes, 2));
+					else
+						footer.setMeta(0);
+					if (recorridos > 0)
+						acumProyeccionFooter = (double) ((acumVentasFooter
+								.intValue() / recorridos) * habiles);
+					footer.setProyeccion(acumProyeccionFooter.intValue());
+					termometro.add(footer);
+					acumVentasFooter = (double) 0;
+					acumPlanificadasFooter = (double) 0;
+					acumProyeccionFooter = (double) 0;
+					termo = new TermometroCliente();
+					descripcion = plan.get(i).getId().getMaestroProducto()
+							.getMaestroMarca().getDescripcion();
+					marca = plan.get(i).getId().getMaestroProducto()
+							.getMaestroMarca().getMarcaDusa();
+					aliado = plan.get(i).getId().getMaestroAliado()
+							.getCodigoAliado();
+					acumVentas = (double) 0;
+					acumPlanificadas = (double) 0;
+					acumProyeccion = (double) 0;
+					mes1 = (double) 0;
+					mes2 = (double) 0;
+					mes3 = (double) 0;
+					mes4 = (double) 0;
+					mes5 = (double) 0;
+					mes6 = (double) 0;
+					mes7 = (double) 0;
+					mes8 = (double) 0;
+					mes9 = (double) 0;
+					mes10 = (double) 0;
+					mes11 = (double) 0;
+					mes12 = (double) 0;
+					i--;
+				}
+			}
+			if (!plan.isEmpty()) {
+				termo.setFaltantes(faltantes);
+				termo.setRecorridos(recorridos);
+				termo.setHabiles(habiles);
+				termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+						+ stringDesde + " al " + stringHasta);
+				termo.setZona(plan.get(plan.size() - 1).getId().getMaestroAliado()
+						.getCodigoAliado());
+				termo.setVendedor(plan.get(plan.size() - 1).getId().getMaestroAliado()
+						.getNombre());
+				termo.setMarca(descripcion);
+				termo.setCuota(acumPlanificadas.intValue());
+				termo.setVendido(acumVentas.intValue());
+				if (acumPlanificadas.intValue() > 0)
+					termo.setPorcentaje(round((acumVentas * 100)
+							/ acumPlanificadas, 2));
+				termo.setExcendente(acumVentas.intValue()
+						- acumPlanificadas.intValue());
+				termo.setSugerido(round(acumPlanificadas / habiles, 2));
+				if (faltantes > 0)
+					termo.setMeta(round((acumVentas - acumPlanificadas)
+							/ faltantes, 2));
+				else
+					termo.setMeta(0);
+				if (recorridos > 0)
+					acumProyeccion = acumProyeccion
+							+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+				termo.setProyeccion(acumProyeccion.intValue());
+				termo.setMes1(mes1.intValue());
+				termo.setMes2(mes2.intValue());
+				termo.setMes3(mes3.intValue());
+				termo.setMes4(mes4.intValue());
+				termo.setMes5(mes5.intValue());
+				termo.setMes6(mes6.intValue());
+				termo.setMes7(mes7.intValue());
+				termo.setMes8(mes8.intValue());
+				termo.setMes9(mes9.intValue());
+				termo.setMes10(mes10.intValue());
+				termo.setMes11(mes11.intValue());
+				termo.setMes12(mes12.intValue());
+				termometro.add(termo);
+
+				acumPlanificadasFooter = acumPlanificadasFooter
+						+ acumPlanificadas;
+				acumProyeccionFooter = acumProyeccionFooter
+						+ acumProyeccion;
+				acumVentasFooter = acumVentasFooter + acumVentas;
+				
+				TermometroCliente footer = new TermometroCliente();
+				footer.setMarca("Total: ");
+				footer.setCuota(acumPlanificadasFooter.intValue());
+				footer.setVendido(acumVentasFooter.intValue());
+				if (acumPlanificadasFooter.intValue() > 0)
+					footer.setPorcentaje(round((acumVentasFooter * 100)
+							/ acumPlanificadasFooter, 2));
+				else
+					footer.setPorcentaje(0);
+				footer.setExcendente(acumVentasFooter.intValue()
+						- acumPlanificadasFooter.intValue());
+				footer.setSugerido(round(acumPlanificadasFooter / habiles,
+						2));
+				if (faltantes > 0)
+					footer.setMeta(round(
+							(acumVentasFooter - acumPlanificadasFooter)
+									/ faltantes, 2));
+				else
+					footer.setMeta(0);
+				if (recorridos > 0)
+					acumProyeccionFooter = (double) ((acumVentasFooter
+							.intValue() / recorridos) * habiles);
+				footer.setProyeccion(acumProyeccionFooter.intValue());
+				termometro.add(footer);
+			}
+		}
+		return termometro;
+	}
+
 	public int obtenerDiasHabiles(Date fecha, Date fecha2) {
 		Calendar calendario = Calendar.getInstance();
 		calendario.setTimeZone(TimeZone.getTimeZone("GMT-4:00"));
@@ -624,7 +1323,7 @@ public class STermometro {
 		fecha2 = calendario.getTime();
 		calendario.setTime(fecha);
 		String fija = formatoFecha.format(fecha2);
-		String hoy ="";
+		String hoy = "";
 		int contador = 0;
 		do {
 			calendario.setTime(fecha);

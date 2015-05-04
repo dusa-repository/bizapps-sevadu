@@ -93,4 +93,14 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 	List<Venta> findByMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
 			String idAliado, Date desde, Date hasta);
 
+	@Query("select coalesce(sum(cantidad), '0') from Venta v where v.maestroAliado.codigoAliado = ?1 "
+			+ "and v.maestroProducto.codigoProductoDusa = ?2 and fechaFactura between ?3 and ?4")
+	double sumByAliadoAndProductoAndFecha(String aliado,
+			String maestroProducto, Date fecha, Date fecha2);
+	
+	@Query("select coalesce(sum(cantidad), '0') from Venta v where v.maestroAliado.codigoAliado = ?1 "
+			+ "and v.maestroProducto.maestroMarca.marcaDusa = ?2 and fechaFactura between ?3 and ?4")
+	double sumByAliadoAndMarcaAndFecha(String aliado,
+			String maestroProducto, Date fecha, Date fecha2);
+
 }

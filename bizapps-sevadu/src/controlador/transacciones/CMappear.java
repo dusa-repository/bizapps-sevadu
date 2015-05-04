@@ -10,6 +10,7 @@ import modelo.maestros.MappingProducto;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
@@ -21,7 +22,6 @@ import org.zkoss.zul.Window;
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
-
 import controlador.maestros.CGenerico;
 
 public class CMappear extends CGenerico {
@@ -51,6 +51,7 @@ public class CMappear extends CGenerico {
 	private Radio radio1;
 	private Radio radio2;
 	private Radio radio3;
+	private Button btnRefrescar;
 
 	@Override
 	public void inicializar() throws IOException {
@@ -59,11 +60,13 @@ public class CMappear extends CGenerico {
 		if (map != null) {
 			mapping = (MappingProducto) map.get("mapping");
 			catalogo = (Catalogo<MappingProducto>) map.get("catalogo");
+			cupos = (List<MappingProducto>) map.get("lista");
 			fila = (Row) map.get("fila");
 			caja = (Textbox) map.get("text");
 			radio1 = (Radio) map.get("radio1");
 			radio2 = (Radio) map.get("radio2");
 			radio3 = (Radio) map.get("radio3");
+			btnRefrescar = (Button) map.get("btnRefrescar");
 			lblCodigo.setValue(mapping.getId().getMaestroProducto()
 					.getCodigoProductoDusa());
 			lblDescripcion.setValue(mapping.getId().getMaestroProducto()
@@ -131,7 +134,7 @@ public class CMappear extends CGenerico {
 					salir();
 					controlador.recibirLista(catalogo, cupos, fila, caja,
 							servicioMapping, servicioAliado, radio1, radio2,
-							radio3);
+							radio3,btnRefrescar);
 
 				}
 			}
@@ -151,7 +154,7 @@ public class CMappear extends CGenerico {
 									controlador.recibirLista(catalogo, cupos,
 											fila, caja, servicioMapping,
 											servicioAliado, radio1, radio2,
-											radio3);
+											radio3, btnRefrescar);
 								}
 							}
 						});

@@ -77,4 +77,11 @@ public class SPlanVenta {
 	public void eliminar(List<PlanVenta> planes) {
 		planVentaDAO.delete(planes);
 	}
+
+	public int sumarPorProductoaliadoYFechas(String aliado,
+			String codigoProductoDusa, int annoPlanDesde, int mesPlanDesde) {
+		return planVentaDAO
+				.sumByIdMaestroAliadoAnIdMaestroProductoProductoAndIdMesAndIdAnno(
+						aliado, codigoProductoDusa, mesPlanDesde, annoPlanDesde);
+	}
 }
