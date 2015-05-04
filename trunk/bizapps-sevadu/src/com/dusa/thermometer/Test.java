@@ -12,14 +12,6 @@ import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.Venta;
 import modelo.pk.MarcaActivadaPK;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import servicio.maestros.SCliente;
-import servicio.maestros.SMaestroMarca;
-import servicio.maestros.SMarcaActivadaVendedor;
-import servicio.maestros.SVenta;
-
 import com.dusa.thermometer.service.to.ActivationTo;
 import com.dusa.thermometer.service.to.HeaderTo;
 import com.dusa.thermometer.service.transformation.ClientData;
@@ -28,26 +20,9 @@ import com.dusa.thermometer.service.transformation.SupervisorData;
 import com.dusa.thermometer.service.transformation.ThermometerData;
 import com.dusa.thermometer.service.transformation.ZoneData;
 
+import controlador.maestros.CGenerico;
+
 public class Test {
-
-	private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-			"/META-INF/ConfiguracionAplicacion.xml");
-
-	public static SMaestroMarca getServicioMarca() {
-		return applicationContext.getBean(SMaestroMarca.class);
-	}
-
-	public static SCliente getServicioCliente() {
-		return applicationContext.getBean(SCliente.class);
-	}
-
-	public static SMarcaActivadaVendedor getServicioMarcaActivada() {
-		return applicationContext.getBean(SMarcaActivadaVendedor.class);
-	}
-
-	public static SVenta getServicioVenta() {
-		return applicationContext.getBean(SVenta.class);
-	}
 
 	public static List<HeaderTo> getTestHeaders() {
 		List<HeaderTo> labels = new ArrayList<HeaderTo>();
@@ -56,7 +31,7 @@ public class Test {
 		labels.add(new HeaderTo("Nombre del Proveedor (Raz&oacute;n Social)",
 				false, "min-width: 300px;"));
 
-		List<MaestroMarca> marcas = getServicioMarca()
+		List<MaestroMarca> marcas = CGenerico.getServicioMarca()
 				.buscarActivasTermometro();
 		for (Iterator<MaestroMarca> iterator = marcas.iterator(); iterator
 				.hasNext();) {
@@ -78,9 +53,10 @@ public class Test {
 			Date desde, Date hasta) {
 		List<ThermometerData> thermometerDatas = new ArrayList<ThermometerData>();
 
-		List<MaestroMarca> marcas = getServicioMarca()
+		List<MaestroMarca> marcas = CGenerico.getServicioMarca()
 				.buscarActivasTermometro();
-		List<Cliente> clientes = getServicioCliente().buscarPorAliado(aliado);
+		List<Cliente> clientes = CGenerico.getServicioCliente()
+				.buscarPorAliado(aliado);
 
 		if (!clientes.isEmpty()) {
 			String supervisor = clientes.get(0).getSupervisor();
@@ -95,27 +71,26 @@ public class Test {
 			for (int i = 0; i < clientes.size(); i++) {
 				marcaNula = false;
 				if (supervisor.equals(clientes.get(i).getSupervisor())) {
-
 					if (vendedor.equals(clientes.get(i).getVendedor())) {
-
 						if (zona.equals(clientes.get(i).getZona())) {
-
 							List<ActivationTo> activations = new ArrayList<ActivationTo>();
 							MarcaActivadaPK clave = new MarcaActivadaPK();
-							Cliente cliente = getServicioCliente()
+							Cliente cliente = CGenerico.getServicioCliente()
 									.buscarPorCodigoYAliado(
 											clientes.get(i).getCodigoCliente(),
 											aliado);
 							clave.setCliente(cliente);
 							clave.setMaestroAliado(aliado);
 							if (cliente != null) {
-								MarcaActivadaVendedor marcaActivada = getServicioMarcaActivada()
-										.buscar(clave);
+								MarcaActivadaVendedor marcaActivada = CGenerico
+										.getServicioMarcaActivada().buscar(
+												clave);
 								if (marcaActivada != null) {
 									for (int j = 0; j < marcas.size(); j++) {
-										boolean primero = false;
+										boolean primero = true;
 										boolean segundo = false;
-										List<Venta> ventas = getServicioVenta()
+										List<Venta> ventas = CGenerico
+												.getServicioVenta()
 												.buscarPorAliadoYVendedorYClienteYMarcaYZona(
 														aliado,
 														clientes.get(i)
@@ -126,7 +101,7 @@ public class Test {
 														desde,
 														hasta,
 														clientes.get(i)
-																.getZona());
+																.getZona());										
 										if (!ventas.isEmpty()) {
 											if (obtenerGet(marcaActivada, j) != null) {
 												if (obtenerGet(marcaActivada, j) == 1) {
@@ -144,7 +119,7 @@ public class Test {
 								} else {
 									for (int j = 0; j < marcas.size(); j++) {
 										ActivationTo activacion = new ActivationTo(
-												false, false);
+												false, true);
 										activations.add(activacion);
 									}
 								}

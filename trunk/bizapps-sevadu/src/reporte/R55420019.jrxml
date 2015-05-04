@@ -390,7 +390,7 @@
 					<subreportParameterExpression><![CDATA[$P{cliente}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "R55420019D.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reporte/R55420019D.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</summary>

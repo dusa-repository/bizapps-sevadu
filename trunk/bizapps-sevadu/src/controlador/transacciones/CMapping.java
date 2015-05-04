@@ -16,8 +16,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
@@ -56,6 +58,8 @@ public class CMapping extends CGenerico {
 	private Div divCatalogoAliado;
 	@Wire
 	private Label lblAliado;
+	@Wire
+	private Button btnRefrescar;
 	@Wire
 	private Row row;
 	Catalogo<MappingProducto> catalogo;
@@ -147,7 +151,6 @@ public class CMapping extends CGenerico {
 	}
 
 	private void mostrarCatalogo() {
-		lista = new ArrayList<MappingProducto>();
 		catalogo = new Catalogo<MappingProducto>(catalogoMapping, "", lista,
 				false, false, true, "Codigo de Producto",
 				"Descripcion del Producto", "Codigo Producto Aliado",
@@ -287,6 +290,7 @@ public class CMapping extends CGenerico {
 			map.put("radio1", rdoNo);
 			map.put("radio2", rdoSi);
 			map.put("radio3", rdoTodos);
+			map.put("btnRefrescar", btnRefrescar);
 			Sessions.getCurrent().setAttribute("mapear", map);
 			Window window = (Window) Executions.createComponents(
 					"/vistas/transacciones/VMappear.zul", null, null);
@@ -342,8 +346,9 @@ public class CMapping extends CGenerico {
 	public void recibirLista(Catalogo<MappingProducto> catalogo2,
 			List<MappingProducto> cupos, Row fila, Textbox caja,
 			SMappingProducto servicioMappingg, SMaestroAliado servicioAliadoo,
-			Radio radio1, Radio radio2, Radio radio3) {
+			Radio radio1, Radio radio2, Radio radio3, Button btnRefrescar2) {
 		catalogo = catalogo2;
+		lista = new ArrayList<MappingProducto>();
 		lista = cupos;
 		row = fila;
 		txtAliado = caja;
@@ -352,6 +357,8 @@ public class CMapping extends CGenerico {
 		rdoNo = radio1;
 		rdoSi = radio2;
 		rdoTodos = radio3;
-		refrescar();
+		btnRefrescar = btnRefrescar2;
+		Events.postEvent("onClick", btnRefrescar, null);
+//		refrescar();
 	}
 }

@@ -44,6 +44,7 @@ import org.zkoss.zul.Tab;
 
 import servicio.bitacora.SBitacoraEliminacion;
 import servicio.bitacora.SBitacoraLogin;
+import servicio.bitacora.SControlUpdate;
 import servicio.maestros.SCliente;
 import servicio.maestros.SConfiguracion;
 import servicio.maestros.SConfiguracionEnvioCorreo;
@@ -81,6 +82,8 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected SF0005 servicioF0005;
 	@WireVariable("SConfiguracionEnvioCorreo")
 	protected SConfiguracionEnvioCorreo servicioEnvio;
+	@WireVariable("SControlUpdate")
+	protected SControlUpdate servicioControlUpdate;
 	@WireVariable("SExistencia")
 	protected SExistencia servicioExistencia;
 	@WireVariable("SMaestroAliado")
@@ -131,10 +134,22 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	public String cerrar;
 	public Time tiempo = new Time(fecha.getTime());
 	private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-			"/META-INF/PropiedadesBaseDatos.xml");
-
+			"/META-INF/ConfiguracionAplicacion.xml");
+	
+	public static SF0004 getServicioF4() {
+		return applicationContext.getBean(SF0004.class);
+	}
+	
 	public static SMaestroAliado getServicioAliado() {
 		return app.getBean(SMaestroAliado.class);
+	}
+	
+	public static SBitacoraLogin getServicioBitacora() {
+		return app.getBean(SBitacoraLogin.class);
+	}
+	
+	public static SUsuario getServicioUsuario() {
+		return app.getBean(SUsuario.class);
 	}
 
 	public static SCliente getServicioCliente() {
@@ -147,6 +162,14 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 
 	public static SConfiguracion getServicioConfiguracion() {
 		return app.getBean(SConfiguracion.class);
+	}
+	
+	public static SMaestroMarca getServicioMarca() {
+		return applicationContext.getBean(SMaestroMarca.class);
+	}
+
+	public static SMarcaActivadaVendedor getServicioMarcaActivada() {
+		return applicationContext.getBean(SMarcaActivadaVendedor.class);
 	}
 
 	@Override

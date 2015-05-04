@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import modelo.bitacora.ControlUpdate;
 import modelo.maestros.Cliente;
 import modelo.maestros.Existencia;
 import modelo.maestros.F0005;
@@ -23,6 +24,7 @@ import modelo.maestros.Venta;
 import modelo.pk.ExistenciaPK;
 import modelo.pk.MarcaActivadaPK;
 import modelo.pk.PlanVentaPK;
+import modelo.seguridad.Usuario;
 import net.sf.jasperreports.olap.mapping.Mapping;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -41,7 +43,10 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Tab;
+import org.zkoss.zul.Window;
 
 import componente.Botonera;
 import componente.Mensaje;
@@ -69,6 +74,7 @@ public class CCargarArchivo extends CGenerico {
 	private String udcNoEncontrada = "La siguiente UDC no fue encontrada.";
 	private String errorLongitud = "La siguiente ubicacion excede el limite establecido de longitud:";
 	private String archivoConError = "Existe un error en el siguiente archivo adjunto: ";
+	List<String> listaErrores = new ArrayList<String>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -135,6 +141,7 @@ public class CCargarArchivo extends CGenerico {
 
 			@Override
 			public void guardar() {
+				listaErrores.clear();
 				if (media != null) {
 					switch (tipo) {
 					case 1:
@@ -372,6 +379,7 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (productos.size() == contadorRow) {
 					servicioProducto.guardarVarios(productos);
+					guardarControlUpdate("NO", "NO", "NO", "NO", "SI", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -381,15 +389,27 @@ public class CCargarArchivo extends CGenerico {
 					msj.mensajeError("El archivo no ha podido ser importado, causas:"
 							+ "Faltan columnas en el archivo");
 				}
-			} else
-				msj.mensajeError("El archivo no ha podido ser importado, causas:"
-						+ "\n"
-						+ mostrarError
-						+ "\n"
-						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow)
-						+ "\n"
-						+ "Cantidad de Filas insertadas: 0");
+			} else {
+				Window ventana = new Window(
+						"Errores encontrados al importar el archivo", "2px",
+						true);
+				Listbox lista = new Listbox();
+				lista.setModel(new ListModelList<String>(listaErrores));
+				lista.setMold("paging");
+				lista.setPagingPosition("top");
+				lista.setPageSize(10);
+				ventana.appendChild(lista);
+				ventana.setParent(divVCargarArchivo);
+				ventana.doModal();
+			}
+			// msj.mensajeError("El archivo no ha podido ser importado, causas:"
+			// + "\n"
+			// + mostrarError
+			// + "\n"
+			// + "Cantidad de Filas evaluadas:"
+			// + (contadorRow)
+			// + "\n"
+			// + "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -429,6 +449,8 @@ public class CCargarArchivo extends CGenerico {
 				Double porcentaje = null;
 				String campo1 = null;
 				String campo2 = null;
+				Double idCampo1 = null;
+				Double idCampo2 = null;
 				Iterator<Cell> cellIterator = row.cellIterator();
 				int contadorCell = 0;
 				while (cellIterator.hasNext()) {
@@ -1203,40 +1225,29 @@ public class CCargarArchivo extends CGenerico {
 						}
 						break;
 					case 54:
-						if (cell.getCellType() == 1) {
-							campo1 = cell.getStringCellValue();
-							if (campo1 != null)
-								if (campo1.length() > 50) {
-									mostrarError = mensajeErrorLongitud(
-											mostrarError, contadorRow,
-											contadorCell);
-									errorLong = true;
-								}
-						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
-							error = true;
-						}
+						campo1 = obtenerStringCualquiera(cell, idCampo1, campo1);
+						if (campo1 != null) {
+							if (campo1.length() > 50) {
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								errorLong = true;
+							}
+						} else
+							campo1 = "";
 						break;
 					case 55:
-						if (cell.getCellType() == 1) {
-							campo2 = cell.getStringCellValue();
-							if (campo2 != null)
-								if (campo2.length() > 50) {
-									mostrarError = mensajeErrorLongitud(
-											mostrarError, contadorRow,
-											contadorCell);
-									errorLong = true;
-								}
-						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
-							error = true;
-						}
+						campo2 = obtenerStringCualquiera(cell, idCampo2, campo2);
+						if (campo2 != null) {
+							if (campo2.length() > 50) {
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								errorLong = true;
+							}
+						} else
+							campo2 = "";
 						break;
 					}
 				}
-
 				if (!error && !errorLong && aliado != null && marca1 != null
 						&& marca2 != null && marca3 != null && marca4 != null
 						&& marca5 != null && marca6 != null && marca7 != null
@@ -1261,8 +1272,7 @@ public class CCargarArchivo extends CGenerico {
 						&& marca45 != null && marca46 != null
 						&& marca47 != null && marca48 != null
 						&& marca49 != null && marca50 != null && total != null
-						&& porcentaje != null && campo1 != null
-						&& campo2 != null) {
+						&& porcentaje != null) {
 					MarcaActivadaPK pk = new MarcaActivadaPK();
 					pk.setCliente(cliente);
 					pk.setMaestroAliado(aliado);
@@ -1329,6 +1339,7 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (marcas.size() == contadorRow) {
 					servicioMarcaActivada.guardarVarios(marcas);
+					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "SI");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -1338,15 +1349,27 @@ public class CCargarArchivo extends CGenerico {
 					msj.mensajeError("El archivo no ha podido ser importado, causas:"
 							+ "Faltan columnas en el archivo");
 				}
-			} else
-				msj.mensajeError("El archivo no ha podido ser importado, causas:"
-						+ "\n"
-						+ mostrarError
-						+ "\n"
-						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow)
-						+ "\n"
-						+ "Cantidad de Filas insertadas: 0");
+			} else {
+				Window ventana = new Window(
+						"Errores encontrados al importar el archivo", "2px",
+						true);
+				Listbox lista = new Listbox();
+				lista.setModel(new ListModelList<String>(listaErrores));
+				lista.setMold("paging");
+				lista.setPagingPosition("top");
+				lista.setPageSize(10);
+				ventana.appendChild(lista);
+				ventana.setParent(divVCargarArchivo);
+				ventana.doModal();
+			}
+			// msj.mensajeError("El archivo no ha podido ser importado, causas:"
+			// + "\n"
+			// + mostrarError
+			// + "\n"
+			// + "Cantidad de Filas evaluadas:"
+			// + (contadorRow)
+			// + "\n"
+			// + "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -1623,9 +1646,9 @@ public class CCargarArchivo extends CGenerico {
 								tipoCliente = servicioTipoCliente
 										.buscarPorCodigo(idTipo);
 								if (tipoCliente == null) {
-									mostrarError = mensajeErrorNoEncontrado(
+									listaErrores.add(mensajeErrorNoEncontrado(
 											mostrarError, idTipo, contadorRow,
-											contadorCell, "Tipo de Cliente");
+											contadorCell, "Tipo de Cliente"));
 									error = true;
 								}
 							}
@@ -1640,14 +1663,14 @@ public class CCargarArchivo extends CGenerico {
 							ruta = cell.getStringCellValue();
 							if (ruta != null)
 								if (ruta.length() > 20) {
-									mostrarError = mensajeErrorLongitud(
+									listaErrores.add(mensajeErrorLongitud(
 											mostrarError, contadorRow,
-											contadorCell);
+											contadorCell));
 									errorLong = true;
 								}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							listaErrores.add(mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell));
 							error = true;
 						}
 						break;
@@ -1656,14 +1679,14 @@ public class CCargarArchivo extends CGenerico {
 							direccion = cell.getStringCellValue();
 							if (direccion != null)
 								if (direccion.length() > 100) {
-									mostrarError = mensajeErrorLongitud(
+									listaErrores.add(mensajeErrorLongitud(
 											mostrarError, contadorRow,
-											contadorCell);
+											contadorCell));
 									errorLong = true;
 								}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							listaErrores.add(mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell));
 							error = true;
 						}
 						break;
@@ -1672,14 +1695,14 @@ public class CCargarArchivo extends CGenerico {
 							rif = cell.getStringCellValue();
 							if (rif != null)
 								if (rif.length() > 20) {
-									mostrarError = mensajeErrorLongitud(
+									listaErrores.add(mensajeErrorLongitud(
 											mostrarError, contadorRow,
-											contadorCell);
+											contadorCell));
 									errorLong = true;
 								}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							listaErrores.add(mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell));
 							error = true;
 						}
 						break;
@@ -1715,6 +1738,7 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (clientes.size() == contadorRow) {
 					servicioCliente.guardarVarios(clientes);
+					guardarControlUpdate("NO", "NO", "NO", "SI", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -1724,15 +1748,28 @@ public class CCargarArchivo extends CGenerico {
 					msj.mensajeError("El archivo no ha podido ser importado, causas:"
 							+ "Faltan columnas en el archivo");
 				}
-			} else
-				msj.mensajeError("El archivo no ha podido ser importado, causas:"
-						+ "\n"
-						+ mostrarError
-						+ "\n"
-						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow)
-						+ "\n"
-						+ "Cantidad de Filas insertadas: 0");
+			} else {
+				Window ventana = new Window(
+						"Errores encontrados al importar el archivo", "2px",
+						true);
+				Listbox lista = new Listbox();
+				lista.setModel(new ListModelList<String>(listaErrores));
+				lista.setMold("paging");
+				lista.setPagingPosition("top");
+				lista.setPageSize(10);
+				ventana.appendChild(lista);
+				ventana.setParent(divVCargarArchivo);
+				ventana.doModal();
+
+			}
+			// msj.mensajeError("El archivo no ha podido ser importado, causas:"
+			// + "\n"
+			// + mostrarError
+			// + "\n"
+			// + "Cantidad de Filas evaluadas:"
+			// + (contadorRow)
+			// + "\n"
+			// + "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -1776,31 +1813,31 @@ public class CCargarArchivo extends CGenerico {
 					Cell cell = cellIterator.next();
 					switch (cell.getColumnIndex()) {
 					case 0:
-						
-						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-						
+
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"dd/MM/yyyy");
+
 						if (cell.getCellType() == 0) {
 							fechaFactura = cell.getDateCellValue();
 						} else if (cell.getCellType() == 1) {
-							
+
 							try {
-								fechaFactura = sdf.parse(cell.getStringCellValue());
+								fechaFactura = sdf.parse(cell
+										.getStringCellValue());
 							} catch (ParseException e) {
 								// TODO Auto-generated catch block
 								mostrarError = mensajeErrorNull(mostrarError,
 										contadorRow, contadorCell);
 								error = true;
 							}
-						
-						}
-						else
-						{
+
+						} else {
 							mostrarError = mensajeErrorNull(mostrarError,
 									contadorRow, contadorCell);
 							error = true;
 						}
 						break;
-						
+
 					case 1:
 						idAliado = obtenerStringCualquiera(cell, refAliado,
 								idAliado);
@@ -1884,6 +1921,7 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (existencias.size() == contadorRow) {
 					servicioExistencia.guardarVarios(existencias);
+					guardarControlUpdate("NO", "NO", "SI", "NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -1893,15 +1931,27 @@ public class CCargarArchivo extends CGenerico {
 					msj.mensajeError("El archivo no ha podido ser importado, causas:"
 							+ "Faltan columnas en el archivo");
 				}
-			} else
-				msj.mensajeError("El archivo no ha podido ser importado, causas:"
-						+ "\n"
-						+ mostrarError
-						+ "\n"
-						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow)
-						+ "\n"
-						+ "Cantidad de Filas insertadas: 0");
+			} else {
+				Window ventana = new Window(
+						"Errores encontrados al importar el archivo", "2px",
+						true);
+				Listbox lista = new Listbox();
+				lista.setModel(new ListModelList<String>(listaErrores));
+				lista.setMold("paging");
+				lista.setPagingPosition("top");
+				lista.setPageSize(10);
+				ventana.appendChild(lista);
+				ventana.setParent(divVCargarArchivo);
+				ventana.doModal();
+			}
+			// msj.mensajeError("El archivo no ha podido ser importado, causas:"
+			// + "\n"
+			// + mostrarError
+			// + "\n"
+			// + "Cantidad de Filas evaluadas:"
+			// + (contadorRow)
+			// + "\n"
+			// + "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -1960,13 +2010,13 @@ public class CCargarArchivo extends CGenerico {
 							if (anno.toString().length() != 4
 									&& (anno.intValue() < 1900 || anno
 											.intValue() > 2100)) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -1976,13 +2026,13 @@ public class CCargarArchivo extends CGenerico {
 							mes = cell.getNumericCellValue();
 							if (mes.toString().length() != 2
 									&& mes.intValue() > 12) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -1991,8 +2041,8 @@ public class CCargarArchivo extends CGenerico {
 								idAliado);
 						if (idAliado != null) {
 							if (idAliado.length() > 50) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							} else {
 								aliado = servicioAliado.buscar(idAliado);
@@ -2122,6 +2172,7 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (planesVentas.size() == contadorRow) {
 					servicioPlan.guardarVarios(planesVentas);
+					guardarControlUpdate("NO", "SI", "NO", "NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2131,15 +2182,27 @@ public class CCargarArchivo extends CGenerico {
 					msj.mensajeError("El archivo no ha podido ser importado, causas:"
 							+ "Faltan columnas en el archivo");
 				}
-			} else
-				msj.mensajeError("El archivo no ha podido ser importado, causas:"
-						+ "\n"
-						+ mostrarError
-						+ "\n"
-						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow)
-						+ "\n"
-						+ "Cantidad de Filas insertadas: 0");
+			} else {
+				Window ventana = new Window(
+						"Errores encontrados al importar el archivo", "2px",
+						true);
+				Listbox lista = new Listbox();
+				lista.setModel(new ListModelList<String>(listaErrores));
+				lista.setMold("paging");
+				lista.setPagingPosition("top");
+				lista.setPageSize(10);
+				ventana.appendChild(lista);
+				ventana.setParent(divVCargarArchivo);
+				ventana.doModal();
+			}
+			// msj.mensajeError("El archivo no ha podido ser importado, causas:"
+			// + "\n"
+			// + mostrarError
+			// + "\n"
+			// + "Cantidad de Filas evaluadas:"
+			// + (contadorRow)
+			// + "\n"
+			// + "Cantidad de Filas insertadas: 0");
 		}
 	}
 
@@ -2227,21 +2290,23 @@ public class CCargarArchivo extends CGenerico {
 								idAliado);
 						if (idAliado != null) {
 							if (idAliado.length() > 50) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								// mostrarError = mensajeErrorLongitud(
+								// mostrarError, contadorRow, contadorCell);
 								errorLong = true;
 							} else {
 								aliado = servicioAliado.buscar(idAliado);
 								if (aliado == null) {
-									mostrarError = mensajeErrorNoEncontrado(
-											mostrarError, idAliado,
-											contadorRow, contadorCell, "Aliado");
+									mensajeErrorNoEncontrado(mostrarError,
+											idAliado, contadorRow,
+											contadorCell, "Aliado");
 									error = true;
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2250,24 +2315,23 @@ public class CCargarArchivo extends CGenerico {
 								idCliente);
 						if (idCliente != null) {
 							if (idCliente.length() > 50) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							} else {
 								cliente = servicioCliente
 										.buscarPorCodigoYAliado(idCliente,
 												aliado);
 								if (cliente == null) {
-									mostrarError = mensajeErrorNoEncontrado(
-											mostrarError, idCliente,
-											contadorRow, contadorCell,
-											"Cliente");
+									mensajeErrorNoEncontrado(mostrarError,
+											idCliente, contadorRow,
+											contadorCell, "Cliente");
 									error = true;
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2275,14 +2339,14 @@ public class CCargarArchivo extends CGenerico {
 						if (cell.getCellType() == 1) {
 							nombreCliente = cell.getStringCellValue();
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						if (nombreCliente != null)
 							if (nombreCliente.length() > 100) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							}
 						break;
@@ -2290,22 +2354,22 @@ public class CCargarArchivo extends CGenerico {
 						idZona = obtenerStringCualquiera(cell, refZona, idZona);
 						if (idZona != null) {
 							if (idZona.length() > 50) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							} else {
 								zona = servicioF0005.buscar("00", "01", idZona);
 								zona = new F0005();
 								if (zona == null) {
-									mostrarError = mensajeErrorUdcNoEncontrada(
-											mostrarError, "00", "01", idZona,
-											contadorRow, contadorCell);
+									mensajeErrorUdcNoEncontrada(mostrarError,
+											"00", "01", idZona, contadorRow,
+											contadorCell);
 									error = true;
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2314,23 +2378,23 @@ public class CCargarArchivo extends CGenerico {
 								idCiudad);
 						if (idCiudad != null) {
 							if (idCiudad.length() > 100) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							} else {
 								ciudad = servicioF0005.buscar("00", "03",
 										idCiudad);
 								ciudad = new F0005();
 								if (ciudad == null) {
-									mostrarError = mensajeErrorUdcNoEncontrada(
-											mostrarError, "00", "03", idCiudad,
-											contadorRow, contadorCell);
+									mensajeErrorUdcNoEncontrada(mostrarError,
+											"00", "03", idCiudad, contadorRow,
+											contadorCell);
 									error = true;
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2340,9 +2404,8 @@ public class CCargarArchivo extends CGenerico {
 						if (idProducto != null) {
 							if (!idProducto.equals("")) {
 								if (idProducto.length() > 50) {
-									mostrarError = mensajeErrorLongitud(
-											mostrarError, contadorRow,
-											contadorCell);
+									mensajeErrorLongitud(mostrarError,
+											contadorRow, contadorCell);
 									errorLong = true;
 								} else {
 									if (aliado != null) {
@@ -2351,7 +2414,7 @@ public class CCargarArchivo extends CGenerico {
 														aliado, idProducto);
 										if (object == null) {
 											producto = null;
-											mostrarError = mensajeErrorNoEncontrado(
+											mensajeErrorNoEncontrado(
 													mostrarError, idProducto,
 													contadorRow, contadorCell,
 													"Mapping Producto (Codigo de Producto de Cliente)");
@@ -2362,13 +2425,13 @@ public class CCargarArchivo extends CGenerico {
 									}
 								}
 							} else {
-								mostrarError = mensajeErrorNull(mostrarError,
-										contadorRow, contadorCell);
+								mensajeErrorNull(mostrarError, contadorRow,
+										contadorCell);
 								error = true;
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2388,29 +2451,30 @@ public class CCargarArchivo extends CGenerico {
 												.getPackingSizeDusa();
 										unidad = object.getCodigoCajaCliente();
 									} else {
-										mostrarError = mostrarError
-												+ " El valor "
-												+ unidad
-												+ " no se ha encontrado en la columna codigo botella"
-												+ " o codigo caja de la tabla  "
-												+ "Mapping de Producto"
-												+ ".  Fila: " + contadorRow
-												+ ". Columna: " + contadorCell
-												+ "\n";
+										listaErrores
+												.add(" El valor "
+														+ unidad
+														+ " no se ha encontrado en la columna codigo botella"
+														+ " o codigo caja de la tabla  "
+														+ "Mapping de Producto"
+														+ ".  Fila: "
+														+ contadorRow
+														+ ". Columna: "
+														+ contadorCell + "\n");
 										error = true;
 									}
 
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						if (unidad != null)
 							if (unidad.length() > 20) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 								formatoCaja = null;
 							}
@@ -2424,21 +2488,22 @@ public class CCargarArchivo extends CGenerico {
 										cantidad = round(
 												cantidad / packingSize, 2);
 									else {
-										mostrarError = mostrarError
-												+ " El Packing Size asociado al Producto "
-												+ idProducto
-												+ " tiene valor 0 por lo "
-												+ "cual no se puede realizar la transformacion necesaria de botella a caja, "
-												+ "verifique este valor en el maestro de producto.  Fila: "
-												+ contadorRow + ". Columna: "
-												+ contadorCell + "\n";
+										listaErrores
+												.add(" El Packing Size asociado al Producto "
+														+ idProducto
+														+ " tiene valor 0 por lo "
+														+ "cual no se puede realizar la transformacion necesaria de botella a caja, "
+														+ "verifique este valor en el maestro de producto.  Fila: "
+														+ contadorRow
+														+ ". Columna: "
+														+ contadorCell + "\n");
 										error = true;
 									}
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2446,13 +2511,13 @@ public class CCargarArchivo extends CGenerico {
 						marca = obtenerStringCualquiera(cell, refMarca, marca);
 						if (marca != null) {
 							if (marca.length() > 50) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2461,50 +2526,48 @@ public class CCargarArchivo extends CGenerico {
 								idEspecie);
 						if (idEspecie != null) {
 							if (idEspecie.length() > 50) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							} else {
 								especie = servicioF0005.buscar("00", "06",
 										idEspecie);
 								especie = new F0005();
 								if (especie == null) {
-									mostrarError = mensajeErrorUdcNoEncontrada(
-											mostrarError, "00", "06",
-											idEspecie, contadorRow,
+									mensajeErrorUdcNoEncontrada(mostrarError,
+											"00", "06", idEspecie, contadorRow,
 											contadorCell);
 									error = true;
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
 					case 10:
-						
-						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-						
+
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"dd/MM/yyyy");
+
 						if (cell.getCellType() == 0) {
 							fechaFactura = cell.getDateCellValue();
 						} else if (cell.getCellType() == 1) {
-							
-							
+
 							try {
-								fechaFactura = sdf.parse(cell.getStringCellValue());
+								fechaFactura = sdf.parse(cell
+										.getStringCellValue());
 							} catch (ParseException e) {
 								// TODO Auto-generated catch block
-								mostrarError = mensajeErrorNull(mostrarError,
-										contadorRow, contadorCell);
+								mensajeErrorNull(mostrarError, contadorRow,
+										contadorCell);
 								error = true;
 							}
-						
-						}
-						else
-						{
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+
+						} else {
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2513,34 +2576,33 @@ public class CCargarArchivo extends CGenerico {
 								idVendedor);
 						if (idVendedor != null) {
 							if (idVendedor.length() > 100) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							} else {
 								vendedor = servicioF0005.buscar("00", "00",
 										idVendedor);
 								vendedor = new F0005();
 								if (vendedor == null) {
-									mostrarError = mensajeErrorUdcNoEncontrada(
-											mostrarError, "00", "00",
-											idVendedor, contadorRow,
-											contadorCell);
+									mensajeErrorUdcNoEncontrada(mostrarError,
+											"00", "00", idVendedor,
+											contadorRow, contadorCell);
 									error = true;
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
 					case 12:
-						
+
 						if (cell.getCellType() == 0) {
 							factura = cell.getNumericCellValue();
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2550,24 +2612,22 @@ public class CCargarArchivo extends CGenerico {
 							segmentacion = cell.getStringCellValue();
 							if (segmentacion != null) {
 								if (segmentacion.length() > 3) {
-									mostrarError = mensajeErrorLongitud(
-											mostrarError, contadorRow,
-											contadorCell);
+									mensajeErrorLongitud(mostrarError,
+											contadorRow, contadorCell);
 									errorLong = true;
 								} else {
 									if (!segmentacion.equalsIgnoreCase("ON")
 											&& !segmentacion
 													.equalsIgnoreCase("OFF")) {
-										mostrarError = mensajeErrorNull(
-												mostrarError, contadorRow,
-												contadorCell);
+										mensajeErrorNull(mostrarError,
+												contadorRow, contadorCell);
 										error = true;
 									}
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2575,22 +2635,22 @@ public class CCargarArchivo extends CGenerico {
 						idTipo = obtenerStringCualquiera(cell, refTipo, idTipo);
 						if (idTipo != null) {
 							if (idTipo.length() > 4) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							} else {
 								tipoCliente = servicioTipoCliente
 										.buscarPorCodigo(idTipo);
 								if (tipoCliente == null) {
-									mostrarError = mensajeErrorNoEncontrado(
-											mostrarError, idTipo, contadorRow,
-											contadorCell, "Tipo de Cliente");
+									mensajeErrorNoEncontrado(mostrarError,
+											idTipo, contadorRow, contadorCell,
+											"Tipo de Cliente");
 									error = true;
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2599,14 +2659,13 @@ public class CCargarArchivo extends CGenerico {
 							ruta = cell.getStringCellValue();
 							if (ruta != null)
 								if (ruta.length() > 50) {
-									mostrarError = mensajeErrorLongitud(
-											mostrarError, contadorRow,
-											contadorCell);
+									mensajeErrorLongitud(mostrarError,
+											contadorRow, contadorCell);
 									errorLong = true;
 								}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2615,24 +2674,23 @@ public class CCargarArchivo extends CGenerico {
 								refSupervisor, idSupervisor);
 						if (idSupervisor != null) {
 							if (idSupervisor.length() > 100) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							} else {
 								supervisor = servicioF0005.buscar("00", "00",
 										idSupervisor);
 								supervisor = new F0005();
 								if (supervisor == null) {
-									mostrarError = mensajeErrorUdcNoEncontrada(
-											mostrarError, "00", "00",
-											idSupervisor, contadorRow,
-											contadorCell);
+									mensajeErrorUdcNoEncontrada(mostrarError,
+											"00", "00", idSupervisor,
+											contadorRow, contadorCell);
 									error = true;
 								}
 							}
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2640,8 +2698,8 @@ public class CCargarArchivo extends CGenerico {
 						if (cell.getCellType() == 0) {
 							precio = cell.getNumericCellValue();
 						} else {
-							mostrarError = mensajeErrorNull(mostrarError,
-									contadorRow, contadorCell);
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
 							error = true;
 						}
 						break;
@@ -2650,8 +2708,8 @@ public class CCargarArchivo extends CGenerico {
 								futuro1);
 						if (futuro1 != null) {
 							if (futuro1.length() > 50) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							}
 						} else
@@ -2662,8 +2720,8 @@ public class CCargarArchivo extends CGenerico {
 								futuro2);
 						if (futuro2 != null) {
 							if (futuro2.length() > 50) {
-								mostrarError = mensajeErrorLongitud(
-										mostrarError, contadorRow, contadorCell);
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
 								errorLong = true;
 							}
 						} else
@@ -2711,6 +2769,7 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (ventas.size() == contadorRow) {
 					servicioVenta.guardarVarios(ventas);
+					guardarControlUpdate("SI", "NO", "NO", "NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2720,42 +2779,72 @@ public class CCargarArchivo extends CGenerico {
 					msj.mensajeError("El archivo no ha podido ser importado, causas:"
 							+ "Faltan columnas en el archivo");
 				}
-			} else
-				msj.mensajeError("El archivo no ha podido ser importado, causas:"
-						+ "\n"
-						+ mostrarError
-						+ "\n"
-						+ "Cantidad de Filas evaluadas:"
-						+ (contadorRow)
-						+ "\n"
-						+ "Cantidad de Filas insertadas: 0");
+			} else {
+				Window ventana = new Window(
+						"Errores encontrados al importar el archivo", "2px",
+						true);
+				Listbox lista = new Listbox();
+				lista.setModel(new ListModelList<String>(listaErrores));
+				lista.setMold("paging");
+				lista.setPagingPosition("top");
+				lista.setPageSize(10);
+				ventana.appendChild(lista);
+				ventana.setParent(divVCargarArchivo);
+				ventana.doModal();
+				// msj.mensajeError("El archivo no ha podido ser importado, causas:"
+				// + "\n" + mostrarError + "\n"
+				// + "Cantidad de Filas evaluadas:" + (contadorRow) + "\n"
+				// + "Cantidad de Filas insertadas: 0");
+			}
+
 		}
+	}
+
+	private void guardarControlUpdate(String ventas, String planVentas,
+			String existencia, String carteraClientes, String pvp,
+			String activacion) {
+		Usuario user = servicioUsuario.buscarPorLogin(nombreUsuarioSesion());
+		String codigoAliado = "Administrador";
+		String nombreAliado = "Sin Aliado";
+		if (user.getMaestroAliado() != null) {
+			codigoAliado = user.getMaestroAliado().getCodigoAliado();
+			nombreAliado = user.getMaestroAliado().getNombre();
+		}
+		ControlUpdate control = new ControlUpdate(0, codigoAliado,
+				nombreAliado, ventas, planVentas, existencia, carteraClientes,
+				pvp, activacion, fecha);
+		servicioControlUpdate.guardar(control);
+
 	}
 
 	private String mensajeErrorUdcNoEncontrada(String mostrarError, String sy,
 			String rt, String idSupervisor, int contadorRow, int contadorCell) {
-		return mostrarError + udcNoEncontrada + sy + "," + rt + ","
-				+ idSupervisor + ". Fila: " + contadorRow + ". Columna: "
-				+ contadorCell + "\n";
+		listaErrores.add(udcNoEncontrada + sy + "," + rt + "," + idSupervisor
+				+ ". Fila: " + contadorRow + ". Columna: " + contadorCell
+				+ "\n");
+		return "";
 	}
 
 	private String mensajeErrorNoEncontrado(String mostrarError,
 			String idCliente, int contadorRow, int contadorCell, String nombre) {
-		return mostrarError + " El valor " + idCliente
+		listaErrores.add("El valor " + idCliente
 				+ " no se ha encontrado en la tabla  " + nombre + ".  Fila: "
-				+ contadorRow + ". Columna: " + contadorCell + "\n";
+				+ contadorRow + ". Columna: " + contadorCell + "\n");
+		return "";
 	}
 
 	private String mensajeErrorNull(String mostrarError, int contadorRow,
 			int contadorCell) {
-		return mostrarError + archivoConError + ". Fila: " + contadorRow
-				+ ". Columna: " + contadorCell + "\n";
+		listaErrores.add(archivoConError + ". Fila: " + contadorRow
+				+ ". Columna: " + contadorCell + "\n");
+		return "";
 	}
 
 	private String mensajeErrorLongitud(String mostrarError, int contadorRow,
 			int contadorCell) {
-		return mostrarError + errorLongitud + ". Fila: " + contadorRow
-				+ ". Columna: " + contadorCell + "\n";
+		listaErrores.add(errorLongitud + ". Fila: " + contadorRow
+				+ ". Columna: " + contadorCell + "\n");
+		return "";
 	}
 
 	@Listen("onUpload = #btnImportar")

@@ -3,7 +3,7 @@
 		border="normal" width="90%" height="auto" contentStyle="overflow:auto"
 		apply="controlador.reporte.CVentaPlan" closable="true">
 		<listbox width="100%" id="ltbLista" height="auto"
-			emptyMessage="No existen ventas cargadas" rows="15">
+			emptyMessage="No existen ventas cargadas" rows="15" mold="paging" pageSize="15">
 			<listhead>
 				<listheader label="Año" width="7.5%" />
 				<listheader label="Mes" width="7.5%" />

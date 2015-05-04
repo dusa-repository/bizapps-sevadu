@@ -204,4 +204,10 @@ public class SVenta {
 	public void eliminar(List<Venta> ventas) {
 		ventaDAO.delete(ventas);
 	}
+
+	public Double sumarPorProductoAliadoYFechas(String aliado,
+			String codigoProductoDusa, Date fechaInicio, Date fechaFin) {
+		return ventaDAO.sumByAliadoAndProductoAndFecha(aliado,
+				codigoProductoDusa, fechaInicio, fechaFin);
+	}
 }
