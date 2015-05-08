@@ -210,4 +210,16 @@ public class SVenta {
 		return ventaDAO.sumByAliadoAndProductoAndFecha(aliado,
 				codigoProductoDusa, fechaInicio, fechaFin);
 	}
+
+	public Venta buscarPorAliadoClienteProductoFechaFacturaYCantidad(
+			MaestroAliado aliado, Cliente cliente, MaestroProducto producto,
+			Date fechaFactura, String factura, float f) {
+		List<Venta> lista = ventaDAO
+				.findByMaestroAliadoAndCodigoClienteAndMaestroProductoAndFechaFacturaAndNumeroDocumentoAndCantidad(
+						aliado, cliente, producto, fechaFactura, factura, f);
+		if (!lista.isEmpty())
+			return lista.get(0);
+		else
+			return null;
+	}
 }
