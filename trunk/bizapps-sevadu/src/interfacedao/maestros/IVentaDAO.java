@@ -103,4 +103,8 @@ public interface IVentaDAO extends JpaRepository<Venta, Integer> {
 	double sumByAliadoAndMarcaAndFecha(String aliado,
 			String maestroProducto, Date fecha, Date fecha2);
 
+	List<Venta> findByMaestroAliadoAndCodigoClienteAndMaestroProductoAndFechaFacturaAndNumeroDocumentoAndCantidad(
+			MaestroAliado aliado, Cliente cliente, MaestroProducto producto,
+			Date fechaFactura, String factura, float f);
+
 }

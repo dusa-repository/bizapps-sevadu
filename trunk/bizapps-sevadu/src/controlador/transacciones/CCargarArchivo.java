@@ -2220,6 +2220,7 @@ public class CCargarArchivo extends CGenerico {
 		boolean errorLong = false;
 		if (rowIterator.hasNext()) {
 			List<Venta> ventas = new ArrayList<Venta>();
+			List<Venta> ventasRepetidas = new ArrayList<Venta>();
 			int contadorRow = 0;
 			boolean entro = false;
 			while (rowIterator.hasNext()) {
@@ -2738,6 +2739,7 @@ public class CCargarArchivo extends CGenerico {
 						&& unidad != null && fechaFactura != null
 						&& factura != null && segmentacion != null
 						&& ruta != null) {
+
 					venta.setCampoAux1(futuro1);
 					venta.setCampoAux2(futuro2);
 					venta.setCanalVentas(segmentacion);
@@ -2764,10 +2766,18 @@ public class CCargarArchivo extends CGenerico {
 					venta.setUnidadMedida(unidad);
 					venta.setZonaAliado(idZona);
 					ventas.add(venta);
+					Venta repetida = servicioVenta
+							.buscarPorAliadoClienteProductoFechaFacturaYCantidad(
+									aliado, cliente, producto, fechaFactura,
+									factura.toString(), cantidad.floatValue());
+					if (repetida != null)
+						ventasRepetidas.add(repetida);
 				}
 			}
 			if (!error && !errorLong) {
 				if (ventas.size() == contadorRow) {
+					if (!ventasRepetidas.isEmpty())
+						servicioVenta.eliminar(ventasRepetidas);
 					servicioVenta.guardarVarios(ventas);
 					guardarControlUpdate("SI", "NO", "NO", "NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
