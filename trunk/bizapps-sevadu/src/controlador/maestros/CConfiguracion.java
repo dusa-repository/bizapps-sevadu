@@ -12,6 +12,7 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Tab;
 
 import componente.Botonera;
@@ -29,6 +30,8 @@ public class CConfiguracion extends CGenerico {
 	private Datebox dtbConfiguracion;
 	@Wire
 	private Doublespinner spnPorcentaje;
+	@Wire
+	private Spinner spnMes;
 	private String nombre;
 
 	@Override
@@ -74,6 +77,7 @@ public class CConfiguracion extends CGenerico {
 				confi.setId(1);
 				confi.setInicioFyActual(dtbConfiguracion.getValue());
 				confi.setPorcentaje(spnPorcentaje.getValue().floatValue());
+				confi.setMes(spnMes.getValue());
 				servicioConfiguracion.guardar(confi);
 				msj.mensajeInformacion(Mensaje.guardado);
 				actualizarEstado();
@@ -119,6 +123,8 @@ public class CConfiguracion extends CGenerico {
 			dtbConfiguracion.setValue(actual.getInicioFyActual());
 			if (actual.getPorcentaje() != null)
 				spnPorcentaje.setValue(actual.getPorcentaje().doubleValue());
+			if (actual.getMes() != null)
+				spnMes.setValue(actual.getMes());
 		}
 	}
 

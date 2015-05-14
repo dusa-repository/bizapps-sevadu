@@ -278,6 +278,7 @@ public abstract class Catalogo<Clase> extends Window {
 	}
 
 	protected void exportar() {
+		lsbCatalogo.renderAll();
 		if (lsbCatalogo.getItemCount() != 0) {
 			String s = ";";
 			final StringBuffer sb = new StringBuffer();

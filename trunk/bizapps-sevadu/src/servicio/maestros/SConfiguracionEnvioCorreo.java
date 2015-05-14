@@ -30,4 +30,8 @@ public class SConfiguracionEnvioCorreo {
 	public void eliminarUno(long clave) {
 		envioDAO.delete(clave);
 	}
+
+	public ConfiguracionEnvioCorreo buscar(long clave) {
+		return envioDAO.findOne(clave);
+	}
 }

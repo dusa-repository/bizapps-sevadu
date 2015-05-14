@@ -35,7 +35,7 @@
 	<window title="" border="0" height="100%" width="100%" apply="arbol.CArbol">
 		<borderlayout height="100%" style="background-color:#fff;">
 			<north height="14%" class="banner">
-				<hbox width="100%" widths="12%,50%,38%">
+				<hbox width="100%" widths="8%,45%,47%">
 					<vbox width="100%">
 						<image src="../public/imagenes/generales/LogoInicio.jpg" />
 					</vbox>
@@ -48,7 +48,7 @@
 						</hbox>
 					</div>
 					<div align="center" width="100%">
-						<hbox height="100%" width="100%">
+						<hbox height="100%" width="100%" widths="10%,1%,44%,1%,44%">
 							<vbox height="100%" width="100%">
 								<separator />
 								<image id="imagenes" width="60px" height="55px" />
@@ -68,20 +68,23 @@
 								</a>
 							</vbox>
 							<separator />
-							<separator />
-							<separator />
-							<separator />
 							<vbox>
-								<listbox style="border:none" width="150px" id="ltbRoles">
-									<template name="model">
-										<listitem>
-											<listcell
-												style="border:none;font-size:14px;color:white;font-weight: bold"
-												class="gruposUsuario" label="${each.nombre}">
-											</listcell>
-										</listitem>
-									</template>
-								</listbox>
+								<hbox widths="97%,3%">
+									<listbox style="border:none" width="100%" id="ltbRoles">
+										<template name="model">
+											<listitem>
+												<listcell
+													style="border:none;font-size:14px;color:white;font-weight: bold"
+													class="gruposUsuario" label="${each.nombre}">
+												</listcell>
+											</listitem>
+										</template>
+									</listbox>
+									<button visible="false" id="btnBuscar" label=""
+										style="-webkit-border-radius: 0.7em;-moz-border-radius: 0.7em;border-radius: 0.7em;background:white;white-space: pre-line;"
+										tooltiptext="Presione para seleccionar otro aliado asociado a su usuario"
+										image="/public/imagenes/botones/buscar.png" autodisable="self" />
+								</hbox>
 							</vbox>
 						</hbox>
 					</div>
@@ -140,5 +143,7 @@
 		<menupopup id="editPopup">
 			<menuitem id="mnuItem" label="Cerrar Todas" />
 		</menupopup>
+		<div id="divCatalogoAliado"
+			tooltiptext="Seleccione el aliado para que cual desea establecer el entorno" />
 	</window>
 </zk>

@@ -40,10 +40,6 @@ public class Usuario implements Serializable {
 	@Column(name = "id_usuario", unique = true, nullable = false)
 	private long idUsuario;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="codigo_aliado", nullable=true)
-	private MaestroAliado maestroAliado;
-	
 	@Column(length = 50)
 	private String email;
 
@@ -102,6 +98,9 @@ public class Usuario implements Serializable {
 	@OneToMany(mappedBy = "usuario")
 	private List<BitacoraLogin> bitacorasLogin;
 
+	@OneToMany(mappedBy = "id.usuario")
+	private List<UsuarioAliado> usuariosAliados;
+
 	public Usuario() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -111,7 +110,7 @@ public class Usuario implements Serializable {
 			String password, byte[] imagen, boolean estado, Set<Grupo> grupos,
 			String nombre, String apellido, String segundoNombre,
 			String segundoApellido, String sexo, String telefono,
-			String direccion, MaestroAliado aliado) {
+			String direccion) {
 		super();
 		this.idUsuario = cedula;
 		this.cedula = cedulas;
@@ -129,7 +128,6 @@ public class Usuario implements Serializable {
 		this.sexo = sexo;
 		this.telefono = telefono;
 		this.direccion = direccion;
-		this.maestroAliado = aliado;
 		// this.fechaAuditoria = fechaAuditoria;
 	}
 
@@ -277,14 +275,6 @@ public class Usuario implements Serializable {
 		this.direccion = direccion;
 	}
 
-	public MaestroAliado getMaestroAliado() {
-		return maestroAliado;
-	}
-
-	public void setMaestroAliado(MaestroAliado maestroAliado) {
-		this.maestroAliado = maestroAliado;
-	}
-
 	public List<BitacoraEliminacion> getBitacorasEliminacion() {
 		return bitacorasEliminacion;
 	}
@@ -300,5 +290,13 @@ public class Usuario implements Serializable {
 
 	public void setBitacorasLogin(List<BitacoraLogin> bitacorasLogin) {
 		this.bitacorasLogin = bitacorasLogin;
+	}
+
+	public List<UsuarioAliado> getUsuariosAliados() {
+		return usuariosAliados;
+	}
+
+	public void setUsuariosAliados(List<UsuarioAliado> usuariosAliados) {
+		this.usuariosAliados = usuariosAliados;
 	}
 }

@@ -43,37 +43,46 @@
 				<separator />
 				<groupbox width="auto" class="blanco" title="" closable="false">
 					<caption label="Destinatarios" style="font-weight:bold; font-size: 13px" />
-					<hbox width="100%" widths="50%,50%">
-						<vbox width="100%" height="100%">
-							<listbox id="ltbCorreos" height="250px" width="100%"
-								emptyMessage="No hay Usuarios Registrados">
-								<listhead>
-									<listheader label="Usuario" width="50%" />
-									<listheader label="Correo" width="50%" />
-								</listhead>
-								<template name="model">
-									<listitem>
-										<listcell label="${each.primerNombre} ${each.primerApellido}">
-										</listcell>
-										<listcell label="${each.email}">
-										</listcell>
-									</listitem>
-								</template>
-							</listbox>
-							<label style="font-weight:bold;color:black;font-size:12px"
-								value="Presione doble click sobre una celda para agregar el correo a los destinatarios" />
+					<hbox width="100%" widths="48%,5%,47%">
+						<listbox id="ltbCorreos" height="250px" width="100%" mold="paging"
+							pageSize="10" emptyMessage="No hay Usuarios Registrados">
+							<listhead>
+								<listheader label="Usuario" width="50%" />
+								<listheader label="Correo" width="50%" />
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="${each.primerNombre} ${each.primerApellido}">
+									</listcell>
+									<listcell label="${each.email}">
+									</listcell>
+								</listitem>
+							</template>
+						</listbox>
+						<vbox>
+							<button class="abrir" id="pasar1"
+								image="/public/imagenes/botones/adelante.png" tooltiptext="Agregar Marca"
+								width="30px" />
+							<separator />
+							<button class="abrir" id="pasar2"
+								image="/public/imagenes/botones/atras.png" tooltiptext="Quitar Marca"
+								width="30px" />
 						</vbox>
-						<hbox width="100%" height="100%" widths="15%,85%">
-							<hbox>
-								<label class="etiqueta" value="Destinatarios:" />
-								<space />
-								<label value="*" style="font-weight:bold;color:red">
-								</label>
-							</hbox>
-							<textbox width="auto" height="250px" multiline="true"
-								class="multilinea" id="txtDestinatarios" maxlength="1000"
-								tooltiptext="Ingrese los destinatarios" />
-						</hbox>
+						<listbox id="ltbCorreosAgregados" mold="paging" pageSize="10"
+							height="250px" width="100%" emptyMessage="No ha Seleccionado Ningún correo">
+							<listhead>
+								<listheader label="Usuario" width="50%" />
+								<listheader label="Correo" width="50%" />
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="${each.primerNombre} ${each.primerApellido}">
+									</listcell>
+									<listcell label="${each.email}">
+									</listcell>
+								</listitem>
+							</template>
+						</listbox>
 					</hbox>
 				</groupbox>
 			</groupbox>

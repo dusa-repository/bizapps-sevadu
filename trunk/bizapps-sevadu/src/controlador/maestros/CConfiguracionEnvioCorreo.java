@@ -2,11 +2,13 @@ package controlador.maestros;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import modelo.maestros.ConfiguracionEnvioCorreo;
 import modelo.maestros.F0005;
+import modelo.maestros.MaestroMarca;
 import modelo.seguridad.Usuario;
 
 import org.zkoss.zk.ui.Sessions;
@@ -17,6 +19,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Tab;
@@ -38,8 +41,9 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 	private Radio rdoSi;
 	@Wire
 	private Radio rdoNo;
+
 	@Wire
-	private Textbox txtDestinatarios;
+	private Listbox ltbCorreosAgregados;
 	@Wire
 	private Div divVEnvio;
 	@Wire
@@ -56,6 +60,8 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 	Catalogo<ConfiguracionEnvioCorreo> catalogo;
 	long clave = 0;
 	private List<ConfiguracionEnvioCorreo> listaGeneral = new ArrayList<ConfiguracionEnvioCorreo>();
+	List<Usuario> correosDisponibles = new ArrayList<Usuario>();
+	List<Usuario> correosAgregados = new ArrayList<Usuario>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -70,11 +76,9 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 				map = null;
 			}
 		}
-		ltbCorreos.setModel(new ListModelList<Usuario>(servicioUsuario
-				.buscarTodos()));
+		llenarListas();
 		mostrarCatalogo();
 		cargarBuscadores();
-		txtDestinatarios.setFocus(true);
 		botonera = new Botonera() {
 
 			@Override
@@ -86,15 +90,13 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 						ConfiguracionEnvioCorreo configuracion = catalogo
 								.objetoSeleccionadoDelCatalogo();
 						clave = configuracion.getIdConfiguracion();
-						txtDestinatarios.setValue(configuracion
-								.getDestinatarios());
+						llenarListas();
 						buscadorReporte.settearCampo(servicioF0005.buscar("00",
 								"07", configuracion.getReporte()));
 						if (configuracion.isEstado())
 							rdoSi.setChecked(true);
 						else
 							rdoNo.setChecked(true);
-						txtDestinatarios.setFocus(true);
 					} else
 						msj.mensajeAlerta(Mensaje.editarSoloUno);
 				}
@@ -124,10 +126,13 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 					boolean estado = false;
 					if (rdoSi.isChecked())
 						estado = true;
+					String correos = "";
+					for (int i = 0; i < correosAgregados.size(); i++) {
+						correos += correosAgregados.get(i).getEmail() + ";";
+					}
 					ConfiguracionEnvioCorreo configuracion = new ConfiguracionEnvioCorreo(
 							clave, buscadorReporte.obtenerCaja(), estado,
-							txtDestinatarios.getValue(), fecha, tiempo,
-							nombreUsuarioSesion());
+							correos, fecha, tiempo, nombreUsuarioSesion());
 					servicioEnvio.guardar(configuracion);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
@@ -157,8 +162,10 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 													servicioEnvio
 															.eliminarVarios(eliminarLista);
 													msj.mensajeInformacion(Mensaje.eliminado);
-													listaGeneral = servicioEnvio.buscarTodosOrdenados();
-													catalogo.actualizarLista(listaGeneral, true);
+													listaGeneral = servicioEnvio
+															.buscarTodosOrdenados();
+													catalogo.actualizarLista(
+															listaGeneral, true);
 												}
 											}
 										});
@@ -180,8 +187,10 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 															.eliminarUno(clave);
 													msj.mensajeInformacion(Mensaje.eliminado);
 													limpiar();
-													listaGeneral = servicioEnvio.buscarTodosOrdenados();
-													catalogo.actualizarLista(listaGeneral, true);
+													listaGeneral = servicioEnvio
+															.buscarTodosOrdenados();
+													catalogo.actualizarLista(
+															listaGeneral, true);
 												}
 											}
 										});
@@ -216,28 +225,93 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 		botoneraEnvio.appendChild(botonera);
 	}
 
+	private void llenarListas() {
+		ConfiguracionEnvioCorreo objeto = servicioEnvio.buscar(clave);
+		List<String> lista = new ArrayList<String>();
+		if (objeto != null) {
+			String destinos[] = objeto.getDestinatarios().split(";");
+			lista = Arrays.asList(destinos);
+		}
+		if (!lista.isEmpty())
+			correosAgregados = servicioUsuario.buscarCorreosOcupados(lista);
+		else
+			correosAgregados.clear();
+		correosDisponibles = servicioUsuario.buscarCorreosLibres(lista);
+		ltbCorreos.setModel(new ListModelList<Usuario>(correosDisponibles));
+		ltbCorreosAgregados.setModel(new ListModelList<Usuario>(
+				correosAgregados));
+		listasMultiples();
+	}
+
+	private void listasMultiples() {
+		ltbCorreos.setMultiple(false);
+		ltbCorreos.setCheckmark(false);
+		ltbCorreos.setMultiple(true);
+		ltbCorreos.setCheckmark(true);
+
+		ltbCorreosAgregados.setMultiple(false);
+		ltbCorreosAgregados.setCheckmark(false);
+		ltbCorreosAgregados.setMultiple(true);
+		ltbCorreosAgregados.setCheckmark(true);
+	}
+
+	@Listen("onClick = #pasar1")
+	public void derecha() {
+		List<Listitem> listitemEliminar = new ArrayList<Listitem>();
+		List<Listitem> listItem = ltbCorreos.getItems();
+		if (listItem.size() != 0) {
+			for (int i = 0; i < listItem.size(); i++) {
+				if (listItem.get(i).isSelected()) {
+					Usuario marca = listItem.get(i).getValue();
+					correosDisponibles.remove(marca);
+					correosAgregados.add(marca);
+					ltbCorreosAgregados.setModel(new ListModelList<Usuario>(
+							correosAgregados));
+					ltbCorreosAgregados.renderAll();
+					listitemEliminar.add(listItem.get(i));
+					listItem.get(i).setSelected(false);
+				}
+			}
+		}
+		for (int i = 0; i < listitemEliminar.size(); i++) {
+			ltbCorreos.removeItemAt(listitemEliminar.get(i).getIndex());
+			ltbCorreos.renderAll();
+		}
+		listasMultiples();
+	}
+
+	@Listen("onClick = #pasar2")
+	public void izquierda() {
+		List<Listitem> listitemEliminar = new ArrayList<Listitem>();
+		List<Listitem> listItem2 = ltbCorreosAgregados.getItems();
+		if (listItem2.size() != 0) {
+			for (int i = 0; i < listItem2.size(); i++) {
+				if (listItem2.get(i).isSelected()) {
+					Usuario marca = listItem2.get(i).getValue();
+					correosAgregados.remove(marca);
+					correosDisponibles.add(0, marca);
+					ltbCorreos.setModel(new ListModelList<Usuario>(
+							correosDisponibles));
+					ltbCorreos.renderAll();
+					listitemEliminar.add(listItem2.get(i));
+					listItem2.get(i).setSelected(false);
+				}
+			}
+		}
+		for (int i = 0; i < listitemEliminar.size(); i++) {
+			ltbCorreosAgregados
+					.removeItemAt(listitemEliminar.get(i).getIndex());
+			ltbCorreosAgregados.renderAll();
+		}
+		listasMultiples();
+	}
+
 	protected boolean validar() {
 		if (clave == 0 && !camposLLenos()) {
 			msj.mensajeError(Mensaje.camposVacios);
 			return false;
-		} else {
-			if (!validarCorreos()) {
-				msj.mensajeError(Mensaje.correoInvalido);
-				return false;
-			} else
-				return true;
-		}
-	}
-
-	private boolean validarCorreos() {
-		String destinos[] = txtDestinatarios.getValue().split(";");
-		int j = 0;
-		while (j < destinos.length) {
-			if (!Validador.validarCorreo(destinos[j]))
-				return false;
-			j++;
-		}
-		return true;
+		} else
+			return true;
 	}
 
 	@Listen("onOpen = #gpxDatos")
@@ -270,8 +344,7 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 	}
 
 	private boolean camposEditando() {
-		if (txtDestinatarios.getText().compareTo("") != 0
-				|| buscadorReporte.obtenerCaja().compareTo("") != 0
+		if (buscadorReporte.obtenerCaja().compareTo("") != 0
 				|| (rdoNo.isChecked() || rdoSi.isChecked())) {
 			return true;
 		} else
@@ -279,8 +352,7 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 	}
 
 	private boolean camposLLenos() {
-		if (txtDestinatarios.getText().compareTo("") == 0
-				|| buscadorReporte.obtenerCaja().compareTo("") == 0
+		if (buscadorReporte.obtenerCaja().compareTo("") == 0
 				|| (!rdoNo.isChecked() && !rdoSi.isChecked())) {
 			return false;
 		} else
@@ -288,11 +360,11 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 	}
 
 	protected void limpiarCampos() {
-		txtDestinatarios.setValue("");
 		buscadorReporte.settearCampo(null);
 		rdoNo.setChecked(false);
 		rdoSi.setChecked(false);
 		clave = 0;
+		llenarListas();
 	}
 
 	@Listen("onClick = #gpxRegistro")
@@ -345,8 +417,7 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 	}
 
 	private void mostrarCatalogo() {
-		listaGeneral = servicioEnvio
-				.buscarTodosOrdenados();
+		listaGeneral = servicioEnvio.buscarTodosOrdenados();
 		catalogo = new Catalogo<ConfiguracionEnvioCorreo>(catalogoEnvio,
 				"Aliado", listaGeneral, false, false, false, "Reporte",
 				"Destinatarios", "Estado") {
@@ -385,13 +456,5 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 			}
 		};
 		catalogo.setParent(catalogoEnvio);
-	}
-
-	@Listen("onDoubleClick = #ltbCorreos")
-	public void pasar() {
-		String anteriores = txtDestinatarios.getValue();
-		Usuario usuario = ltbCorreos.getSelectedItem().getValue();
-		anteriores += usuario.getEmail() + ";";
-		txtDestinatarios.setValue(anteriores);
 	}
 }

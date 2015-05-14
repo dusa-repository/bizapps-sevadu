@@ -29,5 +29,7 @@ public interface IClienteDAO extends JpaRepository<Cliente, String> {
 	List<Cliente> findByMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
 			String idAliado, Date desde, Date hasta);
 
+	List<Cliente> findByMaestroAliadoCodigoAliado(String idAliado, Sort o);
+
 
 }

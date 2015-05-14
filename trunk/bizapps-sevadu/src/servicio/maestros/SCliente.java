@@ -94,4 +94,13 @@ public class SCliente {
 						idAliado, desde, hasta);
 	}
 
+	public List<Cliente> buscarPorIdAliado(String idAliado) {
+		List<String> ordenar = new ArrayList<String>();
+		Sort o;
+		ordenar.add("codigoCliente");
+		ordenar.add("nombre");
+		o = new Sort(Sort.Direction.ASC, ordenar);
+		return clienteDAO.findByMaestroAliadoCodigoAliado(idAliado, o);
+	}
+
 }

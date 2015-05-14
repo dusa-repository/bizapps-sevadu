@@ -49,9 +49,13 @@
 								<label value="*" style="font-weight:bold;color:red">
 								</label>
 							</hbox>
-							<textbox id="txtCanal" hflex="1" maxlength="50"
-								tooltiptext="Ingrese el Canal de Ventas" />
-							<hbox />
+							<cell colspan="2">
+							<combobox tooltiptext="Seleccione un Canal" placeholder="Seleccione un Canal"
+								id="cmbCanal" readonly="true" width="100%">
+								<comboitem label="ON" />
+								<comboitem label="OFF" />
+							</combobox>
+							</cell>
 							<hbox />
 						</row>
 					</rows>

@@ -125,7 +125,7 @@
 								<div id="divBuscadorZona" width="100%" />
 							</cell>
 						</row>
-						<row>
+						<row id="rowAliado">
 							<hbox>
 								<label class="etiqueta" value="Aliado:" />
 								<space />

@@ -13,6 +13,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Messagebox;
@@ -31,7 +32,7 @@ public class CTipoCliente extends CGenerico {
 	@Wire
 	private Textbox txtDescripcion;
 	@Wire
-	private Textbox txtCanal;
+	private Combobox cmbCanal;
 	@Wire
 	private Div divTipoCliente;
 	@Wire
@@ -75,7 +76,7 @@ public class CTipoCliente extends CGenerico {
 						TipoCliente tipo = catalogo
 								.objetoSeleccionadoDelCatalogo();
 						id = tipo.getCodigo();
-						txtCanal.setValue(tipo.getCanalVentas());
+						cmbCanal.setValue(tipo.getCanalVentas());
 						txtCodigo.setValue(tipo.getCodigo());
 						txtCodigo.setDisabled(true);
 						txtDescripcion.setValue(tipo.getDescripcion());
@@ -109,7 +110,7 @@ public class CTipoCliente extends CGenerico {
 					guardar = validar();
 				if (guardar) {
 					if (buscarPorId()) {
-						String canal = txtCanal.getValue();
+						String canal = cmbCanal.getValue();
 						String codigo = txtCodigo.getValue();
 						String descripcion = txtDescripcion.getValue();
 						TipoCliente tipo = new TipoCliente();
@@ -243,7 +244,7 @@ public class CTipoCliente extends CGenerico {
 
 	public void limpiarCampos() {
 		id = "";
-		txtCanal.setValue("");
+		cmbCanal.setValue("");
 		txtCodigo.setValue("");
 		txtCodigo.setDisabled(false);
 		txtDescripcion.setValue("");
@@ -273,7 +274,7 @@ public class CTipoCliente extends CGenerico {
 	}
 
 	public boolean camposLLenos() {
-		if (txtCanal.getText().compareTo("") == 0
+		if (cmbCanal.getText().compareTo("") == 0
 				|| txtCodigo.getText().compareTo("") == 0
 				|| txtDescripcion.getText().compareTo("") == 0) {
 			return false;
@@ -282,7 +283,7 @@ public class CTipoCliente extends CGenerico {
 	}
 
 	public boolean camposEditando() {
-		if (txtCanal.getText().compareTo("") != 0
+		if (cmbCanal.getText().compareTo("") != 0
 				|| txtCodigo.getText().compareTo("") != 0
 				|| txtDescripcion.getText().compareTo("") != 0) {
 			return true;
