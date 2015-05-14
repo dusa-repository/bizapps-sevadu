@@ -70,6 +70,7 @@
 				<tabbox width="100%">
 					<tabs>
 						<tab label="Datos Basicos" id="tabBasicos" />
+						<tab label="Aliados Asociados" id="tabAliados" />
 						<tab label="Datos de Usuario" id="tabUsuarios" />
 					</tabs>
 					<tabpanels>
@@ -112,21 +113,66 @@
 											tooltiptext="Ingrese el Numero de Telefono del Usuario"
 											multiline="true" />
 									</row>
-									<row>
-										<label class="etiqueta" value="Aliado:" />
-										<textbox id="txtAliado" hflex="1" maxlength="100"
-											tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
-										<button id="btnBuscarAliado" label="Buscar"
-											tooltiptext="Catalogo de Aliados" image="/public/imagenes/botones/buscar.png"
-											class="btn" autodisable="self" />
-										<label id="lblNombreAliado" />
-									</row>
 								</rows>
 							</grid>
 							<div align="right" style="float: right;">
 								<separator />
 								<button class="btn" id="btnSiguientePestanna" label="Siguiente"
 									image="/public/imagenes/botones/adelante.png" />
+							</div>
+						</tabpanel>
+						<tabpanel>
+							<separator />
+							<groupbox class="blanco" width="100%"
+								title="Seleccione los Aliados Asociados al Usuario">
+								<hbox width="100%" widths="48%,5%,47%">
+									<listbox mold="paging" pageSize="6" id="ltbAliados"
+										height="280px" width="100%" emptyMessage="No hay Aliados Registrados">
+										<listhead>
+											<listheader label="Codigo" width="25%" />
+											<listheader label="Nombre" width="75%" />
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell label="${each.codigoAliado}" />
+												<listcell label="${each.nombre}" />
+											</listitem>
+										</template>
+									</listbox>
+									<vbox>
+										<button class="abrir" id="pasar12"
+											image="/public/imagenes/botones/adelante.png" tooltiptext="Agregar Aliado"
+											width="30px" />
+										<separator />
+										<button class="abrir" id="pasar22"
+											image="/public/imagenes/botones/atras.png" tooltiptext="Quitar Aliado"
+											width="30px" />
+									</vbox>
+									<listbox id="ltbAliadosAgregados" mold="paging"
+										pageSize="6" height="280px" width="100%"
+										emptyMessage="No ha Seleccionado Ningú Aliado">
+										<listhead>
+											<listheader label="Codigo" width="25%" />
+											<listheader label="Nombre" width="75%" />
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell label="${each.codigoAliado}" />
+												<listcell label="${each.nombre}" />
+											</listitem>
+										</template>
+									</listbox>
+								</hbox>
+							</groupbox>
+							<div align="left" style="float: right;">
+								<hbox width="100%">
+									<separator />
+									<button label="Anterior" class="btn" id="btnAnteriorPestanna2"
+										image="/public/imagenes/botones/atras.png" />
+									<separator />
+									<button label="Anterior" class="btn" id="btnSiguientePestanna2"
+										image="/public/imagenes/botones/adelante.png" />
+								</hbox>
 							</div>
 						</tabpanel>
 						<tabpanel>

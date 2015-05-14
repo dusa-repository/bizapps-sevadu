@@ -1,0 +1,79 @@
+<zk>
+	<style src="../public/Estilo.css" />
+	<div id="divVConsultar" apply="controlador.mantenimiento.CConsultarBitacora"
+		width="100%">
+		<groupbox width="100%" mold="3d"
+			title="Consultar Bitacora (VConsultarBitacora)">
+			<div id="botoneraConsultar" />
+			<separator />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="true">
+				<separator />
+				<grid width="100%">
+					<columns visible="false">
+						<column label="" width="20%" />
+						<column label="" width="30%" />
+						<column label="" width="20%" />
+						<column label="" width="30%" />
+					</columns>
+					<rows>
+						<row>
+							<label class="etiqueta" value="Usuario:" />
+							<textbox id="txtUsuario" value="TODOS" hflex="1"
+								maxlength="50"
+								tooltiptext="Seleccione del Catalogo el Usuario que desea consultar" />
+							<button autodisable="self" id="btnBuscarUsuario" label="Buscar"
+								tooltiptext="Catalogo de Usuarios" image="/public/imagenes/botones/buscar.png"
+								class="btn" />
+							<label id="lblUsuario" value="TODOS" />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Desde:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red" />
+							</hbox>
+							<datebox width="100%" readonly="true" id="dtbDesde"
+								constraint="no future" onCreate="self.value = new Date()"
+								tooltiptext="Seleccione el inicio del Periodo a buscar, en caso de consultar la bitacora de eliminacion este periodo representa a la fecha de eliminacion, para caso contrario la fecha de inicio de session" />
+							<hbox>
+								<label class="etiqueta" value="Hasta:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red" />
+							</hbox>
+							<datebox width="100%" readonly="true" id="dtbHasta"
+								onCreate="self.value = new Date()"
+								tooltiptext="Seleccione el fin del Periodo a buscar, en caso de consultar la bitacora de eliminacion este periodo representa a la fecha de eliminacion, para caso contrario la fecha de inicio de session" />
+							<hbox />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Bitacora a Consultar:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<combobox tooltiptext="Seleccione un Valor" value="Ingreso al Sistema"
+								placeholder="Seleccione un Valor" id="cmbReporte" readonly="true"
+								width="100%">
+								<comboitem label="Ingreso al Sistema" />
+								<comboitem label="Eliminacion de Data" />
+							</combobox>
+							<hbox />
+							<hbox />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox id="gpxDatos" class="azul" width="auto">
+				<caption label="Registros" style="font-weight:bold; font-size: 13px;" />
+				<div id="catalogoLogin" visible="false" />
+				<div id="catalogoDelete" visible="false" />
+			</groupbox>
+			<separator />
+			<separator />
+		</groupbox>
+		<div id="divCatalogoUsuario" />
+	</div>
+</zk>

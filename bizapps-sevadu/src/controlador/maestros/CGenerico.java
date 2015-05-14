@@ -62,6 +62,7 @@ import servicio.maestros.SVenta;
 import servicio.seguridad.SArbol;
 import servicio.seguridad.SGrupo;
 import servicio.seguridad.SUsuario;
+import servicio.seguridad.SUsuarioAliado;
 import servicio.termometro.STermometro;
 import componente.Mensaje;
 
@@ -76,6 +77,8 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected SGrupo servicioGrupo;
 	@WireVariable("SUsuario")
 	protected SUsuario servicioUsuario;
+	@WireVariable("SUsuarioAliado")
+	protected SUsuarioAliado servicioUsuarioAliado;
 	@WireVariable("SF0004")
 	protected SF0004 servicioF0004;
 	@WireVariable("SF0005")

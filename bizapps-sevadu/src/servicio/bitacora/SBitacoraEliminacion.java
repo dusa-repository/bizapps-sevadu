@@ -1,7 +1,9 @@
 package servicio.bitacora;
 
-import interfacedao.bitacora.IBitacoraEliminacionDAO;
+import java.util.Date;
+import java.util.List;
 
+import interfacedao.bitacora.IBitacoraEliminacionDAO;
 import modelo.bitacora.BitacoraEliminacion;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,5 +17,11 @@ public class SBitacoraEliminacion {
 
 	public void guardar(BitacoraEliminacion eliminada) {
 		bitacoraEliminacion.save(eliminada);
+	}
+
+	public List<BitacoraEliminacion> buscarPorUsarioYFechas(String user,
+			Date desde, Date hasta) {
+		return bitacoraEliminacion.findByUsuarioLoginLikeAndFechaEliminacionBetween(user,
+				desde, hasta);
 	}
 }

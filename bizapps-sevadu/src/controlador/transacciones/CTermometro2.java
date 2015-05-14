@@ -9,6 +9,7 @@ import java.util.List;
 import modelo.maestros.MaestroAliado;
 import modelo.seguridad.Arbol;
 import modelo.seguridad.Usuario;
+import modelo.seguridad.UsuarioAliado;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -131,9 +132,13 @@ public class CTermometro2 extends CGenerico {
 						else {
 							Usuario user = servicioUsuario
 									.buscarPorLogin(nombreUsuarioSesion());
-							if (user.getMaestroAliado() != null) {
-								aliado = user.getMaestroAliado();
-							}
+							UsuarioAliado objeto = servicioUsuarioAliado
+									.buscarActivo(user);
+							if (objeto != null)
+								aliado = objeto.getId().getMaestroAliado();
+
+							else
+								aliado = null;
 						}
 						if (aliado != null) {
 
@@ -151,7 +156,7 @@ public class CTermometro2 extends CGenerico {
 							window.doModal();
 
 						} else
-							msj.mensajeError("Su usuario no esta asociado a ningun Aliado, "
+							msj.mensajeAlerta("Su usuario no esta asociado a ningun Aliado, "
 									+ "pongase en contacto con el Administrador del sistema");
 					}
 				}

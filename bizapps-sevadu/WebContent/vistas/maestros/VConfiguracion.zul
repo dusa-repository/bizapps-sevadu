@@ -32,6 +32,19 @@
 								step="1" format="#.##" constraint="min 0 max 100" />
 						</cell>
 					</row>
+					<row>
+						<hbox>
+							<label class="etiqueta" value="Meses a eliminar:" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red">
+							</label>
+						</hbox>
+						<cell colspan="3">
+							<spinner value="1" id="spnMes" width="100%"
+								tooltiptext="Ingrese los meses que pueden ser eliminados por los aliados o usuarios que no tengan la funcionalidad para eliminar sin restriccion de tiempo"
+								step="1" format="#.##" constraint="min 1 max 12" />
+						</cell>
+					</row>
 				</rows>
 			</grid>
 		</groupbox>

@@ -33,6 +33,9 @@ public class Configuracion implements Serializable {
 	@Column(name = "porcentaje")
 	private Float porcentaje;
 
+	@Column(name = "meses_a_borrar")
+	private Integer mes;
+
 	public Configuracion() {
 	}
 
@@ -58,6 +61,14 @@ public class Configuracion implements Serializable {
 
 	public void setPorcentaje(Float porcentaje) {
 		this.porcentaje = porcentaje;
+	}
+
+	public Integer getMes() {
+		return mes;
+	}
+
+	public void setMes(Integer integer) {
+		this.mes = integer;
 	}
 
 }

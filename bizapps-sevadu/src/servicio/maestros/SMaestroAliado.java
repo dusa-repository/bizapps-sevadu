@@ -17,8 +17,6 @@ public class SMaestroAliado {
 
 	@Autowired
 	private IMaestroAliadoDAO aliadoDAO;
-	@Autowired
-	private IUsuarioDAO usuarioDAO;
 
 	public boolean existe(String value) {
 		return aliadoDAO.exists(value);
@@ -43,10 +41,6 @@ public class SMaestroAliado {
 	public MaestroAliado buscar(String value) {
 		return aliadoDAO.findOne(value);
 	}
-
-//	public MaestroAliado buscarPorLoginUsuario(String nombreUsuarioSesion) {
-//		return aliadoDAO.findByUsuarioLogin(nombreUsuarioSesion);
-//	}
 
 	public List<MaestroAliado> buscarRestantes(
 			List<String> listaAliados) {

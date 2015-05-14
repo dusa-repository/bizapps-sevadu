@@ -11,7 +11,13 @@ import modelo.maestros.MaestroAliado;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.TipoCliente;
 import modelo.maestros.Venta;
+import modelo.seguridad.Arbol;
+import modelo.seguridad.Usuario;
+import modelo.seguridad.UsuarioAliado;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -21,6 +27,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Row;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 
@@ -28,6 +35,7 @@ import componente.Botonera;
 import componente.BuscadorUDC;
 import componente.Catalogo;
 import componente.Mensaje;
+import componente.Validador;
 
 public class CCartera extends CGenerico {
 
@@ -75,6 +83,8 @@ public class CCartera extends CGenerico {
 	@Wire
 	private Combobox cmbCanal;
 	@Wire
+	private Row rowAliado;
+	@Wire
 	private Div divVCartera;
 	@Wire
 	private Div botoneraCartera;
@@ -94,6 +104,8 @@ public class CCartera extends CGenerico {
 	Catalogo<Cliente> catalogo;
 	String clave = null;
 	List<Cliente> listaGeneral = new ArrayList<Cliente>();
+	String idAliado = null;
+	private boolean admin = true;
 
 	@Override
 	public void inicializar() throws IOException {
@@ -108,7 +120,21 @@ public class CCartera extends CGenerico {
 				map = null;
 			}
 		}
-		mostrarCatalogo();
+		Usuario user = servicioUsuario.buscarPorLogin(nombreUsuarioSesion());
+		UsuarioAliado objeto = servicioUsuarioAliado.buscarActivo(user);
+		if (objeto != null) {
+			idAliado = objeto.getId().getMaestroAliado().getCodigoAliado();
+			admin = false;
+			rowAliado.setVisible(false);
+		}
+		String[] titulo = { "Codigo", "Nombre", "Estado", "Vendedor",
+				"Tipo Cliente", "Aliado" };
+		String[] titulo2 = { "Codigo", "Nombre", "Estado", "Vendedor",
+				"Tipo Cliente" };
+		if (admin)
+			mostrarCatalogo(titulo);
+		else
+			mostrarCatalogo(titulo2);
 		cargarBuscadores();
 		txtCodigo.setFocus(true);
 		botonera = new Botonera() {
@@ -143,10 +169,12 @@ public class CCartera extends CGenerico {
 						buscadorSupervisor.settearCampo(servicioF0005.buscar(
 								"00", "00", cliente.getSupervisor()));
 						if (cliente.getMaestroAliado() != null) {
-							txtAliado.setValue(cliente.getMaestroAliado()
-									.getCodigoAliado());
-							lblAliado.setValue(cliente.getMaestroAliado()
-									.getNombre());
+							if (admin) {
+								txtAliado.setValue(cliente.getMaestroAliado()
+										.getCodigoAliado());
+								lblAliado.setValue(cliente.getMaestroAliado()
+										.getNombre());
+							}
 						}
 						if (cliente.getTipoCliente() != null) {
 							txtTipo.setValue(cliente.getTipoCliente()
@@ -195,8 +223,11 @@ public class CCartera extends CGenerico {
 					cliente.setSegmentacion(cmbCanal.getValue());
 					cliente.setCampo1(txtCampo1.getValue());
 					cliente.setCampo2(txtCampo2.getValue());
-					MaestroAliado aliado = servicioAliado.buscar(txtAliado
-							.getValue());
+					MaestroAliado aliado = new MaestroAliado();
+					if (admin)
+						aliado = servicioAliado.buscar(txtAliado.getValue());
+					else
+						aliado = servicioAliado.buscar(idAliado);
 					cliente.setMaestroAliado(aliado);
 					TipoCliente tipoCliente = servicioTipoCliente
 							.buscarPorCodigo(txtTipo.getValue());
@@ -389,7 +420,7 @@ public class CCartera extends CGenerico {
 				|| txtRuta.getText().compareTo("") == 0
 				|| txtDireccion.getText().compareTo("") == 0
 				|| cmbCanal.getText().compareTo("") == 0
-				|| txtAliado.getText().compareTo("") == 0
+				|| (admin && txtAliado.getText().compareTo("") == 0)
 				|| txtTipo.getText().compareTo("") == 0
 				|| buscadorCiudad.obtenerCaja().compareTo("") == 0
 				|| buscadorZona.obtenerCaja().compareTo("") == 0
@@ -409,15 +440,17 @@ public class CCartera extends CGenerico {
 	protected void limpiarCampos() {
 		txtCodigo.setValue("");
 		txtNombre.setValue("");
-		txtAliado.setValue("");
+		if (admin) {
+			txtAliado.setValue("");
+			lblAliado.setValue("");
+		}
+		lblTipo.setValue("");
 		txtCampo1.setValue("");
 		txtCampo2.setValue("");
 		txtDireccion.setValue("");
 		txtRif.setValue("");
 		txtRuta.setValue("");
 		txtTipo.setValue("");
-		lblAliado.setValue("");
-		lblTipo.setValue("");
 		cmbCanal.setValue("");
 		buscadorCiudad.settearCampo(null);
 		buscadorEstado.settearCampo(null);
@@ -426,7 +459,7 @@ public class CCartera extends CGenerico {
 		buscadorSupervisor.settearCampo(null);
 		clave = null;
 	}
-	
+
 	@Listen("onClick = #gpxRegistro")
 	public void abrirRegistro() {
 		gpxDatos.setOpen(false);
@@ -518,11 +551,13 @@ public class CCartera extends CGenerico {
 		divBuscadorCiudad.appendChild(buscadorCiudad);
 	}
 
-	private void mostrarCatalogo() {
-		listaGeneral = servicioCliente.buscarTodosOrdenados();
+	private void mostrarCatalogo(String[] titulo) {
+		if (admin)
+			listaGeneral = servicioCliente.buscarTodosOrdenados();
+		else
+			listaGeneral = servicioCliente.buscarPorIdAliado(idAliado);
 		catalogo = new Catalogo<Cliente>(catalogoCartera, "Cartera",
-				listaGeneral, false, false, false, "Codigo", "Nombre",
-				"Aliado", "Estado", "Vendedor", "Tipo Cliente") {
+				listaGeneral, false, false, false, titulo) {
 
 			@Override
 			protected List<Cliente> buscar(List<String> valores) {
@@ -530,21 +565,37 @@ public class CCartera extends CGenerico {
 				List<Cliente> lista = new ArrayList<Cliente>();
 
 				for (Cliente objeto : listaGeneral) {
-					if (objeto.getCodigoCliente().toLowerCase()
-							.contains(valores.get(0).toLowerCase())
-							&& objeto.getNombre().toLowerCase()
-									.contains(valores.get(1).toLowerCase())
-							&& objeto.getMaestroAliado().getNombre()
-									.toLowerCase()
-									.contains(valores.get(2).toLowerCase())
-							&& objeto.getEstado().toLowerCase()
-									.contains(valores.get(3).toLowerCase())
-							&& objeto.getVendedor().toLowerCase()
-									.contains(valores.get(4).toLowerCase())
-							&& objeto.getTipoCliente().getDescripcion()
-									.toLowerCase()
-									.contains(valores.get(5).toLowerCase())) {
-						lista.add(objeto);
+					if (admin) {
+						if (objeto.getCodigoCliente().toLowerCase()
+								.contains(valores.get(0).toLowerCase())
+								&& objeto.getNombre().toLowerCase()
+										.contains(valores.get(1).toLowerCase())
+								&& objeto.getEstado().toLowerCase()
+										.contains(valores.get(2).toLowerCase())
+								&& objeto.getVendedor().toLowerCase()
+										.contains(valores.get(3).toLowerCase())
+								&& objeto.getTipoCliente().getDescripcion()
+										.toLowerCase()
+										.contains(valores.get(4).toLowerCase())
+								&& objeto.getMaestroAliado().getNombre()
+										.toLowerCase()
+										.contains(valores.get(5).toLowerCase())) {
+							lista.add(objeto);
+						}
+					} else {
+						if (objeto.getCodigoCliente().toLowerCase()
+								.contains(valores.get(0).toLowerCase())
+								&& objeto.getNombre().toLowerCase()
+										.contains(valores.get(1).toLowerCase())
+								&& objeto.getEstado().toLowerCase()
+										.contains(valores.get(2).toLowerCase())
+								&& objeto.getVendedor().toLowerCase()
+										.contains(valores.get(3).toLowerCase())
+								&& objeto.getTipoCliente().getDescripcion()
+										.toLowerCase()
+										.contains(valores.get(4).toLowerCase())) {
+							lista.add(objeto);
+						}
 					}
 				}
 				return lista;
@@ -555,10 +606,11 @@ public class CCartera extends CGenerico {
 				String[] registros = new String[6];
 				registros[0] = objeto.getCodigoCliente();
 				registros[1] = objeto.getNombre();
-				registros[2] = objeto.getMaestroAliado().getNombre();
-				registros[3] = objeto.getEstado();
-				registros[4] = objeto.getVendedor();
-				registros[5] = objeto.getTipoCliente().getDescripcion();
+				registros[2] = objeto.getEstado();
+				registros[3] = objeto.getVendedor();
+				registros[4] = objeto.getTipoCliente().getDescripcion();
+				if (admin)
+					registros[5] = objeto.getMaestroAliado().getNombre();
 				return registros;
 			}
 		};

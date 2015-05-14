@@ -141,14 +141,14 @@ public class AngularVenta extends Charts {
 		if(tope > 0)
 			porcentaje = vendido*100/tope;
 		
-		this.getPlotOptions().getGauge().getTooltip().setValueSuffix(" cajas (" + porcentaje + "%)");
+		this.getPlotOptions().getGauge().getTooltip().setValueSuffix(" cajas <b>(" + porcentaje + "%)</b>");
 		this.getSeries().setName("Cajas Vendidas");
 		this.getYAxis().getTitle().setText("Numero de Cajas");
 		this.setTitle("Vendido VS Planificado(Obj):" + " desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
 		this.setSubtitle("Aliado: " + aliado.getNombre() + " ("
-				+ aliado.getCodigoAliado() + ") ("+ porcentaje+"%) de Ventas");
+				+ aliado.getCodigoAliado() + ") <b>("+ porcentaje+"%)</b> de Ventas");
 		// }
 
 		if (ventas.isEmpty())

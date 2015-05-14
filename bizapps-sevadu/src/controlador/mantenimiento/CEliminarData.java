@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import modelo.bitacora.BitacoraEliminacion;
 import modelo.maestros.Cliente;
+import modelo.maestros.Configuracion;
 import modelo.maestros.Existencia;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MarcaActivadaVendedor;
@@ -17,6 +19,7 @@ import modelo.maestros.PlanVenta;
 import modelo.maestros.Venta;
 import modelo.seguridad.Arbol;
 import modelo.seguridad.Usuario;
+import modelo.seguridad.UsuarioAliado;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,6 +29,7 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
@@ -38,7 +42,6 @@ import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
-
 import controlador.maestros.CGenerico;
 
 public class CEliminarData extends CGenerico {
@@ -62,6 +65,16 @@ public class CEliminarData extends CGenerico {
 	@Wire
 	private Combobox cmbTabla;
 	@Wire
+	private Comboitem cimVentas;
+	@Wire
+	private Comboitem cimExistencia;
+	@Wire
+	private Comboitem cimPlan;
+	@Wire
+	private Comboitem cimCartera;
+	@Wire
+	private Comboitem cimActivacion;
+	@Wire
 	private Datebox dtbDesde;
 	@Wire
 	private Datebox dtbHasta;
@@ -77,26 +90,48 @@ public class CEliminarData extends CGenerico {
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(
 				authe.getAuthorities());
 		Usuario user = servicioUsuario.buscarPorLogin(nombreUsuarioSesion());
-		if (user.getMaestroAliado() != null) {
-			idAliado = user.getMaestroAliado().getCodigoAliado();
-			Date hoy = new Date();
-			dtbDesde.setConstraint("between" + formatoMesAnno.format(hoy)
-					+ "01 and" + formatoSimple.format(hoy));
-			dtbHasta.setConstraint("between" + formatoMesAnno.format(hoy)
-					+ "01 and" + formatoSimple.format(hoy));
-		}
+		UsuarioAliado objeto = servicioUsuarioAliado.buscarActivo(user);
+		if (objeto != null)
+			idAliado = objeto.getId().getMaestroAliado().getCodigoAliado();
+		boolean eliminarTodo = false;
 		for (int i = 0; i < authorities.size(); i++) {
 			Arbol arbol;
 			String nombre = authorities.get(i).toString();
 			if (Validador.validarNumero(nombre)) {
 				arbol = servicioArbol.buscar(Long.parseLong(nombre));
-				if (arbol.getNombre().equals("Ver Aliados Eliminar Data")) {
+				if (arbol.getNombre().equals("Ver Aliados Eliminar Data"))
 					rowAliado.setVisible(true);
-
-				}
+				if (arbol.getNombre().equals("Eliminar Data Ventas"))
+					cimVentas.setVisible(true);
+				if (arbol.getNombre().equals("Eliminar Data Plan Ventas"))
+					cimPlan.setVisible(true);
+				if (arbol.getNombre().equals("Eliminar Data Existencia"))
+					cimExistencia.setVisible(true);
+				if (arbol.getNombre().equals("Eliminar Data Cartera"))
+					cimCartera.setVisible(true);
+				if (arbol.getNombre().equals("Eliminar Data Activacion"))
+					cimActivacion.setVisible(true);
+				if (arbol.getNombre().equals("Eliminar Data sin Restriccion"))
+					eliminarTodo = true;
 			}
 		}
-
+		if (!eliminarTodo) {
+			Configuracion actual = servicioConfiguracion.buscar(1);
+			Integer mes = 1;
+			if (actual != null)
+				if (actual.getMes() != null)
+					mes = actual.getMes();
+			Date hoy = new Date();
+			Date ayer = new Date();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(ayer);
+			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - mes);
+			ayer = calendar.getTime();
+			dtbDesde.setConstraint("between" + formatoSimple.format(ayer)
+					+ " and" + formatoSimple.format(hoy));
+			dtbHasta.setConstraint("between" + formatoSimple.format(ayer)
+					+ " and" + formatoSimple.format(hoy));
+		}
 		HashMap<String, Object> map = (HashMap<String, Object>) Sessions
 				.getCurrent().getAttribute("mapaGeneral");
 		if (map != null) {

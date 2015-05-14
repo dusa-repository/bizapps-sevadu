@@ -13,8 +13,11 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import modelo.maestros.MaestroAliado;
+import modelo.maestros.MaestroMarca;
+import modelo.pk.UsuarioAliadoPK;
 import modelo.seguridad.Grupo;
 import modelo.seguridad.Usuario;
+import modelo.seguridad.UsuarioAliado;
 
 import org.zkoss.image.AImage;
 import org.zkoss.util.media.Media;
@@ -57,6 +60,8 @@ public class CUsuario extends CGenerico {
 	@Wire
 	private Tab tabUsuarios;
 	@Wire
+	private Tab tabAliados;
+	@Wire
 	private Div divUsuario;
 	@Wire
 	private Div botoneraUsuario;
@@ -93,25 +98,21 @@ public class CUsuario extends CGenerico {
 	@Wire
 	private Listbox ltbGruposAgregados;
 	@Wire
+	private Listbox ltbAliados;
+	@Wire
+	private Listbox ltbAliadosAgregados;
+	@Wire
 	private Radiogroup rdbSexoUsuario;
 	@Wire
 	private Radio rdoSexoFUsuario;
 	@Wire
 	private Radio rdoSexoMUsuario;
 	@Wire
-	private Textbox txtAliado;
-	@Wire
-	private Button btnBuscarAliado;
-	@Wire
-	private Label lblNombreAliado;
-	@Wire
 	private Image imagen;
 	@Wire
 	private Fileupload fudImagenUsuario;
 	@Wire
 	private Media media;
-	@Wire
-	private Div divCatalogoAliado;
 	Botonera botonera;
 	@Wire
 	private Groupbox gpxDatos;
@@ -121,7 +122,8 @@ public class CUsuario extends CGenerico {
 	Catalogo<Usuario> catalogo;
 	List<Grupo> gruposDisponibles = new ArrayList<Grupo>();
 	List<Grupo> gruposOcupados = new ArrayList<Grupo>();
-	Catalogo<MaestroAliado> catalogoAliado;
+	List<MaestroAliado> aliados = new ArrayList<MaestroAliado>();
+	List<MaestroAliado> aliadosOcupados = new ArrayList<MaestroAliado>();
 	URL url = getClass().getResource("usuario.png");
 
 	@Override
@@ -187,12 +189,6 @@ public class CUsuario extends CGenerico {
 						txtCedulaUsuario.setDisabled(true);
 						id = usuario.getIdUsuario();
 						llenarListas(usuario);
-						if (usuario.getMaestroAliado() != null) {
-							lblNombreAliado.setValue(usuario.getMaestroAliado()
-									.getNombre());
-							txtAliado.setValue(usuario.getMaestroAliado()
-									.getCodigoAliado());
-						}
 					} else
 						msj.mensajeAlerta(Mensaje.editarSoloUno);
 				}
@@ -248,20 +244,17 @@ public class CUsuario extends CGenerico {
 							}
 							imagenUsuario = imagen.getContent().getByteData();
 						}
-
-						MaestroAliado aliado = new MaestroAliado();
-						if (txtAliado.getValue().compareTo("") != 0)
-							aliado = servicioAliado
-									.buscar(txtAliado.getValue());
-						else
-							aliado = null;
-
 						Usuario usuario = new Usuario(id, cedula, correo,
 								login, password, imagenUsuario, true,
 								gruposUsuario, nombre, apellido, nombre2,
-								apellido2, sexo, telefono, direccion, aliado);
+								apellido2, sexo, telefono, direccion);
 
 						servicioUsuario.guardar(usuario);
+						if (id != 0)
+							usuario = servicioUsuario.buscar(id);
+						else
+							usuario = servicioUsuario.buscarUltimo();
+						guardarAliados(usuario);
 						limpiar();
 						msj.mensajeInformacion(Mensaje.guardado);
 						catalogo.actualizarLista(servicioUsuario.buscarTodos(),
@@ -361,6 +354,22 @@ public class CUsuario extends CGenerico {
 		botoneraUsuario.appendChild(botonera);
 	}
 
+	protected void guardarAliados(Usuario usuario) {
+		List<UsuarioAliado> lista = new ArrayList<UsuarioAliado>();
+		servicioUsuarioAliado.limpiarAliados(usuario);
+		for (int i = 0; i < aliadosOcupados.size(); i++) {
+			boolean estado = false;
+			if (i == 0)
+				estado = true;
+			UsuarioAliadoPK clave = new UsuarioAliadoPK();
+			clave.setMaestroAliado(aliadosOcupados.get(i));
+			clave.setUsuario(usuario);
+			UsuarioAliado usuarioAliado = new UsuarioAliado(clave, estado);
+			lista.add(usuarioAliado);
+		}
+		servicioUsuarioAliado.guardarVarios(lista);
+	}
+
 	public void mostrarBotones(boolean bol) {
 		botonera.getChildren().get(1).setVisible(!bol);
 		botonera.getChildren().get(2).setVisible(bol);
@@ -396,6 +405,8 @@ public class CUsuario extends CGenerico {
 	public void limpiarCampos() {
 		ltbGruposAgregados.getItems().clear();
 		ltbGruposDisponibles.getItems().clear();
+		ltbAliados.getItems().clear();
+		ltbAliadosAgregados.getItems().clear();
 		txtApellidoUsuario.setValue("");
 		txtApellido2Usuario.setValue("");
 		txtCedulaUsuario.setValue("");
@@ -410,14 +421,16 @@ public class CUsuario extends CGenerico {
 		txtTelefonoUsuario.setValue("");
 		rdoSexoFUsuario.setChecked(false);
 		rdoSexoMUsuario.setChecked(false);
-		txtAliado.setValue("");
-		lblNombreAliado.setValue("");
 		try {
 			imagen.setContent(new AImage(url));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		id = 0;
+		aliados.clear();
+		aliadosOcupados.clear();
+		gruposDisponibles.clear();
+		gruposOcupados.clear();
 		llenarListas(null);
 	}
 
@@ -550,6 +563,11 @@ public class CUsuario extends CGenerico {
 						gruposDisponibles));
 			}
 		}
+		aliadosOcupados = servicioUsuarioAliado.buscarOcupados(usuario);
+		aliados = servicioUsuarioAliado.buscarLibres(aliadosOcupados);
+		ltbAliadosAgregados.setModel(new ListModelList<MaestroAliado>(
+				aliadosOcupados));
+		ltbAliados.setModel(new ListModelList<MaestroAliado>(aliados));
 		ltbGruposAgregados.setMultiple(false);
 		ltbGruposAgregados.setCheckmark(false);
 		ltbGruposAgregados.setMultiple(true);
@@ -559,6 +577,8 @@ public class CUsuario extends CGenerico {
 		ltbGruposDisponibles.setCheckmark(false);
 		ltbGruposDisponibles.setMultiple(true);
 		ltbGruposDisponibles.setCheckmark(true);
+
+		listasMultiples();
 	}
 
 	/* Permite subir una imagen a la vista */
@@ -632,12 +652,24 @@ public class CUsuario extends CGenerico {
 	/* Abre la pestanna de datos de usuario */
 	@Listen("onClick = #btnSiguientePestanna")
 	public void siguientePestanna() {
-		tabUsuarios.setSelected(true);
+		tabAliados.setSelected(true);
 	}
 
 	/* Abre la pestanna de datos basicos */
 	@Listen("onClick = #btnAnteriorPestanna")
 	public void anteriorPestanna() {
+		tabAliados.setSelected(true);
+	}
+
+	/* Abre la pestanna de datos de usuario */
+	@Listen("onClick = #btnSiguientePestanna2")
+	public void siguientePestanna2() {
+		tabUsuarios.setSelected(true);
+	}
+
+	/* Abre la pestanna de datos basicos */
+	@Listen("onClick = #btnAnteriorPestanna2")
+	public void anteriorPestanna2() {
 		tabBasicos.setSelected(true);
 	}
 
@@ -646,7 +678,7 @@ public class CUsuario extends CGenerico {
 		catalogo = new Catalogo<Usuario>(catalogoUsuario, "Usuario", usuario,
 				false, false, false, "Cedula", "Correo", "Primer Nombre",
 				"Segundo Nombre", "Primer Apellido", "Segundo Apellido",
-				"Sexo", "Telefono", "Direccion", "Aliado Asociado") {
+				"Sexo", "Telefono", "Direccion") {
 
 			@Override
 			protected List<Usuario> buscar(List<String> valores) {
@@ -654,10 +686,6 @@ public class CUsuario extends CGenerico {
 				List<Usuario> user = new ArrayList<Usuario>();
 
 				for (Usuario actividadord : usuario) {
-					String nombreAliado = "N/A";
-					if (actividadord.getMaestroAliado() != null)
-						nombreAliado = actividadord.getMaestroAliado()
-								.getNombre();
 					if (actividadord.getCedula().toLowerCase()
 							.contains(valores.get(0).toLowerCase())
 							&& actividadord.getEmail().toLowerCase()
@@ -675,9 +703,7 @@ public class CUsuario extends CGenerico {
 							&& actividadord.getTelefono().toLowerCase()
 									.contains(valores.get(7).toLowerCase())
 							&& actividadord.getDireccion().toLowerCase()
-									.contains(valores.get(8).toLowerCase())
-							&& nombreAliado.toLowerCase().contains(
-									valores.get(9).toLowerCase())) {
+									.contains(valores.get(8).toLowerCase())) {
 
 						user.add(actividadord);
 					}
@@ -687,10 +713,7 @@ public class CUsuario extends CGenerico {
 
 			@Override
 			protected String[] crearRegistros(Usuario usuarios) {
-				String nombreAliado = "N/A";
-				if (usuarios.getMaestroAliado() != null)
-					nombreAliado = usuarios.getMaestroAliado().getNombre();
-				String[] registros = new String[10];
+				String[] registros = new String[9];
 				registros[0] = usuarios.getCedula();
 				registros[1] = usuarios.getEmail();
 				registros[2] = usuarios.getPrimerNombre();
@@ -700,7 +723,6 @@ public class CUsuario extends CGenerico {
 				registros[6] = usuarios.getSexo();
 				registros[7] = usuarios.getTelefono();
 				registros[8] = usuarios.getDireccion();
-				registros[9] = nombreAliado;
 				return registros;
 			}
 
@@ -727,68 +749,68 @@ public class CUsuario extends CGenerico {
 		}
 	}
 
-	@Listen("onClick = #btnBuscarAliado")
-	public void mostrarCatalogoAliado() {
-		final List<MaestroAliado> listaObjetos = servicioAliado
-				.buscarTodosOrdenados();
-		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
-				"Catalogo de Aliados", listaObjetos, true, false, false,
-				"Codigo", "Nombre", "Zona", "Vendedor") {
-
-			@Override
-			protected List<MaestroAliado> buscar(List<String> valores) {
-
-				List<MaestroAliado> lista = new ArrayList<MaestroAliado>();
-
-				for (MaestroAliado objeto : listaObjetos) {
-					if (objeto.getCodigoAliado().toLowerCase()
-							.contains(valores.get(0).toLowerCase())
-							&& objeto.getNombre().toLowerCase()
-									.contains(valores.get(1).toLowerCase())
-							&& objeto.getDescripcionZona().toLowerCase()
-									.contains(valores.get(2).toLowerCase())
-							&& objeto.getDescripcionVendedor().toLowerCase()
-									.contains(valores.get(3).toLowerCase())) {
-						lista.add(objeto);
-					}
+	@Listen("onClick = #pasar12")
+	public void derecha() {
+		List<Listitem> listitemEliminar = new ArrayList<Listitem>();
+		List<Listitem> listItem = ltbAliados.getItems();
+		if (listItem.size() != 0) {
+			for (int i = 0; i < listItem.size(); i++) {
+				if (listItem.get(i).isSelected()) {
+					MaestroAliado marca = listItem.get(i).getValue();
+					aliados.remove(marca);
+					aliadosOcupados.add(marca);
+					ltbAliadosAgregados
+							.setModel(new ListModelList<MaestroAliado>(
+									aliadosOcupados));
+					ltbAliadosAgregados.renderAll();
+					listitemEliminar.add(listItem.get(i));
+					listItem.get(i).setSelected(false);
 				}
-				return lista;
 			}
-
-			@Override
-			protected String[] crearRegistros(MaestroAliado objeto) {
-				String[] registros = new String[4];
-				registros[0] = objeto.getCodigoAliado();
-				registros[1] = objeto.getNombre();
-				registros[2] = objeto.getDescripcionZona();
-				registros[3] = objeto.getDescripcionVendedor();
-				return registros;
-			}
-		};
-		catalogoAliado.setClosable(true);
-		catalogoAliado.setWidth("80%");
-		catalogoAliado.setParent(divCatalogoAliado);
-		catalogoAliado.doModal();
-	}
-
-	@Listen("onSeleccion = #divCatalogoAliado")
-	public void seleccionAliado() {
-		MaestroAliado aliado = catalogoAliado.objetoSeleccionadoDelCatalogo();
-		txtAliado.setValue(aliado.getCodigoAliado());
-		lblNombreAliado.setValue(aliado.getNombre());
-		catalogoAliado.setParent(null);
-	}
-
-	@Listen("onChange = #txtAliado; onOK=#txtAliado")
-	public void buscarNombreAliado() {
-		MaestroAliado aliado = servicioAliado.buscar(txtAliado.getValue());
-		if (aliado != null) {
-			txtAliado.setValue(aliado.getCodigoAliado());
-			lblNombreAliado.setValue(aliado.getNombre());
-		} else {
-			msj.mensajeAlerta(Mensaje.noHayRegistros);
-			txtAliado.setValue("");
-			txtAliado.setFocus(true);
 		}
+		for (int i = 0; i < listitemEliminar.size(); i++) {
+			ltbAliados.removeItemAt(listitemEliminar.get(i).getIndex());
+			ltbAliados.renderAll();
+		}
+		listasMultiples();
+	}
+
+	@Listen("onClick = #pasar22")
+	public void izquierda() {
+		List<Listitem> listitemEliminar = new ArrayList<Listitem>();
+		List<Listitem> listItem2 = ltbAliadosAgregados.getItems();
+		if (listItem2.size() != 0) {
+			for (int i = 0; i < listItem2.size(); i++) {
+				if (listItem2.get(i).isSelected()) {
+					MaestroAliado marca = listItem2.get(i).getValue();
+					aliadosOcupados.remove(marca);
+					aliados.add(0, marca);
+					ltbAliados.setModel(new ListModelList<MaestroAliado>(
+							aliados));
+					ltbAliados.renderAll();
+					listitemEliminar.add(listItem2.get(i));
+					listItem2.get(i).setSelected(false);
+				}
+			}
+		}
+		for (int i = 0; i < listitemEliminar.size(); i++) {
+			ltbAliadosAgregados
+					.removeItemAt(listitemEliminar.get(i).getIndex());
+			ltbAliadosAgregados.renderAll();
+		}
+		listasMultiples();
+	}
+
+	private void listasMultiples() {
+		ltbAliados.setMultiple(false);
+		ltbAliados.setCheckmark(false);
+		ltbAliados.setMultiple(true);
+		ltbAliados.setCheckmark(true);
+
+		ltbAliadosAgregados.setMultiple(false);
+		ltbAliadosAgregados.setCheckmark(false);
+		ltbAliadosAgregados.setMultiple(true);
+		ltbAliadosAgregados.setCheckmark(true);
+
 	}
 }

@@ -15,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import modelo.seguridad.Usuario;
+import modelo.seguridad.UsuarioAliado;
 
 /**
  * The persistent class for the maestro_aliado database table.
@@ -29,9 +30,6 @@ public class MaestroAliado implements Serializable {
 	@Id
 	@Column(name = "codigo_aliado")
 	private String codigoAliado;
-
-	@OneToMany(mappedBy = "maestroAliado")
-	private List<Usuario> usuarios;
 
 	@Column(name = "ciudad_aliado")
 	private String ciudadAliado;
@@ -88,6 +86,9 @@ public class MaestroAliado implements Serializable {
 	// bi-directional many-to-one association to MappingProducto
 	@OneToMany(mappedBy = "id.maestroAliado")
 	private List<MappingProducto> mappingProductos;
+	
+	@OneToMany(mappedBy = "id.maestroAliado")
+	private List<UsuarioAliado> usuariosAliados;
 
 	// bi-directional many-to-one association to PlanVenta
 	@OneToMany(mappedBy = "id.maestroAliado")
@@ -343,20 +344,20 @@ public class MaestroAliado implements Serializable {
 		this.activaciones = activaciones;
 	}
 
-	public List<Usuario> getUsuarios() {
-		return usuarios;
-	}
-
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
-	}
-
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public List<UsuarioAliado> getUsuariosAliados() {
+		return usuariosAliados;
+	}
+
+	public void setUsuariosAliados(List<UsuarioAliado> usuariosAliados) {
+		this.usuariosAliados = usuariosAliados;
 	}
 
 }

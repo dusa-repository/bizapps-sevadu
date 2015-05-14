@@ -10,6 +10,7 @@ import modelo.maestros.MaestroAliado;
 import modelo.maestros.MappingProducto;
 import modelo.seguridad.Arbol;
 import modelo.seguridad.Usuario;
+import modelo.seguridad.UsuarioAliado;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -320,9 +321,13 @@ public class CMapping extends CGenerico {
 				else {
 					Usuario user = servicioUsuario
 							.buscarPorLogin(nombreUsuarioSesion());
-					if (user.getMaestroAliado() != null) {
-						aliado = user.getMaestroAliado();
-					}
+					UsuarioAliado objeto = servicioUsuarioAliado
+							.buscarActivo(user);
+					if (objeto != null)
+						aliado = objeto.getId().getMaestroAliado();
+					else
+						aliado = null;
+
 				}
 				if (aliado != null) {
 					switch (tipo) {
@@ -338,7 +343,7 @@ public class CMapping extends CGenerico {
 					}
 					catalogo.actualizarLista(lista, false);
 				} else
-					msj.mensajeError("Su usuario no esta asociado a ningun Aliado, pongase en contacto con el Administrador del sistema");
+					msj.mensajeAlerta("Su usuario no esta asociado a ningun Aliado, pongase en contacto con el Administrador del sistema");
 			}
 		}
 	}
@@ -359,6 +364,6 @@ public class CMapping extends CGenerico {
 		rdoTodos = radio3;
 		btnRefrescar = btnRefrescar2;
 		Events.postEvent("onClick", btnRefrescar, null);
-//		refrescar();
+		// refrescar();
 	}
 }

@@ -19,11 +19,11 @@
 							<combobox tooltiptext="Seleccione la Tabla a la cual desea eliminar data"
 								placeholder="Seleccione una Tabla" id="cmbTabla" readonly="true"
 								width="100%">
-								<comboitem label="Ventas" />
-								<comboitem label="Plan de Ventas" />
-								<comboitem label="Existencia" />
-								<comboitem label="Cartera de Clientes" />
-								<comboitem label="Activacion de Marca" />
+								<comboitem label="Ventas" id="cimVentas" visible="false"/>
+								<comboitem label="Plan de Ventas" id="cimPlan" visible="false"/>
+								<comboitem label="Existencia" id="cimExistencia" visible="false"/>
+								<comboitem label="Cartera de Clientes" id="cimCartera" visible="false"/>
+								<comboitem label="Activacion de Marca" id="cimActivacion" visible="false"/>
 							</combobox>
 						</cell>
 						<hbox />

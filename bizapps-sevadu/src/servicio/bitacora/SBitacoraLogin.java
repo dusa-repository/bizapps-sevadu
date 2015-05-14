@@ -1,7 +1,9 @@
 package servicio.bitacora;
 
-import interfacedao.bitacora.IBitacoraLoginDAO;
+import java.util.Date;
+import java.util.List;
 
+import interfacedao.bitacora.IBitacoraLoginDAO;
 import modelo.bitacora.BitacoraLogin;
 import modelo.seguridad.Usuario;
 
@@ -20,12 +22,18 @@ public class SBitacoraLogin {
 
 	public BitacoraLogin buscarUltimo(Usuario u) {
 		long id = bitacoraLogin.buscarUltimoLoginDeUsuario(u);
-		if(id !=0)
+		if (id != 0)
 			return bitacoraLogin.findOne(id);
 		return null;
 	}
 
 	public BitacoraLogin buscarPorId(long idSession) {
 		return bitacoraLogin.findOne(idSession);
+	}
+
+	public List<BitacoraLogin> buscarPorUsarioYFechas(String user, Date desde,
+			Date hasta) {
+		return bitacoraLogin.findByUsuarioLoginLikeAndFechaIngresoBetween(user,
+				desde, hasta);
 	}
 }

@@ -28,6 +28,7 @@ import modelo.maestros.MaestroMarca;
 import modelo.seguridad.Arbol;
 import modelo.seguridad.Grupo;
 import modelo.seguridad.Usuario;
+import modelo.seguridad.UsuarioAliado;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +37,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.zkoss.image.AImage;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -46,6 +48,7 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.A;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Cell;
 import org.zkoss.zul.Center;
 import org.zkoss.zul.Div;
@@ -67,6 +70,7 @@ import org.zkoss.zul.West;
 
 import componente.AngularActivacion;
 import componente.AngularVenta;
+import componente.Catalogo;
 import componente.Validador;
 import controlador.maestros.CGenerico;
 
@@ -90,6 +94,8 @@ public class CArbol extends CGenerico {
 	@Wire
 	private West west;
 	@Wire
+	private Button btnBuscar;
+	@Wire
 	private Listbox ltbRoles;
 	@Wire
 	private Label lblUsuario;
@@ -97,6 +103,8 @@ public class CArbol extends CGenerico {
 	private Groupbox grxGrafico;
 	@Wire
 	private Div divGrafico;
+	@Wire
+	private Div divCatalogoAliado;
 	@Wire
 	private Center center;
 	@Wire
@@ -107,6 +115,7 @@ public class CArbol extends CGenerico {
 	private boolean unAngular = false;
 	HashMap<String, Object> mapGeneral = new HashMap<String, Object>();
 	long idSession = 0;
+	Catalogo<UsuarioAliado> catalogo;
 
 	@Override
 	public void inicializar() throws IOException {
@@ -115,9 +124,9 @@ public class CArbol extends CGenerico {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		Usuario u = servicioUsuario.buscarUsuarioPorNombre(auth.getName());
-		if (u.getMaestroAliado() != null) {
-			lblUsuario.setValue("Aliado: " + u.getMaestroAliado().getNombre());
-		}
+		if (servicioUsuarioAliado.buscarPorUsuario(nombreUsuarioSesion())
+				.size() > 1)
+			btnBuscar.setVisible(true);
 		List<Grupo> grupos = servicioGrupo.buscarGruposUsuario(u);
 		ltbRoles.setModel(new ListModelList<Grupo>(grupos));
 		if (u.getImagen() == null) {
@@ -143,6 +152,16 @@ public class CArbol extends CGenerico {
 		login = servicioBitacoraLogin.buscarUltimo(u);
 		if (login != null)
 			idSession = login.getIdLogin();
+		llenarDatosAliado(u);
+
+	}
+
+	private void llenarDatosAliado(Usuario u) {
+		UsuarioAliado objeto = servicioUsuarioAliado.buscarActivo(u);
+		if (objeto != null) {
+			lblUsuario.setValue("Aliado: "
+					+ objeto.getId().getMaestroAliado().getNombre());
+		}
 		Date fechaHoy = new Date();
 		DateFormat formatoNuevo = new SimpleDateFormat("MM-yyyy");
 		String parteFecha = "01-" + formatoNuevo.format(fechaHoy);
@@ -170,11 +189,10 @@ public class CArbol extends CGenerico {
 		int habilesTotal = obtenerDiasHabiles(fechaPrimero, fechaUltimo);
 		if (unAngular) {
 			center.setStyle("background-image: none;");
-			Usuario usuario = servicioUsuario
-					.buscarPorLogin(nombreUsuarioSesion());
-			if (usuario.getMaestroAliado() != null) {
-				pintarGraficasAliado(usuario.getMaestroAliado(), fechaPrimero,
-						fechaHoy, fechaUltimo, habilesHoy, habilesTotal);
+			if (objeto != null) {
+				pintarGraficasAliado(objeto.getId().getMaestroAliado(),
+						fechaPrimero, fechaHoy, fechaUltimo, habilesHoy,
+						habilesTotal);
 			}
 		}
 		if (todosAngular) {
@@ -182,16 +200,8 @@ public class CArbol extends CGenerico {
 					habilesHoy, habilesTotal);
 			center.setStyle("background-image: none;");
 		}
-	}
 
-	// @Listen("onClick = #cerrar")
-	// public void tomarDatosSalida() {
-	// BitacoraLogin login = servicioBitacoraLogin.buscarPorId(idSession);
-	// BitacoraLogin loginNuevo = new BitacoraLogin(login.getIdLogin(),
-	// login.getUsuario(), login.getDireccionIp(),
-	// login.getFechaIngreso(), login.getHoraIngreso(), fecha, tiempo);
-	// servicioBitacoraLogin.guardar(loginNuevo);
-	// }
+	}
 
 	private void pintarGraficasAdmin(Date fecha1, Date fecha2,
 			Date fechaUltimo, int habilesHoy, int habilesTotal) {
@@ -327,7 +337,10 @@ public class CArbol extends CGenerico {
 								"Ver Reportes Administrador")
 						&& !arbol.getNombre().contains("Dashboard")
 						&& !arbol.getNombre().contains(
-								"Ver Aliados Eliminar Data"))
+								"Ver Aliados Eliminar Data")
+						&& !arbol.getNombre().startsWith("Eliminar Data")
+						&& !arbol.getNombre().contains(
+								"Eliminar Data sin Restriccion"))
 					ids.add(arbol.getIdArbol());
 				if (arbol != null && arbol.getNombre().contains("Dashboard")) {
 					grxGrafico.setVisible(true);
@@ -540,5 +553,66 @@ public class CArbol extends CGenerico {
 				grxGrafico.setOpen(true);
 			}
 		}
+	}
+
+	@Listen("onClick = #btnBuscar")
+	public void mostrarCatalogoAliado() {
+		final List<UsuarioAliado> listaObjetos = servicioUsuarioAliado
+				.buscarPorUsuario(nombreUsuarioSesion());
+		catalogo = new Catalogo<UsuarioAliado>(divCatalogoAliado,
+				"Catalogo de Aliados asociados al Usuario", listaObjetos, true,
+				false, false, "Codigo", "Nombre") {
+
+			@Override
+			protected List<UsuarioAliado> buscar(List<String> valores) {
+
+				List<UsuarioAliado> lista = new ArrayList<UsuarioAliado>();
+
+				for (UsuarioAliado objeto : listaObjetos) {
+					if (objeto.getId().getMaestroAliado().getNombre()
+							.toLowerCase()
+							.contains(valores.get(1).toLowerCase())
+							&& objeto.getId().getMaestroAliado()
+									.getCodigoAliado().toLowerCase()
+									.contains(valores.get(0).toLowerCase())) {
+						lista.add(objeto);
+					}
+				}
+				return lista;
+			}
+
+			@Override
+			protected String[] crearRegistros(UsuarioAliado objeto) {
+				String[] registros = new String[2];
+				registros[0] = objeto.getId().getMaestroAliado()
+						.getCodigoAliado();
+				registros[1] = objeto.getId().getMaestroAliado().getNombre();
+				return registros;
+			}
+		};
+		catalogo.setClosable(true);
+		catalogo.setWidth("30%");
+		catalogo.setParent(divCatalogoAliado);
+		catalogo.doModal();
+	}
+
+	@Listen("onSeleccion = #divCatalogoAliado")
+	public void seleccionAliado() {
+		UsuarioAliado aliado = catalogo.objetoSeleccionadoDelCatalogo();
+		UsuarioAliado nuevo = servicioUsuarioAliado.buscarActivo(aliado.getId()
+				.getUsuario());
+		nuevo.setEstado(false);
+		servicioUsuarioAliado.guardar(nuevo);
+		aliado.setEstado(true);
+		servicioUsuarioAliado.guardar(aliado);
+		List<Component> componentes = (List<Component>) divGrafico
+				.getChildren();
+		for (int i = 0; i < componentes.size(); i++) {
+			divGrafico.removeChild(componentes.get(i));
+		}
+		angular = null;
+		angularVenta = null;
+		llenarDatosAliado(aliado.getId().getUsuario());
+		catalogo.setParent(null);
 	}
 }
