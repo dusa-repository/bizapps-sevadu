@@ -220,10 +220,12 @@ public class CArbol extends CGenerico {
 				fecha1, fecha2, annoPlanDesde, mesPlanDesde);
 		List<MaestroAliado> restantes = servicioAliado
 				.buscarRestantes(listaAliados);
-		for (Iterator<MaestroAliado> iterator = restantes.iterator(); iterator
-				.hasNext();) {
-			MaestroAliado maestroAliado = (MaestroAliado) iterator.next();
-			listaAliados.add(maestroAliado.getCodigoAliado());
+		if (!restantes.isEmpty()) {
+			for (Iterator<MaestroAliado> iterator = restantes.iterator(); iterator
+					.hasNext();) {
+				MaestroAliado maestroAliado = (MaestroAliado) iterator.next();
+				listaAliados.add(maestroAliado.getCodigoAliado());
+			}
 		}
 		if (!listaAliados.isEmpty()) {
 			int valor = 0;
