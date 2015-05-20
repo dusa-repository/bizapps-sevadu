@@ -42,8 +42,9 @@ public class SMaestroAliado {
 		return aliadoDAO.findOne(value);
 	}
 
-	public List<MaestroAliado> buscarRestantes(
-			List<String> listaAliados) {
-		return aliadoDAO.findByCodigoAliadoNotIn(listaAliados);
+	public List<MaestroAliado> buscarRestantes(List<String> listaAliados) {
+		if (!listaAliados.isEmpty())
+			return aliadoDAO.findByCodigoAliadoNotIn(listaAliados);
+		return aliadoDAO.findAllOrderByNombreAsc();
 	}
 }
