@@ -29,4 +29,6 @@ public interface IMaestroProductoDAO extends
 
 	List<MaestroProducto> findByMaestroMarcaMarcaDusaIn(List<String> ids);
 
+	List<MaestroProducto> findByMaestroAliadoIsNull();
+
 }

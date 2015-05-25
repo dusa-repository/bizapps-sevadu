@@ -497,7 +497,7 @@ public class CCartera extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "00");
 		buscadorVendedor = new BuscadorUDC("Vendedor", 100, listF0005, true,
-				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%") {
+				false, false, "00", "00", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "00",
@@ -508,7 +508,7 @@ public class CCartera extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "00");
 		buscadorSupervisor = new BuscadorUDC("Supervisor", 100, listF0005,
-				true, false, false, "00", "04", "29%", "19%", "6%", "28%") {
+				true, false, false, "00", "00", "29%", "19%", "6%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "00",
@@ -519,7 +519,7 @@ public class CCartera extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "01");
 		buscadorZona = new BuscadorUDC("Zona", 100, listF0005, true, false,
-				false, "00", "04", "29%", "18.5%", "6.5%", "28%") {
+				false, "00", "01", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "01",
@@ -530,7 +530,7 @@ public class CCartera extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "02");
 		buscadorEstado = new BuscadorUDC("Estado", 100, listF0005, true, false,
-				false, "00", "04", "29%", "18.5%", "6.5%", "28%") {
+				false, "00", "02", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "02",
@@ -541,7 +541,7 @@ public class CCartera extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "03");
 		buscadorCiudad = new BuscadorUDC("Ciudad", 100, listF0005, true, false,
-				false, "00", "04", "29%", "18.5%", "6.5%", "28%") {
+				false, "00", "03", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "03",
