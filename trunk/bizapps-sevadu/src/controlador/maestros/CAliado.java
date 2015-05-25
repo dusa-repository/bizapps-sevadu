@@ -14,6 +14,7 @@ import modelo.maestros.MappingProducto;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.PlanVenta;
 import modelo.maestros.Venta;
+import modelo.pk.MappingProductoPK;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -149,6 +150,8 @@ public class CAliado extends CGenerico {
 					aliado.setLoteUpload("");
 					aliado.setTipoCliente("");
 					servicioAliado.guardar(aliado);
+					aliado = servicioAliado.buscar(txtCodigo.getValue());
+					mappearProductos(aliado);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
 					listaGeneral = servicioAliado.buscarTodosOrdenados();
@@ -283,6 +286,39 @@ public class CAliado extends CGenerico {
 		botoneraAliado.appendChild(botonera);
 	}
 
+	protected void mappearProductos(MaestroAliado aliado) {
+		List<MaestroProducto> productos = servicioProducto
+				.buscarComunesTodosAliados();
+		if (!productos.isEmpty()) {
+			List<MappingProducto> lista = new ArrayList<MappingProducto>();
+			MappingProducto mappeado = new MappingProducto();
+			MappingProductoPK claveMapping = new MappingProductoPK();
+			for (int i = 0; i < productos.size(); i++) {
+				claveMapping = new MappingProductoPK();
+				claveMapping.setMaestroAliado(aliado);
+				claveMapping.setMaestroProducto(productos.get(i));
+				if (!servicioMapping.existe(claveMapping)) {
+					mappeado = new MappingProducto();
+					String botella = "BT";
+					String cajas = "CA";
+					String codigo = productos.get(i).getCodigoProductoDusa();
+					mappeado.setId(claveMapping);
+					mappeado.setCodigoBotellaCliente(botella);
+					mappeado.setCodigoCajaCliente(cajas);
+					mappeado.setCodigoProductoCliente(codigo);
+					mappeado.setEstadoMapeo(1);
+					mappeado.setFechaAuditoria(fecha);
+					mappeado.setHoraAuditoria(tiempo);
+					mappeado.setIdUsuario(nombreUsuarioSesion());
+					mappeado.setLoteUpload("0");
+					lista.add(mappeado);
+				}
+			}
+			if (!lista.isEmpty())
+				servicioMapping.guardarVarios(lista);
+		}
+	}
+
 	protected boolean validar() {
 		if (clave == null && claveExiste()) {
 			return false;
@@ -410,7 +446,7 @@ public class CAliado extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "00");
 		buscadorVendedor = new BuscadorUDC("Vendedor", 100, listF0005, true,
-				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%") {
+				false, false, "00", "00", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "00",
@@ -421,7 +457,7 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "01");
 		buscadorZona = new BuscadorUDC("Zona", 100, listF0005, true, false,
-				false, "00", "04", "29%", "18.5%", "6.5%", "28%") {
+				false, "00", "01", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "01",
@@ -432,7 +468,7 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "02");
 		buscadorEstado = new BuscadorUDC("Estado", 100, listF0005, true, false,
-				false, "00", "04", "29%", "18.5%", "6.5%", "28%") {
+				false, "00", "02", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "02",
@@ -443,7 +479,7 @@ public class CAliado extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "03");
 		buscadorCiudad = new BuscadorUDC("Ciudad", 100, listF0005, true, false,
-				false, "00", "04", "29%", "18.5%", "6.5%", "28%") {
+				false, "00", "03", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "03",

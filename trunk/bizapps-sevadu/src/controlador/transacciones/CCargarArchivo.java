@@ -1652,7 +1652,8 @@ public class CCargarArchivo extends CGenerico {
 						if (cell.getCellType() == 1) {
 							// Validar ON / OFF
 							segmentacion = cell.getStringCellValue();
-							if (segmentacion != null)
+							if (segmentacion != null) {
+								segmentacion = segmentacion.trim();
 								if (segmentacion.length() > 3) {
 									mostrarError = mensajeErrorLongitud(
 											mostrarError, contadorRow,
@@ -1667,6 +1668,7 @@ public class CCargarArchivo extends CGenerico {
 										error = true;
 									}
 								}
+							}
 						} else {
 							mostrarError = mensajeErrorNull(mostrarError,
 									contadorRow, contadorCell);
@@ -1676,6 +1678,7 @@ public class CCargarArchivo extends CGenerico {
 					case 9:
 						idTipo = obtenerStringCualquiera(cell, refTipo, idTipo);
 						if (idTipo != null) {
+							idTipo = idTipo.trim();
 							if (idTipo.length() > 4) {
 								mostrarError = mensajeErrorLongitud(
 										mostrarError, contadorRow, contadorCell);
@@ -2573,6 +2576,7 @@ public class CCargarArchivo extends CGenerico {
 							// Validar ON / OFF
 							segmentacion = cell.getStringCellValue();
 							if (segmentacion != null) {
+								segmentacion = segmentacion.trim();
 								if (segmentacion.length() > 3) {
 									mensajeErrorLongitud(mostrarError,
 											contadorRow, contadorCell);
@@ -2596,6 +2600,7 @@ public class CCargarArchivo extends CGenerico {
 					case 14:
 						idTipo = obtenerStringCualquiera(cell, refTipo, idTipo);
 						if (idTipo != null) {
+							idTipo = idTipo.trim();
 							if (idTipo.length() > 4) {
 								mensajeErrorLongitud(mostrarError, contadorRow,
 										contadorCell);

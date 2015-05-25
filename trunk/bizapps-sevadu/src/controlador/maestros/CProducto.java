@@ -13,6 +13,7 @@ import modelo.maestros.MaestroProducto;
 import modelo.maestros.MappingProducto;
 import modelo.maestros.PlanVenta;
 import modelo.maestros.Venta;
+import modelo.pk.MappingProductoPK;
 
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -206,6 +207,8 @@ public class CProducto extends CGenerico {
 						producto.setPrecioJ(producto2.getPrecioJ());
 					}
 					servicioProducto.guardar(producto);
+					producto = servicioProducto.buscar(txtCodigo.getValue());
+					mappearProducto(aliado, producto);
 					msj.mensajeInformacion(Mensaje.guardado);
 					limpiar();
 					listaGeneral = servicioProducto.buscarTodosOrdenados();
@@ -323,6 +326,41 @@ public class CProducto extends CGenerico {
 		botonera.getChildren().get(3).setVisible(false);
 		botonera.getChildren().get(5).setVisible(false);
 		botoneraProducto.appendChild(botonera);
+	}
+
+	protected void mappearProducto(MaestroAliado aliado,
+			MaestroProducto producto) {
+		List<MaestroAliado> aliados = new ArrayList<MaestroAliado>();
+		if (aliado == null)
+			aliados = servicioAliado.buscarTodosOrdenados();
+		else
+			aliados.add(aliado);
+		List<MappingProducto> lista = new ArrayList<MappingProducto>();
+		MappingProducto mappeado = new MappingProducto();
+		MappingProductoPK claveMapping = new MappingProductoPK();
+		for (int i = 0; i < aliados.size(); i++) {
+			claveMapping = new MappingProductoPK();
+			claveMapping.setMaestroAliado(aliados.get(i));
+			claveMapping.setMaestroProducto(producto);
+			if (!servicioMapping.existe(claveMapping)) {
+				mappeado = new MappingProducto();
+				String botella = "BT";
+				String cajas = "CA";
+				String codigo = producto.getCodigoProductoDusa();
+				mappeado.setId(claveMapping);
+				mappeado.setCodigoBotellaCliente(botella);
+				mappeado.setCodigoCajaCliente(cajas);
+				mappeado.setCodigoProductoCliente(codigo);
+				mappeado.setEstadoMapeo(1);
+				mappeado.setFechaAuditoria(fecha);
+				mappeado.setHoraAuditoria(tiempo);
+				mappeado.setIdUsuario(nombreUsuarioSesion());
+				mappeado.setLoteUpload("0");
+				lista.add(mappeado);
+			}
+		}
+		if(!lista.isEmpty())
+			servicioMapping.guardarVarios(lista);
 	}
 
 	protected boolean validar() {
@@ -466,8 +504,7 @@ public class CProducto extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "04");
 		buscadorCaja = new BuscadorUDC("Caja", 100, listF0005, true, false,
-				false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		{
+				false, "00", "04", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "04",
@@ -478,8 +515,7 @@ public class CProducto extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "05");
 		buscadorBotella = new BuscadorUDC("Botella", 100, listF0005, true,
-				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		{
+				false, false, "00", "05", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "05",
@@ -490,8 +526,7 @@ public class CProducto extends CGenerico {
 
 		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "06");
 		buscadorEspecie = new BuscadorUDC("Especie", 100, listF0005, true,
-				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		{
+				false, false, "00", "06", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "06",

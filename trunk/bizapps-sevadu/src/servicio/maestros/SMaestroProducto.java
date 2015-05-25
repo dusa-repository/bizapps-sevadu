@@ -70,4 +70,8 @@ public class SMaestroProducto {
 	public void guardarVarios(List<MaestroProducto> productos) {
 		productoDAO.save(productos);
 	}
+
+	public List<MaestroProducto> buscarComunesTodosAliados() {
+		return productoDAO.findByMaestroAliadoIsNull();
+	}
 }

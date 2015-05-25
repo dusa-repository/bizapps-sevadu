@@ -404,9 +404,7 @@ public class CConfiguracionEnvioCorreo extends CGenerico {
 		List<F0005> listF0005 = servicioF0005
 				.buscarParaUDCOrdenados("00", "07");
 		buscadorReporte = new BuscadorUDC("Reporte", 50, listF0005, true,
-				false, false, "00", "04", "29%", "18.5%", "6.5%", "28%")
-		// false, false, "00", "07", "32%", "8%", "10%", "50%")
-		{
+				false, false, "00", "07", "29%", "18.5%", "6.5%", "28%") {
 			@Override
 			protected F0005 buscar() {
 				return servicioF0005.buscar("00", "07",
