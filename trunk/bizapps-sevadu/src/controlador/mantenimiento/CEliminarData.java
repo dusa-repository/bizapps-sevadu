@@ -125,12 +125,12 @@ public class CEliminarData extends CGenerico {
 			Date ayer = new Date();
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(ayer);
-			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - mes);
+			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - (mes - 1));
 			ayer = calendar.getTime();
-			dtbDesde.setConstraint("between" + formatoSimple.format(ayer)
-					+ " and" + formatoSimple.format(hoy));
-			dtbHasta.setConstraint("between" + formatoSimple.format(ayer)
-					+ " and" + formatoSimple.format(hoy));
+			dtbDesde.setConstraint("between" + formatoMesAnno.format(ayer)
+					+ "01 and" + formatoSimple.format(hoy));
+			dtbHasta.setConstraint("between" + formatoMesAnno.format(ayer)
+					+ "01 and" + formatoSimple.format(hoy));
 		}
 		HashMap<String, Object> map = (HashMap<String, Object>) Sessions
 				.getCurrent().getAttribute("mapaGeneral");
