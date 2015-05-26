@@ -1459,6 +1459,10 @@ public class CCargarArchivo extends CGenerico {
 				String ruta = null;
 				String direccion = null;
 				String rif = null;
+				Double idFuturo1 = null;
+				String futuro1 = "";
+				Double idFuturo2 = null;
+				String futuro2 = "";
 				Iterator<Cell> cellIterator = row.cellIterator();
 				int contadorCell = 0;
 				while (cellIterator.hasNext()) {
@@ -1747,6 +1751,30 @@ public class CCargarArchivo extends CGenerico {
 							error = true;
 						}
 						break;
+					case 13:
+						futuro1 = obtenerStringCualquiera(cell, idFuturo1,
+								futuro1);
+						if (futuro1 != null) {
+							if (futuro1.length() > 50) {
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								errorLong = true;
+							}
+						} else
+							futuro1 = "";
+						break;
+					case 14:
+						futuro2 = obtenerStringCualquiera(cell, idFuturo2,
+								futuro2);
+						if (futuro2 != null) {
+							if (futuro2.length() > 50) {
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								errorLong = true;
+							}
+						} else
+							futuro2 = "";
+						break;
 					}
 				}
 				if (!error && !errorLong && aliado != null && idCliente != null
@@ -1755,8 +1783,8 @@ public class CCargarArchivo extends CGenerico {
 						&& supervisor != null && segmentacion != null
 						&& tipoCliente != null && ruta != null
 						&& direccion != null && rif != null) {
-					cliente.setCampo1("");
-					cliente.setCampo2("");
+					cliente.setCampo1(futuro1);
+					cliente.setCampo2(futuro2);
 					cliente.setCiudad(idCiudad);
 					cliente.setCodigoCliente(idCliente);
 					cliente.setDireccion(direccion);
