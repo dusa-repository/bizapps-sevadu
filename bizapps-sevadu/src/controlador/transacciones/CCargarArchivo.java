@@ -387,10 +387,8 @@ public class CCargarArchivo extends CGenerico {
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else {
-					msj.mensajeError("El archivo no ha podido ser importado, causas:"
-							+ "Faltan columnas en el archivo");
-				}
+				} else 
+					mostrarErrores();
 			} else
 				mostrarErrores();
 		}
@@ -1403,10 +1401,8 @@ public class CCargarArchivo extends CGenerico {
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else {
-					msj.mensajeError("El archivo no ha podido ser importado, causas:"
-							+ "Faltan columnas en el archivo");
-				}
+				} else 
+					mostrarErrores();
 			} else
 				mostrarErrores();
 		}
@@ -1814,8 +1810,7 @@ public class CCargarArchivo extends CGenerico {
 							+ (contadorRow));
 
 				} else {
-					msj.mensajeError("El archivo no ha podido ser importado, causas:"
-							+ "Faltan columnas en el archivo");
+					mostrarErrores();
 				}
 			} else
 				mostrarErrores();
@@ -1970,10 +1965,8 @@ public class CCargarArchivo extends CGenerico {
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else {
-					msj.mensajeError("El archivo no ha podido ser importado, causas:"
-							+ "Faltan columnas en el archivo");
-				}
+				} else 
+					mostrarErrores();
 			} else
 				mostrarErrores();
 		}
@@ -2196,10 +2189,8 @@ public class CCargarArchivo extends CGenerico {
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else {
-					msj.mensajeError("El archivo no ha podido ser importado, causas:"
-							+ "Faltan columnas en el archivo");
-				}
+				} else 
+					mostrarErrores();
 			} else
 				mostrarErrores();
 		}
@@ -2780,10 +2771,8 @@ public class CCargarArchivo extends CGenerico {
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else {
-					msj.mensajeError("El archivo no ha podido ser importado, causas:"
-							+ "Faltan columnas en el archivo");
-				}
+				} else 
+					mostrarErrores();
 			} else
 				mostrarErrores();
 

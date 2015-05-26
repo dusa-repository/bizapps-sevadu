@@ -41,6 +41,7 @@ public class STermometro {
 			int tipo) {
 		List<TermometroCliente> termometro = new ArrayList<TermometroCliente>();
 		List<PlanVenta> plan = new ArrayList<PlanVenta>();
+		List<PlanVenta> plan2 = new ArrayList<PlanVenta>();
 		ordenar = new ArrayList<String>();
 		int limiteSup = 0;
 		int limiteInf = 0;
@@ -53,9 +54,12 @@ public class STermometro {
 			plan = planDAO
 					.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdMaestroAliadoAndIdAnnoAndIdMesBetween(
 							true, aliado, anno, tiempo, periodo, o);
-			// anno2 = 0;
-			// limiteInf = 0;
-			// limiteSup = 0;
+			ordenar = new ArrayList<String>();
+			ordenar.add("idMaestroProductoMaestroMarcaMarcaDusa");
+			o = new Sort(Sort.Direction.ASC, ordenar);
+			plan2 = planDAO
+					.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdMaestroAliadoAndIdAnnoAndIdMesBetween(
+							true, aliado, anno, tiempo, periodo, o);
 		} else {
 			ordenar.add("id.zonaAliado");
 			ordenar.add("id.vendedorAliado");
@@ -65,6 +69,13 @@ public class STermometro {
 			limiteSup = 1;
 			limiteInf = 12;
 			plan = planDAO
+					.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdMaestroAliadoAndIdAnnoAndIdMesBetweenAndIdAnnoAndIdMesBetween(
+							true, aliado, anno2, tiempo, limiteInf, anno,
+							limiteSup, periodo, o);
+			ordenar = new ArrayList<String>();
+			ordenar.add("id.maestroProducto.maestroMarca.marcaDusa");
+			o = new Sort(Sort.Direction.ASC, ordenar);
+			plan2 = planDAO
 					.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdMaestroAliadoAndIdAnnoAndIdMesBetweenAndIdAnnoAndIdMesBetween(
 							true, aliado, anno2, tiempo, limiteInf, anno,
 							limiteSup, periodo, o);
@@ -373,6 +384,222 @@ public class STermometro {
 							.intValue() / recorridos) * habiles);
 				footer.setProyeccion(acumProyeccionFooter.intValue());
 				termometro.add(footer);
+//				***************************************************
+				termo = new TermometroCliente();
+				marca = plan2.get(0).getId().getMaestroProducto()
+						.getMaestroMarca().getMarcaDusa();
+				String descripcionMarca = plan2.get(0).getId()
+						.getMaestroProducto().getMaestroMarca()
+						.getDescripcion();
+				acumVentas = (double) 0;
+				acumPlanificadas = (double) 0;
+				acumProyeccion = (double) 0;
+				acumVentasFooter = (double) 0;
+				acumPlanificadasFooter = (double) 0;
+				acumProyeccionFooter = (double) 0;
+				mes1 = (double) 0;
+				mes2 = (double) 0;
+				mes3 = (double) 0;
+				mes4 = (double) 0;
+				mes5 = (double) 0;
+				mes6 = (double) 0;
+				mes7 = (double) 0;
+				mes8 = (double) 0;
+				mes9 = (double) 0;
+				mes10 = (double) 0;
+				mes11 = (double) 0;
+				mes12 = (double) 0;
+				for (int i = 0; i < plan2.size(); i++) {
+
+					PlanVenta planEspecifico = plan2.get(i);
+					if (planEspecifico.getId().getMaestroProducto()
+							.getMaestroMarca().getMarcaDusa().equals(marca)) {
+						acumPlanificadas = acumPlanificadas
+								+ planEspecifico.getCajasPlanificadas();
+						switch (planEspecifico.getId().getMes()) {
+						case 1:
+							mes1 = mes1 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 2:
+							mes2 = mes2 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 3:
+							mes3 = mes3 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 4:
+							mes4 = mes4 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 5:
+							mes5 = mes5 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 6:
+							mes6 = mes6 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 7:
+							mes7 = mes7 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 8:
+							mes8 = mes8 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 9:
+							mes9 = mes9 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 10:
+							mes10 = mes10 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 11:
+							mes11 = mes11 + planEspecifico.getCajasPlanificadas();
+							break;
+						case 12:
+							mes12 = mes12 + planEspecifico.getCajasPlanificadas();
+							break;
+						}
+					} else {
+						termo.setMes1(mes1.intValue());
+						termo.setMes2(mes2.intValue());
+						termo.setMes3(mes3.intValue());
+						termo.setMes4(mes4.intValue());
+						termo.setMes5(mes5.intValue());
+						termo.setMes6(mes6.intValue());
+						termo.setMes7(mes7.intValue());
+						termo.setMes8(mes8.intValue());
+						termo.setMes9(mes9.intValue());
+						termo.setMes10(mes10.intValue());
+						termo.setMes11(mes11.intValue());
+						termo.setMes12(mes12.intValue());
+						acumVentas = (Math.rint(ventaDAO
+								.sumByAliadoAndMarcaAndFecha(
+										aliado.getCodigoAliado(), marca, fechaDesde,
+										fechaHasta) * 1) / 1);
+						termo.setFaltantes(faltantes);
+						termo.setRecorridos(recorridos);
+						termo.setHabiles(habiles);
+						termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+								+ stringDesde + " al " + stringHasta);
+						termo.setZona(aliado.getDescripcionZona());
+						termo.setVendedor(aliado.getDescripcionVendedor());
+						termo.setMarca(descripcionMarca);
+						termo.setMes1(acumPlanificadas.intValue());
+						termo.setCuota(acumPlanificadas.intValue());
+						termo.setVendido(acumVentas.intValue());
+						if (acumPlanificadas.intValue() > 0)
+							termo.setPorcentaje(round((acumVentas * 100)
+									/ acumPlanificadas, 2));
+						termo.setExcendente(acumVentas.intValue()
+								- acumPlanificadas.intValue());
+						termo.setSugerido(round(acumPlanificadas / habiles, 2));
+						if (faltantes > 0)
+							termo.setMeta(round((acumVentas - acumPlanificadas)
+									/ faltantes, 2));
+						else
+							termo.setMeta(0);
+						if (recorridos > 0)
+							acumProyeccion = acumProyeccion
+									+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+						termo.setProyeccion(acumProyeccion.intValue());
+						termometro.add(termo);
+						termo = new TermometroCliente();
+						marca = plan2.get(i).getId().getMaestroProducto()
+								.getMaestroMarca().getMarcaDusa();
+						descripcionMarca = plan2.get(i).getId()
+								.getMaestroProducto().getMaestroMarca()
+								.getDescripcion();
+						acumPlanificadasFooter = acumPlanificadasFooter
+								+ acumPlanificadas;
+						acumProyeccionFooter = acumProyeccionFooter
+								+ acumProyeccion;
+						acumVentasFooter = acumVentasFooter + acumVentas;
+						acumVentas = (double) 0;
+						acumPlanificadas = (double) 0;
+						acumProyeccion = (double) 0;
+						mes1 = (double) 0;
+						mes2 = (double) 0;
+						mes3 = (double) 0;
+						mes4 = (double) 0;
+						mes5 = (double) 0;
+						mes6 = (double) 0;
+						mes7 = (double) 0;
+						mes8 = (double) 0;
+						mes9 = (double) 0;
+						mes10 = (double) 0;
+						mes11 = (double) 0;
+						mes12 = (double) 0;
+						i--;
+					}
+				}
+				termo.setMes1(mes1.intValue());
+				termo.setMes2(mes2.intValue());
+				termo.setMes3(mes3.intValue());
+				termo.setMes4(mes4.intValue());
+				termo.setMes5(mes5.intValue());
+				termo.setMes6(mes6.intValue());
+				termo.setMes7(mes7.intValue());
+				termo.setMes8(mes8.intValue());
+				termo.setMes9(mes9.intValue());
+				termo.setMes10(mes10.intValue());
+				termo.setMes11(mes11.intValue());
+				termo.setMes12(mes12.intValue());
+				acumVentas = (Math.rint(ventaDAO.sumByAliadoAndMarcaAndFecha(
+						aliado.getCodigoAliado(), marca, fechaDesde, fechaHasta) * 1) / 1);
+				termo.setFaltantes(faltantes);
+				termo.setRecorridos(recorridos);
+				termo.setHabiles(habiles);
+				termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+						+ stringDesde + " al " + stringHasta);
+				termo.setZona(aliado.getDescripcionZona());
+				termo.setVendedor(aliado.getDescripcionVendedor());
+				termo.setMarca(descripcionMarca);
+				termo.setMes1(acumPlanificadas.intValue());
+				termo.setCuota(acumPlanificadas.intValue());
+				termo.setVendido(acumVentas.intValue());
+				if (acumPlanificadas.intValue() > 0)
+					termo.setPorcentaje(round((acumVentas * 100)
+							/ acumPlanificadas, 2));
+				termo.setExcendente(acumVentas.intValue()
+						- acumPlanificadas.intValue());
+				termo.setSugerido(round(acumPlanificadas / habiles, 2));
+				if (faltantes > 0)
+					termo.setMeta(round((acumVentas - acumPlanificadas)
+							/ faltantes, 2));
+				else
+					termo.setMeta(0);
+				if (recorridos > 0)
+					acumProyeccion = acumProyeccion
+							+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+				termo.setProyeccion(acumProyeccion.intValue());
+				termometro.add(termo);
+
+				acumPlanificadasFooter = acumPlanificadasFooter
+						+ acumPlanificadas;
+				acumProyeccionFooter = acumProyeccionFooter + acumProyeccion;
+				acumVentasFooter = acumVentasFooter + acumVentas;
+				 footer = new TermometroCliente();
+				footer.setZona(null);
+				footer.setVendedor(aliado.getDescripcionZona());
+				footer.setMarca(aliado.getDescripcionVendedor());
+				footer.setMes1(acumPlanificadasFooter.intValue());
+				footer.setCuota(acumPlanificadasFooter.intValue());
+				footer.setVendido(acumVentasFooter.intValue());
+				if (acumPlanificadasFooter.intValue() > 0)
+					footer.setPorcentaje(round((acumVentasFooter * 100)
+							/ acumPlanificadasFooter, 2));
+				else
+					footer.setPorcentaje(0);
+				footer.setExcendente(acumVentasFooter.intValue()
+						- acumPlanificadasFooter.intValue());
+				footer.setSugerido(round(acumPlanificadasFooter / habiles, 2));
+				if (faltantes > 0)
+					footer.setMeta(round(
+							(acumVentasFooter - acumPlanificadasFooter)
+									/ faltantes, 2));
+				else
+					footer.setMeta(0);
+				if (recorridos > 0)
+					acumProyeccionFooter = (double) ((acumVentasFooter
+							.intValue() / recorridos) * habiles);
+				footer.setProyeccion(acumProyeccionFooter.intValue());
+				termometro.add(footer);
+				
 			}
 		}
 		return termometro;
@@ -387,6 +614,12 @@ public class STermometro {
 		ordenar.add("idMaestroProductoMaestroMarcaMarcaDusa");
 		o = new Sort(Sort.Direction.ASC, ordenar);
 		List<PlanVenta> plan = planDAO
+				.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdMaestroAliadoAndIdAnnoAndIdMes(
+						true, aliado, anno, tiempo, o);
+		ordenar = new ArrayList<String>();
+		ordenar.add("idMaestroProductoMaestroMarcaMarcaDusa");
+		o = new Sort(Sort.Direction.ASC, ordenar);
+		List<PlanVenta> plan2 = planDAO
 				.findByIdMaestroProductoMaestroMarcaFiltroTermometroAndIdMaestroAliadoAndIdAnnoAndIdMes(
 						true, aliado, anno, tiempo, o);
 		String fechaString = anno + "-" + tiempo;
@@ -555,6 +788,136 @@ public class STermometro {
 				footer.setVendedor(null);
 				footer.setMarca(plan.get(plan.size() - 1).getId()
 						.getVendedorAliado());
+				footer.setMes1(acumPlanificadasFooter.intValue());
+				footer.setCuota(acumPlanificadasFooter.intValue());
+				footer.setVendido(acumVentasFooter.intValue());
+				if (acumPlanificadasFooter.intValue() > 0)
+					footer.setPorcentaje(round((acumVentasFooter * 100)
+							/ acumPlanificadasFooter, 2));
+				else
+					footer.setPorcentaje(0);
+				footer.setExcendente(acumVentasFooter.intValue()
+						- acumPlanificadasFooter.intValue());
+				footer.setSugerido(round(acumPlanificadasFooter / habiles, 2));
+				if (faltantes > 0)
+					footer.setMeta(round(
+							(acumVentasFooter - acumPlanificadasFooter)
+									/ faltantes, 2));
+				else
+					footer.setMeta(0);
+				if (recorridos > 0)
+					acumProyeccionFooter = (double) ((acumVentasFooter
+							.intValue() / recorridos) * habiles);
+				footer.setProyeccion(acumProyeccionFooter.intValue());
+				termometro.add(footer);
+				// *****************************************************
+				termo = new TermometroCliente();
+				marca = plan2.get(0).getId().getMaestroProducto()
+						.getMaestroMarca().getMarcaDusa();
+				String descripcionMarca = plan2.get(0).getId()
+						.getMaestroProducto().getMaestroMarca()
+						.getDescripcion();
+				acumVentas = (double) 0;
+				acumPlanificadas = (double) 0;
+				acumProyeccion = (double) 0;
+				acumVentasFooter = (double) 0;
+				acumPlanificadasFooter = (double) 0;
+				acumProyeccionFooter = (double) 0;
+				for (int i = 0; i < plan2.size(); i++) {
+
+					PlanVenta planEspecifico = plan2.get(i);
+					if (planEspecifico.getId().getMaestroProducto()
+							.getMaestroMarca().getMarcaDusa().equals(marca)) {
+						acumPlanificadas = acumPlanificadas
+								+ planEspecifico.getCajasPlanificadas();
+					} else {
+
+						acumVentas = (Math.rint(ventaDAO
+								.sumByAliadoAndMarcaAndFecha(
+										aliado.getCodigoAliado(), marca, fecha,
+										fecha2) * 1) / 1);
+						termo.setFaltantes(faltantes);
+						termo.setRecorridos(recorridos);
+						termo.setHabiles(habiles);
+						termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+								+ stringDesde + " al " + stringHasta);
+						termo.setZona(aliado.getDescripcionZona());
+						termo.setVendedor(aliado.getDescripcionVendedor());
+						termo.setMarca(descripcionMarca);
+						termo.setMes1(acumPlanificadas.intValue());
+						termo.setCuota(acumPlanificadas.intValue());
+						termo.setVendido(acumVentas.intValue());
+						if (acumPlanificadas.intValue() > 0)
+							termo.setPorcentaje(round((acumVentas * 100)
+									/ acumPlanificadas, 2));
+						termo.setExcendente(acumVentas.intValue()
+								- acumPlanificadas.intValue());
+						termo.setSugerido(round(acumPlanificadas / habiles, 2));
+						if (faltantes > 0)
+							termo.setMeta(round((acumVentas - acumPlanificadas)
+									/ faltantes, 2));
+						else
+							termo.setMeta(0);
+						if (recorridos > 0)
+							acumProyeccion = acumProyeccion
+									+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+						termo.setProyeccion(acumProyeccion.intValue());
+						termometro.add(termo);
+						termo = new TermometroCliente();
+						marca = plan2.get(i).getId().getMaestroProducto()
+								.getMaestroMarca().getMarcaDusa();
+						descripcionMarca = plan2.get(i).getId()
+								.getMaestroProducto().getMaestroMarca()
+								.getDescripcion();
+						acumPlanificadasFooter = acumPlanificadasFooter
+								+ acumPlanificadas;
+						acumProyeccionFooter = acumProyeccionFooter
+								+ acumProyeccion;
+						acumVentasFooter = acumVentasFooter + acumVentas;
+						acumVentas = (double) 0;
+						acumPlanificadas = (double) 0;
+						acumProyeccion = (double) 0;
+						i--;
+					}
+				}
+				acumVentas = (Math.rint(ventaDAO.sumByAliadoAndMarcaAndFecha(
+						aliado.getCodigoAliado(), marca, fecha, fecha2) * 1) / 1);
+				termo.setFaltantes(faltantes);
+				termo.setRecorridos(recorridos);
+				termo.setHabiles(habiles);
+				termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
+						+ stringDesde + " al " + stringHasta);
+				termo.setZona(aliado.getDescripcionZona());
+				termo.setVendedor(aliado.getDescripcionVendedor());
+				termo.setMarca(descripcionMarca);
+				termo.setMes1(acumPlanificadas.intValue());
+				termo.setCuota(acumPlanificadas.intValue());
+				termo.setVendido(acumVentas.intValue());
+				if (acumPlanificadas.intValue() > 0)
+					termo.setPorcentaje(round((acumVentas * 100)
+							/ acumPlanificadas, 2));
+				termo.setExcendente(acumVentas.intValue()
+						- acumPlanificadas.intValue());
+				termo.setSugerido(round(acumPlanificadas / habiles, 2));
+				if (faltantes > 0)
+					termo.setMeta(round((acumVentas - acumPlanificadas)
+							/ faltantes, 2));
+				else
+					termo.setMeta(0);
+				if (recorridos > 0)
+					acumProyeccion = acumProyeccion
+							+ (double) ((acumVentas.intValue() / recorridos) * habiles);
+				termo.setProyeccion(acumProyeccion.intValue());
+				termometro.add(termo);
+
+				acumPlanificadasFooter = acumPlanificadasFooter
+						+ acumPlanificadas;
+				acumProyeccionFooter = acumProyeccionFooter + acumProyeccion;
+				acumVentasFooter = acumVentasFooter + acumVentas;
+				footer = new TermometroCliente();
+				footer.setZona(null);
+				footer.setVendedor(aliado.getDescripcionZona());
+				footer.setMarca(aliado.getDescripcionVendedor());
 				footer.setMes1(acumPlanificadasFooter.intValue());
 				footer.setCuota(acumPlanificadasFooter.intValue());
 				footer.setVendido(acumVentasFooter.intValue());
@@ -1180,7 +1543,7 @@ public class STermometro {
 					acumProyeccionFooter = acumProyeccionFooter
 							+ acumProyeccion;
 					acumVentasFooter = acumVentasFooter + acumVentas;
-					
+
 					TermometroCliente footer = new TermometroCliente();
 					footer.setMarca("Total: ");
 					footer.setCuota(acumPlanificadasFooter.intValue());
@@ -1239,10 +1602,10 @@ public class STermometro {
 				termo.setHabiles(habiles);
 				termo.setCampo(stringHoy + "/" + "Rango de Fechas: "
 						+ stringDesde + " al " + stringHasta);
-				termo.setZona(plan.get(plan.size() - 1).getId().getMaestroAliado()
-						.getCodigoAliado());
-				termo.setVendedor(plan.get(plan.size() - 1).getId().getMaestroAliado()
-						.getNombre());
+				termo.setZona(plan.get(plan.size() - 1).getId()
+						.getMaestroAliado().getCodigoAliado());
+				termo.setVendedor(plan.get(plan.size() - 1).getId()
+						.getMaestroAliado().getNombre());
 				termo.setMarca(descripcion);
 				termo.setCuota(acumPlanificadas.intValue());
 				termo.setVendido(acumVentas.intValue());
@@ -1277,10 +1640,9 @@ public class STermometro {
 
 				acumPlanificadasFooter = acumPlanificadasFooter
 						+ acumPlanificadas;
-				acumProyeccionFooter = acumProyeccionFooter
-						+ acumProyeccion;
+				acumProyeccionFooter = acumProyeccionFooter + acumProyeccion;
 				acumVentasFooter = acumVentasFooter + acumVentas;
-				
+
 				TermometroCliente footer = new TermometroCliente();
 				footer.setMarca("Total: ");
 				footer.setCuota(acumPlanificadasFooter.intValue());
@@ -1292,8 +1654,7 @@ public class STermometro {
 					footer.setPorcentaje(0);
 				footer.setExcendente(acumVentasFooter.intValue()
 						- acumPlanificadasFooter.intValue());
-				footer.setSugerido(round(acumPlanificadasFooter / habiles,
-						2));
+				footer.setSugerido(round(acumPlanificadasFooter / habiles, 2));
 				if (faltantes > 0)
 					footer.setMeta(round(
 							(acumVentasFooter - acumPlanificadasFooter)
