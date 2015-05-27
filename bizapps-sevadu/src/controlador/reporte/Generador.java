@@ -40,13 +40,15 @@ public class Generador extends HttpServlet {
 		String desde = request.getParameter("valor6");
 		String hasta = request.getParameter("valor7");
 		String tipoReporte = request.getParameter("valor8");
+		String nombre = request.getParameter("valor9");
 		byte[] fichero = null;
-			fichero = cReporte.reporte(tipo, aliado, zona, cliente, vendedor, desde, hasta);
+		fichero = cReporte.reporte(tipo, aliado, zona, cliente, vendedor,
+				desde, hasta, tipoReporte);
 		if (tipoReporte != null) {
 			if (tipoReporte.equals("EXCEL")) {
 				response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 				response.setHeader("Content-Disposition",
-						"inline; filename=Reporte.xlsx");
+						"inline; filename=" + nombre + ".xlsx");
 			} else {
 				response.setContentType("application/pdf");
 				response.setHeader("Content-disposition",

@@ -81,6 +81,8 @@ public class CReporte extends CGenerico {
 	@Wire
 	private Combobox cmbVendedor;
 	@Wire
+	private Combobox cmbTipo;
+	@Wire
 	private Comboitem itm16;
 	@Wire
 	private Comboitem itm17;
@@ -205,6 +207,7 @@ public class CReporte extends CGenerico {
 					String vendedor = cmbVendedor.getValue();
 					String zona = cmbZona.getValue();
 					String cliente = cmbCliente.getValue();
+					String nombre = cmbReporte.getValue().replaceAll("\\s+","") + "-" + aliado;
 					if (vendedor.equals("TODOS"))
 						vendedor = "";
 					if (zona.equals("TODAS"))
@@ -212,7 +215,6 @@ public class CReporte extends CGenerico {
 					if (cliente.equals("TODOS"))
 						cliente = "";
 					int tipo = 0;
-					String tipoReporte = "PDF";
 					Window ventana = new Window();
 					HashMap<String, Object> mapaGrafica = new HashMap<String, Object>();
 					switch (cmbReporte.getValue()) {
@@ -296,7 +298,6 @@ public class CReporte extends CGenerico {
 						window.doModal();
 						break;
 					case "(R55420025)Generar Objetivos/Marca/Clientes (EXCEL)":
-						tipoReporte = "EXCEL";
 						tipo = 24;
 						break;
 					case "Grafico Venta de Marcas":
@@ -411,7 +412,9 @@ public class CReporte extends CGenerico {
 								+ "&valor7="
 								+ fecha2
 								+ "&valor8="
-								+ tipoReporte
+								+ cmbTipo.getValue()
+								+ "&valor9="
+								+ nombre
 								+ "','','top=100,left=200,height=600,width=800,scrollbars=1,resizable=1')");
 					}
 				}
@@ -474,9 +477,11 @@ public class CReporte extends CGenerico {
 	}
 
 	public byte[] reporte(String tipo, String aliado, String zona,
-			String cliente, String vendedor, String desde, String hasta) {
+			String cliente, String vendedor, String desde, String hasta,
+			String tipoReporte) {
 		byte[] fichero = null;
 		conexion = null;
+		ByteArrayOutputStream xlsReport = new ByteArrayOutputStream();
 		try {
 			MaestroAliado aliadoObjeto = getServicioAliado().buscar(aliado);
 			ClassLoader cl = this.getClass().getClassLoader();
@@ -625,13 +630,12 @@ public class CReporte extends CGenerico {
 				}
 				JasperPrint jasperPrint = null;
 				try {
-					jasperPrint = JasperFillManager.fillReport(repor,
-							parameters, new JRBeanCollectionDataSource(ventas));
+					jasperPrint = JasperFillManager.fillReport(fis, parameters,
+							conexion);
 				} catch (JRException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				ByteArrayOutputStream xlsReport = new ByteArrayOutputStream();
 				JRXlsxExporter exporter = new JRXlsxExporter();
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,
 						jasperPrint);
@@ -652,8 +656,30 @@ public class CReporte extends CGenerico {
 			try {
 
 				if (fichero == null) {
-					fichero = JasperRunManager.runReportToPdf(fis, parameters,
-							conexion);
+					if (tipoReporte.equals("PDF"))
+						fichero = JasperRunManager.runReportToPdf(fis,
+								parameters, conexion);
+					else {
+						JasperPrint jasperPrint = null;
+						try {
+							jasperPrint = JasperFillManager.fillReport(fis,
+									parameters, conexion);
+						} catch (JRException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						JRXlsxExporter exporter = new JRXlsxExporter();
+						exporter.setParameter(JRExporterParameter.JASPER_PRINT,
+								jasperPrint);
+						exporter.setParameter(
+								JRExporterParameter.OUTPUT_STREAM, xlsReport);
+						try {
+							exporter.exportReport();
+						} catch (JRException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 
 			} catch (JRException ex) {
@@ -667,7 +693,10 @@ public class CReporte extends CGenerico {
 		} catch (SQLException e) {
 			System.exit(4);
 		}
-		return fichero;
+		if (tipoReporte.equals("EXCEL"))
+			return xlsReport.toByteArray();
+		else
+			return fichero;
 	}
 
 	protected boolean validar() {
