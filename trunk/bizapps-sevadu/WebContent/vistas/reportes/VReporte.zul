@@ -17,7 +17,7 @@
 						<label class="etiqueta" value="Aliado:" />
 						<textbox id="txtAliado" hflex="1" maxlength="20"
 							tooltiptext="Seleccione del Catalogo el Codigo del Aliado" />
-						<button autodisable="self"  id="btnBuscarAliado" label="Buscar"
+						<button autodisable="self" id="btnBuscarAliado" label="Buscar"
 							tooltiptext="Catalogo de Codigos de Aliados" image="/public/imagenes/botones/buscar.png"
 							class="btn" />
 						<cell colspan="2">
@@ -70,7 +70,7 @@
 							</combobox>
 						</cell>
 						<hbox />
-						
+
 					</row>
 					<row>
 						<hbox>
@@ -117,8 +117,12 @@
 								<comboitem label="${each}" />
 							</template>
 						</combobox>
-						<hbox />
-						<hbox />
+						<label class="etiqueta" value="Tipo de Reporte:" />
+						<combobox tooltiptext="Seleccione un Tipo" placeholder="Seleccione un Tipo"
+							id="cmbTipo" value="PDF" readonly="true" width="100%">
+							<comboitem label="PDF" />
+							<comboitem label="EXCEL" />
+						</combobox>
 						<hbox />
 					</row>
 				</rows>
