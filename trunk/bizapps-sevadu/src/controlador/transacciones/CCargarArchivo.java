@@ -21,6 +21,7 @@ import modelo.maestros.PlanVenta;
 import modelo.maestros.TipoCliente;
 import modelo.maestros.Venta;
 import modelo.pk.ExistenciaPK;
+import modelo.pk.MappingProductoPK;
 import modelo.pk.MarcaActivadaPK;
 import modelo.pk.PlanVentaPK;
 import modelo.seguridad.Usuario;
@@ -122,6 +123,9 @@ public class CCargarArchivo extends CGenerico {
 		case "Subir Archivo PVP":
 			tipo = 6;
 			break;
+		case "Subir Archivo de Mapping":
+			tipo = 7;
+			break;
 		}
 		Botonera botonera = new Botonera() {
 
@@ -170,6 +174,9 @@ public class CCargarArchivo extends CGenerico {
 					case 6:
 						importarPvp();
 						break;
+					case 7:
+						importarMapping();
+						break;
 					}
 				} else
 					msj.mensajeAlerta("El siguiente archivo no posee registros, por lo tanto no fue importado."
@@ -201,6 +208,170 @@ public class CCargarArchivo extends CGenerico {
 		Button btn = (Button) botonera.getChildren().get(3);
 		btn.setLabel("Cargar");
 		botoneraCargarRegistro.appendChild(botonera);
+	}
+
+	protected void importarMapping() {
+		XSSFWorkbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(media.getStreamData());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		Iterator<Row> rowIterator = sheet.iterator();
+		String mostrarError = "";
+		boolean error = false;
+		boolean errorLong = false;
+		if (rowIterator.hasNext()) {
+			List<MappingProducto> planesVentas = new ArrayList<MappingProducto>();
+			int contadorRow = 0;
+			while (rowIterator.hasNext()) {
+				contadorRow = contadorRow + 1;
+				Row row = rowIterator.next();
+				MappingProducto planVenta = new MappingProducto();
+				MaestroAliado aliado = null;
+				String idAliado = null;
+				Double refAliado = (double) 0;
+				MaestroProducto producto = null;
+				String idProducto = null;
+				Double refProducto = (double) 0;
+				String idZona = null;
+				Double refZona = (double) 0;
+				String idCodigo = null;
+				Double refCodigo = (double) 0;
+				String idVendedor = null;
+				Double refVendedor = (double) 0;
+				Iterator<Cell> cellIterator = row.cellIterator();
+				int contadorCell = 0;
+				while (cellIterator.hasNext()) {
+					contadorCell = contadorCell + 1;
+					Cell cell = cellIterator.next();
+					switch (cell.getColumnIndex()) {
+					case 0:
+						idAliado = obtenerStringCualquiera(cell, refAliado,
+								idAliado);
+						if (idAliado != null) {
+							if (idAliado.length() > 50) {
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								errorLong = true;
+							} else {
+								aliado = servicioAliado.buscar(idAliado);
+								if (aliado == null) {
+									mostrarError = mensajeErrorNoEncontrado(
+											mostrarError, idAliado,
+											contadorRow, contadorCell, "Aliado");
+									error = true;
+								}
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+
+					case 1:
+						idProducto = obtenerStringCualquiera(cell, refProducto,
+								idProducto);
+						if (idProducto != null) {
+							if (idProducto.length() > 50) {
+								mostrarError = mensajeErrorLongitud(
+										mostrarError, contadorRow, contadorCell);
+								errorLong = true;
+							} else {
+								producto = servicioProducto.buscar(idProducto);
+								if (producto == null) {
+									mostrarError = mensajeErrorNoEncontrado(
+											mostrarError, idProducto,
+											contadorRow, contadorCell,
+											"Maestro Producto");
+									error = true;
+								}
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 2:
+						idCodigo = obtenerStringCualquiera(cell, refCodigo,
+								idCodigo);
+						if (idCodigo != null) {
+							if (idCodigo.length() > 100) {
+								mostrarError = mensajeErrorLongitud(
+										mostrarError, contadorRow, contadorCell);
+								errorLong = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+
+					case 3:
+						idZona = obtenerStringCualquiera(cell, refZona, idZona);
+						if (idZona != null) {
+							if (idZona.length() > 100) {
+								mostrarError = mensajeErrorLongitud(
+										mostrarError, contadorRow, contadorCell);
+								errorLong = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					case 4:
+						idVendedor = obtenerStringCualquiera(cell, refVendedor,
+								idVendedor);
+						if (idVendedor != null) {
+							if (idVendedor.length() > 100) {
+								mostrarError = mensajeErrorLongitud(
+										mostrarError, contadorRow, contadorCell);
+								errorLong = true;
+							}
+						} else {
+							mostrarError = mensajeErrorNull(mostrarError,
+									contadorRow, contadorCell);
+							error = true;
+						}
+						break;
+					}
+				}
+				if (!error && !errorLong && aliado != null && producto != null) {
+					MappingProductoPK planVentaPK = new MappingProductoPK();
+					planVentaPK.setMaestroAliado(aliado);
+					planVentaPK.setMaestroProducto(producto);
+					planVenta.setId(planVentaPK);
+					planVenta.setCodigoBotellaCliente(idZona);
+					planVenta.setCodigoCajaCliente(idVendedor);
+					planVenta.setCodigoProductoCliente(idCodigo);
+					planVenta.setEstadoMapeo(1);
+					planVenta.setFechaAuditoria(fecha);
+					planVenta.setHoraAuditoria(tiempo);
+					planVenta.setIdUsuario(nombreUsuarioSesion());
+					planVenta.setLoteUpload("");
+					planesVentas.add(planVenta);
+				}
+			}
+			if (!error && !errorLong) {
+				if (planesVentas.size() == contadorRow) {
+					servicioMapping.guardarVarios(planesVentas);
+					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "NO", "SI");
+					msj.mensajeInformacion("Archivo importado con exito" + "\n"
+							+ "Cantidad de Filas evaluadas:" + (contadorRow)
+							+ "\n" + "Cantidad de Filas insertadas:"
+							+ (contadorRow));
+
+				} else
+					mostrarErrores();
+			} else
+				mostrarErrores();
+		}
 	}
 
 	protected void importarPvp() {
@@ -381,13 +552,13 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (productos.size() == contadorRow) {
 					servicioProducto.guardarVarios(productos);
-					guardarControlUpdate("NO", "NO", "NO", "NO", "SI", "NO");
+					guardarControlUpdate("NO", "NO", "NO", "NO", "SI", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else 
+				} else
 					mostrarErrores();
 			} else
 				mostrarErrores();
@@ -1395,13 +1566,13 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (marcas.size() == contadorRow) {
 					servicioMarcaActivada.guardarVarios(marcas);
-					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "SI");
+					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "SI", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else 
+				} else
 					mostrarErrores();
 			} else
 				mostrarErrores();
@@ -1803,7 +1974,7 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (clientes.size() == contadorRow) {
 					servicioCliente.guardarVarios(clientes);
-					guardarControlUpdate("NO", "NO", "NO", "SI", "NO", "NO");
+					guardarControlUpdate("NO", "NO", "NO", "SI", "NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -1959,13 +2130,13 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (existencias.size() == contadorRow) {
 					servicioExistencia.guardarVarios(existencias);
-					guardarControlUpdate("NO", "NO", "SI", "NO", "NO", "NO");
+					guardarControlUpdate("NO", "NO", "SI", "NO", "NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else 
+				} else
 					mostrarErrores();
 			} else
 				mostrarErrores();
@@ -2183,13 +2354,13 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (planesVentas.size() == contadorRow) {
 					servicioPlan.guardarVarios(planesVentas);
-					guardarControlUpdate("NO", "SI", "NO", "NO", "NO", "NO");
+					guardarControlUpdate("NO", "SI", "NO", "NO", "NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else 
+				} else
 					mostrarErrores();
 			} else
 				mostrarErrores();
@@ -2765,13 +2936,13 @@ public class CCargarArchivo extends CGenerico {
 					if (!ventasRepetidas.isEmpty())
 						servicioVenta.eliminar(ventasRepetidas);
 					servicioVenta.guardarVarios(ventas);
-					guardarControlUpdate("SI", "NO", "NO", "NO", "NO", "NO");
+					guardarControlUpdate("SI", "NO", "NO", "NO", "NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
 							+ (contadorRow));
 
-				} else 
+				} else
 					mostrarErrores();
 			} else
 				mostrarErrores();
@@ -2781,7 +2952,7 @@ public class CCargarArchivo extends CGenerico {
 
 	private void guardarControlUpdate(String ventas, String planVentas,
 			String existencia, String carteraClientes, String pvp,
-			String activacion) {
+			String activacion, String mapping) {
 		Usuario user = servicioUsuario.buscarPorLogin(nombreUsuarioSesion());
 		String codigoAliado = "Administrador";
 		String nombreAliado = "Sin Aliado";
@@ -2792,7 +2963,7 @@ public class CCargarArchivo extends CGenerico {
 		}
 		ControlUpdate control = new ControlUpdate(0, codigoAliado,
 				nombreAliado, ventas, planVentas, existencia, carteraClientes,
-				pvp, activacion, fecha);
+				pvp, activacion, fecha, mapping);
 		servicioControlUpdate.guardar(control);
 
 	}
