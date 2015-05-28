@@ -50,6 +50,9 @@ public class ControlUpdate implements Serializable {
 	@Column(name = "activacion", length = 50)
 	private String activacion;
 
+	@Column(name = "mapping", length = 50)
+	private String mapping;
+
 	@Column(name = "fecha")
 	private Date fecha;
 
@@ -60,7 +63,7 @@ public class ControlUpdate implements Serializable {
 
 	public ControlUpdate(Integer id, String codigoAliado, String nombreAliado,
 			String ventas, String planVentas, String existencia,
-			String carteraClientes, String pvp, String activacion, Date fecha) {
+			String carteraClientes, String pvp, String activacion, Date fecha, String mapping) {
 		super();
 		this.id = id;
 		this.codigoAliado = codigoAliado;
@@ -72,6 +75,7 @@ public class ControlUpdate implements Serializable {
 		this.pvp = pvp;
 		this.activacion = activacion;
 		this.fecha = fecha;
+		this.mapping = mapping;
 	}
 
 	public Integer getId() {
@@ -152,6 +156,14 @@ public class ControlUpdate implements Serializable {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}
+
+	public String getMapping() {
+		return mapping;
+	}
+
+	public void setMapping(String mapping) {
+		this.mapping = mapping;
 	}
 
 }

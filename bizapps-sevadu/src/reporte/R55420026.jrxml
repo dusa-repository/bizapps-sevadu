@@ -48,19 +48,20 @@
 	<field name="cartera_clientes" class="java.lang.String"/>
 	<field name="pvp" class="java.lang.String"/>
 	<field name="activacion" class="java.lang.String"/>
+	<field name="mapping" class="java.lang.String"/>
 	<group name="aliado" isStartNewPage="true" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{codigo_aliado}]]></groupExpression>
 		<groupHeader>
 			<band height="18">
 				<textField>
-					<reportElement x="11" y="0" width="74" height="18" uuid="2253acc0-b5bc-4e74-acd1-a0a9f22265d8"/>
+					<reportElement x="11" y="0" width="57" height="18" uuid="2253acc0-b5bc-4e74-acd1-a0a9f22265d8"/>
 					<textElement verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{codigo_aliado}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="95" y="0" width="244" height="18" uuid="1702af67-5dfb-4529-a136-0d20a1d51888"/>
+					<reportElement x="72" y="0" width="403" height="18" uuid="1702af67-5dfb-4529-a136-0d20a1d51888"/>
 					<textElement verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
@@ -200,7 +201,7 @@
 				<text><![CDATA[ALIADO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-4" x="47" y="5" width="97" height="17" uuid="d516a6a4-1fe2-431d-94b3-10e047e30d5c"/>
+				<reportElement key="staticText-4" x="47" y="5" width="64" height="17" uuid="d516a6a4-1fe2-431d-94b3-10e047e30d5c"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -213,7 +214,7 @@
 				<text><![CDATA[NOMBRE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-4" x="144" y="5" width="42" height="18" uuid="7e49ec00-c6bf-424f-a51f-b455b90b0524"/>
+				<reportElement key="staticText-4" x="112" y="5" width="42" height="18" uuid="7e49ec00-c6bf-424f-a51f-b455b90b0524"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -226,7 +227,7 @@
 				<text><![CDATA[VENTAS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-4" x="252" y="5" width="74" height="18" uuid="1e2cb018-c447-4c39-88a6-ff2741aa59db"/>
+				<reportElement key="staticText-4" x="221" y="5" width="74" height="18" uuid="1e2cb018-c447-4c39-88a6-ff2741aa59db"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -239,7 +240,7 @@
 				<text><![CDATA[PLAN VENTAS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-4" x="186" y="5" width="67" height="18" uuid="749cf323-dcfc-40c1-8179-0be3826580af"/>
+				<reportElement key="staticText-4" x="155" y="5" width="67" height="18" uuid="749cf323-dcfc-40c1-8179-0be3826580af"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -252,79 +253,91 @@
 				<text><![CDATA[EXISTENCIA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="326" y="5" width="104" height="18" uuid="182c86ff-5770-40fd-bea6-3b73611eddc6"/>
+				<reportElement x="295" y="5" width="104" height="18" uuid="182c86ff-5770-40fd-bea6-3b73611eddc6"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[CARTERA CLIENTES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="430" y="5" width="81" height="18" uuid="db2501f4-1a16-4c25-af33-1fdd46582745"/>
+				<reportElement x="399" y="5" width="63" height="18" uuid="db2501f4-1a16-4c25-af33-1fdd46582745"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[ACTIVACION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="511" y="5" width="61" height="18" uuid="da8ea8a1-a3a6-45a8-837e-fb685313b362"/>
+				<reportElement x="462" y="5" width="40" height="18" uuid="da8ea8a1-a3a6-45a8-837e-fb685313b362"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[PVP]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="502" y="5" width="70" height="18" uuid="b00f2d0e-135b-4521-80c4-279ed01fec51"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MAPPING]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="17" splitType="Stretch">
+		<band height="16" splitType="Stretch">
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="27" y="0" width="58" height="15" uuid="6d3975a3-dacb-4381-b531-8cbf26915fe4"/>
+				<reportElement x="1" y="0" width="58" height="15" uuid="6d3975a3-dacb-4381-b531-8cbf26915fe4"/>
 				<textElement textAlignment="Right">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="252" y="0" width="74" height="15" uuid="12151bea-a3ec-42c3-a428-c2d04c3d909d"/>
+				<reportElement x="221" y="0" width="74" height="15" uuid="12151bea-a3ec-42c3-a428-c2d04c3d909d"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{plan_ventas}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="183" y="0" width="70" height="15" uuid="17749924-5396-479f-9cb9-b327d4a5b765"/>
+				<reportElement x="152" y="0" width="70" height="15" uuid="17749924-5396-479f-9cb9-b327d4a5b765"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{existencia}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="85" y="0" width="43" height="15" uuid="cb19c49d-fd3a-4e23-ab57-b6f1aa78678c"/>
+				<reportElement x="59" y="0" width="43" height="15" uuid="cb19c49d-fd3a-4e23-ab57-b6f1aa78678c"/>
 				<textElement textAlignment="Right">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("E").format($F{fecha})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="326" y="0" width="104" height="15" uuid="aba2115a-6b63-48bb-a5bd-401c7cde4528"/>
+				<reportElement x="295" y="0" width="104" height="15" uuid="aba2115a-6b63-48bb-a5bd-401c7cde4528"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{cartera_clientes}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="430" y="0" width="81" height="15" uuid="77e83f5b-5b10-4a7f-907d-8ecfb1edf1d3"/>
+				<reportElement x="399" y="0" width="63" height="15" uuid="77e83f5b-5b10-4a7f-907d-8ecfb1edf1d3"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{activacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="511" y="0" width="61" height="15" uuid="0c09c965-0d48-419b-aff9-7830981eda69"/>
+				<reportElement x="462" y="0" width="40" height="15" uuid="0c09c965-0d48-419b-aff9-7830981eda69"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{pvp}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="144" y="0" width="39" height="15" uuid="10e74877-09c8-4a59-86d6-7112a93564e1"/>
+				<reportElement x="113" y="0" width="39" height="15" uuid="10e74877-09c8-4a59-86d6-7112a93564e1"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ventas}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="502" y="0" width="70" height="15" uuid="514cdf26-0ef8-4e3e-8d56-01b6efc49892"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{mapping}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
