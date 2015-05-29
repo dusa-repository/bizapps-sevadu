@@ -342,6 +342,11 @@ public class CCargarArchivo extends CGenerico {
 						break;
 					}
 				}
+				if (contadorCell != 5) {
+					listaErrores.add(mensajeErrorVacio(mostrarError,
+							contadorRow));
+					error = true;
+				}
 				if (!error && !errorLong && aliado != null && producto != null) {
 					MappingProductoPK planVentaPK = new MappingProductoPK();
 					planVentaPK.setMaestroAliado(aliado);
@@ -361,7 +366,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (planesVentas.size() == contadorRow) {
 					servicioMapping.guardarVarios(planesVentas);
-					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "NO", "SI");
+					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "NO",
+							"SI");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -527,6 +533,11 @@ public class CCargarArchivo extends CGenerico {
 						break;
 					}
 				}
+				if (contadorCell != 13) {
+					listaErrores.add(mensajeErrorVacio(mostrarError,
+							contadorRow));
+					error = true;
+				}
 				if (!error && !errorLong && producto != null && precio1 != null
 						&& precio2 != null && precio3 != null
 						&& precio4 != null && precio5 != null
@@ -552,7 +563,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (productos.size() == contadorRow) {
 					servicioProducto.guardarVarios(productos);
-					guardarControlUpdate("NO", "NO", "NO", "NO", "SI", "NO", "NO");
+					guardarControlUpdate("NO", "NO", "NO", "NO", "SI", "NO",
+							"NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -566,6 +578,7 @@ public class CCargarArchivo extends CGenerico {
 	}
 
 	private void mostrarErrores() {
+		System.out.println("lista" + listaErrores.size());
 		Window ventana = new Window(
 				"Errores encontrados al importar el archivo", "2px", true);
 		final Listbox lista = new Listbox();
@@ -1475,6 +1488,11 @@ public class CCargarArchivo extends CGenerico {
 						break;
 					}
 				}
+				if (contadorCell != 56) {
+					listaErrores.add(mensajeErrorVacio(mostrarError,
+							contadorRow));
+					error = true;
+				}
 				if (!error && !errorLong && aliado != null && marca1 != null
 						&& marca2 != null && marca3 != null && marca4 != null
 						&& marca5 != null && marca6 != null && marca7 != null
@@ -1566,7 +1584,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (marcas.size() == contadorRow) {
 					servicioMarcaActivada.guardarVarios(marcas);
-					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "SI", "NO");
+					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "SI",
+							"NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -1604,19 +1623,19 @@ public class CCargarArchivo extends CGenerico {
 				String idCliente = null;
 				Double refCliente = (double) 0;
 				String nombreCliente = null;
-				F0005 zona = new F0005();
+				// F0005 zona = new F0005();
 				String idZona = null;
 				Double refZona = (double) 0;
-				F0005 ciudad = new F0005();
+				// F0005 ciudad = new F0005();
 				String idCiudad = null;
 				Double refCiudad = (double) 0;
-				F0005 estado = new F0005();
+				// F0005 estado = new F0005();
 				String idEstado = null;
 				Double refEstado = (double) 0;
-				F0005 vendedor = new F0005();
+				// F0005 vendedor = new F0005();
 				String idVendedor = null;
 				Double refVendedor = (double) 0;
-				F0005 supervisor = new F0005();
+				// F0005 supervisor = new F0005();
 				String idSupervisor = null;
 				Double refSupervisor = (double) 0;
 				String segmentacion = null;
@@ -1682,12 +1701,13 @@ public class CCargarArchivo extends CGenerico {
 									contadorRow, contadorCell);
 							error = true;
 						}
-						if (nombreCliente != null)
+						if (nombreCliente != null) {
 							if (nombreCliente.length() > 100) {
 								mostrarError = mensajeErrorLongitud(
 										mostrarError, contadorRow, contadorCell);
 								errorLong = true;
 							}
+						}
 						break;
 					case 3:
 						idZona = obtenerStringCualquiera(cell, refZona, idZona);
@@ -1944,12 +1964,22 @@ public class CCargarArchivo extends CGenerico {
 						break;
 					}
 				}
-				if (!error && !errorLong && aliado != null && idCliente != null
-						&& nombreCliente != null && zona != null
-						&& ciudad != null && estado != null && vendedor != null
-						&& supervisor != null && segmentacion != null
-						&& tipoCliente != null && ruta != null
-						&& direccion != null && rif != null) {
+				if (contadorCell != 15) {
+					listaErrores.add(mensajeErrorVacio(mostrarError,
+							contadorRow));
+					error = true;
+				}
+				if (!error
+						&& !errorLong
+						&& aliado != null
+						&& idCliente != null
+						&& nombreCliente != null
+						// && zona != null
+						// && ciudad != null && estado != null && vendedor !=
+						// null
+						// && supervisor != null
+						&& segmentacion != null && tipoCliente != null
+						&& ruta != null && direccion != null && rif != null) {
 					cliente.setCampo1(futuro1);
 					cliente.setCampo2(futuro2);
 					cliente.setCiudad(idCiudad);
@@ -1969,12 +1999,14 @@ public class CCargarArchivo extends CGenerico {
 					cliente.setIdUsuario(nombreUsuarioSesion());
 					cliente.setFechaAuditoria(fecha);
 					clientes.add(cliente);
+
 				}
 			}
 			if (!error && !errorLong) {
 				if (clientes.size() == contadorRow) {
 					servicioCliente.guardarVarios(clientes);
-					guardarControlUpdate("NO", "NO", "NO", "SI", "NO", "NO", "NO");
+					guardarControlUpdate("NO", "NO", "NO", "SI", "NO", "NO",
+							"NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2112,6 +2144,11 @@ public class CCargarArchivo extends CGenerico {
 						break;
 					}
 				}
+				if (contadorCell != 4) {
+					listaErrores.add(mensajeErrorVacio(mostrarError,
+							contadorRow));
+					error = true;
+				}
 				if (!error && !errorLong && aliado != null && producto != null
 						&& cantidad != null && fechaFactura != null) {
 					ExistenciaPK existenciapk = new ExistenciaPK();
@@ -2130,7 +2167,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (existencias.size() == contadorRow) {
 					servicioExistencia.guardarVarios(existencias);
-					guardarControlUpdate("NO", "NO", "SI", "NO", "NO", "NO", "NO");
+					guardarControlUpdate("NO", "NO", "SI", "NO", "NO", "NO",
+							"NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2332,6 +2370,11 @@ public class CCargarArchivo extends CGenerico {
 						break;
 					}
 				}
+				if (contadorCell != 7) {
+					listaErrores.add(mensajeErrorVacio(mostrarError,
+							contadorRow));
+					error = true;
+				}
 				if (!error && !errorLong && aliado != null && producto != null
 						&& anno != null && mes != null && zona != null
 						&& cantidad != null) {
@@ -2354,7 +2397,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (planesVentas.size() == contadorRow) {
 					servicioPlan.guardarVarios(planesVentas);
-					guardarControlUpdate("NO", "SI", "NO", "NO", "NO", "NO", "NO");
+					guardarControlUpdate("NO", "SI", "NO", "NO", "NO", "NO",
+							"NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2887,6 +2931,11 @@ public class CCargarArchivo extends CGenerico {
 						break;
 					}
 				}
+				if (contadorCell != 20) {
+					listaErrores.add(mensajeErrorVacio(mostrarError,
+							contadorRow));
+					error = true;
+				}
 				if (!error && !errorLong && aliado != null && producto != null
 						&& marca != null && tipoCliente != null && zona != null
 						&& ciudad != null && especie != null
@@ -2936,7 +2985,8 @@ public class CCargarArchivo extends CGenerico {
 					if (!ventasRepetidas.isEmpty())
 						servicioVenta.eliminar(ventasRepetidas);
 					servicioVenta.guardarVarios(ventas);
-					guardarControlUpdate("SI", "NO", "NO", "NO", "NO", "NO", "NO");
+					guardarControlUpdate("SI", "NO", "NO", "NO", "NO", "NO",
+							"NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2989,6 +3039,12 @@ public class CCargarArchivo extends CGenerico {
 			int contadorCell) {
 		listaErrores.add(archivoConError + ". Fila: " + contadorRow
 				+ ". Columna: " + contadorCell + "\n");
+		return "";
+	}
+
+	private String mensajeErrorVacio(String mostrarError, int contadorRow) {
+		listaErrores.add(archivoConError + ". Celdas Vacias en la Fila: "
+				+ contadorRow);
 		return "";
 	}
 
