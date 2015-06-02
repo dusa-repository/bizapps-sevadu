@@ -222,6 +222,7 @@ public class CCargarArchivo extends CGenerico {
 		String mostrarError = "";
 		boolean error = false;
 		boolean errorLong = false;
+		MaestroAliado aliado = null;
 		if (rowIterator.hasNext()) {
 			List<MappingProducto> planesVentas = new ArrayList<MappingProducto>();
 			int contadorRow = 0;
@@ -229,7 +230,7 @@ public class CCargarArchivo extends CGenerico {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
 				MappingProducto planVenta = new MappingProducto();
-				MaestroAliado aliado = null;
+				aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
 				MaestroProducto producto = null;
@@ -366,8 +367,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (planesVentas.size() == contadorRow) {
 					servicioMapping.guardarVarios(planesVentas);
-					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "NO",
-							"SI");
+					guardarControlUpdate(aliado, "NO", "NO", "NO", "NO", "NO",
+							"NO", "SI");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -392,6 +393,7 @@ public class CCargarArchivo extends CGenerico {
 		String mostrarError = "";
 		boolean error = false;
 		boolean errorLong = false;
+		MaestroAliado aliado = null;
 		if (rowIterator.hasNext()) {
 			List<MaestroProducto> productos = new ArrayList<MaestroProducto>();
 			int contadorRow = 0;
@@ -563,8 +565,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (productos.size() == contadorRow) {
 					servicioProducto.guardarVarios(productos);
-					guardarControlUpdate("NO", "NO", "NO", "NO", "SI", "NO",
-							"NO");
+					guardarControlUpdate(null, "NO", "NO", "NO", "NO", "SI",
+							"NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -671,6 +673,7 @@ public class CCargarArchivo extends CGenerico {
 		String mostrarError = "";
 		boolean error = false;
 		boolean errorLong = false;
+		MaestroAliado aliado = null;
 		if (rowIterator.hasNext()) {
 			List<MarcaActivadaVendedor> marcas = new ArrayList<MarcaActivadaVendedor>();
 			int contadorRow = 0;
@@ -678,7 +681,7 @@ public class CCargarArchivo extends CGenerico {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
 				MarcaActivadaVendedor marcaActivada = new MarcaActivadaVendedor();
-				MaestroAliado aliado = null;
+				aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
 				Cliente cliente = null;
@@ -1584,8 +1587,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (marcas.size() == contadorRow) {
 					servicioMarcaActivada.guardarVarios(marcas);
-					guardarControlUpdate("NO", "NO", "NO", "NO", "NO", "SI",
-							"NO");
+					guardarControlUpdate(aliado, "NO", "NO", "NO", "NO", "NO",
+							"SI", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -1610,6 +1613,8 @@ public class CCargarArchivo extends CGenerico {
 		String mostrarError = "";
 		boolean error = false;
 		boolean errorLong = false;
+
+		MaestroAliado aliado = null;
 		if (rowIterator.hasNext()) {
 			List<Cliente> clientes = new ArrayList<Cliente>();
 			int contadorRow = 0;
@@ -1617,7 +1622,7 @@ public class CCargarArchivo extends CGenerico {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
 				Cliente cliente = new Cliente();
-				MaestroAliado aliado = null;
+				aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
 				String idCliente = null;
@@ -2005,8 +2010,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (clientes.size() == contadorRow) {
 					servicioCliente.guardarVarios(clientes);
-					guardarControlUpdate("NO", "NO", "NO", "SI", "NO", "NO",
-							"NO");
+					guardarControlUpdate(aliado, "NO", "NO", "NO", "SI", "NO",
+							"NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2032,6 +2037,7 @@ public class CCargarArchivo extends CGenerico {
 		String mostrarError = "";
 		boolean error = false;
 		boolean errorLong = false;
+		MaestroAliado aliado = null;
 		if (rowIterator.hasNext()) {
 			List<Existencia> existencias = new ArrayList<Existencia>();
 			int contadorRow = 0;
@@ -2039,7 +2045,7 @@ public class CCargarArchivo extends CGenerico {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
 				Existencia existencia = new Existencia();
-				MaestroAliado aliado = null;
+				aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
 				MaestroProducto producto = null;
@@ -2167,8 +2173,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (existencias.size() == contadorRow) {
 					servicioExistencia.guardarVarios(existencias);
-					guardarControlUpdate("NO", "NO", "SI", "NO", "NO", "NO",
-							"NO");
+					guardarControlUpdate(aliado, "NO", "NO", "SI", "NO", "NO",
+							"NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2193,6 +2199,7 @@ public class CCargarArchivo extends CGenerico {
 		String mostrarError = "";
 		boolean error = false;
 		boolean errorLong = false;
+		MaestroAliado aliado = null;
 		if (rowIterator.hasNext()) {
 			List<PlanVenta> planesVentas = new ArrayList<PlanVenta>();
 			int contadorRow = 0;
@@ -2200,7 +2207,7 @@ public class CCargarArchivo extends CGenerico {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
 				PlanVenta planVenta = new PlanVenta();
-				MaestroAliado aliado = null;
+				aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
 				MaestroProducto producto = null;
@@ -2397,8 +2404,8 @@ public class CCargarArchivo extends CGenerico {
 			if (!error && !errorLong) {
 				if (planesVentas.size() == contadorRow) {
 					servicioPlan.guardarVarios(planesVentas);
-					guardarControlUpdate("NO", "SI", "NO", "NO", "NO", "NO",
-							"NO");
+					guardarControlUpdate(aliado, "NO", "SI", "NO", "NO", "NO",
+							"NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2423,6 +2430,7 @@ public class CCargarArchivo extends CGenerico {
 		String mostrarError = "";
 		boolean error = false;
 		boolean errorLong = false;
+		MaestroAliado aliado = null;
 		if (rowIterator.hasNext()) {
 			List<Venta> ventas = new ArrayList<Venta>();
 			List<Venta> ventasRepetidas = new ArrayList<Venta>();
@@ -2431,7 +2439,7 @@ public class CCargarArchivo extends CGenerico {
 				contadorRow = contadorRow + 1;
 				Row row = rowIterator.next();
 				Venta venta = new Venta();
-				MaestroAliado aliado = null;
+				aliado = null;
 				String idAliado = null;
 				Double refAliado = (double) 0;
 				MaestroProducto producto = null;
@@ -2985,8 +2993,8 @@ public class CCargarArchivo extends CGenerico {
 					if (!ventasRepetidas.isEmpty())
 						servicioVenta.eliminar(ventasRepetidas);
 					servicioVenta.guardarVarios(ventas);
-					guardarControlUpdate("SI", "NO", "NO", "NO", "NO", "NO",
-							"NO");
+					guardarControlUpdate(aliado, "SI", "NO", "NO", "NO", "NO",
+							"NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -3000,16 +3008,23 @@ public class CCargarArchivo extends CGenerico {
 		}
 	}
 
-	private void guardarControlUpdate(String ventas, String planVentas,
-			String existencia, String carteraClientes, String pvp,
-			String activacion, String mapping) {
-		Usuario user = servicioUsuario.buscarPorLogin(nombreUsuarioSesion());
+	private void guardarControlUpdate(MaestroAliado a, String ventas,
+			String planVentas, String existencia, String carteraClientes,
+			String pvp, String activacion, String mapping) {
 		String codigoAliado = "Administrador";
 		String nombreAliado = "Sin Aliado";
-		UsuarioAliado objeto = servicioUsuarioAliado.buscarActivo(user);
-		if (objeto != null) {
-			codigoAliado = objeto.getId().getMaestroAliado().getCodigoAliado();
-			nombreAliado = objeto.getId().getMaestroAliado().getNombre();
+		if (a != null) {
+			codigoAliado = a.getCodigoAliado();
+			nombreAliado = a.getNombre();
+		} else {
+			Usuario user = servicioUsuario
+					.buscarPorLogin(nombreUsuarioSesion());
+			UsuarioAliado objeto = servicioUsuarioAliado.buscarActivo(user);
+			if (objeto != null) {
+				codigoAliado = objeto.getId().getMaestroAliado()
+						.getCodigoAliado();
+				nombreAliado = objeto.getId().getMaestroAliado().getNombre();
+			}
 		}
 		ControlUpdate control = new ControlUpdate(0, codigoAliado,
 				nombreAliado, ventas, planVentas, existencia, carteraClientes,

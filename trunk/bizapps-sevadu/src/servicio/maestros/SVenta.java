@@ -114,7 +114,7 @@ public class SVenta {
 		ordenar.add("fechaFactura");
 		o = new Sort(Sort.Direction.ASC, ordenar);
 		return ventaDAO
-				.findByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
+				.findByMaestroAliadoCodigoAliadoLikeAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
 						aliadoObjeto, marcas2, fechaDesde2, fechaHasta2, o);
 	}
 
@@ -159,7 +159,7 @@ public class SVenta {
 		ordenar.add("fechaFactura");
 		o = new Sort(Sort.Direction.ASC, ordenar);
 		return ventaDAO
-				.findByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
+				.findByMaestroAliadoCodigoAliadoLikeAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
 						aliado2, ids, fechaDesde2, fechaHasta2, o);
 	}
 

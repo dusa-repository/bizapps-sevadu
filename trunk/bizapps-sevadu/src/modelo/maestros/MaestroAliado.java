@@ -97,6 +97,9 @@ public class MaestroAliado implements Serializable {
 	// bi-directional many-to-one association to Venta
 	@OneToMany(mappedBy = "maestroAliado")
 	private List<Venta> ventas;
+	
+	@OneToMany(mappedBy = "maestroAliado")
+	private List<VentaDusa> ventasDusa;
 
 	@OneToMany(mappedBy = "maestroAliado")
 	private List<Cliente> clientes;
@@ -358,6 +361,14 @@ public class MaestroAliado implements Serializable {
 
 	public void setUsuariosAliados(List<UsuarioAliado> usuariosAliados) {
 		this.usuariosAliados = usuariosAliados;
+	}
+
+	public List<VentaDusa> getVentasDusa() {
+		return ventasDusa;
+	}
+
+	public void setVentasDusa(List<VentaDusa> ventasDusa) {
+		this.ventasDusa = ventasDusa;
 	}
 
 }

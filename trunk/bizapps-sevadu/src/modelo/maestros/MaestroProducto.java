@@ -91,6 +91,10 @@ public class MaestroProducto implements Serializable {
 	@OneToMany(mappedBy = "maestroProducto")
 	private List<Venta> ventas;
 
+	// bi-directional many-to-one association to Venta
+	@OneToMany(mappedBy = "maestroProducto")
+	private List<VentaDusa> ventasDusa;
+
 	@Column(name = "precio_a")
 	private Float precioA;
 
@@ -425,6 +429,14 @@ public class MaestroProducto implements Serializable {
 
 	public void setPrecioJ(Float precioJ) {
 		this.precioJ = precioJ;
+	}
+
+	public List<VentaDusa> getVentasDusa() {
+		return ventasDusa;
+	}
+
+	public void setVentasDusa(List<VentaDusa> ventasDusa) {
+		this.ventasDusa = ventasDusa;
 	}
 
 }

@@ -59,6 +59,7 @@ import servicio.maestros.SMarcaActivadaVendedor;
 import servicio.maestros.SPlanVenta;
 import servicio.maestros.STipoCliente;
 import servicio.maestros.SVenta;
+import servicio.maestros.SVentaDusa;
 import servicio.seguridad.SArbol;
 import servicio.seguridad.SGrupo;
 import servicio.seguridad.SUsuario;
@@ -103,6 +104,8 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected SPlanVenta servicioPlan;
 	@WireVariable("SVenta")
 	protected SVenta servicioVenta;
+	@WireVariable("SVentaDusa")
+	protected SVentaDusa servicioVentaDusa;
 	@WireVariable("STipoCliente")
 	protected STipoCliente servicioTipoCliente;
 	@WireVariable("SConfiguracion")
@@ -136,11 +139,12 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	public Mensaje msj = new Mensaje();
 	public String cerrar;
 	public Time tiempo = new Time(fecha.getTime());
-	private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-			"/META-INF/ConfiguracionAplicacion.xml");
+	public DateFormat formatoAnno = new SimpleDateFormat("yyyy");
+	public DateFormat formatoMes = new SimpleDateFormat("MM");
+	public DateFormat formatoDia = new SimpleDateFormat("dd");
 	
 	public static SF0004 getServicioF4() {
-		return applicationContext.getBean(SF0004.class);
+		return app.getBean(SF0004.class);
 	}
 	
 	public static SMaestroAliado getServicioAliado() {
@@ -168,11 +172,11 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	}
 	
 	public static SMaestroMarca getServicioMarca() {
-		return applicationContext.getBean(SMaestroMarca.class);
+		return app.getBean(SMaestroMarca.class);
 	}
 
 	public static SMarcaActivadaVendedor getServicioMarcaActivada() {
-		return applicationContext.getBean(SMarcaActivadaVendedor.class);
+		return app.getBean(SMarcaActivadaVendedor.class);
 	}
 
 	@Override
@@ -411,7 +415,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 
 	public List<String> obtenerPropiedades() {
 		List<String> arreglo = new ArrayList<String>();
-		DriverManagerDataSource ds = (DriverManagerDataSource) applicationContext
+		DriverManagerDataSource ds = (DriverManagerDataSource) app
 				.getBean("dataSource");
 		arreglo.add(ds.getUsername());
 		arreglo.add(ds.getPassword());

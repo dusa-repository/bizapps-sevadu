@@ -54,7 +54,7 @@ public interface IPlanVentaDAO extends JpaRepository<PlanVenta, PlanVentaPK> {
 	List<PlanVenta> findByIdMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
 			String idAliado, Date desde, Date hasta);
 	
-	@Query("select coalesce(sum(v.cajasPlanificadas), '0') from PlanVenta v where v.id.maestroAliado.codigoAliado = ?1 " +
+	@Query("select coalesce(sum(v.cajasPlanificadas), '0') from PlanVenta v where v.id.maestroAliado.codigoAliado like ?1 " +
 			"and v.id.maestroProducto.codigoProductoDusa = ?2 and v.id.anno = ?4 and v.id.mes=?3")
 	Integer sumByIdMaestroAliadoAnIdMaestroProductoProductoAndIdMesAndIdAnno(
 			String maestroAliado, String maestroProducto,

@@ -31,5 +31,7 @@ public interface IClienteDAO extends JpaRepository<Cliente, String> {
 
 	List<Cliente> findByMaestroAliadoCodigoAliado(String idAliado, Sort o);
 
+	List<Cliente> findByMaestroAliadoCodigoAliadoLike(String codigo, Sort o);
+
 
 }

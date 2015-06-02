@@ -30,6 +30,9 @@ public class SCliente {
 	}
 
 	public List<Cliente> buscarPorAliado(MaestroAliado aliado) {
+		String codigo = "%";
+		if (aliado != null)
+			codigo = aliado.getCodigoAliado();
 		List<String> ordenar = new ArrayList<String>();
 		Sort o;
 		ordenar.add("supervisor");
@@ -37,7 +40,7 @@ public class SCliente {
 		ordenar.add("zona");
 		ordenar.add("nombre");
 		o = new Sort(Sort.Direction.ASC, ordenar);
-		return clienteDAO.findByMaestroAliado(aliado, o);
+		return clienteDAO.findByMaestroAliadoCodigoAliadoLike(codigo, o);
 	}
 
 	public List<Cliente> buscarPorAliados(List<MaestroAliado> eliminarLista) {
