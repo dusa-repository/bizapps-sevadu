@@ -49,4 +49,11 @@ public class SExistencia {
 	public void eliminar(List<Existencia> existencias) {
 		existenciaDAO.delete(existencias);
 	}
+
+	public Integer sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
+			String aliado2, Date fechaDesde2, Date fechaHasta2, List<String> ids) {
+		return existenciaDAO
+				.sumByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
+						aliado2, ids, fechaDesde2, fechaHasta2);
+	}
 }

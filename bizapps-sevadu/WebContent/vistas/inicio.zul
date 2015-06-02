@@ -123,8 +123,7 @@
 							</tabbox>
 							<groupbox id="grxGrafico" width="100%" style="border:none"
 								visible="false">
-								<div style="border:none" hflex="1" vflex="1" id="divGrafico"
-									width="auto">
+								<div style="border:none" width="100%" id="divGrafico">
 								</div>
 							</groupbox>
 						</div>

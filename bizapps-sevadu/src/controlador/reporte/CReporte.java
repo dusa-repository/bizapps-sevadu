@@ -207,7 +207,8 @@ public class CReporte extends CGenerico {
 					String vendedor = cmbVendedor.getValue();
 					String zona = cmbZona.getValue();
 					String cliente = cmbCliente.getValue();
-					String nombre = cmbReporte.getValue().replaceAll("\\s+","") + "-" + aliado;
+					String nombre = cmbReporte.getValue()
+							.replaceAll("\\s+", "") + "-" + aliado;
 					if (vendedor.equals("TODOS"))
 						vendedor = "";
 					if (zona.equals("TODAS"))
@@ -361,6 +362,21 @@ public class CReporte extends CGenerico {
 								mapaGrafica);
 						ventana.doModal();
 						break;
+					case "Grafico Comparativo entre Compras/Ventas vs Inventario":
+						tipo = 25;
+						mapaGrafica = new HashMap<String, Object>();
+						mapaGrafica.put("idAliado", aliado);
+						mapaGrafica.put("desde", desde);
+						mapaGrafica.put("hasta", hasta);
+						mapaGrafica.put("tipo", "mixto");
+						mapaGrafica.put("lista", marcasAgregadas);
+						Sessions.getCurrent().setAttribute("grafica",
+								mapaGrafica);
+						ventana = (Window) Executions.createComponents(
+								"/vistas/reportes/VGrafica.zul", null,
+								mapaGrafica);
+						ventana.doModal();
+						break;
 					case "Grafico Vendido VS Planificado Marcas (Angular)":
 						tipo = 25;
 						mapaGrafica = new HashMap<String, Object>();
@@ -486,14 +502,18 @@ public class CReporte extends CGenerico {
 			MaestroAliado aliadoObjeto = getServicioAliado().buscar(aliado);
 			ClassLoader cl = this.getClass().getClassLoader();
 			InputStream fis = null;
-
+			if (aliado.equals("TODOS"))
+				aliado = "%";
+			String nombreAliado = "TODOS";
+			if(aliadoObjeto!=null)
+				nombreAliado = aliadoObjeto.getNombre();
+			
 			Map<String, Object> parameters = new HashMap<String, Object>();
-
 			parameters.put("aliado", aliado);
 			parameters.put("cliente", cliente);
 			parameters.put("fecha_desde", desde);
 			parameters.put("fecha_hasta", hasta);
-			parameters.put("naliado", aliadoObjeto.getNombre());
+			parameters.put("naliado", nombreAliado);
 			parameters.put("vendedor", vendedor);
 			parameters.put("zona", zona);
 
@@ -733,8 +753,15 @@ public class CReporte extends CGenerico {
 
 	@Listen("onClick = #btnBuscarAliado")
 	public void mostrarCatalogoAliado() {
-		final List<MaestroAliado> listaObjetos = servicioAliado
-				.buscarTodosOrdenados();
+		List<MaestroAliado> listaLlenadora = new ArrayList<MaestroAliado>();
+		MaestroAliado objeto = new MaestroAliado();
+		objeto.setCodigoAliado("TODOS");
+		objeto.setNombre("TODOS");
+		objeto.setZona("TODAS");
+		objeto.setDescripcionVendedor("TODOS");
+		listaLlenadora.add(objeto);
+		listaLlenadora.addAll(servicioAliado.buscarTodosOrdenados());
+		final List<MaestroAliado> listaObjetos = listaLlenadora;
 		catalogoAliado = new Catalogo<MaestroAliado>(divCatalogoAliado,
 				"Catalogo de Aliados", listaObjetos, true, false, false,
 				"Codigo", "Nombre", "Zona", "Vendedor") {

@@ -17,6 +17,7 @@ import modelo.maestros.Configuracion;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.Venta;
+import modelo.termometro.TermometroCliente;
 
 import org.zkoss.chart.Chart;
 import org.zkoss.chart.Charts;
@@ -37,6 +38,7 @@ import org.zkoss.chart.plotOptions.DataLabels;
 import org.zkoss.chart.plotOptions.LinePlotOptions;
 import org.zkoss.chart.plotOptions.PieDataLabels;
 import org.zkoss.chart.plotOptions.PiePlotOptions;
+import org.zkoss.chart.plotOptions.SplinePlotOptions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Window;
@@ -68,6 +70,8 @@ public class CGraficador extends CGenerico {
 				.getCurrent().getAttribute("grafica");
 		if (map != null) {
 			aliado = (String) map.get("idAliado");
+			if (aliado.equals("TODOS"))
+				aliado = "%";
 			fechaDesde = (Date) map.get("desde");
 			fechaHasta = (Date) map.get("hasta");
 			tipoGrafica = (String) map.get("tipo");
@@ -107,6 +111,8 @@ public class CGraficador extends CGenerico {
 			else
 				generarGraficaAngular2(aliado, fechaDesde, fechaHasta);
 			break;
+		case "mixto":
+			generarGraficaMixta(aliado, fechaDesde, fechaHasta, ids);
 
 		default:
 			break;
@@ -202,12 +208,17 @@ public class CGraficador extends CGenerico {
 				.setValueSuffix(" marcas");
 		chart.getSeries().setName("Marcas Vendidas");
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
+		String nombreAliado = "Todos";
+		String codigoAliado = "Todos";
+		if (aliadoBuscar != null) {
+			nombreAliado = aliadoBuscar.getNombre();
+			codigoAliado = aliadoBuscar.getCodigoAliado();
+		}
 		chart.getYAxis().getTitle().setText("Marcas Vendidas");
 		chart.setTitle("Marcas a Activar(Obj) VS Marcas Vendidas" + " desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
-		chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
-				+ aliado2 + ")");
+		chart.setSubtitle("Aliado: " + nombreAliado + " (" + codigoAliado + ")");
 	}
 
 	private void generarGraficaAngular(String aliado2, Date fechaDesde2,
@@ -331,13 +342,19 @@ public class CGraficador extends CGenerico {
 					.setValueSuffix(" cajas");
 			chart.getSeries().setName("Cajas Vendidas");
 			MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
+			String nombreAliado = "Todos";
+			String codigoAliado = "Todos";
+			if (aliadoBuscar != null) {
+				nombreAliado = aliadoBuscar.getNombre();
+				codigoAliado = aliadoBuscar.getCodigoAliado();
+			}
 			chart.getYAxis().getTitle().setText("Numero de Cajas");
 			chart.setTitle("Vendido VS Planificado(Obj) de la Marca:"
 					+ servicioMarca.buscar(ids.get(0)).getDescripcion()
 					+ " desde " + formatoCorrecto.format(fechaDesde2)
 					+ " hasta  " + formatoCorrecto.format(fechaHasta2));
-			chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
-					+ aliado2 + ")");
+			chart.setSubtitle("Aliado: " + nombreAliado + " (" + codigoAliado
+					+ ")");
 		}
 
 		if (ventas.isEmpty())
@@ -400,11 +417,18 @@ public class CGraficador extends CGenerico {
 			serieMarca.addPoint(browserPoint);
 		}
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
+
+		String nombreAliado = "Todos";
+		String codigoAliado = "Todos";
+		if (aliadoBuscar != null) {
+			nombreAliado = aliadoBuscar.getNombre();
+			codigoAliado = aliadoBuscar.getCodigoAliado();
+		}
+
 		chart.setTitle("Porcentaje de Participacion en Ventas(Marcas)"
 				+ " desde " + formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
-		chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
-				+ aliado2 + ")");
+		chart.setSubtitle("Aliado: " + nombreAliado + " (" + codigoAliado + ")");
 
 		Chart chartOptional = chart.getChart();
 		chartOptional.setBackgroundColor("");
@@ -509,12 +533,17 @@ public class CGraficador extends CGenerico {
 			serieMarca.addPoint(browserPoint);
 		}
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
+		String nombreAliado = "Todos";
+		String codigoAliado = "Todos";
+		if (aliadoBuscar != null) {
+			nombreAliado = aliadoBuscar.getNombre();
+			codigoAliado = aliadoBuscar.getCodigoAliado();
+		}
 		chart.setTitle("Volumen de Ventas por Marca y Producto" + " desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
 
-		chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
-				+ aliado2 + ")");
+		chart.setSubtitle("Aliado: " + nombreAliado + " (" + codigoAliado + ")");
 		PiePlotOptions browserPlotOptions = new PiePlotOptions();
 		browserPlotOptions.setSize("60%");
 		serieMarca.setPlotOptions(browserPlotOptions);
@@ -595,6 +624,14 @@ public class CGraficador extends CGenerico {
 			modelo.setValue("Vendido", marca, Math.rint(vendido * 100) / 100);
 		}
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
+
+		String nombreAliado = "Todos";
+		String codigoAliado = "Todos";
+		if (aliadoBuscar != null) {
+			nombreAliado = aliadoBuscar.getNombre();
+			codigoAliado = aliadoBuscar.getCodigoAliado();
+		}
+
 		chart.setModel(modelo);
 		chart.getXAxis().getTitle().setText("Numero de Cajas");
 		chart.setTitle("Vendido VS Planificado de la Marca:"
@@ -602,8 +639,7 @@ public class CGraficador extends CGenerico {
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
 
-		chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
-				+ aliado2 + ")");
+		chart.setSubtitle("Aliado: " + nombreAliado + " (" + codigoAliado + ")");
 		YAxis yAxis = chart.getYAxis();
 		yAxis.setMin(0);
 		yAxis.setTitle("Cajas");
@@ -688,13 +724,19 @@ public class CGraficador extends CGenerico {
 		}
 
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliadoObjeto);
+
+		String nombreAliado = "Todos";
+		String codigoAliado = "Todos";
+		if (aliadoBuscar != null) {
+			nombreAliado = aliadoBuscar.getNombre();
+			codigoAliado = aliadoBuscar.getCodigoAliado();
+		}
 		chart.setModel(modelo);
 		chart.getYAxis().getTitle().setText("Venta de Cajas");
 		chart.setTitle("Ventas Mensuales por Marca desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
-		chart.setSubtitle("Aliado: " + aliadoBuscar.getNombre() + " ("
-				+ aliadoObjeto + ")");
+		chart.setSubtitle("Aliado: " + nombreAliado + " (" + codigoAliado + ")");
 
 		chart.getXAxis().setMin(0);
 		chart.getTooltip().setEnabled(true);
@@ -712,6 +754,142 @@ public class CGraficador extends CGenerico {
 					+ formatoCorrecto.format(fechaHasta2)
 					+ "\n"
 					+ "NO EXISTEN VENTAS REGISTRADAS EN ESTE INTERVALO DE TIEMPO");
+	}
+
+	private void generarGraficaMixta(String aliado2, Date fechaDesde2,
+			Date fechaHasta2, List<String> ids) {
+		int annoPlanDesde = Integer.parseInt(formatoAnno.format(fechaDesde));
+		int mesPlanDesde = Integer.parseInt(formatoMes.format(fechaDesde));
+		int annoPlanHasta = Integer.parseInt(formatoAnno.format(fechaHasta));
+		int mesPlanHasta = Integer.parseInt(formatoMes.format(fechaHasta));
+		List<String> categorias = new ArrayList<String>();
+		List<Integer> inventario = new ArrayList<Integer>();
+		List<Double> ventas = new ArrayList<Double>();
+		List<Double> ventasDusa = new ArrayList<Double>();
+		// List<Double> compras = new ArrayList<Double>();
+		// List<Double> comprasDusa = new ArrayList<Double>();
+		do {
+			if (mesPlanDesde == 13) {
+				mesPlanDesde = 1;
+				annoPlanDesde = annoPlanDesde + 1;
+			}
+			Date fechaInicio = null;
+			try {
+				fechaInicio = formatoCorrecto.parse("01-" + mesPlanDesde + "-"
+						+ annoPlanDesde);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			Date fechaFin = null;
+			String ultimoDia = "";
+			if (annoPlanDesde == annoPlanHasta && mesPlanDesde == mesPlanHasta)
+				ultimoDia = formatoDia.format(fechaHasta) + "-";
+			else
+				ultimoDia = lastDay(fechaInicio);
+
+			try {
+				fechaFin = formatoCorrecto.parse(ultimoDia + mesPlanDesde + "-"
+						+ annoPlanDesde);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			Double valorVenta = servicioVenta
+					.sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
+							aliado2, fechaInicio, fechaFin, ids);
+			Double valorVentaDusa = valorVenta + 10;
+			Integer valorInventario = servicioExistencia
+					.sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
+							aliado2, fechaInicio, fechaFin, ids);
+			// Double valorCompra = (double) 0;
+			// Double valorCompraDusa = (double) 0;
+			ventas.add(valorVenta);
+			ventasDusa.add(valorVentaDusa);
+			inventario.add(valorInventario);
+			categorias.add(formatoFecha.format(fechaInicio));
+
+			mesPlanDesde = mesPlanDesde + 1;
+		} while (annoPlanDesde != annoPlanHasta
+				|| mesPlanDesde != mesPlanHasta + 1);
+
+		chart.getXAxis().setCategories(categorias);
+
+		YAxis yAxis3 = chart.getYAxis();
+		yAxis3.setMin(0);
+		yAxis3.setGridLineWidth(0);
+		yAxis3.setTitle("Ventas Dusa");
+		yAxis3.getLabels().setFormat("{value} Cajas");
+		yAxis3.setOpposite(true);
+		chart.getTooltip().setShared(true);
+
+		YAxis yAxis1 = chart.getYAxis(1);
+		yAxis1.setMin(0);
+		yAxis1.getLabels().setFormat("{value} Cajas");
+		yAxis1.setTitle("Inventario");
+		yAxis1.setOpposite(true);
+
+		YAxis yAxis2 = chart.getYAxis(2);
+		yAxis2.setMin(0);
+		yAxis2.setGridLineWidth(0);
+		yAxis2.setTitle("Ventas");
+		yAxis2.getLabels().setFormat("{value} Cajas");
+
+		String color1 = chart.getColors().get(0).stringValue();
+		String color2 = chart.getColors().get(1).stringValue();
+		String color3 = chart.getColors().get(2).stringValue();
+		yAxis1.getLabels().setStyle("color: '" + color1 + "'");
+		yAxis1.getTitle().setStyle("color: '" + color1 + "'");
+		yAxis2.getLabels().setStyle("color: '" + color2 + "'");
+		yAxis2.getTitle().setStyle("color: '" + color2 + "'");
+		yAxis3.getLabels().setStyle("color: '" + color3 + "'");
+		yAxis3.getTitle().setStyle("color: '" + color3 + "'");
+
+		Legend legend = chart.getLegend();
+		legend.setLayout("vertical");
+		legend.setAlign("left");
+		legend.setX(120);
+		legend.setVerticalAlign("top");
+		legend.setY(80);
+		legend.setFloating(true);
+
+		Series rainfall = new Series("Inventario");
+		rainfall.setName("Inventario");
+		rainfall.setType("column");
+		rainfall.setYAxis(1);
+		rainfall.setData(inventario);
+		rainfall.getPlotOptions().getTooltip().setValueSuffix(" cajas");
+		chart.addSeries(rainfall);
+
+		Series pressure = new Series("Ventas");
+		pressure.setName("Ventas");
+		pressure.setType("spline");
+		pressure.setYAxis(2);
+		pressure.setData(ventas);
+		pressure.getMarker().setEnabled(false);
+		SplinePlotOptions plotOptions2 = new SplinePlotOptions();
+		plotOptions2.setDashStyle("shortdot");
+		plotOptions2.getTooltip().setValueSuffix(" cajas");
+		pressure.setPlotOptions(plotOptions2);
+		chart.addSeries(pressure);
+
+		Series temperature = new Series("Ventas Dusa");
+		temperature.setName("Ventas Dusa");
+		temperature.setType("spline");
+		temperature.setData(ventasDusa);
+		temperature.getPlotOptions().getTooltip().setValueSuffix(" cajas");
+		chart.addSeries(temperature);
+
+		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
+		String nombreAliado = "Todos";
+		String codigoAliado = "Todos";
+		if (aliadoBuscar != null) {
+			nombreAliado = aliadoBuscar.getNombre();
+			codigoAliado = aliadoBuscar.getCodigoAliado();
+		}
+		chart.setTitle("Comparacion entre Ventas/Compras vs Inventario desde "
+				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
+				+ formatoCorrecto.format(fechaHasta2));
+		chart.setSubtitle("Aliado: " + nombreAliado + " (" + codigoAliado + ")");
 	}
 
 }

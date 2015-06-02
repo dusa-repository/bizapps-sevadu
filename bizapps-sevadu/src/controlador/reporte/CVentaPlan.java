@@ -37,9 +37,6 @@ public class CVentaPlan extends CGenerico {
 	String vendedor;
 	Date fechaDesde;
 	Date fechaHasta;
-	DateFormat formatoAnno = new SimpleDateFormat("yyyy");
-	DateFormat formatoMes = new SimpleDateFormat("MM");
-	DateFormat formatoDia = new SimpleDateFormat("dd");
 
 	@Override
 	public void inicializar() throws IOException {
@@ -48,6 +45,8 @@ public class CVentaPlan extends CGenerico {
 				.getCurrent().getAttribute("reporte");
 		if (map != null) {
 			aliado = (String) map.get("idAliado");
+			if (aliado.equals("TODOS"))
+				aliado = "%";
 			vendedor = (String) map.get("vendedor");
 			fechaDesde = (Date) map.get("desde");
 			fechaHasta = (Date) map.get("hasta");
@@ -89,15 +88,15 @@ public class CVentaPlan extends CGenerico {
 				}
 				Date fechaFin = null;
 				String ultimoDia = "";
-				if(annoPlanDesde == annoPlanHasta
-					&& mesPlanDesde == mesPlanHasta)
-					ultimoDia = formatoDia.format(fechaHasta)+"-";
-				else 
+				if (annoPlanDesde == annoPlanHasta
+						&& mesPlanDesde == mesPlanHasta)
+					ultimoDia = formatoDia.format(fechaHasta) + "-";
+				else
 					ultimoDia = lastDay(fechaInicio);
-				
+
 				try {
-					fechaFin = formatoFecha.parse(ultimoDia
-							+ mesPlanDesde + "-" + annoPlanDesde);
+					fechaFin = formatoFecha.parse(ultimoDia + mesPlanDesde
+							+ "-" + annoPlanDesde);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
