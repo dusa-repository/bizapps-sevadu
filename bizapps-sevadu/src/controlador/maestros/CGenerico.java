@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.mail.Address;
@@ -42,6 +43,11 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Tab;
 
+import security.modelo.Grupo;
+import security.modelo.UsuarioSeguridad;
+import security.servicio.SArbol;
+import security.servicio.SGrupo;
+import security.servicio.SUsuarioSeguridad;
 import servicio.bitacora.SBitacoraEliminacion;
 import servicio.bitacora.SBitacoraLogin;
 import servicio.bitacora.SControlUpdate;
@@ -60,11 +66,10 @@ import servicio.maestros.SPlanVenta;
 import servicio.maestros.STipoCliente;
 import servicio.maestros.SVenta;
 import servicio.maestros.SVentaDusa;
-import servicio.seguridad.SArbol;
-import servicio.seguridad.SGrupo;
 import servicio.seguridad.SUsuario;
 import servicio.seguridad.SUsuarioAliado;
 import servicio.termometro.STermometro;
+
 import componente.Mensaje;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
@@ -78,6 +83,8 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	protected SGrupo servicioGrupo;
 	@WireVariable("SUsuario")
 	protected SUsuario servicioUsuario;
+	@WireVariable("SUsuarioSeguridad")
+	protected SUsuarioSeguridad servicioUsuarioSeguridad;
 	@WireVariable("SUsuarioAliado")
 	protected SUsuarioAliado servicioUsuarioAliado;
 	@WireVariable("SF0004")
@@ -142,19 +149,19 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	public DateFormat formatoAnno = new SimpleDateFormat("yyyy");
 	public DateFormat formatoMes = new SimpleDateFormat("MM");
 	public DateFormat formatoDia = new SimpleDateFormat("dd");
-	
+
 	public static SF0004 getServicioF4() {
 		return app.getBean(SF0004.class);
 	}
-	
+
 	public static SMaestroAliado getServicioAliado() {
 		return app.getBean(SMaestroAliado.class);
 	}
-	
+
 	public static SBitacoraLogin getServicioBitacora() {
 		return app.getBean(SBitacoraLogin.class);
 	}
-	
+
 	public static SUsuario getServicioUsuario() {
 		return app.getBean(SUsuario.class);
 	}
@@ -170,7 +177,7 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 	public static SConfiguracion getServicioConfiguracion() {
 		return app.getBean(SConfiguracion.class);
 	}
-	
+
 	public static SMaestroMarca getServicioMarca() {
 		return app.getBean(SMaestroMarca.class);
 	}
@@ -693,6 +700,28 @@ public abstract class CGenerico extends SelectorComposer<Component> {
 			break;
 		}
 		return last;
+	}
+
+	public void guardarDatosSeguridad(Usuario usuarioLogica,
+			Set<Grupo> gruposUsuario) {
+		UsuarioSeguridad usuario = new UsuarioSeguridad(
+				usuarioLogica.getLogin(), usuarioLogica.getEmail(),
+				usuarioLogica.getPassword(), usuarioLogica.getImagen(), true,
+				usuarioLogica.getPrimerNombre(),
+				usuarioLogica.getPrimerApellido(), fechaHora, horaAuditoria,
+				nombreUsuarioSesion(), gruposUsuario);
+		servicioUsuarioSeguridad.guardar(usuario);
+	}
+
+	public void inhabilitarSeguridad(List<Usuario> list) {
+		for (int i = 0; i < list.size(); i++) {
+			UsuarioSeguridad usuario = servicioUsuarioSeguridad
+					.buscarPorLogin(list.get(i).getLogin());
+			usuario.setEstado(false);
+			servicioUsuarioSeguridad.guardar(usuario);
+			list.get(i).setEstado(false);
+			servicioUsuario.guardar(list.get(i));
+		}
 	}
 
 }

@@ -9,7 +9,6 @@ import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.MarcaActivadaVendedor;
-import modelo.maestros.Venta;
 import modelo.pk.MarcaActivadaPK;
 
 import org.zkoss.zk.ui.Sessions;

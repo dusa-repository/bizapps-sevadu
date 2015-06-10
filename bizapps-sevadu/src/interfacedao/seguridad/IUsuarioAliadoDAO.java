@@ -2,7 +2,6 @@ package interfacedao.seguridad;
 
 import java.util.List;
 
-import modelo.maestros.MaestroAliado;
 import modelo.pk.UsuarioAliadoPK;
 import modelo.seguridad.Usuario;
 import modelo.seguridad.UsuarioAliado;

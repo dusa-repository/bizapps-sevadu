@@ -1,7 +1,7 @@
 <zk>
 	<style src="/public/Estilo.css" />
-	<div id="divGrupo" apply="controlador.seguridad.CGrupo">
-		<groupbox width="100%" mold="3d" title="Grupo (VGrupo)">
+	<div id="divGrupo" apply="security.controlador.CGrupo">
+		<groupbox width="auto" mold="3d" title="Grupo (VGrupo)">
 			<div id="botoneraGrupo" />
 			<separator />
 			<groupbox id="gpxRegistro" width="auto" class ="azul" title="" open="false">
@@ -23,7 +23,7 @@
 								<label value="*" style="font-weight:bold;color:red">
 								</label>
 							</hbox>
-							<textbox id="txtNombreGrupo" tooltiptext="Ingrese el Nombre del Grupo" />
+							<textbox id="txtNombreGrupo" tooltiptext="Ingrese el Nombre del Grupo (nombre)" />
 							<hbox />
 							<hbox />
 						</row>
@@ -33,25 +33,15 @@
 				<hbox width="100%">
 					<groupbox width="100%" title="Funcionalidades Disponibles" class="blanco">
 						<tree id="treeGrupo" width="99%">
-						<template name="model">
-							<treeitem context="menupopup" open="true">
-								<treerow>
-									<treecell context="${each.index}" label="${each.label}" />
-								</treerow>
-							</treeitem>
-						</template>
-					</tree>
-					</groupbox>
-					<!-- <groupbox width="100%" title="Funcionalidades Seleccionadas" class="blanco">
-						<listbox width="auto" id="ltbFuncionalidadesSeleccionados">
-							<listhead><listheader label="Accion" width="100%" /></listhead>
 							<template name="model">
-								<listitem>
-									<listcell label="${each}"></listcell>
-								</listitem>
+								<treeitem context="menupopup" open="true">
+									<treerow>
+										<treecell context="${each.index}" label="${each.label}" />
+									</treerow>
+								</treeitem>
 							</template>
-						</listbox>
-					</groupbox> -->
+						</tree>
+					</groupbox>
 				</hbox>
 				<separator />
 			</groupbox>

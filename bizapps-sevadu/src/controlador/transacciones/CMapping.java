@@ -8,7 +8,6 @@ import java.util.List;
 
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MappingProducto;
-import modelo.seguridad.Arbol;
 import modelo.seguridad.Usuario;
 import modelo.seguridad.UsuarioAliado;
 
@@ -30,12 +29,15 @@ import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
+import security.modelo.Arbol;
 import servicio.maestros.SMaestroAliado;
 import servicio.maestros.SMappingProducto;
+
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
+
 import controlador.maestros.CGenerico;
 
 public class CMapping extends CGenerico {

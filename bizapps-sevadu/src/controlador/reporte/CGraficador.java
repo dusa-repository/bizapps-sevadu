@@ -17,7 +17,6 @@ import modelo.maestros.Configuracion;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
 import modelo.maestros.Venta;
-import modelo.termometro.TermometroCliente;
 
 import org.zkoss.chart.Chart;
 import org.zkoss.chart.Charts;
@@ -27,7 +26,6 @@ import org.zkoss.chart.LinearGradient;
 import org.zkoss.chart.PaneBackground;
 import org.zkoss.chart.Point;
 import org.zkoss.chart.Series;
-import org.zkoss.chart.Tooltip;
 import org.zkoss.chart.YAxis;
 import org.zkoss.chart.model.CategoryModel;
 import org.zkoss.chart.model.DefaultCategoryModel;

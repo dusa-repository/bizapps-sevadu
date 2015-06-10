@@ -9,8 +9,6 @@ import java.util.List;
 
 import modelo.bitacora.BitacoraEliminacion;
 import modelo.bitacora.BitacoraLogin;
-import modelo.maestros.MaestroAliado;
-import modelo.maestros.MaestroMarca;
 import modelo.seguridad.Usuario;
 
 import org.zkoss.zk.ui.Sessions;
@@ -28,6 +26,7 @@ import org.zkoss.zul.Textbox;
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
+
 import controlador.maestros.CGenerico;
 
 public class CConsultarBitacora extends CGenerico {

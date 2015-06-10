@@ -25,7 +25,7 @@
 		execution.getParameter("respuesta");
 	</zscript>
 	<window title="" border="0" height="100%" width="100%"
-		apply="controlador.portal.CIndex">
+		apply="security.controlador.CIndex">
 		<borderlayout height="100%"
 			style="background-image: url('public/imagenes/generales/estadistica.jpg'); background-repeat:no-repeat;height=100%; width=100% ; background-color:white">
 			<north height="2%" class="banner">
@@ -61,14 +61,14 @@
 										<label class="etiqueta" height="20px" style="font-size:16px"
 											value="Nombre de Usuario :" />
 										<textbox placeholder="Usuario" height="22px" id="log_usuario"
-											name="j_username" hflex="1" width="200px" />
+											name="username" hflex="1" width="200px" />
 									</vlayout>
 									<separator></separator>
 									<vlayout width="100%">
 										<label class="etiqueta" height="20px" style="font-size:16px"
 											value="Contraseña :" />
 										<textbox placeholder="Contraseña" height="22px" id="log_clave"
-											hflex="1" type="password" name="j_password" width="200px" />
+											hflex="1" type="password" name="password" width="200px" />
 									</vlayout>
 									<separator />
 									<separator />

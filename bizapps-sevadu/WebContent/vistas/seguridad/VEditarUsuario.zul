@@ -1,21 +1,44 @@
 <zk>
 	<style src="/public/Estilo.css" />
-	<div apply="controlador.seguridad.CEditarUsuario" id="divEditarUsuario">
-		<groupbox width="50%" mold="3d" title="Editar Usuario">
+	<div apply="security.controlador.CEditarUsuario" id="divEditarUsuario">
+		<groupbox width="52%" mold="3d" title="Editar Usuario">
 			<grid width="100%">
 				<columns visible="false">
-					<column label="" width="40%" />
-					<column label="" width="60%" />
+					<column label="" width="35%" />
+					<column label="" width="65%" />
 				</columns>
 				<rows>
 					<row>
+						<label value="Nombre de Usuario:" class="etiqueta" />
+						<textbox id="txtNombreUsuarioEditar" maxlength="50"
+							disabled="true" tooltiptext="Nombre de Usuario Actual" />
+					</row>
+					<row>
 						<hbox>
-							<label value="Nombre de Usuario:" class="etiqueta" />
+							<label value="Nombre:" class="etiqueta" />
 							<space />
 							<label value="*" style="font-weight:bold;color:red" />
 						</hbox>
-						<textbox id="txtNombreUsuarioEditar" maxlength="50"
-							disabled="true" />
+						<textbox id="txtNombre" maxlength="50"
+							tooltiptext="Ingrese el nombre de Usuario" />
+					</row>
+					<row>
+						<hbox>
+							<label value="Apellido:" class="etiqueta" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red" />
+						</hbox>
+						<textbox id="txtApellido" maxlength="50"
+							tooltiptext="Ingrese el apellido de Usuario" />
+					</row>
+					<row>
+						<hbox>
+							<label value="Correo:" class="etiqueta" />
+							<space />
+							<label value="*" style="font-weight:bold;color:red" />
+						</hbox>
+						<textbox id="txtCorreo" maxlength="50"
+							tooltiptext="Ingrese el correo de Usuario (ejemplo@ejemplo.com)" />
 					</row>
 					<row>
 						<hbox>
@@ -29,8 +52,7 @@
 					</row>
 					<row>
 						<hbox>
-							<label value="
-							Confirme su contraseña: " class="etiqueta" />
+							<label value="Confirme su contraseña:" class="etiqueta" />
 							<space />
 							<label value="*" style="font-weight:bold;color:red" />
 						</hbox>
@@ -39,11 +61,9 @@
 					</row>
 					<row>
 						<label class="etiqueta" value="Adjuntar Imagen:" />
-						<fileupload
-							style="	background: #952C2C;font-size: 13px;color: white;cursor: pointer;width: 95px;height: 29px;	-webkit-border-radius: 0.7em;-moz-border-radius: 0.7em;	border-radius: 0.7em;"
-							id="fudImagenUsuario" image="/public/imagenes/botones/cargar.png" label="Foto"/>
-					</row>
-					<row>
+						<fileupload label="Foto" id="fudImagenUsuario"
+							image="/public/imagenes/botones/cargar.png"
+							style="	background: #952C2C;font-size: 13px;color: white;cursor: pointer;width: 95px;height: 29px;	-webkit-border-radius: 0.7em;-moz-border-radius: 0.7em;	border-radius: 0.7em;" />
 						<label class="etiqueta" value="Imagen Seleccionada:" />
 						<image id="imgUsuario" width="50px" height="50px" />
 					</row>

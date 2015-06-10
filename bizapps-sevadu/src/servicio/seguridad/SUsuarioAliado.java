@@ -1,10 +1,11 @@
 package servicio.seguridad;
 
+import interfacedao.maestros.IMaestroAliadoDAO;
+import interfacedao.seguridad.IUsuarioAliadoDAO;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import interfacedao.maestros.IMaestroAliadoDAO;
-import interfacedao.seguridad.IUsuarioAliadoDAO;
 import modelo.maestros.MaestroAliado;
 import modelo.seguridad.Usuario;
 import modelo.seguridad.UsuarioAliado;

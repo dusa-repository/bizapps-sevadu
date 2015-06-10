@@ -1,18 +1,20 @@
 <zk>
 	<style src="../public/Estilo.css" />
-	<div id="divVMenuArbol" apply="controlador.seguridad.CMenuArbol">
+	<div id="divVMenuArbol" apply="security.controlador.CMenuArbol">
 		<groupbox width="auto" mold="3d" title="Menu Arbol (VMenuArbol)">
 			<div id="botoneraMenuArbol" />
-			<groupbox id="gpxRegistro" width="auto" class ="azul" title="" open="false">
-				<caption label="Añadir"  style="font-weight:bold; font-size: 13px"
+			<separator />
+			<groupbox id="gpxRegistro" width="auto" class="azul" title=""
+				open="false">
+				<caption label="Añadir" style="font-weight:bold; font-size: 13px"
 					tooltiptext="Presione para Registrar un Nuevo Item del Menu Arbol" />
 				<separator />
 				<grid width="100%">
 					<columns visible="false">
-						<column label="" width="20%" />
-						<column label="" width="10%" />
 						<column label="" width="25%" />
-						<column label="" width="45%" />
+						<column label="" width="25%" />
+						<column label="" width="25%" />
+						<column label="" width="25%" />
 					</columns>
 					<rows>
 						<row>
@@ -22,23 +24,11 @@
 								<label value="*" style="font-weight:bold;color:red">
 								</label>
 							</hbox>
-							<cell colspan="2">
-									<textbox id="txtNombre" hflex="1" maxlength="100"
-										tooltiptext="Ingrese el Nombre del Item del Menu Arbol" width="100%"/>
+							<cell colspan="3">
+								<textbox id="txtNombre" hflex="1" maxlength="100"
+									tooltiptext="Ingrese el Nombre del Item del Menu Arbol (nombre)"
+									width="100%" />
 							</cell>
-							<hbox />
-						</row>
-						<row>
-							<hbox>
-								<label class="etiqueta" value="Padre:" />
-								<space />
-								<label value="*" style="font-weight:bold;color:red">
-								</label>
-							</hbox>
-							<longbox id="txtPadre" hflex="1" maxlength="3"
-								tooltiptext="Ingrese el Padre del Item" width="100%"/>
-							<hbox />
-							<hbox />
 						</row>
 						<row>
 							<hbox>
@@ -47,11 +37,46 @@
 								<label value="*" style="font-weight:bold;color:red">
 								</label>
 							</hbox>
-							<cell colspan="2">							
-									<textbox id="txtUrl" hflex="1" maxlength="100"
-										tooltiptext="Ingrese la Url de la Vista" />							
+							<cell colspan="3">
+								<textbox id="txtUrl" hflex="1" maxlength="100"
+									tooltiptext="Ingrese la Url de la Vista (url)" />
 							</cell>
-							<hbox />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="Padre:" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<longbox id="txtPadre" hflex="1" maxlength="5"
+								tooltiptext="Ingrese el Padre del Item (padre)" width="100%" />
+							<label class="etiqueta" value="Orden en el Menu:" />
+							<intbox id="txtOrden" hflex="1" maxlength="8"
+								tooltiptext="Ingrese el Orden en que aparecera el item en el Menu"
+								width="100%" />
+						</row>
+						<row>
+							<hbox>
+								<label class="etiqueta" value="¿Maneja Versiones?" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<radiogroup>
+								<radio label="SI" value="si" id="rdoSi" />
+								<radio label="NO" value="no" id="rdoNo" />
+							</radiogroup>
+							<hbox>
+								<label class="etiqueta" value="¿Amerita ocultar menu al abrir?" />
+								<space />
+								<label value="*" style="font-weight:bold;color:red">
+								</label>
+							</hbox>
+							<radiogroup>
+								<radio label="SI" value="si" id="rdoSiMenu" />
+								<radio label="NO" value="no" id="rdoNoMenu" />
+							</radiogroup>
 						</row>
 					</rows>
 				</grid>

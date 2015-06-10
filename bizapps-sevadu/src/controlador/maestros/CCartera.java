@@ -11,13 +11,9 @@ import modelo.maestros.MaestroAliado;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.TipoCliente;
 import modelo.maestros.Venta;
-import modelo.seguridad.Arbol;
 import modelo.seguridad.Usuario;
 import modelo.seguridad.UsuarioAliado;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -35,7 +31,6 @@ import componente.Botonera;
 import componente.BuscadorUDC;
 import componente.Catalogo;
 import componente.Mensaje;
-import componente.Validador;
 
 public class CCartera extends CGenerico {
 

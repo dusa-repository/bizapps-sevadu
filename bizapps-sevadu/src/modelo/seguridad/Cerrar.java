@@ -2,8 +2,6 @@ package modelo.seguridad;
 
 import java.io.IOException;
 import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -15,7 +13,6 @@ import modelo.bitacora.BitacoraLogin;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.zkoss.zk.ui.Executions;
 
 import controlador.maestros.CGenerico;
 
