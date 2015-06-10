@@ -1,9 +1,10 @@
 package servicio.bitacora;
 
+import interfacedao.bitacora.IBitacoraEliminacionDAO;
+
 import java.util.Date;
 import java.util.List;
 
-import interfacedao.bitacora.IBitacoraEliminacionDAO;
 import modelo.bitacora.BitacoraEliminacion;
 
 import org.springframework.beans.factory.annotation.Autowired;

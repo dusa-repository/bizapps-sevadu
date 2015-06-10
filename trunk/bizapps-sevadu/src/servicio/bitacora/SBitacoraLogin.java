@@ -1,9 +1,10 @@
 package servicio.bitacora;
 
+import interfacedao.bitacora.IBitacoraLoginDAO;
+
 import java.util.Date;
 import java.util.List;
 
-import interfacedao.bitacora.IBitacoraLoginDAO;
 import modelo.bitacora.BitacoraLogin;
 import modelo.seguridad.Usuario;
 

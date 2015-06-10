@@ -5,18 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 
 import modelo.maestros.MaestroAliado;
-import modelo.seguridad.Arbol;
 import modelo.seguridad.Usuario;
 import modelo.seguridad.UsuarioAliado;
 import modelo.termometro.TermometroCliente;
@@ -51,10 +46,13 @@ import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.West;
 
+import security.modelo.Arbol;
+
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
+
 import controlador.maestros.CGenerico;
 
 public class CTermometro extends CGenerico {

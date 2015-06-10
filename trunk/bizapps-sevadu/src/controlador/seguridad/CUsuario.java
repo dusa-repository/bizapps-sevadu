@@ -13,9 +13,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import modelo.maestros.MaestroAliado;
-import modelo.maestros.MaestroMarca;
 import modelo.pk.UsuarioAliadoPK;
-import modelo.seguridad.Grupo;
 import modelo.seguridad.Usuario;
 import modelo.seguridad.UsuarioAliado;
 
@@ -31,7 +29,6 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Fileupload;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Image;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
@@ -41,7 +38,8 @@ import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 
-import arbol.CArbol;
+import security.modelo.Grupo;
+import security.modelo.UsuarioSeguridad;
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
@@ -125,6 +123,7 @@ public class CUsuario extends CGenerico {
 	List<MaestroAliado> aliados = new ArrayList<MaestroAliado>();
 	List<MaestroAliado> aliadosOcupados = new ArrayList<MaestroAliado>();
 	URL url = getClass().getResource("usuario.png");
+	List<Usuario> listaGeneral = new ArrayList<Usuario>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -245,11 +244,12 @@ public class CUsuario extends CGenerico {
 							imagenUsuario = imagen.getContent().getByteData();
 						}
 						Usuario usuario = new Usuario(id, cedula, correo,
-								login, password, imagenUsuario, true,
-								gruposUsuario, nombre, apellido, nombre2,
-								apellido2, sexo, telefono, direccion);
+								login, password, imagenUsuario, true, nombre,
+								apellido, nombre2, apellido2, sexo, telefono,
+								direccion);
 
 						servicioUsuario.guardar(usuario);
+						guardarDatosSeguridad(usuario, gruposUsuario);
 						if (id != 0)
 							usuario = servicioUsuario.buscar(id);
 						else
@@ -282,13 +282,12 @@ public class CUsuario extends CGenerico {
 													throws InterruptedException {
 												if (evt.getName()
 														.equals("onOK")) {
-													servicioUsuario
-															.eliminarVarios(eliminarLista);
+													inhabilitarSeguridad(eliminarLista);
 													msj.mensajeInformacion(Mensaje.eliminado);
+													listaGeneral = servicioUsuario
+															.buscarTodos();
 													catalogo.actualizarLista(
-															servicioUsuario
-																	.buscarTodos(),
-															true);
+															listaGeneral, true);
 												}
 											}
 										});
@@ -306,14 +305,20 @@ public class CUsuario extends CGenerico {
 													throws InterruptedException {
 												if (evt.getName()
 														.equals("onOK")) {
+													Usuario usuario = servicioUsuario
+															.buscar(id);
+													List<Usuario> list = new ArrayList<Usuario>();
+													list.add(usuario);
+													inhabilitarSeguridad(list);
+													usuario.setEstado(false);
 													servicioUsuario
-															.eliminarClave(id);
+															.guardar(usuario);
 													msj.mensajeInformacion(Mensaje.eliminado);
 													limpiar();
+													listaGeneral = servicioUsuario
+															.buscarTodos();
 													catalogo.actualizarLista(
-															servicioUsuario
-																	.buscarTodos(),
-															true);
+															listaGeneral, true);
 												}
 											}
 										});
@@ -544,12 +549,15 @@ public class CUsuario extends CGenerico {
 
 	/* LLena las listas dado un usario */
 	public void llenarListas(Usuario usuario) {
+		UsuarioSeguridad user = null;
+		if (usuario != null)
+			user = servicioUsuarioSeguridad.buscarPorLogin(usuario.getLogin());
 		gruposDisponibles = servicioGrupo.buscarTodos();
 		if (usuario == null) {
 			ltbGruposDisponibles.setModel(new ListModelList<Grupo>(
 					gruposDisponibles));
 		} else {
-			gruposOcupados = servicioGrupo.buscarGruposDelUsuario(usuario);
+			gruposOcupados = servicioGrupo.buscarGruposDelUsuario(user);
 			ltbGruposAgregados
 					.setModel(new ListModelList<Grupo>(gruposOcupados));
 			if (!gruposOcupados.isEmpty()) {
@@ -674,18 +682,21 @@ public class CUsuario extends CGenerico {
 	}
 
 	public void mostrarCatalogo() {
-		final List<Usuario> usuario = servicioUsuario.buscarTodos();
-		catalogo = new Catalogo<Usuario>(catalogoUsuario, "Usuario", usuario,
-				false, false, false, "Cedula", "Correo", "Primer Nombre",
-				"Segundo Nombre", "Primer Apellido", "Segundo Apellido",
-				"Sexo", "Telefono", "Direccion") {
+		listaGeneral = servicioUsuario.buscarTodos();
+		catalogo = new Catalogo<Usuario>(catalogoUsuario, "Usuario",
+				listaGeneral, false, false, false, "Cedula", "Correo",
+				"Primer Nombre", "Segundo Nombre", "Primer Apellido",
+				"Segundo Apellido", "Telefono", "Direccion", "Estado") {
 
 			@Override
 			protected List<Usuario> buscar(List<String> valores) {
 
 				List<Usuario> user = new ArrayList<Usuario>();
 
-				for (Usuario actividadord : usuario) {
+				for (Usuario actividadord : listaGeneral) {
+					String estado = "Activo";
+					if (!actividadord.isEstado())
+						estado = "Inactivo";
 					if (actividadord.getCedula().toLowerCase()
 							.contains(valores.get(0).toLowerCase())
 							&& actividadord.getEmail().toLowerCase()
@@ -698,12 +709,12 @@ public class CUsuario extends CGenerico {
 									.contains(valores.get(4).toLowerCase())
 							&& actividadord.getSegundoApellido().toLowerCase()
 									.contains(valores.get(5).toLowerCase())
-							&& actividadord.getSexo().toLowerCase()
-									.contains(valores.get(6).toLowerCase())
+							&& estado.toLowerCase().contains(
+									valores.get(8).toLowerCase())
 							&& actividadord.getTelefono().toLowerCase()
-									.contains(valores.get(7).toLowerCase())
+									.contains(valores.get(6).toLowerCase())
 							&& actividadord.getDireccion().toLowerCase()
-									.contains(valores.get(8).toLowerCase())) {
+									.contains(valores.get(7).toLowerCase())) {
 
 						user.add(actividadord);
 					}
@@ -713,6 +724,9 @@ public class CUsuario extends CGenerico {
 
 			@Override
 			protected String[] crearRegistros(Usuario usuarios) {
+				String estado = "Activo";
+				if (!usuarios.isEstado())
+					estado = "Inactivo";
 				String[] registros = new String[9];
 				registros[0] = usuarios.getCedula();
 				registros[1] = usuarios.getEmail();
@@ -720,9 +734,9 @@ public class CUsuario extends CGenerico {
 				registros[3] = usuarios.getSegundoNombre();
 				registros[4] = usuarios.getPrimerApellido();
 				registros[5] = usuarios.getSegundoApellido();
-				registros[6] = usuarios.getSexo();
-				registros[7] = usuarios.getTelefono();
-				registros[8] = usuarios.getDireccion();
+				registros[6] = usuarios.getTelefono();
+				registros[7] = usuarios.getDireccion();
+				registros[8] = estado;
 				return registros;
 			}
 
@@ -812,5 +826,20 @@ public class CUsuario extends CGenerico {
 		ltbAliadosAgregados.setMultiple(true);
 		ltbAliadosAgregados.setCheckmark(true);
 
+	}
+
+	@Listen("onChange = #txtCedulaUsuario; onOK =  #txtCedulaUsuario")
+	public void buscarCedula() {
+		if (txtCedulaUsuario.getText().compareTo("") != 0) {
+			Usuario empleado = servicioUsuario.buscarPorCedula(txtCedulaUsuario
+					.getValue());
+			if (empleado != null) {
+				if (empleado.getIdUsuario() != id) {
+					txtCedulaUsuario.setFocus(true);
+					txtCedulaUsuario.setValue("");
+					msj.mensajeAlerta("Esta Cedula ya ha sido asignada a otro usuario");
+				}
+			}
+		}
 	}
 }

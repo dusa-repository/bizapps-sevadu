@@ -8,7 +8,6 @@ import java.util.List;
 
 import modelo.maestros.ConfiguracionEnvioCorreo;
 import modelo.maestros.F0005;
-import modelo.maestros.MaestroMarca;
 import modelo.seguridad.Usuario;
 
 import org.zkoss.zk.ui.Sessions;
@@ -23,13 +22,11 @@ import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Tab;
-import org.zkoss.zul.Textbox;
 
 import componente.Botonera;
 import componente.BuscadorUDC;
 import componente.Catalogo;
 import componente.Mensaje;
-import componente.Validador;
 
 public class CConfiguracionEnvioCorreo extends CGenerico {
 

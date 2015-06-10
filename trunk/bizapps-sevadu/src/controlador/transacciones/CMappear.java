@@ -22,6 +22,7 @@ import org.zkoss.zul.Window;
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
+
 import controlador.maestros.CGenerico;
 
 public class CMappear extends CGenerico {

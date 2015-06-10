@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import modelo.maestros.MaestroAliado;
 import modelo.seguridad.Usuario;
 
 @Entity

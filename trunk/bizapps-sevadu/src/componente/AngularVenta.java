@@ -6,10 +6,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import modelo.maestros.Cliente;
 import modelo.maestros.Configuracion;
 import modelo.maestros.MaestroAliado;
-import modelo.maestros.MaestroMarca;
 import modelo.maestros.Venta;
 
 import org.zkoss.chart.Charts;

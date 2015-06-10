@@ -8,50 +8,37 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import modelo.bitacora.BitacoraLogin;
 import modelo.maestros.Cliente;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroMarca;
-import modelo.seguridad.Arbol;
-import modelo.seguridad.Grupo;
 import modelo.seguridad.Usuario;
 import modelo.seguridad.UsuarioAliado;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.zkoss.chart.Charts;
-import org.zkoss.chart.Legend;
 import org.zkoss.chart.Series;
 import org.zkoss.chart.YAxis;
 import org.zkoss.chart.plotOptions.SplinePlotOptions;
 import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Cell;
@@ -73,6 +60,11 @@ import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.Treecell;
 import org.zkoss.zul.West;
 
+import security.modelo.Arbol;
+import security.modelo.Grupo;
+import security.modelo.MArbol;
+import security.modelo.Nodos;
+import security.modelo.UsuarioSeguridad;
 import componente.AngularActivacion;
 import componente.AngularVenta;
 import componente.Catalogo;
@@ -132,7 +124,9 @@ public class CArbol extends CGenerico {
 		if (servicioUsuarioAliado.buscarPorUsuario(nombreUsuarioSesion())
 				.size() > 1)
 			btnBuscar.setVisible(true);
-		List<Grupo> grupos = servicioGrupo.buscarGruposUsuario(u);
+		UsuarioSeguridad u2 = servicioUsuarioSeguridad.buscarPorLogin(auth
+				.getName());
+		List<Grupo> grupos = servicioGrupo.buscarGruposUsuario(u2);
 		ltbRoles.setModel(new ListModelList<Grupo>(grupos));
 		if (u.getImagen() == null) {
 			imagenes.setContent(new AImage(url));

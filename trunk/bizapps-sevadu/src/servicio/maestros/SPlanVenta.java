@@ -8,7 +8,6 @@ import java.util.List;
 import modelo.maestros.MaestroAliado;
 import modelo.maestros.MaestroProducto;
 import modelo.maestros.PlanVenta;
-import modelo.maestros.Venta;
 import modelo.pk.PlanVentaPK;
 
 import org.springframework.beans.factory.annotation.Autowired;

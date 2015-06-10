@@ -40,7 +40,6 @@ import org.zkoss.zul.Vbox;
 import org.zkoss.zul.Window;
 
 import controlador.maestros.CGenerico;
-import servicio.maestros.SF0004;
 
 public abstract class Catalogo<Clase> extends Window {
 

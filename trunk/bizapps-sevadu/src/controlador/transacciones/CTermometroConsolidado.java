@@ -11,14 +11,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import modelo.maestros.MaestroAliado;
-import modelo.seguridad.Arbol;
-import modelo.seguridad.Usuario;
 import modelo.termometro.TermometroCliente;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -27,28 +21,24 @@ import org.zkoss.zss.api.CellOperationUtil;
 import org.zkoss.zss.api.Exporter;
 import org.zkoss.zss.api.Exporters;
 import org.zkoss.zss.api.Range;
-import org.zkoss.zss.api.Ranges;
 import org.zkoss.zss.api.Range.ApplyBorderType;
+import org.zkoss.zss.api.Ranges;
 import org.zkoss.zss.api.model.Book;
-import org.zkoss.zss.api.model.Font;
 import org.zkoss.zss.api.model.CellStyle.BorderType;
+import org.zkoss.zss.api.model.Font;
 import org.zkoss.zss.ui.Spreadsheet;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Groupbox;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Radio;
-import org.zkoss.zul.Row;
 import org.zkoss.zul.Tab;
-import org.zkoss.zul.Textbox;
 import org.zkoss.zul.West;
 
 import componente.Botonera;
-import componente.Catalogo;
-import componente.Validador;
+
 import controlador.maestros.CGenerico;
 
 public class CTermometroConsolidado extends CGenerico {
