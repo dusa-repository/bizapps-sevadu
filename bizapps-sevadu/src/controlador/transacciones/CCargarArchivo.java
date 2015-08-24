@@ -60,7 +60,6 @@ import org.zkoss.zul.Window;
 import componente.Botonera;
 import componente.Mensaje;
 import componente.Validador;
-
 import controlador.maestros.CGenerico;
 
 public class CCargarArchivo extends CGenerico {
@@ -85,6 +84,7 @@ public class CCargarArchivo extends CGenerico {
 	private String errorLongitud = "La siguiente ubicacion excede el limite establecido de longitud:";
 	private String archivoConError = "Existe un error en el siguiente archivo adjunto: ";
 	List<String> listaErrores = new ArrayList<String>();
+	private List<UsuarioAliado> listaAliados = new ArrayList<UsuarioAliado>();
 
 	@Override
 	public void inicializar() throws IOException {
@@ -100,6 +100,8 @@ public class CCargarArchivo extends CGenerico {
 			}
 		}
 		gpxCargarRegistro.setTitle(titulo);
+		listaAliados = servicioUsuarioAliado
+				.buscarPorUsuario(nombreUsuarioSesion());
 		switch (titulo) {
 		case "Subir Archivo de Ventas":
 			tipo = 1;
@@ -264,6 +266,16 @@ public class CCargarArchivo extends CGenerico {
 											mostrarError, idAliado,
 											contadorRow, contadorCell, "Aliado");
 									error = true;
+								} else {
+									if (!verificarAliados(idAliado)) {
+										listaErrores
+												.add("El Aliado"
+														+ idAliado
+														+ " no esta asociado a ninguno de los aliados del Usuario en sesion.  Fila: "
+														+ contadorRow
+														+ ". Columna: "
+														+ contadorCell + "\n");
+									}
 								}
 							}
 						} else {
@@ -380,6 +392,15 @@ public class CCargarArchivo extends CGenerico {
 			} else
 				mostrarErrores();
 		}
+	}
+
+	private boolean verificarAliados(String idAliado) {
+		for (int i = 0; i < listaAliados.size(); i++) {
+			if (listaAliados.get(i).getId().getMaestroAliado()
+					.getCodigoAliado().equals(idAliado))
+				return true;
+		}
+		return false;
 	}
 
 	protected void importarPvp() {
@@ -716,6 +737,16 @@ public class CCargarArchivo extends CGenerico {
 											mostrarError, idAliado,
 											contadorRow, contadorCell, "Aliado");
 									error = true;
+								} else {
+									if (!verificarAliados(idAliado)) {
+										listaErrores
+												.add("El Aliado"
+														+ idAliado
+														+ " no esta asociado a ninguno de los aliados del Usuario en sesion.  Fila: "
+														+ contadorRow
+														+ ". Columna: "
+														+ contadorCell + "\n");
+									}
 								}
 							}
 						} else {
@@ -1676,6 +1707,16 @@ public class CCargarArchivo extends CGenerico {
 											mostrarError, idAliado,
 											contadorRow, contadorCell, "Aliado");
 									error = true;
+								} else {
+									if (!verificarAliados(idAliado)) {
+										listaErrores
+												.add("El Aliado"
+														+ idAliado
+														+ " no esta asociado a ninguno de los aliados del Usuario en sesion.  Fila: "
+														+ contadorRow
+														+ ". Columna: "
+														+ contadorCell + "\n");
+									}
 								}
 							}
 						} else {
@@ -2101,6 +2142,16 @@ public class CCargarArchivo extends CGenerico {
 											mostrarError, idAliado,
 											contadorRow, contadorCell, "Aliado");
 									error = true;
+								} else {
+									if (!verificarAliados(idAliado)) {
+										listaErrores
+												.add("El Aliado"
+														+ idAliado
+														+ " no esta asociado a ninguno de los aliados del Usuario en sesion.  Fila: "
+														+ contadorRow
+														+ ". Columna: "
+														+ contadorCell + "\n");
+									}
 								}
 							}
 						} else {
@@ -2277,6 +2328,16 @@ public class CCargarArchivo extends CGenerico {
 											mostrarError, idAliado,
 											contadorRow, contadorCell, "Aliado");
 									error = true;
+								} else {
+									if (!verificarAliados(idAliado)) {
+										listaErrores
+												.add("El Aliado"
+														+ idAliado
+														+ " no esta asociado a ninguno de los aliados del Usuario en sesion.  Fila: "
+														+ contadorRow
+														+ ". Columna: "
+														+ contadorCell + "\n");
+									}
 								}
 							}
 						} else {
@@ -2506,6 +2567,16 @@ public class CCargarArchivo extends CGenerico {
 											idAliado, contadorRow,
 											contadorCell, "Aliado");
 									error = true;
+								} else {
+									if (!verificarAliados(idAliado)) {
+										listaErrores
+												.add("El Aliado"
+														+ idAliado
+														+ " no esta asociado a ninguno de los aliados del Usuario en sesion.  Fila: "
+														+ contadorRow
+														+ ". Columna: "
+														+ contadorCell + "\n");
+									}
 								}
 							}
 						} else {
