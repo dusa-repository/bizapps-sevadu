@@ -3,6 +3,7 @@ package arbol;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,6 +29,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.zkoss.chart.Charts;
+import org.zkoss.chart.Legend;
 import org.zkoss.chart.Series;
 import org.zkoss.chart.YAxis;
 import org.zkoss.chart.plotOptions.SplinePlotOptions;
@@ -39,6 +41,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Cell;
@@ -158,8 +161,12 @@ public class CArbol extends CGenerico {
 	private void llenarDatosAliado(Usuario u) {
 		UsuarioAliado objeto = servicioUsuarioAliado.buscarActivo(u);
 		if (objeto != null) {
+			String categoria = "N/A";
+			if (objeto.getId().getMaestroAliado().getCategoria() != null)
+				categoria = objeto.getId().getMaestroAliado().getCategoria();
 			lblUsuario.setValue("Aliado: "
-					+ objeto.getId().getMaestroAliado().getNombre());
+					+ objeto.getId().getMaestroAliado().getNombre() + "("
+					+ categoria + ")");
 		}
 		Date fechaHoy = new Date();
 		DateFormat formatoNuevo = new SimpleDateFormat("MM-yyyy");
@@ -429,69 +436,87 @@ public class CArbol extends CGenerico {
 			final Arbol arbolItem = servicioArbol.buscarPorId(item);
 			if (!arbolItem.getUrl().equals("inicio")) {
 				mapGeneral.put("titulo", arbolItem.getNombre());
-				for (int i = 0; i < tabs.size(); i++) {
-					if (tabs.get(i).getLabel().equals(arbolItem.getNombre())) {
-						abrir = false;
-						taba = tabs.get(i);
+				if (!arbolItem.getUrl().equals("graficas")) {
+					for (int i = 0; i < tabs.size(); i++) {
+						if (tabs.get(i).getLabel()
+								.equals(arbolItem.getNombre())) {
+							abrir = false;
+							taba = tabs.get(i);
+						}
 					}
-				}
-				if (abrir) {
-					if (grxGrafico.isVisible() && grxGrafico.isOpen()) {
-						grxGrafico.setOpen(false);
-					}
-					if (arbolItem.getUrl().contains("Termometro")) {
-						west.setOpen(false);
-						mapGeneral.put("west", west);
-					}
-					String ruta = "/vistas/" + arbolItem.getUrl() + ".zul";
-					contenido = new Include();
-					contenido.setSrc(null);
-					contenido.setSrc(ruta);
-					Tab newTab = new Tab(arbolItem.getNombre());
-					newTab.setClosable(true);
-					newTab.addEventListener(Events.ON_CLOSE,
-							new EventListener<Event>() {
-								@Override
-								public void onEvent(Event arg0)
-										throws Exception {
-									if (arbolItem.getUrl().contains(
-											"Termometro"))
-										west.setOpen(true);
-									for (int i = 0; i < tabs.size(); i++) {
-										if (tabs.get(i).getLabel()
-												.equals(arbolItem.getNombre())) {
-											if (i == (tabs.size() - 1)
-													&& tabs.size() > 1) {
-												tabs.get(i - 1).setSelected(
-														true);
-											}
+					if (abrir) {
+						if (grxGrafico.isVisible() && grxGrafico.isOpen()) {
+							grxGrafico.setOpen(false);
+						}
+						if (arbolItem.getUrl().contains("Termometro")) {
+							west.setOpen(false);
+							mapGeneral.put("west", west);
+						}
+						String ruta = "/vistas/" + arbolItem.getUrl() + ".zul";
+						contenido = new Include();
+						contenido.setSrc(null);
+						InputStream url = Sessions.getCurrent().getWebApp()
+								.getServletContext().getResourceAsStream(ruta);
+						if (url != null) {
+							contenido.setSrc(ruta);
+							Tab newTab = new Tab(arbolItem.getNombre());
+							newTab.setClosable(true);
+							newTab.addEventListener(Events.ON_CLOSE,
+									new EventListener<Event>() {
+										@Override
+										public void onEvent(Event arg0)
+												throws Exception {
+											if (arbolItem.getUrl().contains(
+													"Termometro"))
+												west.setOpen(true);
+											for (int i = 0; i < tabs.size(); i++) {
+												if (tabs.get(i)
+														.getLabel()
+														.equals(arbolItem
+																.getNombre())) {
+													if (i == (tabs.size() - 1)
+															&& tabs.size() > 1) {
+														tabs.get(i - 1)
+																.setSelected(
+																		true);
+													}
 
-											tabs.get(i).close();
-											tabs.remove(i);
-											if (tabs.size() == 0) {
-												if (grxGrafico.isVisible()
-														&& !grxGrafico.isOpen()) {
-													grxGrafico.setOpen(true);
+													tabs.get(i).close();
+													tabs.remove(i);
+													if (tabs.size() == 0) {
+														if (grxGrafico
+																.isVisible()
+																&& !grxGrafico
+																		.isOpen()) {
+															grxGrafico
+																	.setOpen(true);
+														}
+													}
 												}
 											}
 										}
-									}
-								}
-							});
-					newTab.setSelected(true);
-					Tabpanel newTabpanel = new Tabpanel();
-					newTabpanel.setWidth("100%");
-					newTabpanel.appendChild(contenido);
-					tabBox.getTabs().insertBefore(newTab, tab);
-					newTabpanel.setParent(tabBox.getTabpanels());
-					tabs.add(newTab);
-					mapGeneral.put("tabsGenerales", tabs);
-					mapGeneral.put("grxGraficoGeneral", grxGrafico);
-					mapGeneral.put("nombre", arbolItem.getNombre());
-					Sessions.getCurrent().setAttribute("mapaGeneral",
-							mapGeneral);
+									});
+							newTab.setSelected(true);
+							Tabpanel newTabpanel = new Tabpanel();
+							newTabpanel.setWidth("100%");
+							newTabpanel.appendChild(contenido);
+							tabBox.getTabs().insertBefore(newTab, tab);
+							newTabpanel.setParent(tabBox.getTabpanels());
+							tabs.add(newTab);
+							mapGeneral.put("tabsGenerales", tabs);
+							mapGeneral.put("grxGraficoGeneral", grxGrafico);
+							mapGeneral.put("nombre", arbolItem.getNombre());
+							Sessions.getCurrent().setAttribute("mapaGeneral",
+									mapGeneral);
+						} else
+							msj.mensajeError("Vista no encontrada; contactar soporte");
+					} else {
+						taba.setSelected(true);
+					}
 				} else {
-					taba.setSelected(true);
+					Clients.evalJavaScript("window.open('"
+							+ "../../dusa-charts/vistas/inicio.zul?type=2&id="
+							+ nombreUsuarioSesion() + "','_blank')");
 				}
 			} else {
 				if (!arbolMenu.getSelectedItem().isOpen())
@@ -647,8 +672,7 @@ public class CArbol extends CGenerico {
 		List<Integer> inventario = new ArrayList<Integer>();
 		List<Double> ventas = new ArrayList<Double>();
 		List<Double> ventasDusa = new ArrayList<Double>();
-		// List<Double> compras = new ArrayList<Double>();
-		// List<Double> comprasDusa = new ArrayList<Double>();
+		List<Integer> planes = new ArrayList<Integer>();
 		do {
 			if (mesPlanDesde == 13) {
 				mesPlanDesde = 1;
@@ -678,15 +702,18 @@ public class CArbol extends CGenerico {
 			Double valorVenta = servicioVenta
 					.sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
 							aliado2, fechaInicio, fechaFin, ids);
-			Double valorVentaDusa = valorVenta + 10;
+			Double valorVentaDusa = servicioVentaDusa
+					.sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
+							aliado2, fechaInicio, fechaFin, ids);
 			Integer valorInventario = servicioExistencia
 					.sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
 							aliado2, fechaInicio, fechaFin, ids);
-			// Double valorCompra = (double) 0;
-			// Double valorCompraDusa = (double) 0;
+			Integer planificado = servicioPlan.sumarPorProductosaliadoYFechas(
+					aliado2, ids, annoPlanDesde, mesPlanDesde);
 			ventas.add(valorVenta);
 			ventasDusa.add(valorVentaDusa);
 			inventario.add(valorInventario);
+			planes.add(planificado);
 			categorias.add(formatoFechaNuevo.format(fechaInicio));
 
 			mesPlanDesde = mesPlanDesde + 1;
@@ -694,6 +721,12 @@ public class CArbol extends CGenerico {
 				|| mesPlanDesde != mesPlanHasta + 1);
 
 		chart.getXAxis().setCategories(categorias);
+
+		YAxis yAxis1 = chart.getYAxis(1);
+		yAxis1.setMin(0);
+		yAxis1.getLabels().setFormat("{value} Cajas");
+		yAxis1.setTitle("Inventario");
+		yAxis1.setOpposite(true);
 
 		YAxis yAxis3 = chart.getYAxis();
 		yAxis3.setMin(0);
@@ -703,27 +736,37 @@ public class CArbol extends CGenerico {
 		yAxis3.setOpposite(true);
 		chart.getTooltip().setShared(true);
 
-		YAxis yAxis1 = chart.getYAxis(1);
-		yAxis1.setMin(0);
-		yAxis1.getLabels().setFormat("{value} Cajas");
-		yAxis1.setTitle("Inventario");
-		yAxis1.setOpposite(true);
-
 		YAxis yAxis2 = chart.getYAxis(2);
 		yAxis2.setMin(0);
 		yAxis2.setGridLineWidth(0);
 		yAxis2.setTitle("Ventas");
 		yAxis2.getLabels().setFormat("{value} Cajas");
 
+		YAxis yAxis4 = chart.getYAxis(3);
+		yAxis4.setMin(0);
+		yAxis4.setTitle("Plan Ventas");
+		yAxis4.getLabels().setFormat("{value} Cajas");
+
 		String color1 = chart.getColors().get(0).stringValue();
 		String color2 = chart.getColors().get(1).stringValue();
 		String color3 = chart.getColors().get(2).stringValue();
+		String color4 = chart.getColors().get(3).stringValue();
 		yAxis1.getLabels().setStyle("color: '" + color1 + "'");
 		yAxis1.getTitle().setStyle("color: '" + color1 + "'");
-		yAxis2.getLabels().setStyle("color: '" + color2 + "'");
-		yAxis2.getTitle().setStyle("color: '" + color2 + "'");
-		yAxis3.getLabels().setStyle("color: '" + color3 + "'");
-		yAxis3.getTitle().setStyle("color: '" + color3 + "'");
+		yAxis3.getLabels().setStyle("color: '" + color2 + "'");
+		yAxis3.getTitle().setStyle("color: '" + color2 + "'");
+		yAxis2.getLabels().setStyle("color: '" + color3 + "'");
+		yAxis2.getTitle().setStyle("color: '" + color3 + "'");
+		yAxis4.getLabels().setStyle("color: '" + color4 + "'");
+		yAxis4.getTitle().setStyle("color: '" + color4 + "'");
+
+		Legend legend = chart.getLegend();
+		legend.setLayout("vertical");
+		legend.setAlign("left");
+		legend.setX(165);
+		legend.setVerticalAlign("top");
+		legend.setY(80);
+		legend.setFloating(true);
 
 		Series rainfall = new Series("Inventario");
 		rainfall.setName("Inventario");
@@ -732,6 +775,13 @@ public class CArbol extends CGenerico {
 		rainfall.setData(inventario);
 		rainfall.getPlotOptions().getTooltip().setValueSuffix(" cajas");
 		chart.addSeries(rainfall);
+
+		Series temperature = new Series("Ventas Dusa");
+		temperature.setName("Ventas Dusa");
+		temperature.setType("spline");
+		temperature.setData(ventasDusa);
+		temperature.getPlotOptions().getTooltip().setValueSuffix(" cajas");
+		chart.addSeries(temperature);
 
 		Series pressure = new Series("Ventas");
 		pressure.setName("Ventas");
@@ -745,12 +795,17 @@ public class CArbol extends CGenerico {
 		pressure.setPlotOptions(plotOptions2);
 		chart.addSeries(pressure);
 
-		Series temperature = new Series("Ventas Dusa");
-		temperature.setName("Ventas Dusa");
-		temperature.setType("spline");
-		temperature.setData(ventasDusa);
-		temperature.getPlotOptions().getTooltip().setValueSuffix(" cajas");
-		chart.addSeries(temperature);
+		Series pressure2 = new Series("Plan Ventas");
+		pressure2.setName("Plan Ventas");
+		pressure2.setType("spline");
+		pressure2.setYAxis(3);
+		pressure2.setData(planes);
+		pressure2.getMarker().setEnabled(false);
+		SplinePlotOptions plotOptions22 = new SplinePlotOptions();
+		plotOptions22.setDashStyle("dot");
+		plotOptions22.getTooltip().setValueSuffix(" cajas");
+		pressure2.setPlotOptions(plotOptions22);
+		chart.addSeries(pressure2);
 
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
 		String nombreAliado = "Todos";
@@ -759,8 +814,9 @@ public class CArbol extends CGenerico {
 			nombreAliado = aliadoBuscar.getNombre();
 			codigoAliado = aliadoBuscar.getCodigoAliado();
 		}
-		chart.setTitle("Comparacion entre Ventas/Compras vs Inventario desde "
-				+ formatoFecha.format(fechaDesde) + " hasta  "
+		chart.setTitle("Comparacion entre Ventas/Compras/Inventario/Plan Ventas "
+				+ formatoFecha.format(fechaDesde)
+				+ " hasta  "
 				+ formatoFecha.format(fechaHasta));
 		chart.setSubtitle("Aliado: " + nombreAliado + " (" + codigoAliado + ")");
 		return chart;

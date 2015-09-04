@@ -34,7 +34,7 @@
 								<comboitem label="Grafico Vendido VS Planificado Marcas" />
 								<comboitem label="Grafico Volumen de Ventas por Marca y Producto" />
 								<comboitem label="Grafico Porcentaje de Participacion en Ventas(Marcas)" />
-								<comboitem label="Grafico Comparativo entre Compras/Ventas vs Inventario" />
+								<comboitem label="Grafico de Comparacion entre Ventas/Compras/Inventario/Plan Ventas" />
 								<comboitem label="Grafico Vendido VS Planificado Marcas (Angular)" />
 								<comboitem label="Grafico Vendido VS Activado Marcas (Angular)" />
 								<!-- <comboitem label="(G55420001)Grafico de Activacion/Marca" /> -->

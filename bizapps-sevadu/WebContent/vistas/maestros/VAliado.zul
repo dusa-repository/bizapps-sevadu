@@ -59,6 +59,14 @@
 								<div id="divBuscadorCiudad" width="100%" />
 							</cell>
 						</row>
+						<row>
+							<cell colspan="4">
+								<div id="divBuscadorCategoria" width="100%" />
+							</cell>
+							<cell colspan="4">
+								<hbox />
+							</cell>
+						</row>
 					</rows>
 				</grid>
 			</groupbox>

@@ -71,6 +71,9 @@ public class MaestroAliado implements Serializable {
 	@Column(length = 50, name = "email")
 	private String email;
 
+	@Column(length = 50, name = "categoria")
+	private String categoria;
+
 	@OneToMany(mappedBy = "id.maestroAliado")
 	private List<MarcaActivadaVendedor> activaciones;
 
@@ -368,6 +371,14 @@ public class MaestroAliado implements Serializable {
 
 	public void setVentasDusa(List<VentaDusa> ventasDusa) {
 		this.ventasDusa = ventasDusa;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
 
 }

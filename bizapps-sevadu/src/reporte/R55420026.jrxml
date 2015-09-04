@@ -49,6 +49,7 @@
 	<field name="pvp" class="java.lang.String"/>
 	<field name="activacion" class="java.lang.String"/>
 	<field name="mapping" class="java.lang.String"/>
+	<field name="ventas_dusa" class="java.lang.String"/>
 	<group name="aliado" isStartNewPage="true" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{codigo_aliado}]]></groupExpression>
 		<groupHeader>
@@ -253,25 +254,32 @@
 				<text><![CDATA[EXISTENCIA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="337" y="5" width="104" height="18" uuid="182c86ff-5770-40fd-bea6-3b73611eddc6"/>
+				<reportElement x="337" y="5" width="51" height="18" uuid="182c86ff-5770-40fd-bea6-3b73611eddc6"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[CARTERA CLIENTES]]></text>
+				<text><![CDATA[CARTERA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="5" width="76" height="18" uuid="db2501f4-1a16-4c25-af33-1fdd46582745"/>
+				<reportElement x="388" y="5" width="65" height="18" uuid="db2501f4-1a16-4c25-af33-1fdd46582745"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[ACTIVACION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="515" y="5" width="56" height="18" uuid="da8ea8a1-a3a6-45a8-837e-fb685313b362"/>
+				<reportElement x="452" y="5" width="41" height="18" uuid="da8ea8a1-a3a6-45a8-837e-fb685313b362"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[PVP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="493" y="5" width="79" height="18" uuid="9cdc488f-5058-48b3-9c61-097458f472be"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENTAS DUSA]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -306,17 +314,17 @@
 				<textFieldExpression><![CDATA[new SimpleDateFormat("E").format($F{fecha})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="0" width="104" height="15" uuid="aba2115a-6b63-48bb-a5bd-401c7cde4528"/>
+				<reportElement x="337" y="0" width="51" height="15" uuid="aba2115a-6b63-48bb-a5bd-401c7cde4528"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{cartera_clientes}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="440" y="0" width="76" height="15" uuid="77e83f5b-5b10-4a7f-907d-8ecfb1edf1d3"/>
+				<reportElement x="388" y="0" width="65" height="15" uuid="77e83f5b-5b10-4a7f-907d-8ecfb1edf1d3"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{activacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="515" y="0" width="56" height="15" uuid="0c09c965-0d48-419b-aff9-7830981eda69"/>
+				<reportElement x="452" y="0" width="41" height="15" uuid="0c09c965-0d48-419b-aff9-7830981eda69"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{pvp}]]></textFieldExpression>
 			</textField>
@@ -326,6 +334,11 @@
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ventas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="493" y="0" width="79" height="15" uuid="0803cd82-7cb4-41cd-8f0c-033d834dad75"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ventas_dusa}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

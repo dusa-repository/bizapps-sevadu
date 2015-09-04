@@ -363,7 +363,7 @@ public class CReporte extends CGenerico {
 								mapaGrafica);
 						ventana.doModal();
 						break;
-					case "Grafico Comparativo entre Compras/Ventas vs Inventario":
+					case "Grafico de Comparacion entre Ventas/Compras/Inventario/Plan Ventas":
 						tipo = 25;
 						mapaGrafica = new HashMap<String, Object>();
 						mapaGrafica.put("idAliado", aliado);

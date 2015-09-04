@@ -72,4 +72,10 @@ public interface IPlanVentaDAO extends JpaRepository<PlanVenta, PlanVentaPK> {
 			boolean b, int anno2, int tiempo, int limiteInf, int anno,
 			int limiteSup, int periodo, Sort o);
 
+	@Query("select coalesce(sum(v.cajasPlanificadas), '0') from PlanVenta v where v.id.maestroAliado.codigoAliado like ?1 " +
+			"and v.id.maestroProducto.maestroMarca.marcaDusa in ?2 and v.id.anno = ?4 and v.id.mes=?3")
+	Integer sumByIdMaestroAliadoAnIdMaestroProductoProductoAndIdMesAndIdAnno(
+			String aliado2, List<String> ids, int mesPlanDesde,
+			int annoPlanDesde);
+
 }

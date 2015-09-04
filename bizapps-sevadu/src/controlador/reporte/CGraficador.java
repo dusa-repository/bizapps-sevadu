@@ -764,8 +764,7 @@ public class CGraficador extends CGenerico {
 		List<Integer> inventario = new ArrayList<Integer>();
 		List<Double> ventas = new ArrayList<Double>();
 		List<Double> ventasDusa = new ArrayList<Double>();
-		// List<Double> compras = new ArrayList<Double>();
-		// List<Double> comprasDusa = new ArrayList<Double>();
+		List<Integer> planes = new ArrayList<Integer>();
 		do {
 			if (mesPlanDesde == 13) {
 				mesPlanDesde = 1;
@@ -795,15 +794,18 @@ public class CGraficador extends CGenerico {
 			Double valorVenta = servicioVenta
 					.sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
 							aliado2, fechaInicio, fechaFin, ids);
-			Double valorVentaDusa = valorVenta + 10;
+			Double valorVentaDusa = servicioVentaDusa
+					.sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
+							aliado2, fechaInicio, fechaFin, ids);
 			Integer valorInventario = servicioExistencia
 					.sumarPorAliadoEntreFechasYMarcasOrdenadoPorProducto(
 							aliado2, fechaInicio, fechaFin, ids);
-			// Double valorCompra = (double) 0;
-			// Double valorCompraDusa = (double) 0;
-			ventas.add(valorVenta);
-			ventasDusa.add(valorVentaDusa);
+			Integer planificado = servicioPlan.sumarPorProductosaliadoYFechas(
+					aliado2, ids, annoPlanDesde, mesPlanDesde);
+			ventas.add(Math.rint(valorVenta * 100) / 100);
+			ventasDusa.add(Math.rint(valorVentaDusa * 100) / 100);
 			inventario.add(valorInventario);
+			planes.add(planificado);
 			categorias.add(formatoFecha.format(fechaInicio));
 
 			mesPlanDesde = mesPlanDesde + 1;
@@ -811,6 +813,12 @@ public class CGraficador extends CGenerico {
 				|| mesPlanDesde != mesPlanHasta + 1);
 
 		chart.getXAxis().setCategories(categorias);
+
+		YAxis yAxis1 = chart.getYAxis(1);
+		yAxis1.setMin(0);
+		yAxis1.getLabels().setFormat("{value} Cajas");
+		yAxis1.setTitle("Inventario");
+		yAxis1.setOpposite(true);
 
 		YAxis yAxis3 = chart.getYAxis();
 		yAxis3.setMin(0);
@@ -820,32 +828,34 @@ public class CGraficador extends CGenerico {
 		yAxis3.setOpposite(true);
 		chart.getTooltip().setShared(true);
 
-		YAxis yAxis1 = chart.getYAxis(1);
-		yAxis1.setMin(0);
-		yAxis1.getLabels().setFormat("{value} Cajas");
-		yAxis1.setTitle("Inventario");
-		yAxis1.setOpposite(true);
-
 		YAxis yAxis2 = chart.getYAxis(2);
 		yAxis2.setMin(0);
 		yAxis2.setGridLineWidth(0);
 		yAxis2.setTitle("Ventas");
 		yAxis2.getLabels().setFormat("{value} Cajas");
 
+		YAxis yAxis4 = chart.getYAxis(3);
+		yAxis4.setMin(0);
+		yAxis4.setTitle("Plan Ventas");
+		yAxis4.getLabels().setFormat("{value} Cajas");
+
 		String color1 = chart.getColors().get(0).stringValue();
 		String color2 = chart.getColors().get(1).stringValue();
 		String color3 = chart.getColors().get(2).stringValue();
+		String color4 = chart.getColors().get(3).stringValue();
 		yAxis1.getLabels().setStyle("color: '" + color1 + "'");
 		yAxis1.getTitle().setStyle("color: '" + color1 + "'");
-		yAxis2.getLabels().setStyle("color: '" + color2 + "'");
-		yAxis2.getTitle().setStyle("color: '" + color2 + "'");
-		yAxis3.getLabels().setStyle("color: '" + color3 + "'");
-		yAxis3.getTitle().setStyle("color: '" + color3 + "'");
+		yAxis3.getLabels().setStyle("color: '" + color2 + "'");
+		yAxis3.getTitle().setStyle("color: '" + color2 + "'");
+		yAxis2.getLabels().setStyle("color: '" + color3 + "'");
+		yAxis2.getTitle().setStyle("color: '" + color3 + "'");
+		yAxis4.getLabels().setStyle("color: '" + color4 + "'");
+		yAxis4.getTitle().setStyle("color: '" + color4 + "'");
 
 		Legend legend = chart.getLegend();
 		legend.setLayout("vertical");
 		legend.setAlign("left");
-		legend.setX(120);
+		legend.setX(165);
 		legend.setVerticalAlign("top");
 		legend.setY(80);
 		legend.setFloating(true);
@@ -857,6 +867,13 @@ public class CGraficador extends CGenerico {
 		rainfall.setData(inventario);
 		rainfall.getPlotOptions().getTooltip().setValueSuffix(" cajas");
 		chart.addSeries(rainfall);
+
+		Series temperature = new Series("Ventas Dusa");
+		temperature.setName("Ventas Dusa");
+		temperature.setType("spline");
+		temperature.setData(ventasDusa);
+		temperature.getPlotOptions().getTooltip().setValueSuffix(" cajas");
+		chart.addSeries(temperature);
 
 		Series pressure = new Series("Ventas");
 		pressure.setName("Ventas");
@@ -870,12 +887,17 @@ public class CGraficador extends CGenerico {
 		pressure.setPlotOptions(plotOptions2);
 		chart.addSeries(pressure);
 
-		Series temperature = new Series("Ventas Dusa");
-		temperature.setName("Ventas Dusa");
-		temperature.setType("spline");
-		temperature.setData(ventasDusa);
-		temperature.getPlotOptions().getTooltip().setValueSuffix(" cajas");
-		chart.addSeries(temperature);
+		Series pressure2 = new Series("Plan Ventas");
+		pressure2.setName("Plan Ventas");
+		pressure2.setType("spline");
+		pressure2.setYAxis(3);
+		pressure2.setData(planes);
+		pressure2.getMarker().setEnabled(false);
+		SplinePlotOptions plotOptions22 = new SplinePlotOptions();
+		plotOptions22.setDashStyle("dot");
+		plotOptions22.getTooltip().setValueSuffix(" cajas");
+		pressure2.setPlotOptions(plotOptions22);
+		chart.addSeries(pressure2);
 
 		MaestroAliado aliadoBuscar = servicioAliado.buscar(aliado2);
 		String nombreAliado = "Todos";
@@ -884,8 +906,9 @@ public class CGraficador extends CGenerico {
 			nombreAliado = aliadoBuscar.getNombre();
 			codigoAliado = aliadoBuscar.getCodigoAliado();
 		}
-		chart.setTitle("Comparacion entre Ventas/Compras vs Inventario desde "
-				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
+		chart.setTitle("Grafico de Comparacion entre Ventas/Compras/Inventario/Plan Ventas "
+				+ formatoCorrecto.format(fechaDesde2)
+				+ " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
 		chart.setSubtitle("Aliado: " + nombreAliado + " (" + codigoAliado + ")");
 	}

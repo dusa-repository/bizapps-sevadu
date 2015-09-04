@@ -97,7 +97,7 @@ public class AngularVenta extends Charts {
 		scale.setTickColor("#666666");
 		scale.setValue(vendido);
 		scale.newRange(0, limiteSuperior - (limiteSuperior * minimo / 100),
-				"#DF5353", 0.9, 1); 
+				"#DF5353", 0.9, 1);
 		scale.newRange(limiteSuperior - (limiteSuperior * minimo / 100),
 				limiteSuperior, "#DDDF0D", 0.9, 1);
 		scale.newRange(limiteSuperior, tope.intValue(), "#55BF3B", 0.9, 1);
@@ -136,17 +136,23 @@ public class AngularVenta extends Charts {
 		yAxis.getLabels().setStep(2);
 		yAxis.getLabels().setRotation("auto");
 		Double porcentaje = (double) 0;
-		if(tope > 0)
-			porcentaje = vendido*100/tope;
-		
-		this.getPlotOptions().getGauge().getTooltip().setValueSuffix(" cajas <b>(" + porcentaje + "%)</b>");
+		if (tope > 0)
+			porcentaje = vendido * 100 / tope;
+
+		this.getPlotOptions()
+				.getGauge()
+				.getTooltip()
+				.setValueSuffix(
+						" cajas <b>(" + Math.rint(porcentaje * 100) / 100
+								+ "%)</b>");
 		this.getSeries().setName("Cajas Vendidas");
 		this.getYAxis().getTitle().setText("Numero de Cajas");
 		this.setTitle("Vendido VS Planificado(Obj):" + " desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
 		this.setSubtitle("Aliado: " + aliado.getNombre() + " ("
-				+ aliado.getCodigoAliado() + ") <b>("+ porcentaje+"%)</b> de Ventas");
+				+ aliado.getCodigoAliado() + ") <b>("
+				+ Math.rint(porcentaje * 100) / 100 + "%)</b> de Ventas");
 		// }
 
 		if (ventas.isEmpty())

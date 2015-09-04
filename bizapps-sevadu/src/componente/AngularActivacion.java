@@ -115,15 +115,21 @@ public class AngularActivacion extends Charts {
 		yAxis.getLabels().setRotation("auto");
 
 		Double porcentaje = (double) 0;
-		if(total > 0)
-			porcentaje = (double) (cantidadVentasActivas*100/total);
-		this.getPlotOptions().getGauge().getTooltip().setValueSuffix(" marcas <b>(" + porcentaje + "%)</b>");
+		if (total > 0)
+			porcentaje = (double) (cantidadVentasActivas * 100 / total);
+		this.getPlotOptions()
+				.getGauge()
+				.getTooltip()
+				.setValueSuffix(
+						" marcas <b>(" + Math.rint(porcentaje * 100) / 100
+								+ "%)</b>");
 		this.getSeries().setName("Marcas Vendidas");
 		this.getYAxis().getTitle().setText("Marcas Vendidas");
 		this.setTitle("Marcas a Activar(Obj) VS Marcas Vendidas:" + " desde "
 				+ formatoCorrecto.format(fechaDesde2) + " hasta  "
 				+ formatoCorrecto.format(fechaHasta2));
 		this.setSubtitle("Aliado: " + aliado.getNombre() + " ("
-				+ aliado.getCodigoAliado() + ")<b>("+ porcentaje+"%)</b> de Marcas");
+				+ aliado.getCodigoAliado() + ")<b>("
+				+ Math.rint(porcentaje * 100) / 100 + "%)</b> de Marcas");
 	}
 }

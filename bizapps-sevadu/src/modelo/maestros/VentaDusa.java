@@ -1,6 +1,7 @@
 package modelo.maestros;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -47,6 +48,16 @@ public class VentaDusa implements Serializable {
 	private Float cantidad;
 
 	private Float precio;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "fecha_auditoria")
+	private Date fechaAuditoria;
+
+	@Column(name = "hora_auditoria")
+	private Time horaAuditoria;
+
+	@Column(name = "id_usuario")
+	private String idUsuario;
 
 	public VentaDusa() {
 		super();
@@ -107,6 +118,30 @@ public class VentaDusa implements Serializable {
 
 	public void setPrecio(Float precio) {
 		this.precio = precio;
+	}
+
+	public Date getFechaAuditoria() {
+		return fechaAuditoria;
+	}
+
+	public void setFechaAuditoria(Date fechaAuditoria) {
+		this.fechaAuditoria = fechaAuditoria;
+	}
+
+	public Time getHoraAuditoria() {
+		return horaAuditoria;
+	}
+
+	public void setHoraAuditoria(Time horaAuditoria) {
+		this.horaAuditoria = horaAuditoria;
+	}
+
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 	
 }

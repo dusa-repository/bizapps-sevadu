@@ -44,6 +44,9 @@ public class CAliado extends CGenerico {
 	private Div divBuscadorCiudad;
 	BuscadorUDC buscadorCiudad;
 	@Wire
+	private Div divBuscadorCategoria;
+	BuscadorUDC buscadorCategoria;
+	@Wire
 	private Div divBuscadorEstado;
 	BuscadorUDC buscadorEstado;
 	@Wire
@@ -103,6 +106,8 @@ public class CAliado extends CGenerico {
 								"02", aliado.getEstadoAliado()));
 						buscadorCiudad.settearCampo(servicioF0005.buscar("00",
 								"03", aliado.getCiudadAliado()));
+						buscadorCategoria.settearCampo(servicioF0005.buscar(
+								"00", "08", aliado.getCategoria()));
 						txtCodigo.setDisabled(true);
 						txtNombre.setFocus(true);
 					} else
@@ -137,6 +142,7 @@ public class CAliado extends CGenerico {
 					aliado.setCodigoAliado(txtCodigo.getValue());
 					aliado.setNombre(txtNombre.getValue());
 					aliado.setCiudadAliado(buscadorCiudad.obtenerCaja());
+					aliado.setCategoria(buscadorCategoria.obtenerCaja());
 					aliado.setEstadoAliado(buscadorEstado.obtenerCaja());
 					aliado.setCodigoVendedor(buscadorVendedor.obtenerCaja());
 					aliado.setZona(buscadorZona.obtenerCaja());
@@ -374,6 +380,7 @@ public class CAliado extends CGenerico {
 	public boolean camposLLenos() {
 		if (txtCodigo.getText().compareTo("") == 0
 				|| txtNombre.getText().compareTo("") == 0
+				|| buscadorCategoria.obtenerCaja().compareTo("") == 0
 				|| buscadorCiudad.obtenerCaja().compareTo("") == 0
 				|| buscadorZona.obtenerCaja().compareTo("") == 0
 				|| buscadorVendedor.obtenerCaja().compareTo("") == 0
@@ -386,6 +393,7 @@ public class CAliado extends CGenerico {
 	public boolean camposEditando() {
 		if (txtCodigo.getText().compareTo("") != 0
 				|| txtNombre.getText().compareTo("") != 0
+				|| buscadorCategoria.obtenerCaja().compareTo("") != 0
 				|| buscadorCiudad.obtenerCaja().compareTo("") != 0
 				|| buscadorZona.obtenerCaja().compareTo("") != 0
 				|| buscadorVendedor.obtenerCaja().compareTo("") != 0
@@ -404,6 +412,7 @@ public class CAliado extends CGenerico {
 		txtCodigo.setValue("");
 		txtNombre.setValue("");
 		buscadorCiudad.settearCampo(null);
+		buscadorCategoria.settearCampo(null);
 		buscadorEstado.settearCampo(null);
 		buscadorVendedor.settearCampo(null);
 		buscadorZona.settearCampo(null);
@@ -487,6 +496,17 @@ public class CAliado extends CGenerico {
 			}
 		};
 		divBuscadorCiudad.appendChild(buscadorCiudad);
+
+		listF0005 = servicioF0005.buscarParaUDCOrdenados("00", "08");
+		buscadorCategoria = new BuscadorUDC("Categoria", 100, listF0005, true,
+				false, false, "00", "08", "29%", "18.5%", "6.5%", "28%") {
+			@Override
+			protected F0005 buscar() {
+				return servicioF0005.buscar("00", "08",
+						buscadorCategoria.obtenerCaja());
+			}
+		};
+		divBuscadorCategoria.appendChild(buscadorCategoria);
 	}
 
 	private void mostrarCatalogo() {

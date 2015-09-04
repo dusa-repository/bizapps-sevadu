@@ -20,6 +20,7 @@ import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.PlanVenta;
 import modelo.maestros.TipoCliente;
 import modelo.maestros.Venta;
+import modelo.maestros.VentaDusa;
 import modelo.pk.ExistenciaPK;
 import modelo.pk.MappingProductoPK;
 import modelo.pk.MarcaActivadaPK;
@@ -129,6 +130,9 @@ public class CCargarArchivo extends CGenerico {
 		case "Subir Archivo de Mapping":
 			tipo = 7;
 			break;
+		case "Subir Archivo de Ventas DUSA":
+			tipo = 8;
+			break;
 		}
 		Botonera botonera = new Botonera() {
 
@@ -180,6 +184,9 @@ public class CCargarArchivo extends CGenerico {
 					case 7:
 						importarMapping();
 						break;
+					case 8:
+						importarVentasDusa();
+						break;
 					}
 				} else
 					msj.mensajeAlerta("El siguiente archivo no posee registros, por lo tanto no fue importado."
@@ -211,6 +218,185 @@ public class CCargarArchivo extends CGenerico {
 		Button btn = (Button) botonera.getChildren().get(3);
 		btn.setLabel("Cargar");
 		botoneraCargarRegistro.appendChild(botonera);
+	}
+
+	protected void importarVentasDusa() {
+		XSSFWorkbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(media.getStreamData());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		Iterator<Row> rowIterator = sheet.iterator();
+		String mostrarError = "";
+		boolean error = false;
+		boolean errorLong = false;
+		MaestroAliado aliado = null;
+		if (rowIterator.hasNext()) {
+			List<VentaDusa> ventas = new ArrayList<VentaDusa>();
+			int contadorRow = 0;
+			while (rowIterator.hasNext()) {
+				contadorRow = contadorRow + 1;
+				Row row = rowIterator.next();
+				VentaDusa venta = new VentaDusa();
+				aliado = null;
+				String idAliado = null;
+				Double refAliado = (double) 0;
+				MaestroProducto producto = null;
+				String idProducto = null;
+				Double refProducto = (double) 0;
+				Double cantidad = null;
+				Double precio = (double) 0;
+				Date fechaFactura = null;
+				MappingProducto object = null;
+				Iterator<Cell> cellIterator = row.cellIterator();
+				int contadorCell = 0;
+				while (cellIterator.hasNext()) {
+					contadorCell = contadorCell + 1;
+					Cell cell = cellIterator.next();
+					switch (cell.getColumnIndex()) {
+					case 0:
+						idAliado = obtenerStringCualquiera(cell, refAliado,
+								idAliado);
+						if (idAliado != null) {
+							if (idAliado.length() > 50) {
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								errorLong = true;
+							} else {
+								aliado = servicioAliado.buscar(idAliado);
+								if (aliado == null) {
+									mensajeErrorNoEncontrado(mostrarError,
+											idAliado, contadorRow,
+											contadorCell, "Aliado");
+									error = true;
+								} else {
+									if (!verificarAliados(idAliado)) {
+										listaErrores
+												.add("El Aliado"
+														+ idAliado
+														+ " no esta asociado a ninguno de los aliados del Usuario en sesion.  Fila: "
+														+ contadorRow
+														+ ". Columna: "
+														+ contadorCell + "\n");
+										error = true;
+									}
+								}
+							}
+						} else {
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
+							error = true;
+						}
+						break;
+					case 1:
+						idProducto = obtenerStringCualquiera(cell, refProducto,
+								idProducto);
+						if (idProducto != null) {
+							if (!idProducto.equals("")) {
+								if (idProducto.length() > 50) {
+									mensajeErrorLongitud(mostrarError,
+											contadorRow, contadorCell);
+									errorLong = true;
+								} else {
+									if (aliado != null) {
+										object = servicioMapping
+												.buscarPorAliadoyProductoNoDusa(
+														aliado, idProducto);
+										if (object == null) {
+											producto = null;
+											mensajeErrorNoEncontrado(
+													mostrarError, idProducto,
+													contadorRow, contadorCell,
+													"Mapping Producto (Codigo de Producto de Cliente)");
+											error = true;
+										} else
+											producto = object.getId()
+													.getMaestroProducto();
+									}
+								}
+							} else {
+								mensajeErrorNull(mostrarError, contadorRow,
+										contadorCell);
+								error = true;
+							}
+						} else {
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
+							error = true;
+						}
+						break;
+					case 2:
+						if (cell.getCellType() == 0) {
+							cantidad = cell.getNumericCellValue();
+						} else {
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
+							error = true;
+						}
+						break;
+					case 3:
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"dd/MM/yyyy");
+
+						if (cell.getCellType() == 0) {
+							fechaFactura = cell.getDateCellValue();
+						} else if (cell.getCellType() == 1) {
+
+							try {
+								fechaFactura = sdf.parse(cell
+										.getStringCellValue());
+							} catch (ParseException e) {
+								mensajeErrorNull(mostrarError, contadorRow,
+										contadorCell);
+								error = true;
+							}
+
+						} else {
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
+							error = true;
+						}
+						break;
+					}
+				}
+				if (contadorCell != 4) {
+					listaErrores.add(mensajeErrorVacio(mostrarError,
+							contadorRow));
+					error = true;
+				}
+				if (!error && !errorLong && aliado != null && producto != null
+						&& cantidad != null && fechaFactura != null) {
+					venta.setCantidad(cantidad.floatValue());
+					venta.setFechaAuditoria(fecha);
+					venta.setHoraAuditoria(tiempo);
+					venta.setIdrow(0);
+					venta.setIdUsuario(nombreUsuarioSesion());
+					venta.setMaestroAliado(aliado);
+					venta.setMaestroProducto(producto);
+					venta.setPrecio(precio.floatValue());
+					venta.setFecha(fechaFactura);
+					venta.setUnidadMedida("CA");
+					ventas.add(venta);
+				}
+			}
+			if (!error && !errorLong) {
+				if (ventas.size() == contadorRow) {
+					servicioVentaDusa.guardarVarios(ventas);
+					guardarControlUpdate(aliado, "NO", "NO", "NO", "NO", "NO",
+							"NO", "NO", "SI");
+					msj.mensajeInformacion("Archivo importado con exito" + "\n"
+							+ "Cantidad de Filas evaluadas:" + (contadorRow)
+							+ "\n" + "Cantidad de Filas insertadas:"
+							+ (contadorRow));
+
+				} else
+					mostrarErrores();
+			} else
+				mostrarErrores();
+
+		}
 	}
 
 	protected void importarMapping() {
@@ -275,6 +461,7 @@ public class CCargarArchivo extends CGenerico {
 														+ contadorRow
 														+ ". Columna: "
 														+ contadorCell + "\n");
+										error = true;
 									}
 								}
 							}
@@ -381,7 +568,7 @@ public class CCargarArchivo extends CGenerico {
 				if (planesVentas.size() == contadorRow) {
 					servicioMapping.guardarVarios(planesVentas);
 					guardarControlUpdate(aliado, "NO", "NO", "NO", "NO", "NO",
-							"NO", "SI");
+							"NO", "SI", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -588,7 +775,7 @@ public class CCargarArchivo extends CGenerico {
 				if (productos.size() == contadorRow) {
 					servicioProducto.guardarVarios(productos);
 					guardarControlUpdate(null, "NO", "NO", "NO", "NO", "SI",
-							"NO", "NO");
+							"NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -602,7 +789,6 @@ public class CCargarArchivo extends CGenerico {
 	}
 
 	private void mostrarErrores() {
-		System.out.println("lista" + listaErrores.size());
 		Window ventana = new Window(
 				"Errores encontrados al importar el archivo", "2px", true);
 		final Listbox lista = new Listbox();
@@ -746,6 +932,7 @@ public class CCargarArchivo extends CGenerico {
 														+ contadorRow
 														+ ". Columna: "
 														+ contadorCell + "\n");
+										error = true;
 									}
 								}
 							}
@@ -1620,7 +1807,7 @@ public class CCargarArchivo extends CGenerico {
 				if (marcas.size() == contadorRow) {
 					servicioMarcaActivada.guardarVarios(marcas);
 					guardarControlUpdate(aliado, "NO", "NO", "NO", "NO", "NO",
-							"SI", "NO");
+							"SI", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -1708,6 +1895,7 @@ public class CCargarArchivo extends CGenerico {
 											contadorRow, contadorCell, "Aliado");
 									error = true;
 								} else {
+
 									if (!verificarAliados(idAliado)) {
 										listaErrores
 												.add("El Aliado"
@@ -1716,6 +1904,7 @@ public class CCargarArchivo extends CGenerico {
 														+ contadorRow
 														+ ". Columna: "
 														+ contadorCell + "\n");
+										error = true;
 									}
 								}
 							}
@@ -2053,7 +2242,7 @@ public class CCargarArchivo extends CGenerico {
 				if (clientes.size() == contadorRow) {
 					servicioCliente.guardarVarios(clientes);
 					guardarControlUpdate(aliado, "NO", "NO", "NO", "SI", "NO",
-							"NO", "NO");
+							"NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2114,7 +2303,6 @@ public class CCargarArchivo extends CGenerico {
 								fechaFactura = sdf.parse(cell
 										.getStringCellValue());
 							} catch (ParseException e) {
-								// TODO Auto-generated catch block
 								mostrarError = mensajeErrorNull(mostrarError,
 										contadorRow, contadorCell);
 								error = true;
@@ -2151,6 +2339,7 @@ public class CCargarArchivo extends CGenerico {
 														+ contadorRow
 														+ ". Columna: "
 														+ contadorCell + "\n");
+										error = true;
 									}
 								}
 							}
@@ -2226,7 +2415,7 @@ public class CCargarArchivo extends CGenerico {
 				if (existencias.size() == contadorRow) {
 					servicioExistencia.guardarVarios(existencias);
 					guardarControlUpdate(aliado, "NO", "NO", "SI", "NO", "NO",
-							"NO", "NO");
+							"NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2337,6 +2526,7 @@ public class CCargarArchivo extends CGenerico {
 														+ contadorRow
 														+ ". Columna: "
 														+ contadorCell + "\n");
+										error = true;
 									}
 								}
 							}
@@ -2467,7 +2657,7 @@ public class CCargarArchivo extends CGenerico {
 				if (planesVentas.size() == contadorRow) {
 					servicioPlan.guardarVarios(planesVentas);
 					guardarControlUpdate(aliado, "NO", "SI", "NO", "NO", "NO",
-							"NO", "NO");
+							"NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -2576,6 +2766,7 @@ public class CCargarArchivo extends CGenerico {
 														+ contadorRow
 														+ ". Columna: "
 														+ contadorCell + "\n");
+										error = true;
 									}
 								}
 							}
@@ -2837,7 +3028,6 @@ public class CCargarArchivo extends CGenerico {
 								fechaFactura = sdf.parse(cell
 										.getStringCellValue());
 							} catch (ParseException e) {
-								// TODO Auto-generated catch block
 								mensajeErrorNull(mostrarError, contadorRow,
 										contadorCell);
 								error = true;
@@ -3066,7 +3256,7 @@ public class CCargarArchivo extends CGenerico {
 						servicioVenta.eliminar(ventasRepetidas);
 					servicioVenta.guardarVarios(ventas);
 					guardarControlUpdate(aliado, "SI", "NO", "NO", "NO", "NO",
-							"NO", "NO");
+							"NO", "NO", "NO");
 					msj.mensajeInformacion("Archivo importado con exito" + "\n"
 							+ "Cantidad de Filas evaluadas:" + (contadorRow)
 							+ "\n" + "Cantidad de Filas insertadas:"
@@ -3082,7 +3272,7 @@ public class CCargarArchivo extends CGenerico {
 
 	private void guardarControlUpdate(MaestroAliado a, String ventas,
 			String planVentas, String existencia, String carteraClientes,
-			String pvp, String activacion, String mapping) {
+			String pvp, String activacion, String mapping, String ventasDusa) {
 		String codigoAliado = "Administrador";
 		String nombreAliado = "Sin Aliado";
 		if (a != null) {
@@ -3100,7 +3290,7 @@ public class CCargarArchivo extends CGenerico {
 		}
 		ControlUpdate control = new ControlUpdate(0, codigoAliado,
 				nombreAliado, ventas, planVentas, existencia, carteraClientes,
-				pvp, activacion, fecha, mapping);
+				pvp, activacion, fecha, mapping, ventasDusa);
 		servicioControlUpdate.guardar(control);
 
 	}

@@ -83,4 +83,11 @@ public class SPlanVenta {
 				.sumByIdMaestroAliadoAnIdMaestroProductoProductoAndIdMesAndIdAnno(
 						aliado, codigoProductoDusa, mesPlanDesde, annoPlanDesde);
 	}
+
+	public Integer sumarPorProductosaliadoYFechas(String aliado2,
+			List<String> ids, int annoPlanDesde, int mesPlanDesde) {
+		return planVentaDAO
+				.sumByIdMaestroAliadoAnIdMaestroProductoProductoAndIdMesAndIdAnno(
+						aliado2, ids, mesPlanDesde, annoPlanDesde);
+	}
 }

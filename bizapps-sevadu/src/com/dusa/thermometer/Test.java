@@ -67,9 +67,7 @@ public class Test {
 			SellerData sellerData = new SellerData(1, clientes.get(0)
 					.getVendedor());
 			ZoneData zoneData = new ZoneData(1, clientes.get(0).getZona());
-			boolean marcaNula = false;
 			for (int i = 0; i < clientes.size(); i++) {
-				marcaNula = false;
 				if (supervisor.equals(clientes.get(i).getSupervisor())) {
 					if (vendedor.equals(clientes.get(i).getVendedor())) {
 						if (zona.equals(clientes.get(i).getZona())) {
