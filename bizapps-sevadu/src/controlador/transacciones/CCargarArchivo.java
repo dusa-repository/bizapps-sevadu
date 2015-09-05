@@ -235,6 +235,7 @@ public class CCargarArchivo extends CGenerico {
 		MaestroAliado aliado = null;
 		if (rowIterator.hasNext()) {
 			List<VentaDusa> ventas = new ArrayList<VentaDusa>();
+			List<VentaDusa> ventasRepetidas = new ArrayList<VentaDusa>();
 			int contadorRow = 0;
 			while (rowIterator.hasNext()) {
 				contadorRow = contadorRow + 1;
@@ -379,10 +380,17 @@ public class CCargarArchivo extends CGenerico {
 					venta.setFecha(fechaFactura);
 					venta.setUnidadMedida("CA");
 					ventas.add(venta);
+					List<VentaDusa> repetida = servicioVentaDusa
+							.buscarPorAliadoProductoFecha(aliado, producto,
+									fechaFactura);
+					if (!repetida.isEmpty())
+						ventasRepetidas.addAll(repetida);
 				}
 			}
 			if (!error && !errorLong) {
 				if (ventas.size() == contadorRow) {
+					if (!ventasRepetidas.isEmpty())
+						servicioVentaDusa.eliminar(ventasRepetidas);
 					servicioVentaDusa.guardarVarios(ventas);
 					guardarControlUpdate(aliado, "NO", "NO", "NO", "NO", "NO",
 							"NO", "NO", "SI");

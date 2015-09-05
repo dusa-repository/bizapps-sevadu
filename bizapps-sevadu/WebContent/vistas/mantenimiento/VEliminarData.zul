@@ -20,6 +20,7 @@
 								placeholder="Seleccione una Tabla" id="cmbTabla" readonly="true"
 								width="100%">
 								<comboitem label="Ventas" id="cimVentas" visible="false"/>
+								<comboitem label="Ventas DUSA" id="cimVentasDusa" visible="false"/>
 								<comboitem label="Plan de Ventas" id="cimPlan" visible="false"/>
 								<comboitem label="Existencia" id="cimExistencia" visible="false"/>
 								<comboitem label="Cartera de Clientes" id="cimCartera" visible="false"/>

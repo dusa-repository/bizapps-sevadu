@@ -17,6 +17,7 @@ import modelo.maestros.MaestroAliado;
 import modelo.maestros.MarcaActivadaVendedor;
 import modelo.maestros.PlanVenta;
 import modelo.maestros.Venta;
+import modelo.maestros.VentaDusa;
 import modelo.seguridad.Usuario;
 import modelo.seguridad.UsuarioAliado;
 
@@ -37,12 +38,10 @@ import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 
 import security.modelo.Arbol;
-
 import componente.Botonera;
 import componente.Catalogo;
 import componente.Mensaje;
 import componente.Validador;
-
 import controlador.maestros.CGenerico;
 
 public class CEliminarData extends CGenerico {
@@ -75,6 +74,8 @@ public class CEliminarData extends CGenerico {
 	private Comboitem cimCartera;
 	@Wire
 	private Comboitem cimActivacion;
+	@Wire
+	private Comboitem cimVentasDusa;
 	@Wire
 	private Datebox dtbDesde;
 	@Wire
@@ -112,6 +113,8 @@ public class CEliminarData extends CGenerico {
 					cimCartera.setVisible(true);
 				if (arbol.getNombre().equals("Eliminar Data Activacion"))
 					cimActivacion.setVisible(true);
+				if (arbol.getNombre().equals("Eliminar Data Ventas DUSA"))
+					cimVentasDusa.setVisible(true);
 				if (arbol.getNombre().equals("Eliminar Data sin Restriccion"))
 					eliminarTodo = true;
 			}
@@ -126,7 +129,8 @@ public class CEliminarData extends CGenerico {
 			Date ayer = new Date();
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(ayer);
-			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - (mes - 1));
+			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH)
+					- (mes - 1));
 			ayer = calendar.getTime();
 			dtbDesde.setConstraint("between" + formatoMesAnno.format(ayer)
 					+ "01 and" + formatoSimple.format(hoy));
@@ -190,6 +194,15 @@ public class CEliminarData extends CGenerico {
 						if (!ventas.isEmpty()) {
 							tablaEliminada = tabla;
 							servicioVenta.eliminar(ventas);
+						}
+						break;
+					case "Ventas DUSA":
+						List<VentaDusa> ventasDusa = servicioVentaDusa
+								.buscarPorAliadoEntreFechasRegistro(idAliado,
+										desde, hasta);
+						if (!ventasDusa.isEmpty()) {
+							tablaEliminada = tabla;
+							servicioVentaDusa.eliminar(ventasDusa);
 						}
 						break;
 					case "Plan de Ventas":

@@ -3,6 +3,8 @@ package interfacedao.maestros;
 import java.util.Date;
 import java.util.List;
 
+import modelo.maestros.MaestroAliado;
+import modelo.maestros.MaestroProducto;
 import modelo.maestros.VentaDusa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +16,11 @@ public interface IVentaDusaDAO extends JpaRepository<VentaDusa, Integer> {
 			+ "and v.maestroProducto.maestroMarca.marcaDusa in ?2 and v.fecha between ?3 and ?4")
 	Double sumByMaestroAliadoCodigoAliadoAndMaestroProductoMaestroMarcaMarcaDusaInAndFechaFacturaBetween(
 			String aliado2, List<String> ids, Date fechaInicio, Date fechaFin);
+
+	List<VentaDusa> findByMaestroAliadoAndMaestroProductoAndFecha(
+			MaestroAliado aliado, MaestroProducto producto, Date fechaFactura);
+
+	List<VentaDusa> findByMaestroAliadoCodigoAliadoAndFechaAuditoriaBetween(
+			String idAliado, Date desde, Date hasta);
 
 }
