@@ -59,6 +59,12 @@ public class VentaDusa implements Serializable {
 	@Column(name = "id_usuario")
 	private String idUsuario;
 
+	@Column(name="numero_documento")
+	private String numeroDocumento;
+
+	@Column(name="tipo_documento")
+	private String tipoDocumento;
+
 	public VentaDusa() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -142,6 +148,22 @@ public class VentaDusa implements Serializable {
 
 	public void setIdUsuario(String idUsuario) {
 		this.idUsuario = idUsuario;
+	}
+
+	public String getNumeroDocumento() {
+		return numeroDocumento;
+	}
+
+	public void setNumeroDocumento(String numeroDocumento) {
+		this.numeroDocumento = numeroDocumento;
+	}
+
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
 	}
 	
 }

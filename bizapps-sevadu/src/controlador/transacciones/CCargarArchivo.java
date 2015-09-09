@@ -58,6 +58,8 @@ import org.zkoss.zul.Space;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Window;
 
+import com.jhlabs.image.DitherFilter;
+
 import componente.Botonera;
 import componente.Mensaje;
 import componente.Validador;
@@ -251,6 +253,12 @@ public class CCargarArchivo extends CGenerico {
 				Double precio = (double) 0;
 				Date fechaFactura = null;
 				MappingProducto object = null;
+				Double idDoc = null;
+				String doc = "";
+				Double idTipoDoc = null;
+				String tipoDoc = "";
+				Double idUm = null;
+				String um = "";
 				Iterator<Cell> cellIterator = row.cellIterator();
 				int contadorCell = 0;
 				while (cellIterator.hasNext()) {
@@ -329,6 +337,20 @@ public class CCargarArchivo extends CGenerico {
 						}
 						break;
 					case 2:
+						um = obtenerStringCualquiera(cell, idUm, um);
+						if (um != null) {
+							if (um.length() > 100) {
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								errorLong = true;
+							}
+						} else {
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
+							error = true;
+						}
+						break;
+					case 3:
 						if (cell.getCellType() == 0) {
 							cantidad = cell.getNumericCellValue();
 						} else {
@@ -337,7 +359,7 @@ public class CCargarArchivo extends CGenerico {
 							error = true;
 						}
 						break;
-					case 3:
+					case 4:
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"dd/MM/yyyy");
 
@@ -360,15 +382,45 @@ public class CCargarArchivo extends CGenerico {
 							error = true;
 						}
 						break;
+					case 5:
+						doc = obtenerStringCualquiera(cell, idDoc, doc);
+						if (doc != null) {
+							if (doc.length() > 100) {
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								errorLong = true;
+							}
+						} else {
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
+							error = true;
+						}
+						break;
+					case 6:
+						tipoDoc = obtenerStringCualquiera(cell, idTipoDoc,
+								tipoDoc);
+						if (tipoDoc != null) {
+							if (tipoDoc.length() > 100) {
+								mensajeErrorLongitud(mostrarError, contadorRow,
+										contadorCell);
+								errorLong = true;
+							}
+						} else {
+							mensajeErrorNull(mostrarError, contadorRow,
+									contadorCell);
+							error = true;
+						}
+						break;
 					}
 				}
-				if (contadorCell != 4) {
+				if (contadorCell != 7) {
 					listaErrores.add(mensajeErrorVacio(mostrarError,
 							contadorRow));
 					error = true;
 				}
 				if (!error && !errorLong && aliado != null && producto != null
-						&& cantidad != null && fechaFactura != null) {
+						&& cantidad != null && fechaFactura != null
+						&& doc != null && tipoDoc != null && um != null) {
 					venta.setCantidad(cantidad.floatValue());
 					venta.setFechaAuditoria(fecha);
 					venta.setHoraAuditoria(tiempo);
@@ -378,7 +430,9 @@ public class CCargarArchivo extends CGenerico {
 					venta.setMaestroProducto(producto);
 					venta.setPrecio(precio.floatValue());
 					venta.setFecha(fechaFactura);
-					venta.setUnidadMedida("CA");
+					venta.setUnidadMedida(um);
+					venta.setNumeroDocumento(doc);
+					venta.setTipoDocumento(tipoDoc);
 					ventas.add(venta);
 					List<VentaDusa> repetida = servicioVentaDusa
 							.buscarPorAliadoProductoFecha(aliado, producto,
