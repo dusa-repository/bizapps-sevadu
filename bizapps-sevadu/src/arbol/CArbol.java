@@ -164,9 +164,10 @@ public class CArbol extends CGenerico {
 			String categoria = "N/A";
 			if (objeto.getId().getMaestroAliado().getCategoria() != null)
 				categoria = objeto.getId().getMaestroAliado().getCategoria();
-			lblUsuario.setValue("Aliado: "
-					+ objeto.getId().getMaestroAliado().getNombre() + "("
-					+ categoria + ")");
+			// lblUsuario.setValue("Aliado: "
+			// + objeto.getId().getMaestroAliado().getNombre() + "("
+			// + categoria + ")");lblUsuario.setValue("Aliado: "
+			lblUsuario.setValue("Aliado: " + categoria);
 		}
 		Date fechaHoy = new Date();
 		DateFormat formatoNuevo = new SimpleDateFormat("MM-yyyy");
@@ -313,18 +314,25 @@ public class CArbol extends CGenerico {
 		Hbox caja = new Hbox();
 		caja.setWidth("80%");
 		Cell celda = new Cell();
-		celda.setWidth("30%");
+		celda.setWidth("50%");
 		celda.appendChild(angular);
 		caja.appendChild(celda);
 		celda = new Cell();
-		celda.setWidth("30%");
+		celda.setWidth("50%");
 		celda.appendChild(angularVenta);
 		caja.appendChild(celda);
+		divGrafico.appendChild(caja);
+		caja = new Hbox();
+		caja.setWidth("80%");
 		celda = new Cell();
-		celda.setWidth("40%");
+		celda.setWidth("100%");
 		celda.appendChild(graficoVentas(aliado.getCodigoAliado(), fecha1,
 				fecha2, ids));
 		caja.appendChild(celda);
+//		celda = new Cell();
+//		celda.setWidth("50%");
+//		celda.appendChild(new Hbox());
+//		caja.appendChild(celda);
 		divGrafico.appendChild(caja);
 	}
 
