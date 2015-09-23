@@ -286,19 +286,19 @@ public class CArbol extends CGenerico {
 			cajaHorizontal = new Hbox();
 			cajaHorizontal.setWidth("100%");
 			Cell celda = new Cell();
-			celda.setWidth("30%");
-			celda.appendChild(new Space());
-			cajaHorizontal.appendChild(celda);
+			// celda.setWidth("30%");
+			// celda.appendChild(new Space());
+			// cajaHorizontal.appendChild(celda);
 
-			celda = new Cell();
-			celda.setWidth("40%");
+			// celda = new Cell();
+			celda.setWidth("100%");
 			celda.appendChild(graficoVentas("%", fecha1, fecha2, ids));
 			cajaHorizontal.appendChild(celda);
 
-			celda = new Cell();
-			celda.setWidth("30%");
-			celda.appendChild(new Space());
-			cajaHorizontal.appendChild(celda);
+			// celda = new Cell();
+			// celda.setWidth("30%");
+			// celda.appendChild(new Space());
+			// cajaHorizontal.appendChild(celda);
 			divGrafico.appendChild(cajaHorizontal);
 		}
 	}
@@ -311,6 +311,12 @@ public class CArbol extends CGenerico {
 				fecha1, fecha2, servicioConfiguracion);
 		angularVenta = new AngularVenta(aliado, servicioVenta, servicioPlan,
 				fecha1, fecha2, servicioConfiguracion, habilesHoy, habilesTotal);
+		try {
+			fecha1 = formatoFecha.parse("01-01-"
+					+ Integer.parseInt(formatoAnno.format(fecha1)));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		Hbox caja = new Hbox();
 		caja.setWidth("80%");
 		Cell celda = new Cell();
@@ -325,14 +331,14 @@ public class CArbol extends CGenerico {
 		caja = new Hbox();
 		caja.setWidth("80%");
 		celda = new Cell();
-		celda.setWidth("100%");
+		celda.setWidth("95%");
 		celda.appendChild(graficoVentas(aliado.getCodigoAliado(), fecha1,
 				fecha2, ids));
 		caja.appendChild(celda);
-//		celda = new Cell();
-//		celda.setWidth("50%");
-//		celda.appendChild(new Hbox());
-//		caja.appendChild(celda);
+		celda = new Cell();
+		celda.setWidth("5%");
+		celda.appendChild(new Space());
+		caja.appendChild(celda);
 		divGrafico.appendChild(caja);
 	}
 
